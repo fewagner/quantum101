@@ -68,6 +68,7 @@ needed. Each `[ ]` becomes a section or chapter.
 - [ ] Lindblad master equation
 - [ ] Relaxation and dephasing: $T_1$, $T_2$, $T_2^*$
 - [ ] Input–output theory
+- [ ] Quantum Zeno effect (measurement-induced freezing of dynamics)
 - [ ] Stochastic master equation / quantum trajectories (optional)
 
 ### Part III — Quantum optics
@@ -79,12 +80,15 @@ needed. Each `[ ]` becomes a section or chapter.
 - [ ] Beam splitters and interferometry
 - [ ] Atom–field interaction, dipole approximation
 - [ ] Jaynes–Cummings model: dressed states, vacuum Rabi splitting
-- [ ] Dispersive regime and dispersive shift
+- [ ] Dispersive regime and dispersive shift $\chi$
+- [ ] AC Stark shift (photon-number-dependent qubit frequency shift) and measurement-induced dephasing
 - [ ] Cavity QED basics (strong, weak, bad-cavity limits)
 - [ ] Purcell effect
 
 ### Part IV — Superconducting circuits
 
+- [ ] DiVincenzo criteria for a quantum computer
+- [ ] Superconductivity primer: BCS ground state, Bogoliubov quasiparticles
 - [ ] Lumped-element circuit quantization (node flux / charge)
 - [ ] LC oscillator as a quantum harmonic oscillator
 - [ ] Josephson junctions: Josephson relations, energy
@@ -94,9 +98,29 @@ needed. Each `[ ]` becomes a section or chapter.
 - [ ] Capacitive and inductive coupling between elements
 - [ ] Qubit–resonator coupling and dispersive readout
 - [ ] Drive Hamiltonians and single-qubit gates
+- [ ] Parametric / mixing processes: three- and four-wave mixing in Josephson nonlinearities
+      (e.g., two resonator modes + drive + qubit as a four-wave-mixing example)
 - [ ] Two-qubit gates: cross-resonance, iSWAP, CZ (overview)
-- [ ] Decoherence channels in cQED hardware
+- [ ] Decoherence channels in cQED hardware (incl. quasiparticle poisoning)
 - [ ] Parametric amplifiers and quantum-limited readout (optional)
+
+#### Experimental basics (qubit calibration)
+
+- [ ] Resonator spectroscopy ($S_{21}$ vs. drive frequency; bare vs. dressed cavity)
+- [ ] Two-tone (drive) spectroscopy of the qubit
+- [ ] Rabi experiment: drive amplitude → $\pi$-pulse calibration
+- [ ] Ramsey experiment: detuning and $T_2^*$ measurement
+- [ ] Echo / CPMG sequences for $T_2$ (optional)
+- [ ] $T_1$ measurement (optional)
+
+### Part V — Quantum error correction (introduction)
+
+- [ ] Why QEC: noise channels, no-cloning, the digitization theorem
+- [ ] Repetition codes: bit-flip and phase-flip
+- [ ] Shor and Steane codes (overview)
+- [ ] Stabilizer formalism (overview)
+- [ ] Surface code (overview)
+- [ ] Bosonic codes in cQED: cat / GKP (overview, optional)
 
 ### Appendices (optional)
 
