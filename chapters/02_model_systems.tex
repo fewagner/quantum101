@@ -1,0 +1,276 @@
+\chapter{Two canonical model systems}
+\label{ch:model-systems}
+
+\section*{Chapter overview}
+
+Almost every system encountered in circuit QED is built --- exactly or
+approximately --- from two ingredients: the quantum harmonic
+oscillator and the two-level system (TLS). The harmonic oscillator
+describes lumped LC resonators, microwave cavities, transmission-line
+modes and, to leading order, weakly anharmonic qubits. The two-level
+system describes spins, idealised qubits and any pair of levels we
+isolate from a more complicated spectrum. This chapter solves both
+exactly, fixes the notation we will use everywhere later, and ends by
+combining a TLS with a coherent drive --- producing the Rabi
+oscillations that underlie all single-qubit control.
+
+% --------------------------------------------------------------
+\section{The quantum harmonic oscillator}
+\label{sec:qho}
+
+\begin{phenomenon}
+A particle in a quadratic potential, an LC circuit, and a single
+mode of the electromagnetic field all share the same equation of
+motion: simple harmonic motion at a single frequency $\omega$. Their
+quantum versions therefore share a single Hilbert space structure
+and a single energy spectrum.
+\end{phenomenon}
+
+\begin{statement}[Harmonic-oscillator spectrum]
+\label{stmt:qho-spectrum}
+The Hamiltonian
+\begin{equation}
+\op{H} \;=\; \frac{\op{p}^2}{2m} + \tfrac12 m\omega^2 \op{x}^2
+\end{equation}
+has eigenvalues $E_n=\hbar\omega(n+\tfrac12)$ for $n=0,1,2,\ldots$,
+with non-degenerate eigenstates $\ket{n}$ that span the Hilbert
+space.
+\end{statement}
+
+\paragraph{Derivation via ladder operators.}
+Define the dimensionless ladder operators
+\begin{equation}
+\label{eq:ladder-def}
+a   = \sqrt{\frac{m\omega}{2\hbar}}\Bigl(\op{x}+\frac{i}{m\omega}\op{p}\Bigr),
+\qquad
+a^\dagger = \sqrt{\frac{m\omega}{2\hbar}}\Bigl(\op{x}-\frac{i}{m\omega}\op{p}\Bigr).
+\end{equation}
+Using $[\op{x},\op{p}]=i\hbar$ one immediately obtains
+\begin{equation}
+[a,a^\dagger] = 1,\qquad
+\op{H} = \hbar\omega\bigl(a^\dagger a + \tfrac12\bigr).
+\end{equation}
+The number operator $\op{N}=a^\dagger a$ commutes with $\op{H}$, so
+they share an eigenbasis. From $[\op{N},a]=-a$ and $[\op{N},a^\dagger]=+a^\dagger$
+one finds that $a$ and $a^\dagger$ shift the eigenvalue of $\op{N}$ by $\mp 1$:
+\begin{equation}
+\label{eq:ladder-action}
+a\ket{n} = \sqrt{n}\,\ket{n-1},
+\qquad
+a^\dagger\ket{n} = \sqrt{n+1}\,\ket{n+1}.
+\end{equation}
+Positivity, $\bra{\psi}a^\dagger a\ket{\psi}\geq0$, forces $n\geq0$; a
+unique ground state $\ket{0}$ with $a\ket{0}=0$ exists, and the
+remaining eigenstates are
+$\ket{n}=(a^\dagger)^n/\sqrt{n!}\,\ket{0}$.
+
+\begin{example}[Photons in a cavity]
+A single mode of the electromagnetic field, treated in
+\cref{ch:em-quantization}, has exactly this Hamiltonian with
+$\op{N}$ counting photons. The same algebra describes phonons in a
+crystal and, with the right choice of variables, the LC oscillator
+of a superconducting circuit (\cref{ch:circuit-qed}).
+\end{example}
+
+\paragraph{Transition.}
+The harmonic oscillator gives us an infinite ladder of evenly spaced
+levels. The opposite extreme --- a system with only two levels --- is
+the second cornerstone of quantum optics and forms the idealisation
+of a qubit.
+
+% --------------------------------------------------------------
+\section{The two-level system and the Pauli algebra}
+\label{sec:tls}
+
+\begin{phenomenon}
+Whenever a small subset of energy levels is well separated from
+everything else, dynamics restricted to that subset can be modelled
+by a Hamiltonian acting on a low-dimensional Hilbert space. The
+simplest non-trivial case --- a single isolated transition --- is
+the two-level system.
+\end{phenomenon}
+
+\begin{definition}[Pauli matrices]
+\label{def:pauli}
+On $\hilbert=\C^2$ with basis $\{\ket{0},\ket{1}\}$, define
+\begin{equation}
+\sigma_x = \begin{pmatrix}0&1\\1&0\end{pmatrix},\quad
+\sigma_y = \begin{pmatrix}0&-i\\i&0\end{pmatrix},\quad
+\sigma_z = \begin{pmatrix}1&0\\0&-1\end{pmatrix}.
+\end{equation}
+Together with $\id$ they form a basis of the Hermitian operators on
+$\C^2$.
+\end{definition}
+
+The Pauli matrices satisfy
+\begin{equation}
+\label{eq:pauli-algebra}
+\sigma_i\sigma_j = \delta_{ij}\,\id + i\epsilon_{ijk}\sigma_k,
+\qquad
+[\sigma_i,\sigma_j] = 2i\epsilon_{ijk}\sigma_k,
+\qquad
+\{\sigma_i,\sigma_j\} = 2\delta_{ij}\,\id.
+\end{equation}
+We also use the raising and lowering operators
+$\sigma_\pm = (\sigma_x\pm i\sigma_y)/2$, with
+$\sigma_+\ket{1}=\ket{0}$, $\sigma_-\ket{0}=\ket{1}$ in the convention
+$\sigma_z\ket{0}=+\ket{0}$ used throughout these notes.
+
+\begin{statement}[Most general TLS Hamiltonian]
+\label{stmt:tls-hamiltonian}
+Up to an irrelevant additive constant, every Hermitian operator on
+$\C^2$ has the form
+\begin{equation}
+\label{eq:tls-h}
+\op{H} \;=\; \tfrac{1}{2}\,\bm{B}\cdot\bm{\sigma},
+\end{equation}
+for some real vector $\bm{B}=(B_x,B_y,B_z)\in\R^3$.
+\end{statement}
+
+The eigenvalues of \cref{eq:tls-h} are $\pm |\bm{B}|/2$, and the
+eigenvectors are aligned with $\pm\bm{B}/|\bm{B}|$ in the geometric
+sense made precise next.
+
+\paragraph{Transition.}
+The vector $\bm{B}$ in \cref{eq:tls-h} suggests a geometric picture.
+That picture is the Bloch sphere, and it turns the algebra of a TLS
+into elementary geometry on $S^2$.
+
+% --------------------------------------------------------------
+\section{The Bloch sphere}
+\label{sec:bloch}
+
+\begin{statement}[Bloch representation]
+\label{stmt:bloch}
+Every state of a single qubit, pure or mixed, can be written as
+\begin{equation}
+\label{eq:bloch-rho}
+\op{\rho} \;=\; \tfrac12\bigl(\id + \bm{r}\cdot\bm{\sigma}\bigr),
+\qquad
+\bm{r}\in\R^3,\;|\bm{r}|\leq1,
+\end{equation}
+with $|\bm{r}|=1$ for pure states and $|\bm{r}|<1$ for mixed states.
+\end{statement}
+
+\begin{proof}
+Any Hermitian operator on $\C^2$ expands in the basis
+$\{\id,\sigma_x,\sigma_y,\sigma_z\}$. Trace-one and Hermiticity fix
+the coefficient of $\id$ and the reality of the others; positivity
+$\op{\rho}\geq0$ requires both eigenvalues
+$\tfrac12(1\pm|\bm{r}|)\geq0$, i.e.\ $|\bm{r}|\leq1$. Purity,
+$\Tr\op{\rho}^2=\tfrac12(1+|\bm{r}|^2)=1$, then forces $|\bm{r}|=1$.
+\end{proof}
+
+In coordinates a pure state $\ket{\psi}=\cos(\theta/2)\ket{0}+
+e^{i\varphi}\sin(\theta/2)\ket{1}$ has Bloch vector
+$\bm{r}=(\sin\theta\cos\varphi,\sin\theta\sin\varphi,\cos\theta)$,
+and the action of \cref{eq:tls-h} on $\bm{r}$ is precession around
+$\bm{B}$ at angular speed $|\bm{B}|/\hbar$. Density matrices and the
+appearance of $|\bm{r}|<1$ for mixed states are revisited in
+\cref{ch:composite}.
+
+\begin{remark}
+Single-qubit gates correspond to rotations of $\bm{r}$ about an axis
+$\hat{\bm{n}}$ by an angle $\phi$, implemented by the unitary
+\begin{equation}
+R_{\hat{\bm{n}}}(\phi) = \exp\!\bigl(-i\tfrac{\phi}{2}\,\hat{\bm{n}}\cdot\bm{\sigma}\bigr)
+= \cos(\phi/2)\,\id - i\sin(\phi/2)\,\hat{\bm{n}}\cdot\bm{\sigma}.
+\end{equation}
+This is the Hamiltonian-engineering identity we use to think about
+gate calibration in \cref{sec:rabi}.
+\end{remark}
+
+\paragraph{Transition.}
+The static spectrum of a TLS is now fully characterised. The
+question of how a TLS \emph{responds to a coherent drive} is what
+turns this static picture into a tool for controlling qubits.
+
+% --------------------------------------------------------------
+\section{Rabi oscillations}
+\label{sec:rabi}
+
+\begin{phenomenon}
+A two-level system irradiated near its transition frequency does
+not absorb a single photon and stay in the excited state forever:
+it oscillates coherently between $\ket{0}$ and $\ket{1}$ at a rate
+controlled by the drive amplitude. The frequency of this oscillation
+--- the Rabi frequency --- is the basic quantity any qubit
+calibration aims to measure.
+\end{phenomenon}
+
+Consider the driven TLS Hamiltonian
+\begin{equation}
+\label{eq:driven-tls}
+\op{H}(t) = \frac{\omega_q}{2}\sigma_z + \Omega\cos(\omega_d t)\,\sigma_x,
+\end{equation}
+with qubit frequency $\omega_q$, drive frequency $\omega_d$ and
+drive amplitude $\Omega$.
+
+\paragraph{Move to the rotating frame.}
+Apply the unitary $\op{U}_0(t)=e^{-i\omega_d t\sigma_z/2}$. Using
+$\op{U}_0^\dagger\sigma_+\op{U}_0=e^{+i\omega_d t}\sigma_+$ and the
+identity $\cos(\omega_d t)\sigma_x = \tfrac12 e^{i\omega_d t}\sigma_-+
+\tfrac12 e^{-i\omega_d t}\sigma_+ + \tfrac12 e^{-i\omega_d t}\sigma_-+
+\tfrac12 e^{i\omega_d t}\sigma_+$, the rotating-frame Hamiltonian
+becomes (after dropping fast counter-rotating terms; this is the
+\emph{rotating-wave approximation} of \cref{sec:rwa})
+\begin{equation}
+\label{eq:rabi-h-rwa}
+\op{H}_R = \frac{\Delta}{2}\sigma_z + \frac{\Omega}{2}\sigma_x,
+\qquad
+\Delta = \omega_q - \omega_d.
+\end{equation}
+This is exactly the form \cref{eq:tls-h} with
+$\bm{B}=(\Omega,0,\Delta)$, so the Bloch vector precesses about
+$\bm{B}$ at the \emph{generalised Rabi frequency}
+\begin{equation}
+\Omega_R = \sqrt{\Omega^2+\Delta^2}.
+\end{equation}
+
+\begin{theorem}[Rabi formula]
+\label{thm:rabi}
+For the driven TLS \cref{eq:driven-tls}, in the rotating-wave
+approximation with the qubit initially in $\ket{0}$, the probability
+of finding it in $\ket{1}$ at time $t$ is
+\begin{equation}
+\label{eq:rabi-formula}
+P_{0\to 1}(t) \;=\; \frac{\Omega^2}{\Omega^2+\Delta^2}\,
+\sin^2\!\Bigl(\frac{\Omega_R\,t}{2}\Bigr).
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+The unitary generated by $\op{H}_R$ over a time $t$ is
+$\exp(-i\op{H}_R t)=\cos(\Omega_R t/2)\id - i\sin(\Omega_R t/2)\,
+\hat{\bm{n}}\cdot\bm{\sigma}$ with
+$\hat{\bm{n}}=(\Omega,0,\Delta)/\Omega_R$. Acting on $\ket{0}$ and
+projecting onto $\ket{1}$ gives \cref{eq:rabi-formula}.
+\end{proof}
+
+\begin{example}[Rabi calibration of a qubit]
+On resonance $\Delta=0$ and $P_{0\to1}(t)=\sin^2(\Omega t/2)$. A
+$\pi$-pulse, which inverts $\ket{0}\leftrightarrow\ket{1}$, requires
+$\Omega t=\pi$. Sweeping the drive amplitude (or duration) and
+fitting the resulting oscillation in $P_{0\to1}$ is the standard
+``Rabi experiment'' used to calibrate the amplitude of single-qubit
+gates in superconducting hardware (\cref{sec:experimental-basics}).
+\end{example}
+
+% --------------------------------------------------------------
+\section*{Chapter summary and outlook}
+
+We have solved the two systems that recur throughout the rest of the
+text. The harmonic oscillator gave us the ladder operators, the Fock
+basis, and the equally spaced spectrum that defines a linear
+resonator. The two-level system gave us the Pauli algebra, the
+geometric picture of the Bloch sphere, and Rabi oscillations under
+a coherent drive.
+
+So far our quantum systems have been completely isolated and
+described by a single state vector. Real experiments are not isolated:
+the qubit and resonator are coupled, the system is entangled with
+its environment, and the experimenter has only partial information
+about its state. The next chapter introduces the language --- tensor
+products, density matrices, and the partial trace --- that is needed
+to handle composite and mixed states without giving up any of the
+machinery developed so far.

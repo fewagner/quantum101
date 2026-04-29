@@ -1,0 +1,91 @@
+\chapter*{Introduction}
+\addcontentsline{toc}{chapter}{Introduction}
+
+\section*{Why these notes?}
+
+Superconducting circuits have, over the last two decades, become one of
+the leading hardware platforms for quantum computation, quantum simulation,
+and the experimental study of quantum optics in the microwave regime.
+Working in this field requires fluency in several different bodies of
+knowledge: the postulates and basic toolbox of non-relativistic quantum
+mechanics, the methods of quantum optics (originally developed for
+atom--photon interactions), and circuit theory adapted to the quantum
+regime.
+
+Many excellent textbooks cover each of these subjects individually.
+The purpose of these notes is more modest: to collect, in one place
+and in a uniform style, the specific subset of results that one
+typically uses on a daily basis when designing, simulating or analysing
+a superconducting-qubit experiment. The text is therefore intentionally
+not exhaustive --- formal proofs, edge cases and historical context are
+mostly omitted in favour of clarity and density. Where a derivation
+is given, it is given in full; where it is not, a pointer to the
+relevant literature is provided.
+
+\section*{Scope and structure}
+
+The document is organised in five parts.
+\begin{itemize}
+  \item \textbf{Part~I --- Quantum mechanics foundations.} Postulates,
+        Hilbert space and operators, the harmonic oscillator and
+        two-level system, density matrices and composite systems,
+        time-dependent perturbation theory, and the rotating-wave
+        approximation.
+  \item \textbf{Part~II --- Open quantum systems.} The Lindblad master
+        equation, $T_1$ and $T_2$, input--output theory, and the
+        quantum Zeno effect.
+  \item \textbf{Part~III --- Quantum optics.} Quantisation of the
+        electromagnetic field, Fock, coherent and squeezed states, the
+        Jaynes--Cummings model, dispersive coupling, the AC Stark
+        shift, and the Purcell effect.
+  \item \textbf{Part~IV --- Superconducting circuits.} Circuit
+        quantisation, the Josephson effects, the transmon and related
+        qubits, parametric and four-wave-mixing processes, dispersive
+        readout, single- and two-qubit gates, and the standard
+        calibration experiments (resonator and qubit spectroscopy,
+        Rabi, Ramsey).
+  \item \textbf{Part~V --- Quantum error correction.} Codes, the
+        stabiliser formalism, the surface code and a brief look at
+        bosonic codes.
+\end{itemize}
+
+\section*{Pedagogical convention}
+
+Every topic follows a four-step structure that we adopt deliberately
+throughout the document:
+\begin{enumerate}
+  \item \emph{Phenomenon.} A short description, in words, of what is
+        observed and why it deserves attention.
+  \item \emph{Statement.} The result, stated formally as a theorem,
+        proposition, definition or postulate.
+  \item \emph{Derivation.} The mathematical argument that establishes
+        the statement.
+  \item \emph{Example / application.} A pointer (sometimes worked out,
+        sometimes not) to a context in which the result is used.
+\end{enumerate}
+A reader who already knows the topic can scan the statements and skip
+the rest; a reader meeting the topic for the first time can build
+intuition from the phenomenon, then follow the derivation, then see
+where it lands.
+
+\section*{Notation and conventions}
+
+We use natural units in which $\hbar = 1$ unless emphasising the role
+of the Planck scale. State vectors are written as $\ket{\psi}$ and
+their duals as $\bra{\psi}$, with $\braket{\phi}{\psi}\in\C$ the inner
+product. Operators carry a hat ($\op{O}$) when there is a risk of
+confusion with a classical quantity. Pauli matrices are denoted
+$\sigma_x,\sigma_y,\sigma_z$ with the convention
+$\sigma_z\ket{0}=+\ket{0}$ and $\sigma_z\ket{1}=-\ket{1}$, so that
+$\ket{0}$ is the qubit ground state. The bosonic ladder operators
+$a, a^\dagger$ satisfy $[a,a^\dagger]=1$. Throughout, $\hilbert$
+denotes a complex separable Hilbert space and $\id$ the identity
+operator on it.
+
+\section*{How to read this document}
+
+Readers familiar with non-relativistic quantum mechanics may skim
+Part~I, treating it as a reference for notation, and proceed directly
+to Part~III. Readers new to the field are encouraged to read in order:
+the parts are deliberately layered, with later parts using results,
+notation, and intuition built up earlier.

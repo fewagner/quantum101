@@ -1,0 +1,335 @@
+\chapter{Postulates and the language of quantum mechanics}
+\label{ch:postulates}
+
+\section*{Chapter overview}
+
+Quantum mechanics is the framework that replaces classical mechanics
+when the systems we describe are small enough or cold enough that
+their phase-space volume becomes comparable to $\hbar$. Before doing
+any physics with it, we need a vocabulary: the Hilbert space in which
+states live, the algebra of operators that represent observables, and
+the rules that govern measurement and time evolution. This chapter
+collects exactly that vocabulary. The development is concise and
+deliberately a-physical; intuition for what these objects mean will be
+built in Chapters~\ref{ch:model-systems}--\ref{ch:perturbations} once
+we apply the toolbox to concrete systems.
+
+% --------------------------------------------------------------
+\section{States and Hilbert space}
+\label{sec:states}
+
+\begin{phenomenon}
+Single-photon and single-electron interference experiments
+demonstrate that quantum systems do not, in general, possess a
+definite value of every observable prior to measurement. The full
+list of possible outcomes for any measurement, together with the
+probability of each, is encoded in a single abstract object that we
+call the \emph{state} of the system.
+\end{phenomenon}
+
+\begin{postulate}[State space]
+\label{post:states}
+The state of an isolated quantum system is described by a unit
+vector $\ket{\psi}\in\hilbert$ in a complex separable Hilbert space.
+States that differ only by an overall phase, $\ket{\psi}$ and
+$e^{i\alpha}\ket{\psi}$, are physically equivalent.
+\end{postulate}
+
+\begin{definition}[Hilbert space]
+\label{def:hilbert}
+A \emph{Hilbert space} $\hilbert$ is a complex vector space equipped
+with an inner product
+$\braket{\cdot}{\cdot}:\hilbert\times\hilbert\to\C$ that is
+sesquilinear, conjugate-symmetric and positive definite, and that is
+complete under the induced norm $\|\psi\|=\sqrt{\braket{\psi}{\psi}}$.
+\end{definition}
+
+In Dirac (bra--ket) notation we write vectors as kets $\ket{\psi}$
+and elements of the dual space as bras $\bra{\psi}$, with
+$\braket{\phi}{\psi}\in\C$ the inner product. A countable orthonormal
+basis $\{\ket{n}\}$ of a separable Hilbert space gives the
+\emph{resolution of the identity}
+\begin{equation}
+\label{eq:resolution-identity}
+\id \;=\; \sum_{n} \ket{n}\bra{n},
+\end{equation}
+which we will use ubiquitously to insert complete sets of states into
+expressions.
+
+\begin{example}[Two-level system]
+A single qubit lives in $\hilbert=\C^2$ with computational-basis
+vectors $\ket{0},\ket{1}$. The most general pure state, up to global
+phase, is
+\begin{equation}
+\ket{\psi} = \cos(\theta/2)\,\ket{0} + e^{i\varphi}\sin(\theta/2)\,\ket{1},
+\end{equation}
+parametrised by a point $(\theta,\varphi)$ on the unit sphere ---
+the Bloch sphere of \cref{sec:bloch}.
+\end{example}
+
+\paragraph{Transition.}
+States by themselves are inert: they only become physical objects
+once we say what we can \emph{measure} on them. Measurements are
+mediated by operators, to which we now turn.
+
+% --------------------------------------------------------------
+\section{Observables and operators}
+\label{sec:operators}
+
+\begin{phenomenon}
+Some physical quantities --- energy, position, spin component along
+a given axis --- can in principle be measured, while others cannot
+be measured simultaneously without disturbance. Both facts must be
+encoded in the mathematical object that represents a measurable
+quantity.
+\end{phenomenon}
+
+\begin{postulate}[Observables]
+\label{post:observables}
+Every physical observable $A$ is represented by a self-adjoint
+(Hermitian) linear operator $\op{A}$ on $\hilbert$. The possible
+outcomes of a measurement of $A$ are the eigenvalues of $\op{A}$.
+\end{postulate}
+
+\begin{definition}[Hermitian, unitary, projector]
+\label{def:operator-types}
+Let $\op{A}$ be a linear operator on $\hilbert$. We call $\op{A}$
+\begin{itemize}
+  \item \emph{Hermitian} if $\op{A}^\dagger=\op{A}$;
+  \item \emph{unitary} if $\op{A}^\dagger\op{A}=\op{A}\op{A}^\dagger=\id$;
+  \item a \emph{projector} if $\op{A}^2=\op{A}$ and $\op{A}^\dagger=\op{A}$.
+\end{itemize}
+\end{definition}
+
+\begin{theorem}[Spectral theorem, finite-dimensional version]
+\label{thm:spectral}
+Any Hermitian operator $\op{A}$ on a finite-dimensional Hilbert
+space admits an orthonormal eigenbasis. Equivalently, there exist
+real numbers $\{a_n\}$ and a complete set of orthogonal projectors
+$\{\op{P}_n\}$ with $\op{P}_n\op{P}_m=\delta_{nm}\op{P}_n$ and
+$\sum_n\op{P}_n=\id$ such that
+\begin{equation}
+\label{eq:spectral-decomp}
+\op{A} \;=\; \sum_n a_n\,\op{P}_n.
+\end{equation}
+\end{theorem}
+
+\begin{proof}[Sketch]
+For finite-dimensional $\hilbert$ the proof reduces to the linear
+algebra fact that any Hermitian matrix is unitarily diagonalisable.
+For infinite-dimensional $\hilbert$ a more careful spectral measure
+is required; we will not need that level of generality here.
+\end{proof}
+
+\begin{remark}
+Unitaries play a dual role: as operators that conserve the inner
+product, $\braket{U\phi}{U\psi}=\braket{\phi}{\psi}$, and therefore
+preserve probabilities; and as the operators that implement reversible
+time evolution (\cref{sec:time-evolution}).
+\end{remark}
+
+\paragraph{Transition.}
+Equipped with states and operators, we can now state how the two
+combine to give an actual measurement outcome.
+
+% --------------------------------------------------------------
+\section{Measurement and the Born rule}
+\label{sec:measurement}
+
+\begin{phenomenon}
+A measurement of a quantum system in general yields one of several
+possible outcomes, with probabilities determined by the state. After
+the measurement, the system's state is updated to be consistent with
+the outcome that was observed.
+\end{phenomenon}
+
+\begin{postulate}[Born rule and projective measurement]
+\label{post:born}
+Let $\ket{\psi}\in\hilbert$ and let $\op{A}=\sum_n a_n\op{P}_n$ be
+an observable. A measurement of $\op{A}$ yields the outcome $a_n$
+with probability
+\begin{equation}
+\label{eq:born}
+p(a_n) \;=\; \bra{\psi}\op{P}_n\ket{\psi},
+\end{equation}
+and immediately after the measurement the state is updated to
+\begin{equation}
+\label{eq:projection}
+\ket{\psi}\;\longmapsto\; \frac{\op{P}_n\ket{\psi}}{\sqrt{p(a_n)}}.
+\end{equation}
+\end{postulate}
+
+\begin{example}[Measuring $\sigma_z$ on a qubit]
+Take $\op{A}=\sigma_z$ with eigendecomposition
+$\sigma_z=(+1)\ket{0}\bra{0}+(-1)\ket{1}\bra{1}$. For
+$\ket{\psi}=\cos(\theta/2)\ket{0}+e^{i\varphi}\sin(\theta/2)\ket{1}$
+the Born rule gives $p(0)=\cos^2(\theta/2)$ and
+$p(1)=\sin^2(\theta/2)$, independent of $\varphi$.
+\end{example}
+
+The expectation value of $\op{A}$ in state $\ket{\psi}$ is the
+classical average of the outcomes weighted by their probabilities,
+\begin{equation}
+\label{eq:expectation}
+\expval{\op{A}}_\psi \;=\; \sum_n a_n\,p(a_n)
+\;=\; \bra{\psi}\op{A}\ket{\psi}.
+\end{equation}
+
+\paragraph{Transition.}
+The fact that two observables share or fail to share an eigenbasis
+controls whether they can be measured jointly. This is what
+commutators encode.
+
+% --------------------------------------------------------------
+\section{Commutators and the uncertainty principle}
+\label{sec:uncertainty}
+
+\begin{definition}[Commutator and anticommutator]
+For operators $\op{A},\op{B}$ define
+\begin{equation}
+[\op{A},\op{B}] = \op{A}\op{B}-\op{B}\op{A},
+\qquad
+\{\op{A},\op{B}\} = \op{A}\op{B}+\op{B}\op{A}.
+\end{equation}
+\end{definition}
+
+Two Hermitian operators share an orthonormal eigenbasis if and only
+if $[\op{A},\op{B}]=0$. When $[\op{A},\op{B}]\neq0$ the two
+observables cannot be sharply specified at the same time, in a sense
+made quantitative by the following theorem.
+
+\begin{theorem}[Robertson uncertainty relation]
+\label{thm:robertson}
+For any state $\ket{\psi}$ and Hermitian operators $\op{A},\op{B}$,
+\begin{equation}
+\label{eq:robertson}
+\Delta A\,\Delta B \;\geq\; \tfrac{1}{2}\,
+\bigl|\expval{[\op{A},\op{B}]}_\psi\bigr|,
+\end{equation}
+where $\Delta A=\sqrt{\expval{\op{A}^2}-\expval{\op{A}}^2}$.
+\end{theorem}
+
+\begin{proof}
+Define the shifted operators
+$\delta\op{A}=\op{A}-\expval{\op{A}}\,\id$ and similarly
+$\delta\op{B}$, and the auxiliary state
+$\ket{f}=\delta\op{A}\ket{\psi}$,
+$\ket{g}=\delta\op{B}\ket{\psi}$. The Cauchy--Schwarz inequality
+gives
+\begin{equation}
+\bigl|\braket{f}{g}\bigr|^2 \;\leq\; \braket{f}{f}\,\braket{g}{g}
+\;=\; (\Delta A)^2(\Delta B)^2.
+\end{equation}
+Decomposing
+$\braket{f}{g}=\expval{\delta\op{A}\,\delta\op{B}}=
+\tfrac12\expval{\{\delta\op{A},\delta\op{B}\}}+\tfrac12\expval{[\op{A},\op{B}]}$,
+the first term is real and the second imaginary, so
+$|\braket{f}{g}|^2\geq\tfrac14|\expval{[\op{A},\op{B}]}|^2$.
+Combining the two inequalities yields \cref{eq:robertson}.
+\end{proof}
+
+\begin{example}[Position and momentum]
+With $[\op{x},\op{p}]=i\hbar\,\id$ the Robertson relation reduces to
+the familiar Heisenberg inequality $\Delta x\,\Delta p\geq\hbar/2$.
+\end{example}
+
+\paragraph{Transition.}
+Static states and a probability rule are not yet a theory of motion.
+We close the chapter by giving the equation that drives the state
+forward in time.
+
+% --------------------------------------------------------------
+\section{Time evolution}
+\label{sec:time-evolution}
+
+\begin{postulate}[Schr\"odinger equation]
+\label{post:schrodinger}
+The state of an isolated quantum system evolves continuously in
+time according to
+\begin{equation}
+\label{eq:schrodinger}
+i\hbar\,\dv{t}\ket{\psi(t)} \;=\; \op{H}(t)\,\ket{\psi(t)},
+\end{equation}
+where $\op{H}(t)$ is the Hermitian Hamiltonian operator.
+\end{postulate}
+
+For a time-independent Hamiltonian the formal solution is
+$\ket{\psi(t)}=\op{U}(t)\ket{\psi(0)}$ with the unitary
+$\op{U}(t)=e^{-i\op{H}t/\hbar}$. For time-dependent Hamiltonians
+the solution requires the time-ordered exponential
+\begin{equation}
+\op{U}(t,t_0) = \mathcal{T}\exp\!\Bigl[-\tfrac{i}{\hbar}\!\int_{t_0}^t\!\op{H}(t')\,\dd t'\Bigr],
+\end{equation}
+which we will need in \cref{ch:perturbations}.
+
+\subsection{Schr\"odinger, Heisenberg and interaction pictures}
+\label{sec:pictures}
+
+The split of the world into ``state'' and ``operator'' is a matter of
+convention. In the Schr\"odinger picture states evolve and operators
+do not; in the Heisenberg picture the assignment is reversed; and in
+the interaction picture both evolve, but only with respect to a
+chosen reference Hamiltonian.
+
+\begin{statement}[Picture transformations]
+\label{stmt:pictures}
+Let $\op{H}=\op{H}_0+\op{V}(t)$ and define the unitary
+$\op{U}_0(t)=e^{-i\op{H}_0 t/\hbar}$. Schr\"odinger states/operators
+are denoted with subscript $S$, Heisenberg with $H$, interaction
+with $I$. Then
+\begin{align}
+\ket{\psi(t)}_H &= \op{U}^\dagger(t)\ket{\psi(0)}_S = \ket{\psi(0)}_S, &
+\op{O}_H(t) &= \op{U}^\dagger(t)\,\op{O}_S\,\op{U}(t), \\
+\ket{\psi(t)}_I &= \op{U}_0^\dagger(t)\ket{\psi(t)}_S, &
+\op{O}_I(t) &= \op{U}_0^\dagger(t)\,\op{O}_S\,\op{U}_0(t).
+\end{align}
+The dynamical equations in each picture are
+\begin{equation}
+\dv{t}\op{O}_H = \tfrac{i}{\hbar}[\op{H},\op{O}_H],
+\qquad
+i\hbar\,\dv{t}\ket{\psi}_I = \op{V}_I(t)\,\ket{\psi}_I.
+\end{equation}
+\end{statement}
+
+\begin{proof}[Derivation, interaction picture]
+Differentiating $\ket{\psi}_I=\op{U}_0^\dagger\ket{\psi}_S$,
+\begin{equation}
+i\hbar\,\dv{t}\ket{\psi}_I
+= -\op{U}_0^\dagger\op{H}_0\ket{\psi}_S
++ \op{U}_0^\dagger\op{H}\ket{\psi}_S
+= \op{U}_0^\dagger\,\op{V}\,\op{U}_0\,\ket{\psi}_I
+= \op{V}_I(t)\,\ket{\psi}_I.
+\end{equation}
+The Heisenberg equation follows analogously by differentiating
+$\op{O}_H=\op{U}^\dagger\op{O}_S\op{U}$ and using
+$i\hbar\,\dot{\op{U}}=\op{H}\op{U}$.
+\end{proof}
+
+\begin{example}[Driven qubit]
+For $\op{H}_0=\tfrac{\omega_q}{2}\sigma_z$ and a drive
+$\op{V}(t)=\Omega\cos(\omega_d t)\,\sigma_x$, moving to the
+interaction picture with respect to $\op{H}_0$ rotates
+$\sigma_\pm$ at the qubit frequency $\omega_q$, isolating the
+near-resonant ($\omega_d\approx\omega_q$) terms. We will use this
+exact construction in \cref{sec:rabi,sec:rwa}.
+\end{example}
+
+% --------------------------------------------------------------
+\section*{Chapter summary and outlook}
+
+We now have everything we need to do physics: states are unit
+vectors in a Hilbert space; observables are Hermitian operators;
+measurements yield eigenvalues with the probabilities given by the
+Born rule; non-commuting observables obey the Robertson uncertainty
+relation; and unitary evolution under the Schr\"odinger equation
+governs the dynamics. The Heisenberg and interaction pictures give
+us complementary, frame-dependent ways of describing the same
+physics.
+
+In the next chapter we apply this machinery to the two systems that,
+between them, account for almost all of the dynamics encountered in
+cQED: the quantum harmonic oscillator (which describes resonators
+and, through the Josephson nonlinearity, the leading behaviour of
+the transmon) and the two-level system (which describes a qubit and,
+in the Bloch-sphere picture, gives the geometric language of
+single-qubit gates).

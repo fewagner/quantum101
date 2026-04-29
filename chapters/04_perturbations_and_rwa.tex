@@ -1,0 +1,206 @@
+\chapter{Driven systems: perturbation theory and the rotating-wave approximation}
+\label{ch:perturbations}
+
+\section*{Chapter overview}
+
+The Schr\"odinger equation can rarely be solved exactly when the
+Hamiltonian is time-dependent. Two systematic approximations carry us
+through almost every situation we will meet later. The first is
+\emph{time-dependent perturbation theory}, in which a small coupling
+$\op{V}(t)$ added to a known $\op{H}_0$ generates transitions whose
+amplitudes are computed order by order; specialising to a continuum
+of final states gives Fermi's golden rule, the standard expression
+for transition rates. The second is the \emph{rotating-wave
+approximation} (RWA), in which fast counter-rotating terms in the
+interaction-picture Hamiltonian are dropped because they average to
+zero on the timescales of interest. Both approximations are
+ingredients of the Jaynes--Cummings model
+(\cref{ch:jaynes-cummings}), of dispersive readout
+(\cref{sec:dispersive}), and of every drive-Hamiltonian calculation
+in cQED.
+
+% --------------------------------------------------------------
+\section{Time-dependent perturbation theory}
+\label{sec:tdpt}
+
+\begin{phenomenon}
+A weakly perturbed system in an eigenstate of $\op{H}_0$ slowly
+leaks probability amplitude into other eigenstates. To leading order
+the leakage rate depends on a single matrix element of the
+perturbation and on a frequency-domain mismatch between drive and
+transition.
+\end{phenomenon}
+
+Let $\op{H}(t)=\op{H}_0+\op{V}(t)$ with $\op{H}_0\ket{n}=E_n\ket{n}$.
+Expand the state in the interaction picture as
+\begin{equation}
+\ket{\psi(t)}_I = \sum_n c_n(t)\,\ket{n},
+\end{equation}
+where $\ket{\psi}_I=e^{i\op{H}_0 t/\hbar}\ket{\psi}_S$. Plugging into
+the interaction-picture Schr\"odinger equation
+$i\hbar\,\partial_t\ket{\psi}_I=\op{V}_I(t)\ket{\psi}_I$ and projecting
+onto $\bra{f}$ gives
+\begin{equation}
+\label{eq:cdot-exact}
+i\hbar\,\dot c_f(t) \;=\; \sum_n e^{i\omega_{fn}t}\,V_{fn}(t)\,c_n(t),
+\qquad \omega_{fn}=(E_f-E_n)/\hbar,
+\end{equation}
+with $V_{fn}(t)=\bra{f}\op{V}(t)\ket{n}$.
+
+\begin{statement}[First-order amplitude]
+\label{stmt:first-order}
+Starting from $\ket{i}$ at $t=0$ and assuming $\op{V}$ is small, the
+amplitude to be in $\ket{f}\neq\ket{i}$ at time $t$ is
+\begin{equation}
+\label{eq:c-first-order}
+c_f^{(1)}(t) \;=\; -\frac{i}{\hbar}\int_0^t e^{i\omega_{fi}t'}\,V_{fi}(t')\,\dd t'.
+\end{equation}
+\end{statement}
+
+\begin{proof}
+Set $c_n(t)=\delta_{ni}+c_n^{(1)}(t)+\ldots$ and substitute into
+\cref{eq:cdot-exact}. Keeping only zeroth-order $c_n$ on the right
+and $\dot c_f^{(1)}$ on the left gives
+$i\hbar\,\dot c_f^{(1)}=e^{i\omega_{fi}t}V_{fi}(t)$; integrating from
+$0$ to $t$ yields \cref{eq:c-first-order}.
+\end{proof}
+
+\paragraph{Transition.}
+\Cref{eq:c-first-order} is exact at first order but contains only
+amplitudes. To extract experimentally observable transition
+\emph{rates} into a continuum of final states, we take the
+long-time, dense-spectrum limit, which produces Fermi's golden rule.
+
+% --------------------------------------------------------------
+\section{Fermi's golden rule}
+\label{sec:fermi}
+
+\begin{theorem}[Fermi's golden rule]
+\label{thm:fermi}
+Let $\op{V}(t)=\op{V}\,e^{-i\omega t}+\op{V}^\dagger e^{+i\omega t}$ be a
+harmonic perturbation, and let the final states form a continuum
+with density of states $\rho_f(E)$ near $E=E_i+\hbar\omega$. The
+transition rate from $\ket{i}$ to states near energy
+$E_f=E_i+\hbar\omega$ is
+\begin{equation}
+\label{eq:fermi}
+\Gamma_{i\to f} \;=\; \frac{2\pi}{\hbar}\,\bigl|\bra{f}\op{V}\ket{i}\bigr|^2\,\rho_f(E_f).
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+From \cref{eq:c-first-order} with $V_{fi}(t)=V_{fi}\,e^{-i\omega t}$,
+\begin{equation}
+c_f^{(1)}(t) = -\frac{i}{\hbar}V_{fi}\,
+\frac{e^{i(\omega_{fi}-\omega)t}-1}{i(\omega_{fi}-\omega)},
+\end{equation}
+so
+\begin{equation}
+\bigl|c_f^{(1)}(t)\bigr|^2
+= \frac{|V_{fi}|^2}{\hbar^2}\,\frac{4\sin^2[(\omega_{fi}-\omega)t/2]}{(\omega_{fi}-\omega)^2}.
+\end{equation}
+For large $t$ the function on the right is sharply peaked at
+$\omega_{fi}=\omega$ with integral $2\pi t$; in the distributional
+sense $4\sin^2(xt/2)/x^2\to 2\pi t\,\delta(x)$. Summing over a
+continuum of final states with density $\rho_f(E_f)$ and dividing by
+$t$ gives \cref{eq:fermi}.
+\end{proof}
+
+\begin{example}[Spontaneous emission and the Purcell rate]
+The decay rate of an excited atom into the continuum of vacuum
+electromagnetic modes follows from Fermi's golden rule with
+$|V_{fi}|^2$ proportional to the dipole matrix element squared and
+$\rho_f(E_f)$ to the photon density of states. In a cavity,
+modifying $\rho_f$ at the atomic frequency accelerates or suppresses
+the decay --- the Purcell effect of \cref{sec:purcell}.
+\end{example}
+
+\paragraph{Transition.}
+Fermi's golden rule applies to weak perturbations and incoherent
+transitions. For \emph{strong} but \emph{near-resonant} drives, like
+the microwave tones used to control qubits, a different
+approximation is more useful: drop the fast off-resonant terms in
+the interaction-picture Hamiltonian.
+
+% --------------------------------------------------------------
+\section{The rotating-wave approximation}
+\label{sec:rwa}
+
+\begin{phenomenon}
+A near-resonant drive on a quantum system produces both a slow,
+``co-rotating'' amplitude that drives transitions and a fast,
+``counter-rotating'' one that averages to zero on the timescale of
+the slow dynamics. Provided the slow and fast scales are well
+separated, the counter-rotating part can be discarded.
+\end{phenomenon}
+
+\begin{statement}[RWA, generic form]
+\label{stmt:rwa}
+Consider $\op{H}(t)=\op{H}_0+\op{V}(t)$ with
+$\op{H}_0\ket{n}=E_n\ket{n}$ and $\op{V}(t)$ harmonic at frequency
+$\omega$. In the interaction picture,
+$\op{V}_I(t)=\sum_{m,n} V_{mn}\,e^{i\omega_{mn}t}\,e^{\pm i\omega t}\,
+\ket{m}\bra{n}$. Terms with $|\omega_{mn}\pm\omega|\gg|V_{mn}|/\hbar$
+oscillate fast on the scale of $\hbar/V$ and integrate to a
+negligible contribution; the RWA consists in dropping them and
+keeping only the resonant terms with $\omega_{mn}\pm\omega\approx0$.
+\end{statement}
+
+\paragraph{Derivation, two-level example.}
+For the driven TLS of \cref{sec:rabi} with
+$\op{V}(t)=\Omega\cos(\omega_d t)\sigma_x$, expand
+$\sigma_x=\sigma_++\sigma_-$ and write
+\begin{equation}
+\op{V}_I(t) = \tfrac{\Omega}{2}\bigl(\sigma_+ e^{i\omega_q t}+\sigma_- e^{-i\omega_q t}\bigr)
+\bigl(e^{i\omega_d t}+e^{-i\omega_d t}\bigr).
+\end{equation}
+Multiplying out, four terms appear: two oscillate at
+$\omega_q\pm\omega_d$ (slow, when $\omega_d\approx\omega_q$) and two
+at $\omega_q+\omega_d$ or $-(\omega_q+\omega_d)$ (always fast).
+Dropping the latter,
+\begin{equation}
+\op{V}_I^\text{RWA}(t)
+= \tfrac{\Omega}{2}\bigl(\sigma_+ e^{+i(\omega_q-\omega_d)t}+\sigma_- e^{-i(\omega_q-\omega_d)t}\bigr).
+\end{equation}
+Going one step further into the frame rotating at the drive
+frequency, $\op{U}_d(t)=e^{-i\omega_d t\sigma_z/2}$, removes the
+remaining time dependence and reproduces \cref{eq:rabi-h-rwa}, the
+static Hamiltonian whose dynamics gave the Rabi formula.
+
+\begin{remark}[Validity]
+The RWA is exact only in the limit
+$\Omega\ll \omega_q+\omega_d$ and $|\omega_q-\omega_d|\ll\omega_q+\omega_d$.
+At very strong driving the kept terms produce dynamics on a timescale
+comparable to the discarded fast oscillations, and corrections such
+as the Bloch--Siegert shift become measurable.
+\end{remark}
+
+\begin{example}[Why we needed it earlier]
+The Rabi formula in \cref{thm:rabi} was derived using exactly this
+approximation. Every drive Hamiltonian we will meet from
+\cref{ch:jaynes-cummings} onwards --- the Jaynes--Cummings coupling,
+the dispersive readout drive, the cross-resonance two-qubit gate ---
+takes its standard textbook form only after invoking the RWA.
+\end{example}
+
+% --------------------------------------------------------------
+\section*{Chapter summary and outlook}
+
+This chapter completed the toolkit needed to handle time-dependent
+problems: time-dependent perturbation theory gives transition
+amplitudes order by order, Fermi's golden rule converts those
+amplitudes into rates whenever a continuum of final states is
+available, and the rotating-wave approximation simplifies
+near-resonant drives to a static Hamiltonian in the appropriate
+rotating frame.
+
+Together with the postulates and operators of
+\cref{ch:postulates}, the model systems of \cref{ch:model-systems},
+and the composite-system formalism of \cref{ch:composite}, we have
+everything we need to start doing physics. In Part~II we will use
+this machinery to describe systems coupled to a noisy environment ---
+producing the Lindblad master equation, the relaxation and dephasing
+times $T_1, T_2$, and the input--output formalism. From there
+Part~III turns to quantum optics proper, and Part~IV to
+superconducting circuits, where every approximation introduced in
+this chapter will earn its keep.

@@ -1,0 +1,245 @@
+\chapter{Composite systems, density matrices and entanglement}
+\label{ch:composite}
+
+\section*{Chapter overview}
+
+Up to this point we have described isolated systems with a single
+ket. To talk about a qubit coupled to a resonator, two qubits in a
+gate, or a qubit interacting with its environment, we need three
+pieces of new machinery: (i) the tensor product, which combines two
+Hilbert spaces into one; (ii) the density matrix, which extends the
+notion of state to situations with classical uncertainty or
+correlations with inaccessible degrees of freedom; and (iii) the
+partial trace, which extracts the effective state of a subsystem from
+that of a larger composite. With these tools we will see that
+entanglement --- which has no classical analogue --- is the generic
+behaviour of interacting quantum systems and the resource that powers
+both quantum information processing and the standard tomography
+techniques used in cQED.
+
+% --------------------------------------------------------------
+\section{Composite systems and tensor products}
+\label{sec:tensor}
+
+\begin{phenomenon}
+Two independent quantum systems prepared in states $\ket{\psi_A}$
+and $\ket{\psi_B}$ are jointly described by a single state in a
+larger Hilbert space. Crucially, the joint Hilbert space contains
+many states that cannot be written as a single product
+$\ket{\psi_A}\otimes\ket{\psi_B}$ --- the entangled states.
+\end{phenomenon}
+
+\begin{postulate}[Composite systems]
+\label{post:composite}
+The Hilbert space of a composite system $AB$ is the tensor product
+$\hilbert_{AB}=\hilbert_A\otimes\hilbert_B$. If $\{\ket{i}_A\}$ and
+$\{\ket{j}_B\}$ are bases of $\hilbert_A,\hilbert_B$ then
+$\{\ket{i}_A\otimes\ket{j}_B\}$ is a basis of $\hilbert_{AB}$.
+Operators acting only on $A$ or $B$ are extended by the identity:
+$\op{O}_A\to\op{O}_A\otimes\id_B$, $\op{O}_B\to\id_A\otimes\op{O}_B$.
+\end{postulate}
+
+\begin{example}[Two qubits]
+For two qubits, $\hilbert_{AB}=\C^2\otimes\C^2=\C^4$ with basis
+$\{\ket{00},\ket{01},\ket{10},\ket{11}\}$. The four \emph{Bell
+states}
+\begin{equation}
+\ket{\Phi^\pm} = \tfrac{1}{\sqrt2}(\ket{00}\pm\ket{11}),
+\qquad
+\ket{\Psi^\pm} = \tfrac{1}{\sqrt2}(\ket{01}\pm\ket{10}),
+\end{equation}
+form a maximally entangled basis: none of them is a product
+$\ket{\psi_A}\otimes\ket{\psi_B}$.
+\end{example}
+
+\paragraph{Transition.}
+The four Bell states already exhibit the central oddity of composite
+systems: a perfectly known joint state can correspond to two
+\emph{individually} undefined subsystem states. To make sense of this,
+we now generalise the notion of state itself.
+
+% --------------------------------------------------------------
+\section{Density matrices}
+\label{sec:density}
+
+\begin{phenomenon}
+We rarely know the exact pure state of a real system: the
+preparation procedure may produce $\ket{\psi_n}$ with classical
+probability $p_n$, the system may be entangled with a bath, or the
+experimenter may simply have a coarse-grained description of the
+state. In all such cases the relevant object is a probability-weighted
+mixture of pure states, the density matrix.
+\end{phenomenon}
+
+\begin{definition}[Density matrix]
+\label{def:density}
+A \emph{density matrix} on $\hilbert$ is a linear operator
+$\op{\rho}:\hilbert\to\hilbert$ such that
+$\op{\rho}^\dagger=\op{\rho}$, $\op{\rho}\geq 0$, and $\Tr\op{\rho}=1$.
+The set of all such operators is convex; its extreme points are the
+\emph{pure states} $\op{\rho}=\ket{\psi}\bra{\psi}$ and all other
+density matrices are \emph{mixed}.
+\end{definition}
+
+For a statistical mixture of pure states $\{(\ket{\psi_n},p_n)\}$ the
+density matrix is
+\begin{equation}
+\op{\rho} \;=\; \sum_n p_n\,\ket{\psi_n}\bra{\psi_n},
+\qquad p_n\geq0,\;\sum_n p_n=1.
+\end{equation}
+Pure-state purity is captured by $\Tr\op{\rho}^2=1$; for any mixed
+state $\Tr\op{\rho}^2<1$.
+
+\begin{statement}[Born rule and dynamics, density-matrix form]
+\label{stmt:rho-rules}
+The expectation value of an observable $\op{A}$ in state $\op{\rho}$
+is
+\begin{equation}
+\expval{\op{A}} \;=\; \Tr(\op{\rho}\,\op{A}),
+\end{equation}
+and unitary evolution under a Hamiltonian $\op{H}$ obeys the
+Liouville--von~Neumann equation
+\begin{equation}
+\label{eq:liouville}
+i\hbar\,\dv{t}\op{\rho} \;=\; [\op{H},\op{\rho}].
+\end{equation}
+\end{statement}
+
+\begin{proof}
+For a pure state $\ket{\psi}$, $\Tr(\op{\rho}\op{A})=\bra{\psi}\op{A}\ket{\psi}$
+by inserting the resolution of identity; the result extends by
+linearity to mixtures. For dynamics,
+$\op{\rho}(t)=\op{U}\op{\rho}(0)\op{U}^\dagger$ with
+$\op{U}=e^{-i\op{H}t/\hbar}$; differentiating gives
+\cref{eq:liouville}.
+\end{proof}
+
+\paragraph{Transition.}
+A density matrix on $\hilbert_{AB}$ describes the joint state. The
+question of what state subsystem $A$ effectively sees, when $B$ is
+inaccessible, is answered by the partial trace.
+
+% --------------------------------------------------------------
+\section{The partial trace and reduced states}
+\label{sec:partial-trace}
+
+\begin{definition}[Partial trace]
+\label{def:partial-trace}
+Let $\op{\rho}_{AB}$ be a density matrix on
+$\hilbert_A\otimes\hilbert_B$ and $\{\ket{j}_B\}$ a basis of
+$\hilbert_B$. The \emph{reduced density matrix} of $A$ is
+\begin{equation}
+\label{eq:partial-trace}
+\op{\rho}_A \;=\; \Tr_B\,\op{\rho}_{AB}
+\;=\; \sum_j \bra{j}_B\,\op{\rho}_{AB}\,\ket{j}_B.
+\end{equation}
+$\op{\rho}_A$ is the unique operator on $\hilbert_A$ such that
+$\Tr_A(\op{\rho}_A\,\op{O}_A)=\Tr(\op{\rho}_{AB}\,(\op{O}_A\otimes\id_B))$
+for every observable $\op{O}_A$ on $A$.
+\end{definition}
+
+\begin{statement}[Reduction of an entangled pure state]
+\label{stmt:reduced-pure}
+Let $\ket{\Psi}_{AB}$ be a pure state. Its reduced state
+$\op{\rho}_A=\Tr_B\,\ket{\Psi}\bra{\Psi}$ is mixed if and only if
+$\ket{\Psi}$ is entangled. In particular,
+\begin{equation}
+\Tr\op{\rho}_A^2 = 1 \;\;\Longleftrightarrow\;\;
+\ket{\Psi}_{AB} = \ket{\psi}_A\otimes\ket{\phi}_B
+\text{ for some }\ket{\psi},\ket{\phi}.
+\end{equation}
+\end{statement}
+
+\begin{proof}[Sketch via Schmidt decomposition]
+Any bipartite pure state admits the Schmidt decomposition
+$\ket{\Psi}=\sum_k \lambda_k\,\ket{u_k}_A\otimes\ket{v_k}_B$ with
+$\lambda_k\geq0$ and $\sum_k\lambda_k^2=1$. Tracing over $B$ yields
+$\op{\rho}_A=\sum_k\lambda_k^2\,\ket{u_k}\bra{u_k}$, which is pure
+($\lambda_k=\delta_{k1}$) precisely when only one Schmidt coefficient
+is non-zero, i.e.\ when $\ket{\Psi}$ factorises.
+\end{proof}
+
+\begin{example}[Bell state has maximally mixed marginals]
+For $\ket{\Phi^+}=(\ket{00}+\ket{11})/\sqrt2$ a direct calculation
+gives
+$\op{\rho}_A = \tfrac12(\ket{0}\bra{0}+\ket{1}\bra{1}) = \tfrac12\id$.
+Each qubit individually is in the maximally mixed state $\id/2$ ---
+its Bloch vector is the origin of the Bloch sphere --- even though
+the joint state is perfectly known.
+\end{example}
+
+\begin{remark}
+The same construction underlies the description of an open system
+coupled to a bath: the system's effective state is the partial trace
+of the system--bath density matrix over the bath. The Lindblad
+master equation of \cref{ch:open-systems} is the time-local equation
+this reduced state obeys under the Born--Markov approximation.
+\end{remark}
+
+\paragraph{Transition.}
+Entanglement, having appeared as the obstruction to writing
+$\ket{\Psi}$ as a product, deserves a section of its own --- both as
+a phenomenon and as a quantitative resource.
+
+% --------------------------------------------------------------
+\section{Entanglement}
+\label{sec:entanglement}
+
+\begin{definition}[Separable and entangled states]
+\label{def:entanglement}
+A pure bipartite state $\ket{\Psi}_{AB}$ is \emph{separable} if it
+factorises as $\ket{\psi}_A\otimes\ket{\phi}_B$, otherwise it is
+\emph{entangled}. A mixed state $\op{\rho}_{AB}$ is separable if it
+admits a decomposition
+$\op{\rho}_{AB}=\sum_n p_n\,\op{\rho}_A^{(n)}\otimes\op{\rho}_B^{(n)}$
+with $p_n\geq0$, $\sum_n p_n=1$, and entangled otherwise.
+\end{definition}
+
+\begin{statement}[Schmidt rank as an entanglement witness]
+\label{stmt:schmidt}
+The Schmidt rank of a bipartite pure state $\ket{\Psi}_{AB}$ ---
+i.e.\ the number of non-zero Schmidt coefficients $\lambda_k$ in
+$\ket{\Psi}=\sum_k\lambda_k\ket{u_k}_A\ket{v_k}_B$ --- equals one if
+and only if $\ket{\Psi}$ is separable. Larger Schmidt rank means
+more entanglement; the entropy $S(\op{\rho}_A)=-\sum_k\lambda_k^2\log\lambda_k^2$
+of the reduced state is the canonical quantitative measure.
+\end{statement}
+
+\begin{example}[Two-qubit entanglement]
+For $\ket{\Phi^+}$, both Schmidt coefficients are $1/\sqrt2$ and
+$S(\op{\rho}_A)=\log 2$ --- one bit of entanglement, the maximum
+possible for a two-qubit system. This single ebit is the resource
+consumed by quantum teleportation and produced by an idealised
+two-qubit gate acting on $\ket{+}\otimes\ket{0}$.
+\end{example}
+
+\begin{application}[Why entanglement matters in cQED]
+\label{app:entanglement-cqed}
+Two-qubit gates (\cref{sec:two-qubit-gates}) are characterised by
+their ability to entangle: a gate that cannot create entanglement is
+locally equivalent to a product of single-qubit gates and provides
+no quantum-computational power. Conversely, entanglement with the
+environment is the cause of decoherence
+(\cref{ch:open-systems}): tracing out the environment in an
+entangled system--bath state produces a mixed reduced state for the
+qubit.
+\end{application}
+
+% --------------------------------------------------------------
+\section*{Chapter summary and outlook}
+
+We have moved from a single isolated system described by a ket to
+a much richer setting: composite systems live in tensor products,
+mixtures and reductions are described by density matrices, and the
+partial trace makes the relationship between joint and marginal
+states explicit. Entanglement emerges as the generic property of
+non-product joint states, and shows up in cQED both as the resource
+exploited by gates and as the mechanism behind decoherence.
+
+The final chapter of this part deals with one further question that
+the postulates do not, by themselves, answer: how does a system
+respond to a small or near-resonant time-dependent drive? The
+answer assembles two of the workhorses of quantum optics ---
+time-dependent perturbation theory (and Fermi's golden rule) and the
+rotating-wave approximation --- both of which we will use repeatedly
+in Parts~III and IV.
