@@ -1,0 +1,64 @@
+% ---- Encoding & language ----
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+\usepackage{lmodern}
+\usepackage{microtype}
+
+% ---- Math ----
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{physics}      % \bra, \ket, \dd, \pdv, \comm, etc.
+\usepackage{bm}
+\usepackage{siunitx}
+
+% ---- Graphics & layout ----
+\usepackage{graphicx}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{quantikz, circuits.ee.IEC, decorations.pathreplacing}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{float}
+
+% ---- References & links ----
+\usepackage{hyperref}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue!50!black,
+  citecolor=green!40!black,
+  urlcolor=blue!70!black
+}
+\usepackage{cleveref}
+
+% ---- Theorem-like environments ----
+% Style: phenomenon (motivation), then statement (theorem-like),
+% then proof/derivation, then example.
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[chapter]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{statement}[theorem]{Statement}
+\newtheorem{postulate}[theorem]{Postulate}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{application}[theorem]{Application}
+
+\theoremstyle{remark}
+\newtheorem*{phenomenon}{Phenomenon}
+\newtheorem*{intuition}{Intuition}
+\newtheorem*{remark}{Remark}
+\newtheorem*{note}{Note}
+
+% ---- Custom shortcuts ----
+\newcommand{\hilbert}{\mathcal{H}}
+\newcommand{\id}{\mathbb{1}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\hc}{\text{h.c.}}
+\newcommand{\Tr}{\operatorname{Tr}}
+\newcommand{\op}[1]{\hat{#1}}
