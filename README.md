@@ -41,6 +41,24 @@ make clean      # remove aux files
 Requires a TeX Live distribution with the `physics`, `tikz`/`quantikz`,
 `siunitx`, `cleveref`, and `hyperref` packages.
 
+## Online preview
+
+Every push to this repository triggers a GitHub Actions workflow
+(`.github/workflows/build-pdf.yml`) that compiles `main.tex` and
+publishes the resulting PDF to GitHub Pages, embedded in
+`index.html`.
+
+**One-time setup** (repository owner only):
+
+1. Open *Settings → Pages* on the GitHub repo.
+2. Under **Build and deployment → Source**, choose **GitHub Actions**.
+3. Push any change (or re-run the latest workflow). Once the deploy
+   job succeeds, the PDF is available at
+   `https://<user>.github.io/quantum101/` (with a "Download PDF"
+   link), and the raw file at `https://<user>.github.io/quantum101/main.pdf`.
+
+Build status and the deploy URL are visible under the *Actions* tab.
+
 ---
 
 ## TODO — Topics to cover

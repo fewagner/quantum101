@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Quantum 101 &mdash; Notes</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    html, body { margin: 0; padding: 0; height: 100%; background: #1e1e1e; color: #eee;
+                 font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    .bar { padding: 0.5rem 1rem; background: #111; border-bottom: 1px solid #333;
+           display: flex; align-items: baseline; gap: 1rem; }
+    .bar h1 { margin: 0; font-size: 1rem; font-weight: 600; }
+    .bar a { color: #6cb6ff; text-decoration: none; font-size: 0.9rem; }
+    .bar a:hover { text-decoration: underline; }
+    .viewer { width: 100%; height: calc(100vh - 2.5rem); border: 0; }
+    .fallback { padding: 2rem; max-width: 40rem; }
+  </style>
+</head>
+<body>
+  <div class="bar">
+    <h1>Quantum 101</h1>
+    <a href="main.pdf" download>Download PDF</a>
+    <a href="https://github.com/fewagner/quantum101">Source</a>
+  </div>
+  <object class="viewer" data="main.pdf" type="application/pdf">
+    <div class="fallback">
+      <p>Your browser cannot display the PDF inline.
+         <a href="main.pdf">Download main.pdf</a> instead.</p>
+    </div>
+  </object>
+</body>
+</html>
