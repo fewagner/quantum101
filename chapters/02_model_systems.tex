@@ -96,9 +96,10 @@ of a superconducting circuit (\cref{ch:circuit-qed}).
 
 \paragraph{Transition.}
 The harmonic oscillator gives us an infinite ladder of evenly spaced
-levels. The opposite extreme --- a system with only two levels --- is
-the second cornerstone of quantum optics and forms the idealisation
-of a qubit.
+levels. The opposite extreme --- a system with only two levels ---
+is the second cornerstone we need. We treat it next, and along the
+way introduce the term \emph{qubit} that we have, until now, been
+careful to avoid.
 
 % --------------------------------------------------------------
 \section{The two-level system and the Pauli algebra}
@@ -111,6 +112,20 @@ by a Hamiltonian acting on a low-dimensional Hilbert space. The
 simplest non-trivial case --- a single isolated transition --- is
 the two-level system.
 \end{phenomenon}
+
+\begin{definition}[Qubit]
+\label{def:qubit}
+A \emph{qubit} (quantum bit) is a two-level quantum system used as
+the physical realisation of a logical bit of quantum information.
+The two basis states are written $\ket{0}$ and $\ket{1}$, with
+$\ket{0}$ playing the role of the classical $0$. The term is
+agnostic about the physical implementation: a qubit can be an
+electron spin, a photon polarisation, the two lowest levels of a
+transmon (\cref{ch:circuit-qed}), and so on. From here on we use
+``qubit'' and ``two-level system'' interchangeably, defaulting to
+``qubit'' when the system is being thought of as a unit of quantum
+information rather than just a bare two-level Hamiltonian.
+\end{definition}
 
 \begin{definition}[Pauli operators]
 \label{def:pauli}
@@ -138,6 +153,28 @@ $\hat\sigma_\pm = (\hat\sigma_x\pm i\hat\sigma_y)/2$, with
 $\hat\sigma_+\ket{1}=\ket{0}$, $\hat\sigma_-\ket{0}=\ket{1}$ in the
 convention $\hat\sigma_z\ket{0}=+\ket{0}$ used throughout these notes.
 
+\begin{remark}[Geometric meaning: generators of rotations]
+The Pauli operators are the \emph{generators} of rotations on the
+qubit's Hilbert space about the three coordinate axes. Concretely,
+\begin{equation}
+\label{eq:pauli-rotation}
+\hat{R}_i(\theta) \;\equiv\; e^{-i\theta\hat\sigma_i/2}
+\;=\; \cos(\theta/2)\,\id - i\sin(\theta/2)\,\hat\sigma_i,
+\qquad i\in\{x,y,z\},
+\end{equation}
+implements a rotation by angle $\theta$ about the $i$-axis: it
+takes the Bloch vector $\bm{r}$ (\cref{sec:bloch}) to the rotated
+vector $R_i(\theta)\bm{r}$. The Pauli operators themselves
+($\theta\to\infty$ in some sense) are not rotations --- they have
+eigenvalues $\pm1$ and square to $\id$ --- but they generate the
+rotation group through \cref{eq:pauli-rotation}. The factor
+$\frac12$ in the exponent reflects the spinor structure of $\C^2$:
+a $2\pi$ rotation maps $\ket{\psi}\to-\ket{\psi}$ rather than back
+to $\ket{\psi}$, and only a $4\pi$ rotation is the identity. This
+geometric picture is what makes the Bloch sphere
+(\cref{sec:bloch}) such a useful tool.
+\end{remark}
+
 \begin{statement}[Most general TLS Hamiltonian]
 \label{stmt:tls-hamiltonian}
 Up to an irrelevant additive constant, every Hermitian operator on
@@ -164,35 +201,93 @@ of a TLS into elementary geometry on $S^2$.
 \section{The Bloch sphere}
 \label{sec:bloch}
 
+\paragraph{From state vectors to density matrices.}
+A state vector $\ket{\psi}\in\C^2$ describes \emph{maximal}
+knowledge of a qubit: we know its preparation exactly. In practice
+preparation is rarely perfect, and we frequently want to talk about
+a qubit whose state is only known up to a classical probability
+distribution. The right object for that is the \emph{density
+matrix}, which we define below in the qubit-specific form needed
+here; the same object plays a central role in \cref{ch:composite},
+where it is set up in full generality and where we will also see
+that interaction with an environment naturally turns pure states
+into mixed ones.
+
+\begin{definition}[Single-qubit density matrix and purity]
+\label{def:density-tls}
+A \emph{density matrix} on $\C^2$ is a Hermitian, positive
+semi-definite operator $\op{\rho}$ with $\Tr\op{\rho}=1$. Every
+$\ket{\psi}\in\C^2$ of unit norm gives a density matrix
+$\op{\rho}=\ket{\psi}\bra{\psi}$, and any convex combination
+$\op{\rho}=\sum_n p_n\,\ket{\psi_n}\bra{\psi_n}$ with $p_n\geq0$,
+$\sum_n p_n=1$ is again one. The \emph{purity} of $\op{\rho}$ is
+\begin{equation}
+\mathcal{P}(\op{\rho}) \;=\; \Tr\op{\rho}^2 \;\in\; [\tfrac12,\,1].
+\end{equation}
+We call $\op{\rho}$ \emph{pure} when
+$\mathcal{P}(\op{\rho})=1$ and \emph{mixed} otherwise; one shows
+(see \cref{ch:composite}) that
+$\mathcal{P}(\op{\rho})=1$ holds if and only if $\op{\rho}$ is a
+projector onto a single state vector,
+$\op{\rho}=\ket{\psi}\bra{\psi}$.
+\end{definition}
+
 \begin{statement}[Bloch representation]
 \label{stmt:bloch}
-Every state of a single qubit, pure or mixed, can be written as
+Every density matrix on $\C^2$ can be written as
 \begin{equation}
 \label{eq:bloch-rho}
 \op{\rho} \;=\; \tfrac12\bigl(\id + \bm{r}\cdot\hat{\bm{\sigma}}\bigr),
 \qquad
-\bm{r}\in\R^3,\;|\bm{r}|\leq1,
+\bm{r}\in\R^3,\;|\bm{r}|\leq1.
 \end{equation}
-with $|\bm{r}|=1$ for pure states and $|\bm{r}|<1$ for mixed states.
+The map $\op{\rho}\leftrightarrow\bm{r}$ is bijective; the surface
+$|\bm{r}|=1$ corresponds exactly to the pure states of
+\cref{def:density-tls}, and the interior $|\bm{r}|<1$ to the mixed
+ones.
 \end{statement}
 
 \begin{proof}
 Any Hermitian operator on $\C^2$ expands in the basis
-$\{\id,\hat\sigma_x,\hat\sigma_y,\hat\sigma_z\}$. Trace-one and
-Hermiticity fix the coefficient of $\id$ and the reality of the
-others; positivity $\op{\rho}\geq0$ requires both eigenvalues
-$\tfrac12(1\pm|\bm{r}|)\geq0$, i.e.\ $|\bm{r}|\leq1$. Purity,
-$\Tr\op{\rho}^2=\tfrac12(1+|\bm{r}|^2)=1$, then forces $|\bm{r}|=1$.
+$\{\id,\hat\sigma_x,\hat\sigma_y,\hat\sigma_z\}$ as
+$\op{\rho}=c_0\id+\bm{c}\cdot\hat{\bm{\sigma}}$ for some $c_0\in\R$
+and $\bm{c}\in\R^3$. Trace-one fixes
+$c_0=\tfrac12$, and writing $\bm{c}=\tfrac12\bm{r}$ puts
+\cref{eq:bloch-rho} in standard form.
+The two eigenvalues of $\op{\rho}$ are $\tfrac12(1\pm|\bm{r}|)$;
+positivity ($\op{\rho}\geq0$) requires both to be non-negative,
+giving $|\bm{r}|\leq1$. A direct computation using
+$(\hat{\bm{\sigma}}\cdot\bm{r})^2=|\bm{r}|^2\,\id$ then yields
+$\Tr\op{\rho}^2=\tfrac12(1+|\bm{r}|^2)$, so the purity condition
+$\Tr\op{\rho}^2=1$ from \cref{def:density-tls} translates exactly
+to $|\bm{r}|=1$.
 \end{proof}
 
+\paragraph{Pure states and the geometry of the sphere.}
 In coordinates a pure state $\ket{\psi}=\cos(\theta/2)\ket{0}+
 e^{i\varphi}\sin(\theta/2)\ket{1}$ has Bloch vector
 $\bm{r}=(\sin\theta\cos\varphi,\sin\theta\sin\varphi,\cos\theta)$,
-and the action of \cref{eq:tls-h} on $\bm{r}$ is precession around
-$\bm{\Omega}$ at angular speed $|\bm{\Omega}|$. (The factor $\hbar$
-in \cref{eq:tls-h} cancels with the $\hbar$ in
-$e^{-i\op{H}t/\hbar}$.) Density matrices and the appearance of
-$|\bm{r}|<1$ for mixed states are revisited in \cref{ch:composite}.
+parametrising the unit sphere $S^2$. The action of \cref{eq:tls-h}
+on $\bm{r}$ is precession around the axis $\bm{\Omega}$ at angular
+speed $|\bm{\Omega}|$ (the $\hbar$ in \cref{eq:tls-h} cancels with
+the $\hbar$ in $e^{-i\op{H}t/\hbar}$).
+
+\begin{remark}[How a pure state becomes mixed]
+Mixed states ($|\bm{r}|<1$) arise in two distinct but related ways.
+The first is \emph{classical uncertainty in preparation}: if the
+device produces $\ket{\psi_n}$ with probability $p_n$, the state
+relevant for predictions is $\op{\rho}=\sum_n p_n\,\ket{\psi_n}\bra{\psi_n}$,
+which has $|\bm{r}|<1$ unless all $p_n$ are concentrated on a
+single state. The second is \emph{coupling to an environment}:
+even if the joint state of qubit and environment is pure, the
+qubit's reduced state (obtained by the partial trace
+of \cref{ch:composite}) is in general mixed. This second mechanism
+is the origin of decoherence in real hardware and is treated in
+detail in Part~II (\cref{ch:open-systems}). On the Bloch sphere
+the qubit's $\bm{r}$ accordingly contracts towards the origin
+under noise; the rate of that contraction is what the relaxation
+($T_1$) and dephasing ($T_2$) times measure.
+\end{remark}
 
 \begin{remark}
 Single-qubit gates correspond to rotations of $\bm{r}$ about an axis
@@ -215,42 +310,117 @@ turns this static picture into a tool for controlling qubits.
 \label{sec:rabi}
 
 \begin{phenomenon}
-A two-level system irradiated near its transition frequency does
-not absorb a single photon and stay in the excited state forever:
-it oscillates coherently between $\ket{0}$ and $\ket{1}$ at a rate
-controlled by the drive amplitude. The frequency of this oscillation
---- the Rabi frequency --- is the basic quantity any qubit
-calibration aims to measure.
+A qubit driven coherently at a frequency close to its level
+spacing does not just sit in $\ket{0}$ or $\ket{1}$: it cycles
+back and forth between the two states at a rate set by the drive
+amplitude. The frequency of this cycle --- the \emph{Rabi
+frequency} --- is the basic quantity that any qubit calibration
+aims to measure (\cref{sec:experimental-basics}), and the cycle
+itself is what every single-qubit gate exploits.
 \end{phenomenon}
 
-Consider the driven TLS Hamiltonian
+Consider the driven-qubit Hamiltonian
 \begin{equation}
 \label{eq:driven-tls}
 \op{H}(t) = \frac{\hbar\omega_q}{2}\hat\sigma_z
           + \hbar\Omega\cos(\omega_d t)\,\hat\sigma_x,
 \end{equation}
-with qubit (angular) frequency $\omega_q$, drive frequency $\omega_d$
-and drive amplitude $\Omega$ (also an angular frequency).
+with qubit angular frequency $\omega_q$, drive (angular) frequency
+$\omega_d$, and drive amplitude $\Omega$ (also an angular
+frequency). This is the same physical setup as
+\cref{ex:tls-rotating-frame} of \cref{ch:postulates}, now written
+in the Pauli-operator language of \cref{def:pauli}: the
+identification is $\op{H}_0\,(\text{from Ex.\,\ref{ex:tls-rotating-frame}})
+\leftrightarrow\frac{\hbar\omega_q}{2}\hat\sigma_z$ (up to a
+$\frac12$-Identity additive constant) and
+$\ket{0}\bra{1}+\ket{1}\bra{0}\leftrightarrow\hat\sigma_x$.
+\Cref{ex:tls-rotating-frame} stopped after deriving the
+interaction-picture Hamiltonian and identifying its slow and fast
+parts. Here we go one step further and \emph{also} cancel the
+slow oscillation, ending up with a strictly time-independent
+Hamiltonian whose dynamics is \cref{thm:rabi}.
 
-\paragraph{Move to the rotating frame.}
-Apply the unitary $\op{U}_0(t)=e^{-i\omega_d t\hat\sigma_z/2}$. The
-transformed Hamiltonian, including the inertial term
-$-i\hbar\,\op{U}_0^\dagger\dot{\op{U}}_0=-\hbar\omega_d\hat\sigma_z/2$, is
+\paragraph{Move to a rotating frame.}
+The reason \cref{eq:driven-tls} looks intractable is the
+$\cos(\omega_d t)$: a static Hamiltonian we can exponentiate, a
+time-dependent one in general we cannot. The remedy is to switch
+to a frame in which the explicit time dependence is gone.
+Concretely, we look for a unitary $\op{U}_0(t)$ such that the
+transformed state $\ket{\tilde\psi(t)}=\op{U}_0^\dagger(t)\ket{\psi(t)}$
+obeys $i\hbar\,\partial_t\ket{\tilde\psi}=\op{H}_R\ket{\tilde\psi}$
+with $\op{H}_R$ \emph{time-independent}. This is exactly the
+interaction-picture construction of \cref{stmt:pictures}: the
+Hamiltonian transforms as
 \begin{equation}
-\op{H}_R(t) = \frac{\hbar\Delta}{2}\hat\sigma_z
-            + \hbar\Omega\cos(\omega_d t)\,\op{U}_0^\dagger\hat\sigma_x\op{U}_0,
-\qquad \Delta=\omega_q-\omega_d.
+\label{eq:frame-transform}
+\op{H} \;\longmapsto\;
+\op{H}_R(t) \;=\; \op{U}_0^\dagger(t)\,\op{H}(t)\,\op{U}_0(t)
+\;-\; i\hbar\,\op{U}_0^\dagger(t)\,\dot{\op{U}}_0(t),
 \end{equation}
-Using $\op{U}_0^\dagger\hat\sigma_\pm\op{U}_0=e^{\pm i\omega_d t}\hat\sigma_\pm$
-gives
-$\op{U}_0^\dagger\hat\sigma_x\op{U}_0=
-e^{i\omega_d t}\hat\sigma_+ + e^{-i\omega_d t}\hat\sigma_-$. Multiplying
-by $\cos(\omega_d t)=\tfrac12(e^{i\omega_d t}+e^{-i\omega_d t})$ produces
-four terms; two are time-independent and two oscillate at $\pm 2\omega_d$.
-Dropping the latter (the rotating-wave approximation of \cref{sec:rwa}),
+where the second term (the ``inertial'' or ``frame'' term) accounts
+for the fact that we're working in a moving reference frame. Any
+unitary is a legal choice; what makes the construction useful is
+choosing $\op{U}_0$ to absorb as much of the time dependence as
+possible.
+
+\Cref{ex:tls-rotating-frame} chose $\op{U}_0$ generated by
+$\op{H}_0$ itself, ending up in a frame rotating at the system
+frequency $\omega_q$. The terms then oscillated at the detuning
+$\omega_q-\omega_d$ (slow) and at $\omega_q+\omega_d$ (fast). Here
+we make the slightly different --- and stronger --- choice of
+rotating at the \emph{drive} frequency $\omega_d$:
+\begin{equation}
+\label{eq:rabi-rotating-unitary}
+\op{U}_0(t) \;=\; e^{-i\omega_d t\,\hat\sigma_z/2}.
+\end{equation}
+That choice is engineered to cancel the explicit $\cos(\omega_d t)$
+in \cref{eq:driven-tls}; it leaves us with a time-\emph{independent}
+Hamiltonian once the fast counter-rotating piece is dropped, which
+\cref{ex:tls-rotating-frame} did not achieve.
+
+\paragraph{Carry out the transformation.}
+Differentiating \cref{eq:rabi-rotating-unitary} gives the inertial
+term
+\begin{equation}
+-i\hbar\,\op{U}_0^\dagger\dot{\op{U}}_0
+\;=\; -\frac{\hbar\omega_d}{2}\hat\sigma_z.
+\end{equation}
+Because $\op{U}_0$ commutes with $\hat\sigma_z$, the diagonal piece
+of $\op{H}$ is unchanged by conjugation, and combining with the
+inertial term yields
+\begin{equation}
+\op{U}_0^\dagger\,\frac{\hbar\omega_q}{2}\hat\sigma_z\,\op{U}_0
+- \frac{\hbar\omega_d}{2}\hat\sigma_z
+\;=\; \frac{\hbar\Delta}{2}\hat\sigma_z,
+\qquad \Delta\equiv\omega_q-\omega_d.
+\end{equation}
+For the off-diagonal piece, use the same identity as in
+\cref{ex:tls-rotating-frame},
+\begin{equation}
+\op{U}_0^\dagger\,\hat\sigma_\pm\,\op{U}_0
+\;=\; e^{\pm i\omega_d t}\,\hat\sigma_\pm,
+\quad\text{hence}\quad
+\op{U}_0^\dagger\,\hat\sigma_x\,\op{U}_0
+\;=\; e^{+i\omega_d t}\hat\sigma_+ + e^{-i\omega_d t}\hat\sigma_-.
+\end{equation}
+Multiplying by
+$\cos(\omega_d t)=\tfrac12(e^{i\omega_d t}+e^{-i\omega_d t})$ gives
+four terms,
+\begin{equation}
+\hbar\Omega\cos(\omega_d t)\,\op{U}_0^\dagger\hat\sigma_x\op{U}_0
+\;=\; \tfrac{\hbar\Omega}{2}\bigl[\hat\sigma_+ + \hat\sigma_- \bigr]
+\;+\; \tfrac{\hbar\Omega}{2}\bigl[e^{+2i\omega_d t}\hat\sigma_+ + e^{-2i\omega_d t}\hat\sigma_-\bigr],
+\end{equation}
+of which the first bracket is the time-independent
+\emph{co-rotating} piece (it equals
+$\tfrac{\hbar\Omega}{2}\hat\sigma_x$) and the second oscillates at
+$\pm 2\omega_d$. Dropping the latter --- the rotating-wave
+approximation of \cref{sec:rwa}, valid for
+$\Omega\ll\omega_q+\omega_d$ --- finally yields the static
+rotating-frame Hamiltonian
 \begin{equation}
 \label{eq:rabi-h-rwa}
-\op{H}_R = \frac{\hbar\Delta}{2}\hat\sigma_z + \frac{\hbar\Omega}{2}\hat\sigma_x.
+\op{H}_R \;=\; \frac{\hbar\Delta}{2}\hat\sigma_z + \frac{\hbar\Omega}{2}\hat\sigma_x.
 \end{equation}
 This is exactly the form \cref{eq:tls-h} with
 $\bm{\Omega}=(\Omega,0,\Delta)$, so the Bloch vector precesses about
