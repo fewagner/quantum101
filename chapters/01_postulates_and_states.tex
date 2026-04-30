@@ -370,13 +370,80 @@ $\op{O}_H=\op{U}^\dagger\op{O}_S\op{U}$ and using
 $i\hbar\,\dot{\op{U}}=\op{H}\op{U}$.
 \end{proof}
 
-\begin{example}[Driven qubit]
-For $\op{H}_0=\tfrac{\hbar\omega_q}{2}\hat\sigma_z$ and a drive
-$\op{V}(t)=\hbar\Omega\cos(\omega_d t)\,\hat\sigma_x$, moving to the
-interaction picture with respect to $\op{H}_0$ rotates
-$\hat\sigma_\pm$ at the qubit frequency $\omega_q$, isolating the
-near-resonant ($\omega_d\approx\omega_q$) terms. We will use this
-exact construction in \cref{sec:rabi,sec:rwa}.
+\begin{example}[Two-level system in a rotating frame]
+\label{ex:tls-rotating-frame}
+The interaction picture is the workhorse tool for ``rotating away''
+a known piece of the Hamiltonian. To see it in action we work
+through the simplest non-trivial case: a system with two energy
+eigenstates $\ket{0}$ and $\ket{1}$ (energies $0$ and $\hbar\omega_0$,
+respectively) coupled by a weak periodic drive.
+
+\paragraph{Setup.}
+Take
+\begin{equation}
+\op{H}_0 \;=\; \hbar\omega_0\,\ket{1}\bra{1},
+\qquad
+\op{V}(t) \;=\; \hbar\Omega\cos(\omega_d t)\,
+\bigl(\ket{0}\bra{1}+\ket{1}\bra{0}\bigr),
+\end{equation}
+with a small drive amplitude $\Omega>0$ and a drive frequency
+$\omega_d$ that we will eventually pick close to $\omega_0$. The
+operator $\ket{0}\bra{1}+\ket{1}\bra{0}$ swaps the two basis states,
+so $\op{V}(t)$ is the off-diagonal coupling that lets the drive move
+amplitude between $\ket{0}$ and $\ket{1}$.
+
+\paragraph{Step 1: build the reference unitary.}
+The reference Hamiltonian $\op{H}_0$ has eigenstates $\ket{0}$ and
+$\ket{1}$, so
+\begin{equation}
+\op{U}_0(t) \;=\; e^{-i\op{H}_0 t/\hbar}
+\;=\; \ket{0}\bra{0} + e^{-i\omega_0 t}\,\ket{1}\bra{1}.
+\end{equation}
+Conjugating $\ket{1}\bra{0}$ by $\op{U}_0$ produces a single
+exponential factor:
+\begin{equation}
+\op{U}_0^\dagger(t)\,\ket{1}\bra{0}\,\op{U}_0(t)
+\;=\; e^{+i\omega_0 t}\,\ket{1}\bra{0},
+\quad\text{and}\quad
+\op{U}_0^\dagger(t)\,\ket{0}\bra{1}\,\op{U}_0(t)
+\;=\; e^{-i\omega_0 t}\,\ket{0}\bra{1}.
+\end{equation}
+
+\paragraph{Step 2: write $\op{V}_I(t)$.}
+By definition $\op{V}_I(t)=\op{U}_0^\dagger(t)\,\op{V}(t)\,\op{U}_0(t)$,
+so
+\begin{equation}
+\op{V}_I(t) \;=\; \hbar\Omega\cos(\omega_d t)\,
+\bigl(e^{+i\omega_0 t}\ket{1}\bra{0} + e^{-i\omega_0 t}\ket{0}\bra{1}\bigr).
+\end{equation}
+Now expand the cosine, $\cos(\omega_d t)=\tfrac12(e^{i\omega_d t}+e^{-i\omega_d t})$,
+and multiply out. Four exponential terms appear:
+\begin{equation}
+\op{V}_I(t) \;=\; \tfrac{\hbar\Omega}{2}\Bigl[\,
+\underbrace{e^{i(\omega_0-\omega_d)t}\ket{1}\bra{0}
+       + e^{-i(\omega_0-\omega_d)t}\ket{0}\bra{1}}_{\text{slow at $\omega_d\approx\omega_0$}}
+\;+\;
+\underbrace{e^{i(\omega_0+\omega_d)t}\ket{1}\bra{0}
+       + e^{-i(\omega_0+\omega_d)t}\ket{0}\bra{1}}_{\text{always fast}}
+\,\Bigr].
+\end{equation}
+
+\paragraph{Step 3: read off the physics.}
+The first two terms oscillate at the \emph{detuning}
+$\omega_0-\omega_d$, which is small whenever the drive is tuned
+close to the level spacing $\omega_0$. They drive amplitude back
+and forth between $\ket{0}$ and $\ket{1}$ slowly, and accumulate
+coherently. The last two terms oscillate at $\omega_0+\omega_d
+\approx 2\omega_0$ regardless of how the drive is tuned; they
+average down to a small residual when integrated over many cycles.
+Provided $\Omega\ll\omega_0+\omega_d$ (so that the slow dynamics is
+itself slow compared to $2\omega_0$), the fast pair can be dropped.
+Doing so is the \emph{rotating-wave approximation}, derived
+systematically in \cref{sec:rwa}; the surviving slow Hamiltonian is
+the starting point of the Rabi formula (\cref{sec:rabi}). We will
+recognise these same four terms, written in the Pauli-operator
+language of \cref{ch:model-systems}, when we revisit this
+calculation there.
 \end{example}
 
 % --------------------------------------------------------------

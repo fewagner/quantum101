@@ -3,16 +3,34 @@
 
 \section*{Chapter overview}
 
-Almost every system encountered in circuit QED is built --- exactly or
-approximately --- from two ingredients: the quantum harmonic
-oscillator and the two-level system (TLS). The harmonic oscillator
-describes lumped LC resonators, microwave cavities, transmission-line
-modes and, to leading order, weakly anharmonic qubits. The two-level
-system describes spins, idealised qubits and any pair of levels we
-isolate from a more complicated spectrum. This chapter solves both
-exactly, fixes the notation we will use everywhere later, and ends by
-combining a TLS with a coherent drive --- producing the Rabi
-oscillations that underlie all single-qubit control.
+This chapter solves two systems that, between them, model most of
+the dynamics encountered in circuit QED: the quantum harmonic
+oscillator and the two-level system (TLS). They are
+\emph{idealisations}, not faithful descriptions of any physical
+hardware --- but they are the building blocks out of which the more
+realistic models in later chapters are assembled.
+
+LC resonators, microwave cavities and transmission-line modes are,
+in the lossless and linear limit, exact harmonic oscillators.
+Superconducting \emph{qubits}, by contrast, are not strictly
+two-level: they are weakly anharmonic oscillators with an infinite
+ladder of energy levels, designed so that the
+$\ket{0}\!\to\!\ket{1}$ transition frequency differs slightly from
+$\ket{1}\!\to\!\ket{2}$. The TLS is the standard idealisation that
+ignores all but the lowest two levels; it is accurate when drives
+and couplings are slow and weak enough that population of $\ket{2}$
+and beyond stays negligible. When such leakage matters --- for
+instance during fast gates or strong drives --- the more honest
+picture is the (anharmonic) oscillator, and one has to keep track
+of the full ladder.
+
+We will routinely move between the two. A transmon (\cref{ch:circuit-qed})
+behaves as a TLS for slow control and as an anharmonic oscillator
+when leakage is on the agenda. The toolbox developed in this
+chapter --- ladder operators, the Pauli algebra, the Bloch sphere,
+and Rabi oscillations --- is what we need in either limit. The
+chapter ends by combining a TLS with a coherent drive, producing
+the Rabi oscillations that underlie all single-qubit control.
 
 % --------------------------------------------------------------
 \section{The quantum harmonic oscillator}
