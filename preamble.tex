@@ -57,15 +57,23 @@
 \newtheorem*{note}{Note}
 
 % ---- Custom shortcuts ----
+% The physics package (and occasionally babel) define some of these
+% names already, so we \let\name\undefined before each definition.
+% That makes the redefinition unconditional whether or not the name
+% was already in use.
+\let\hilbert\undefined
 \newcommand{\hilbert}{\mathcal{H}}
+\let\id\undefined
 \newcommand{\id}{\mathbb{1}}
+\let\C\undefined
 \newcommand{\C}{\mathbb{C}}
+\let\R\undefined
 \newcommand{\R}{\mathbb{R}}
+\let\Z\undefined
 \newcommand{\Z}{\mathbb{Z}}
+\let\hc\undefined
 \newcommand{\hc}{\text{h.c.}}
-% physics package already defines \Tr; override it to behave like a
-% standard math operator (\operatorname{Tr}) so subscripts and
-% spacing work the way we want, e.g. \Tr_B \rho.
 \let\Tr\undefined
 \DeclareMathOperator{\Tr}{Tr}
+\let\op\undefined
 \newcommand{\op}[1]{\hat{#1}}
