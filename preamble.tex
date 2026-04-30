@@ -63,5 +63,9 @@
 \newcommand{\R}{\mathbb{R}}
 \newcommand{\Z}{\mathbb{Z}}
 \newcommand{\hc}{\text{h.c.}}
-\newcommand{\Tr}{\operatorname{Tr}}
+% physics package already defines \Tr; override it to behave like a
+% standard math operator (\operatorname{Tr}) so subscripts and
+% spacing work the way we want, e.g. \Tr_B \rho.
+\let\Tr\undefined
+\DeclareMathOperator{\Tr}{Tr}
 \newcommand{\op}[1]{\hat{#1}}
