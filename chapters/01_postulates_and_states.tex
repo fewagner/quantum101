@@ -245,9 +245,40 @@ $|\braket{f}{g}|^2\geq\tfrac14|\expval{[\op{A},\op{B}]}|^2$.
 Combining the two inequalities yields \cref{eq:robertson}.
 \end{proof}
 
-\begin{example}[Position and momentum]
-With $[\op{x},\op{p}]=i\hbar\,\id$ the Robertson relation reduces to
-the familiar Heisenberg inequality $\Delta x\,\Delta p\geq\hbar/2$.
+\begin{definition}[Position and momentum operators]
+\label{def:position-momentum}
+For a single non-relativistic particle moving in one spatial
+dimension, the \emph{position} operator $\op{x}$ and the
+\emph{momentum} operator $\op{p}$ are the self-adjoint operators on
+the particle's Hilbert space defined, in the position
+representation $\psi(x)\equiv\braket{x}{\psi}$, by
+\begin{equation}
+(\op{x}\,\psi)(x) \;=\; x\,\psi(x),
+\qquad
+(\op{p}\,\psi)(x) \;=\; -i\hbar\,\dv{x}\,\psi(x).
+\end{equation}
+Applying both sides of $\op{x}\op{p}-\op{p}\op{x}$ to a test wave
+function $\psi(x)$ and using the product rule yields the
+\emph{canonical commutation relation}
+\begin{equation}
+\label{eq:ccr}
+[\op{x},\op{p}] \;=\; i\hbar\,\id.
+\end{equation}
+In several dimensions or for several particles, the same
+construction is repeated for each independent coordinate, with
+$[\op{x}_i,\op{p}_j]=i\hbar\,\delta_{ij}\,\id$ and all other pairs
+commuting. We will need only \cref{eq:ccr} in what follows.
+\end{definition}
+
+\begin{example}[Position and momentum: the Heisenberg inequality]
+Applying the Robertson relation \cref{eq:robertson} to
+$\op{A}=\op{x}$, $\op{B}=\op{p}$ and using \cref{eq:ccr},
+$|\expval{[\op{x},\op{p}]}|=\hbar$, one recovers the familiar
+Heisenberg inequality
+\begin{equation}
+\Delta x\,\Delta p \;\geq\; \frac{\hbar}{2},
+\end{equation}
+saturated by Gaussian wave packets.
 \end{example}
 
 \paragraph{Transition.}
