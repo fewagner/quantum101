@@ -40,7 +40,10 @@
 % \input{chapters/08_quantum_error_correction}
 
 \backmatter
-\bibliographystyle{plain}
-\bibliography{bibliography}
+% Re-enable once we have at least one \cite{...} call. Running bibtex
+% on an empty bibliography.bib with zero citations exits non-zero,
+% which makes latexmk fail the whole build.
+% \bibliographystyle{plain}
+% \bibliography{bibliography}
 
 \end{document}
