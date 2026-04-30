@@ -1,0 +1,145 @@
+\chapter{Auxiliary mathematical definitions}
+\label{app:aux-defs}
+
+\section*{Overview}
+
+This appendix collects the mathematical vocabulary that the main
+text uses without re-deriving --- inner products, completeness,
+dual spaces, adjoints, tensor products. Readers comfortable with
+elementary linear algebra and functional analysis can skip it;
+others may want to skim it once before \cref{ch:postulates} or
+refer back to it as the chapters cite it.
+
+% --------------------------------------------------------------
+\section{Forms, inner products, and norms}
+\label{app:inner-product}
+
+\begin{definition}[Sesquilinear form]
+\label{def:sesquilinear}
+Let $V$ be a complex vector space. A map
+$\langle\cdot,\cdot\rangle:V\times V\to\C$ is \emph{sesquilinear}
+if it is linear in one argument and conjugate-linear (antilinear)
+in the other. We follow the physics convention of antilinearity in
+the first slot and linearity in the second: for all
+$\alpha,\beta\in\C$ and $\phi,\psi,\chi\in V$,
+\begin{equation}
+\langle\alpha\phi+\beta\psi,\chi\rangle
+= \bar\alpha\langle\phi,\chi\rangle + \bar\beta\langle\psi,\chi\rangle,
+\qquad
+\langle\phi,\alpha\psi+\beta\chi\rangle
+= \alpha\langle\phi,\psi\rangle + \beta\langle\phi,\chi\rangle.
+\end{equation}
+\end{definition}
+
+\begin{definition}[Conjugate symmetry]
+\label{def:conj-sym}
+A form $\langle\cdot,\cdot\rangle:V\times V\to\C$ is
+\emph{conjugate-symmetric} if
+$\langle\phi,\psi\rangle=\overline{\langle\psi,\phi\rangle}$ for
+all $\phi,\psi\in V$. In particular
+$\langle\psi,\psi\rangle\in\R$.
+\end{definition}
+
+\begin{definition}[Positive definiteness]
+\label{def:positive-definite}
+A form $\langle\cdot,\cdot\rangle$ on $V$ is
+\emph{positive definite} if $\langle\psi,\psi\rangle\geq0$ for
+every $\psi\in V$, with equality if and only if $\psi=0$.
+\end{definition}
+
+\begin{definition}[Inner product, norm, metric]
+\label{def:inner-product}
+An \emph{inner product} on a complex vector space $V$ is a
+sesquilinear (\cref{def:sesquilinear}), conjugate-symmetric
+(\cref{def:conj-sym}), positive-definite
+(\cref{def:positive-definite}) form
+$\langle\cdot,\cdot\rangle:V\times V\to\C$. It induces a
+\emph{norm} $\|\psi\|=\sqrt{\langle\psi,\psi\rangle}$ and, through
+the norm, a \emph{metric} $d(\phi,\psi)=\|\phi-\psi\|$.
+\end{definition}
+
+% --------------------------------------------------------------
+\section{Completeness and separability}
+\label{app:completeness}
+
+\begin{definition}[Cauchy sequence and completeness]
+\label{def:cauchy}
+A sequence $(\psi_n)$ in a normed space $V$ is a \emph{Cauchy
+sequence} if for every $\varepsilon>0$ there exists $N$ such that
+$\|\psi_n-\psi_m\|<\varepsilon$ for all $n,m\geq N$. The space $V$
+is \emph{complete} if every Cauchy sequence in $V$ converges to a
+limit in $V$. A complete inner-product space is, by definition, a
+\emph{Hilbert space}.
+\end{definition}
+
+\begin{definition}[Separability and orthonormal basis]
+\label{def:separable}
+A topological space is \emph{separable} if it contains a countable
+dense subset. For a Hilbert space, separability is equivalent to
+the existence of a countable \emph{orthonormal basis}: a sequence
+$\{\ket{n}\}_{n\in\N}$ with $\braket{n}{m}=\delta_{nm}$ such that
+every $\ket{\psi}\in\hilbert$ admits the (norm-convergent) expansion
+$\ket{\psi}=\sum_n c_n\ket{n}$ with $c_n=\braket{n}{\psi}$. Every
+Hilbert space encountered in the main text is separable.
+\end{definition}
+
+% --------------------------------------------------------------
+\section{Dual space and operators}
+\label{app:dual-space}
+
+\begin{definition}[(Continuous) dual space]
+\label{def:dual-space}
+The \emph{dual space} $V^*$ of a Hilbert space $V$ is the space of
+continuous linear functionals $\phi:V\to\C$. The Riesz
+representation theorem identifies $V^*$ canonically with $V$ itself:
+for every $\phi\in V^*$ there is a unique $\chi_\phi\in V$ with
+$\phi(\psi)=\langle\chi_\phi,\psi\rangle$. Dirac notation makes
+this identification explicit: $\bra{\phi}\in V^*$ is the linear
+functional that sends $\ket{\psi}$ to $\braket{\phi}{\psi}$.
+\end{definition}
+
+\begin{definition}[Linear operator, bounded operator]
+\label{def:linear-op}
+A map $\op{A}:V\to V$ is a \emph{linear operator} if
+$\op{A}(\alpha\phi+\beta\psi)=\alpha\op{A}\phi+\beta\op{A}\psi$ for
+all $\alpha,\beta\in\C$ and $\phi,\psi\in V$. It is \emph{bounded}
+if $\|\op{A}\|\equiv\sup_{\|\psi\|=1}\|\op{A}\psi\|<\infty$. In
+finite dimensions every linear operator is bounded; in infinite
+dimensions important operators (e.g.\ $\op{x}$ and $\op{p}$) are
+unbounded and require domain restrictions to be made rigorous.
+\end{definition}
+
+\begin{definition}[Adjoint]
+\label{def:adjoint}
+The \emph{adjoint} (or Hermitian conjugate) $\op{A}^\dagger$ of a
+bounded linear operator $\op{A}$ on a Hilbert space is the unique
+bounded operator satisfying
+\begin{equation}
+\langle\op{A}^\dagger\phi,\psi\rangle = \langle\phi,\op{A}\psi\rangle
+\qquad\text{for all}\ \phi,\psi\in V.
+\end{equation}
+The Hermitian, unitary, and projector classes of operators are
+defined in \cref{def:operator-types} in terms of the relation
+between $\op{A}$ and $\op{A}^\dagger$.
+\end{definition}
+
+% --------------------------------------------------------------
+\section{Tensor products}
+\label{app:tensor}
+
+\begin{definition}[Tensor product of Hilbert spaces]
+\label{def:tensor-product}
+The \emph{tensor product} $V\otimes W$ of two Hilbert spaces is
+the (completion of the) vector space of finite formal sums
+$\sum_i \alpha_i\,\phi_i\otimes\chi_i$ with $\phi_i\in V$,
+$\chi_i\in W$, $\alpha_i\in\C$, modulo bilinearity in each
+factor. Its inner product, defined on product elements by
+\begin{equation}
+\langle\phi\otimes\chi,\,\phi'\otimes\chi'\rangle
+= \langle\phi,\phi'\rangle_V\,\langle\chi,\chi'\rangle_W,
+\end{equation}
+extends sesquilinearly to all of $V\otimes W$. If
+$\{\ket{i}\}_i$ and $\{\ket{j}\}_j$ are orthonormal bases of $V$
+and $W$ then $\{\ket{i}\otimes\ket{j}\}_{ij}$ is an orthonormal
+basis of $V\otimes W$.
+\end{definition}

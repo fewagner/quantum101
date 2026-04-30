@@ -31,23 +31,33 @@ call the \emph{state} of the system.
 \label{post:states}
 The state of an isolated quantum system is described by a unit
 vector $\ket{\psi}\in\hilbert$ in a complex separable Hilbert space.
-States that differ only by an overall phase, $\ket{\psi}$ and
-$e^{i\alpha}\ket{\psi}$, are physically equivalent.
+Two unit vectors that differ only by an overall phase, $\ket{\psi}$
+and $e^{i\alpha}\ket{\psi}$, are \emph{physically equivalent}: no
+measurement can distinguish them, because every observable
+prediction depends only on $|\braket{\phi}{\psi}|^2$, in which the
+global phase $e^{i\alpha}$ cancels (cf.\ the Born rule,
+\cref{post:born}).
 \end{postulate}
 
 \begin{definition}[Hilbert space]
 \label{def:hilbert}
 A \emph{Hilbert space} $\hilbert$ is a complex vector space equipped
 with an inner product
-$\braket{\cdot}{\cdot}:\hilbert\times\hilbert\to\C$ that is
-sesquilinear, conjugate-symmetric and positive definite, and that is
-complete under the induced norm $\|\psi\|=\sqrt{\braket{\psi}{\psi}}$.
+$\braket{\cdot}{\cdot}:\hilbert\times\hilbert\to\C$
+(\cref{def:inner-product}: sesquilinear, conjugate-symmetric, and
+positive definite; \cref{def:sesquilinear,def:conj-sym,def:positive-definite})
+that is complete under the induced norm
+$\|\psi\|=\sqrt{\braket{\psi}{\psi}}$ in the sense of
+\cref{def:cauchy}. The Hilbert spaces relevant for these notes are
+all \emph{separable} (\cref{def:separable}), i.e.\ they admit a
+countable orthonormal basis.
 \end{definition}
 
 In Dirac (bra--ket) notation we write vectors as kets $\ket{\psi}$
-and elements of the dual space as bras $\bra{\psi}$, with
-$\braket{\phi}{\psi}\in\C$ the inner product. A countable orthonormal
-basis $\{\ket{n}\}$ of a separable Hilbert space gives the
+and elements of the dual space (\cref{def:dual-space}) as bras
+$\bra{\psi}$; the action of a bra on a ket is the inner product,
+$\braket{\phi}{\psi}\in\C$. A countable orthonormal basis
+$\{\ket{n}\}$ of $\hilbert$ (\cref{def:separable}) gives the
 \emph{resolution of the identity}
 \begin{equation}
 \label{eq:resolution-identity}
@@ -56,15 +66,19 @@ basis $\{\ket{n}\}$ of a separable Hilbert space gives the
 which we will use ubiquitously to insert complete sets of states into
 expressions.
 
-\begin{example}[Two-level system]
-A single qubit lives in $\hilbert=\C^2$ with computational-basis
-vectors $\ket{0},\ket{1}$. The most general pure state, up to global
-phase, is
+\begin{example}[The simplest non-trivial Hilbert space]
+The smallest Hilbert space that is not just $\C$ itself is
+$\hilbert=\C^2$, with orthonormal basis $\{\ket{0},\ket{1}\}$.
+Every unit vector in $\hilbert$ can be written, up to an overall
+phase, as
 \begin{equation}
 \ket{\psi} = \cos(\theta/2)\,\ket{0} + e^{i\varphi}\sin(\theta/2)\,\ket{1},
 \end{equation}
-parametrised by a point $(\theta,\varphi)$ on the unit sphere ---
-the Bloch sphere of \cref{sec:bloch}.
+parametrised by a point $(\theta,\varphi)$ on the unit sphere $S^2$.
+This is the Hilbert space of a two-level system (introduced as a
+quantum-mechanical model in \cref{sec:tls}); the geometric picture
+of the unit sphere will reappear there as the Bloch sphere
+(\cref{sec:bloch}).
 \end{example}
 
 \paragraph{Transition.}
@@ -93,9 +107,11 @@ outcomes of a measurement of $A$ are the eigenvalues of $\op{A}$.
 
 \begin{definition}[Hermitian, unitary, projector]
 \label{def:operator-types}
-Let $\op{A}$ be a linear operator on $\hilbert$. We call $\op{A}$
+Let $\op{A}$ be a linear operator on $\hilbert$
+(\cref{def:linear-op}), and $\op{A}^\dagger$ its adjoint
+(\cref{def:adjoint}). We call $\op{A}$
 \begin{itemize}
-  \item \emph{Hermitian} if $\op{A}^\dagger=\op{A}$;
+  \item \emph{Hermitian} (or self-adjoint) if $\op{A}^\dagger=\op{A}$;
   \item \emph{unitary} if $\op{A}^\dagger\op{A}=\op{A}\op{A}^\dagger=\id$;
   \item a \emph{projector} if $\op{A}^2=\op{A}$ and $\op{A}^\dagger=\op{A}$.
 \end{itemize}
