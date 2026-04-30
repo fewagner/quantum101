@@ -148,22 +148,21 @@ keeping only the resonant terms with $\omega_{mn}\pm\omega\approx0$.
 
 \paragraph{Derivation, two-level example.}
 For the driven TLS of \cref{sec:rabi} with
-$\op{V}(t)=\Omega\cos(\omega_d t)\sigma_x$, expand
-$\sigma_x=\sigma_++\sigma_-$ and write
+$\op{V}(t)=\hbar\Omega\cos(\omega_d t)\hat\sigma_x$, expand
+$\hat\sigma_x=\hat\sigma_++\hat\sigma_-$ and write
 \begin{equation}
-\op{V}_I(t) = \tfrac{\Omega}{2}\bigl(\sigma_+ e^{i\omega_q t}+\sigma_- e^{-i\omega_q t}\bigr)
+\op{V}_I(t) = \tfrac{\hbar\Omega}{2}\bigl(\hat\sigma_+ e^{i\omega_q t}+\hat\sigma_- e^{-i\omega_q t}\bigr)
 \bigl(e^{i\omega_d t}+e^{-i\omega_d t}\bigr).
 \end{equation}
 Multiplying out, four terms appear: two oscillate at
-$\omega_q\pm\omega_d$ (slow, when $\omega_d\approx\omega_q$) and two
-at $\omega_q+\omega_d$ or $-(\omega_q+\omega_d)$ (always fast).
-Dropping the latter,
+$\omega_q-\omega_d$ (slow, when $\omega_d\approx\omega_q$) and two
+at $\pm(\omega_q+\omega_d)$ (always fast). Dropping the latter,
 \begin{equation}
 \op{V}_I^\text{RWA}(t)
-= \tfrac{\Omega}{2}\bigl(\sigma_+ e^{+i(\omega_q-\omega_d)t}+\sigma_- e^{-i(\omega_q-\omega_d)t}\bigr).
+= \tfrac{\hbar\Omega}{2}\bigl(\hat\sigma_+ e^{+i(\omega_q-\omega_d)t}+\hat\sigma_- e^{-i(\omega_q-\omega_d)t}\bigr).
 \end{equation}
 Going one step further into the frame rotating at the drive
-frequency, $\op{U}_d(t)=e^{-i\omega_d t\sigma_z/2}$, removes the
+frequency, $\op{U}_d(t)=e^{-i\omega_d t\hat\sigma_z/2}$, removes the
 remaining time dependence and reproduces \cref{eq:rabi-h-rwa}, the
 static Hamiltonian whose dynamics gave the Rabi formula.
 
