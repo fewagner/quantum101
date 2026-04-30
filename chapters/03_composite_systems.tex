@@ -24,9 +24,19 @@ techniques used in cQED.
 \begin{phenomenon}
 Two independent quantum systems prepared in states $\ket{\psi_A}$
 and $\ket{\psi_B}$ are jointly described by a single state in a
-larger Hilbert space. Crucially, the joint Hilbert space contains
-many states that cannot be written as a single product
-$\ket{\psi_A}\otimes\ket{\psi_B}$ --- the entangled states.
+larger Hilbert space, the tensor product $\hilbert_A\otimes\hilbert_B$.
+This much is intuitive: two non-interacting qubits, for instance,
+can clearly be described by listing the state of each. The
+genuinely new feature is that the tensor product is \emph{larger}
+than the set of such product descriptions: it contains many states
+that cannot be written as $\ket{\psi_A}\otimes\ket{\psi_B}$ for
+\emph{any} choice of $\ket{\psi_A}$ and $\ket{\psi_B}$. Such states
+are called \emph{entangled}; they encode correlations between the
+two subsystems that have no classical analogue. The example below
+shows concretely that even one of the simplest-looking two-qubit
+states, $\tfrac{1}{\sqrt 2}(\ket{00}+\ket{11})$, cannot be
+factorised --- any attempt to write it as a product of
+single-qubit states leads to a direct contradiction.
 \end{phenomenon}
 
 \begin{postulate}[Composite systems]
@@ -41,7 +51,7 @@ the identity: $\op{O}_A\to\op{O}_A\otimes\id_B$,
 $\op{O}_B\to\id_A\otimes\op{O}_B$.
 \end{postulate}
 
-\begin{example}[Two qubits]
+\begin{example}[Two qubits and the Bell states]
 For two qubits, $\hilbert_{AB}=\C^2\otimes\C^2=\C^4$ with basis
 $\{\ket{00},\ket{01},\ket{10},\ket{11}\}$. The four \emph{Bell
 states}
@@ -50,8 +60,29 @@ states}
 \qquad
 \ket{\Psi^\pm} = \tfrac{1}{\sqrt2}(\ket{01}\pm\ket{10}),
 \end{equation}
-form a maximally entangled basis: none of them is a product
-$\ket{\psi_A}\otimes\ket{\psi_B}$.
+form a maximally entangled basis of $\C^4$: none of them is a
+product. Let us verify this for $\ket{\Phi^+}$ by direct
+calculation. Suppose, for contradiction, that
+\begin{equation}
+\ket{\Phi^+} \;=\;
+(\alpha\ket{0}+\beta\ket{1})\otimes(\gamma\ket{0}+\delta\ket{1})
+\;=\; \alpha\gamma\,\ket{00} + \alpha\delta\,\ket{01}
+   + \beta\gamma\,\ket{10} + \beta\delta\,\ket{11},
+\end{equation}
+for some $\alpha,\beta,\gamma,\delta\in\C$. Matching coefficients
+against $\ket{\Phi^+}=\tfrac{1}{\sqrt2}(\ket{00}+\ket{11})$ gives
+\begin{equation}
+\alpha\gamma=\tfrac{1}{\sqrt2},\quad
+\beta\delta=\tfrac{1}{\sqrt2},\quad
+\alpha\delta=0,\quad
+\beta\gamma=0.
+\end{equation}
+The first two equations require $\alpha,\gamma,\beta,\delta$ all
+non-zero; the last two then force $\alpha\delta=0$, a
+contradiction. There are no single-qubit states whose tensor
+product is $\ket{\Phi^+}$, so $\ket{\Phi^+}$ is genuinely
+entangled. The same argument disposes of the other three Bell
+states.
 \end{example}
 
 \paragraph{Transition.}
@@ -73,14 +104,30 @@ state. In all such cases the relevant object is a probability-weighted
 mixture of pure states, the density matrix.
 \end{phenomenon}
 
-\begin{definition}[Density matrix]
+\paragraph{Beyond the qubit case.}
+We already met the density matrix as the right description of a
+single qubit when its preparation is uncertain
+(\cref{def:density-tls} in \cref{sec:bloch}). The construction
+makes sense in any Hilbert space, not just $\C^2$, and we restate
+it here in full generality. The defining conditions
+\emph{Hermitian, positive, unit-trace} are unchanged from
+\cref{def:density-tls}; what is new is that $\hilbert$ is now
+arbitrary --- in particular, it can be a tensor product
+$\hilbert_A\otimes\hilbert_B$ of two subsystems, the case which
+will let us describe a qubit's effective state when it is
+entangled with another system. The single-qubit Bloch
+parametrisation (\cref{stmt:bloch}) is the
+$\hilbert=\C^2$ specialisation of what follows.
+
+\begin{definition}[Density matrix, general]
 \label{def:density}
-A \emph{density matrix} on $\hilbert$ is a linear operator
-$\op{\rho}:\hilbert\to\hilbert$ such that
-$\op{\rho}^\dagger=\op{\rho}$, $\op{\rho}\geq 0$, and $\Tr\op{\rho}=1$.
-The set of all such operators is convex; its extreme points are the
-\emph{pure states} $\op{\rho}=\ket{\psi}\bra{\psi}$ and all other
-density matrices are \emph{mixed}.
+A \emph{density matrix} on a Hilbert space $\hilbert$ is a linear
+operator $\op{\rho}:\hilbert\to\hilbert$ such that
+$\op{\rho}^\dagger=\op{\rho}$, $\op{\rho}\geq 0$, and
+$\Tr\op{\rho}=1$. The set of all such operators is convex; its
+extreme points are the \emph{pure states}
+$\op{\rho}=\ket{\psi}\bra{\psi}$ and all other density matrices are
+\emph{mixed}.
 \end{definition}
 
 For a statistical mixture of pure states $\{(\ket{\psi_n},p_n)\}$ the
@@ -89,8 +136,9 @@ density matrix is
 \op{\rho} \;=\; \sum_n p_n\,\ket{\psi_n}\bra{\psi_n},
 \qquad p_n\geq0,\;\sum_n p_n=1.
 \end{equation}
-Pure-state purity is captured by $\Tr\op{\rho}^2=1$; for any mixed
-state $\Tr\op{\rho}^2<1$.
+The purity introduced for the qubit case in \cref{def:density-tls}
+extends without change: $\Tr\op{\rho}^2=1$ exactly when $\op{\rho}$
+is pure, and $\Tr\op{\rho}^2<1$ otherwise.
 
 \begin{statement}[Born rule and dynamics, density-matrix form]
 \label{stmt:rho-rules}
@@ -115,6 +163,35 @@ $\op{\rho}(t)=\op{U}\op{\rho}(0)\op{U}^\dagger$ with
 $\op{U}=e^{-i\op{H}t/\hbar}$; differentiating gives
 \cref{eq:liouville}.
 \end{proof}
+
+\paragraph{Connection to the Schr\"odinger equation.}
+The dynamical part of \cref{stmt:rho-rules} is the Schr\"odinger
+equation rewritten in density-matrix language. A pure-state
+evolution under a Hamiltonian $\op{H}$ is
+$\ket{\psi(t)}=\op{U}(t)\ket{\psi(0)}$ with
+$\op{U}(t)=e^{-i\op{H}t/\hbar}$ (\cref{post:schrodinger}). The
+corresponding density matrix therefore evolves as
+\begin{equation}
+\op{\rho}(t) \;=\; \ket{\psi(t)}\bra{\psi(t)}
+              \;=\; \op{U}(t)\,\op{\rho}(0)\,\op{U}^\dagger(t),
+\end{equation}
+and differentiating both sides while using
+$i\hbar\,\dot{\op{U}}=\op{H}\op{U}$ gives the Liouville--von~Neumann
+equation \cref{eq:liouville}. By linearity the same equation holds
+for any \emph{mixture} $\op{\rho}=\sum_n p_n\,\ket{\psi_n}\bra{\psi_n}$
+of pure states evolving under the same $\op{H}$, since each
+$\ket{\psi_n}\bra{\psi_n}$ obeys it term by term.
+
+So the Liouville--von~Neumann equation is not a new dynamical
+postulate: it is the Schr\"odinger equation expressed in the
+language that also handles classical uncertainty in the
+preparation. The two are strictly equivalent for an isolated
+system. What is genuinely new comes in Part~II: when the system is
+\emph{open} (coupled to an environment) we cannot describe its
+dynamics by a single Hamiltonian, and the density matrix evolves
+under a generally non-unitary equation --- the Lindblad master
+equation --- that has no analogue at the level of a state vector,
+because the state can stop being pure even if it started so.
 
 \paragraph{Transition.}
 A density matrix on $\hilbert_{AB}$ describes the joint state. The
