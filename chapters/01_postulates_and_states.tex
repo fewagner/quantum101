@@ -282,31 +282,79 @@ which we will need in \cref{ch:perturbations}.
 \subsection{Schr\"odinger, Heisenberg and interaction pictures}
 \label{sec:pictures}
 
-The split of the world into ``state'' and ``operator'' is a matter of
-convention. In the Schr\"odinger picture states evolve and operators
-do not; in the Heisenberg picture the assignment is reversed; and in
-the interaction picture both evolve, but only with respect to a
-chosen reference Hamiltonian.
+\paragraph{The freedom of choice.}
+Every physical prediction is an expectation value of the form
+$\bra{\psi(t)}\op{O}\ket{\psi(t)}$. Inserting any unitary
+$\op{W}(t)$ in the middle ($\op{W}^\dagger\op{W}=\id$) leaves the
+prediction unchanged:
+\begin{equation}
+\bra{\psi(t)}\op{O}\ket{\psi(t)}
+\;=\; \bra{\psi(t)}\op{W}^\dagger\,\bigl(\op{W}\op{O}\op{W}^\dagger\bigr)\,\op{W}\ket{\psi(t)}.
+\end{equation}
+By choosing $\op{W}$ we can shift time dependence between the state
+and the operator without changing any measurable quantity. The
+three standard choices are:
+\begin{itemize}
+  \item \emph{Schr\"odinger picture}: $\op{W}=\id$. States carry
+        all the time dependence ($\ket{\psi(t)}_S$); operators are
+        time-independent ($\op{O}_S$). This is the picture in
+        which we stated the Schr\"odinger equation
+        \cref{eq:schrodinger}.
+  \item \emph{Heisenberg picture}: $\op{W}=\op{U}^\dagger(t)$ with
+        $\op{U}(t)=e^{-i\op{H}t/\hbar}$. The unitary
+        $\op{W}=\op{U}^\dagger$ exactly undoes the Schr\"odinger
+        evolution of the state, so states become time-independent
+        and operators inherit the dynamics.
+  \item \emph{Interaction picture}: $\op{W}=\op{U}_0^\dagger(t)$
+        with $\op{U}_0(t)=e^{-i\op{H}_0 t/\hbar}$ for some
+        \emph{reference} Hamiltonian $\op{H}_0$ (a piece of the
+        full $\op{H}=\op{H}_0+\op{V}(t)$ that we want to ``rotate
+        out''). States and operators both evolve, but only under
+        the parts of $\op{H}$ that the reference does not capture.
+\end{itemize}
 
 \begin{statement}[Picture transformations]
 \label{stmt:pictures}
-Let $\op{H}=\op{H}_0+\op{V}(t)$ and define the unitary
-$\op{U}_0(t)=e^{-i\op{H}_0 t/\hbar}$. Schr\"odinger states/operators
-are denoted with subscript $S$, Heisenberg with $H$, interaction
-with $I$. Then
+Let $\op{H}=\op{H}_0+\op{V}(t)$,
+$\op{U}(t)=e^{-i\op{H}t/\hbar}$ (full evolution) and
+$\op{U}_0(t)=e^{-i\op{H}_0 t/\hbar}$ (reference evolution).
+Schr\"odinger states/operators are denoted with subscript $S$,
+Heisenberg with $H$, interaction with $I$. Then
 \begin{align}
-\ket{\psi(t)}_H &= \op{U}^\dagger(t)\ket{\psi(0)}_S = \ket{\psi(0)}_S, &
-\op{O}_H(t) &= \op{U}^\dagger(t)\,\op{O}_S\,\op{U}(t), \\
-\ket{\psi(t)}_I &= \op{U}_0^\dagger(t)\ket{\psi(t)}_S, &
-\op{O}_I(t) &= \op{U}_0^\dagger(t)\,\op{O}_S\,\op{U}_0(t).
+\ket{\psi}_H &\;\equiv\; \op{U}^\dagger(t)\,\ket{\psi(t)}_S
+              \;=\; \ket{\psi(0)}_S
+\quad(\text{time-independent}), &
+\op{O}_H(t) &\;\equiv\; \op{U}^\dagger(t)\,\op{O}_S\,\op{U}(t),
+\\[2pt]
+\ket{\psi(t)}_I &\;\equiv\; \op{U}_0^\dagger(t)\,\ket{\psi(t)}_S, &
+\op{O}_I(t) &\;\equiv\; \op{U}_0^\dagger(t)\,\op{O}_S\,\op{U}_0(t).
 \end{align}
 The dynamical equations in each picture are
 \begin{equation}
 \dv{t}\op{O}_H = \tfrac{i}{\hbar}[\op{H},\op{O}_H],
 \qquad
-i\hbar\,\dv{t}\ket{\psi}_I = \op{V}_I(t)\,\ket{\psi}_I.
+i\hbar\,\dv{t}\ket{\psi(t)}_I = \op{V}_I(t)\,\ket{\psi(t)}_I.
 \end{equation}
 \end{statement}
+
+\begin{remark}[Why the Heisenberg state is constant in time]
+The second equality on the Heisenberg line,
+$\ket{\psi}_H=\ket{\psi(0)}_S$, is not an additional assumption: it
+follows from the Schr\"odinger evolution
+$\ket{\psi(t)}_S=\op{U}(t)\ket{\psi(0)}_S$. Substituting into the
+definition,
+\begin{equation}
+\ket{\psi}_H \;=\; \op{U}^\dagger(t)\,\ket{\psi(t)}_S
+              \;=\; \op{U}^\dagger(t)\,\op{U}(t)\,\ket{\psi(0)}_S
+              \;=\; \ket{\psi(0)}_S.
+\end{equation}
+The defining unitary $\op{U}^\dagger(t)$ is, by construction, the
+inverse of the Schr\"odinger flow, so applying it to
+$\ket{\psi(t)}_S$ ``rewinds'' the state back to $t=0$. That is the
+sense in which Heisenberg states do not move: all the dynamics has
+been absorbed into the operators by the conjugation
+$\op{O}_H(t)=\op{U}^\dagger\op{O}_S\op{U}$.
+\end{remark}
 
 \begin{proof}[Derivation, interaction picture]
 Differentiating $\ket{\psi}_I=\op{U}_0^\dagger\ket{\psi}_S$,
