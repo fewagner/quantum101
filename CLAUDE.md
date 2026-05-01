@@ -89,8 +89,10 @@ README.md               # public-facing scope, TODO list of topics
   for any new shortcut.
 - **Empty bibliography kills bibtex.** With no `\cite{...}` calls and an
   empty `bibliography.bib`, bibtex exits non-zero and latexmk aborts. The
-  `\bibliographystyle` and `\bibliography` lines in `main.tex` are
-  **commented out**. Re-enable them only after at least one citation exists.
+  `\bibliographystyle{plain}` and `\bibliography{bibliography}` lines in
+  `main.tex` were originally commented out for this reason. They were
+  re-enabled in commit "On the nature of quantum randomness" once the
+  first batch of citations was added; keep them on.
 - **Undefined control sequences abort pdflatex.** Always grep for `\Foo` if
   you introduce a new symbol; if it isn't defined, no `.aux` files are
   written for any chapter after the one with the error, and you'll see
@@ -142,6 +144,7 @@ without checking — the document should keep reading as a quiet book.
 | Hermitian / unitary / projector | `def:operator-types` | ch. 1 §1.2 |
 | Position / momentum operators | `def:position-momentum` | ch. 1 §1.4 |
 | Schrödinger / Heisenberg / interaction pictures | `stmt:pictures` | ch. 1 §1.5 |
+| Quantum randomness / interpretations (foundational discussion) | `sec:quantum-randomness` | ch. 1 §1.3 |
 | Qubit | `def:qubit` | ch. 2 §2.2 |
 | Pauli operators | `def:pauli` | ch. 2 §2.2 |
 | Density matrix (single-qubit) and purity | `def:density-tls` | ch. 2 §2.3 |
@@ -165,8 +168,8 @@ When introducing new terms in future chapters, **append to this table**.
 ## Open todos
 
 - Part I done; Parts II–V outlined in `README.md` only.
-- Bibliography empty; once any citation is added, uncomment the
-  `\bibliographystyle{plain}` and `\bibliography{bibliography}` lines in
-  `main.tex`.
+- Bibliography active (11 entries; foundations + decoherence +
+  interpretations). Add new entries thematically grouped in
+  `bibliography.bib` as future chapters acquire citations.
 - No figures yet. `figures/` is empty; consider TikZ for diagrams when
   needed (Bloch sphere, circuit diagrams, level diagrams, …).

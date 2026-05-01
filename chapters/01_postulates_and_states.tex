@@ -192,6 +192,148 @@ classical average of the outcomes weighted by their probabilities,
 \;=\; \bra{\psi}\op{A}\ket{\psi}.
 \end{equation}
 
+% --------------------------------------------------------------
+\subsection{On the nature of quantum randomness}
+\label{sec:quantum-randomness}
+
+The Born rule (\cref{post:born}) is unusual among the laws of
+physics: it asserts an \emph{irreducible} probability distribution
+over measurement outcomes. Three questions naturally follow that
+the formalism by itself does not answer, but on which there is now
+a substantial experimental and theoretical literature. We address
+each briefly. The reader should know up front that none of the
+answers affects the calculations done in the rest of these notes
+--- every cQED experiment gives the same numerical predictions in
+every interpretation --- but the discussion sets out what we are,
+and what we are not, claiming when we apply the Born rule.
+
+\paragraph{Is the randomness fundamental, or just classical ignorance?}
+A natural worry is that the Born-rule probabilities reflect only
+\emph{ignorance} of some hidden degree of freedom, in the way that
+a classical coin toss looks random only because we do not track the
+coin's exact initial conditions. If so, a more detailed
+(``hidden-variable'') theory would in principle reproduce the
+quantum predictions while restoring determinism.
+
+The question of whether such a theory is possible was reduced to an
+experimental one by Bell~\cite{bell1964}, who showed that any
+\emph{local} hidden-variable theory --- one in which the underlying
+variables associated with each measurement are determined by data
+within the past light cone of that measurement --- must satisfy a
+mathematical inequality that quantum mechanics, in suitable
+correlation experiments, violates. Subsequent measurements have
+confirmed quantum mechanics: the early experiments of Aspect,
+Grangier and Roger~\cite{aspect1982} and, after several decades of
+work to close experimental loopholes (detection efficiency,
+measurement-setting independence, spacelike separation of
+detectors), the simultaneous loophole-free Bell tests of
+2015~\cite{hensen2015,giustina2015,shalm2015}.
+
+The supported conclusion is precise: \emph{no local hidden-variable
+theory can reproduce the predictions of quantum mechanics}. The
+Born-rule randomness is in this sense irreducible \emph{within the
+locality assumption}. This is not the same as a metaphysical claim
+of ``true randomness'': theories that abandon locality (such as the
+de Broglie--Bohm pilot-wave theory~\cite{bohm1952}, which is
+explicitly non-local) reproduce all known experiments while
+remaining deterministic. What the Bell-inequality tests do show is
+that one cannot have both locality and hidden-variable determinism
+simultaneously, and this constrains what any future ``deeper''
+theory can look like.
+
+\paragraph{Where does the information go on measurement?}
+A naive reading of the projection rule \cref{eq:projection} is that
+the system \emph{really was} in the superposition $\sum_n c_n\ket{n}$
+before the measurement and \emph{really is} in $\ket{n_0}$ after it
+--- the rest of the wave function ``collapsing'' to nothing. Taken
+literally, this is uncomfortable: the joint dynamics of system,
+measurement apparatus and environment is, by every interaction
+Hamiltonian we know how to write down, unitary, and unitary
+evolution conserves information.
+
+The standard resolution is that the projection postulate is an
+\emph{effective} description, valid for an observer with access only
+to the system after the system has interacted with an apparatus
+that is itself entangled with a vast bath of degrees of freedom
+(the readout electronics, the cryostat, the room, the cosmos). The
+mathematical mechanism is the partial-trace construction set up in
+\cref{sec:partial-trace} and made concrete by
+\cref{ex:decoherence-by-partial-trace}, which carries out the same
+analysis in a single line of algebra for one system qubit and one
+environment qubit. The phase information of the system is not
+destroyed; it is dispersed into system--apparatus--environment
+correlations that we discard because we have no realistic way to
+track them. From the system's point of view this dispersal is
+indistinguishable from genuine non-unitary collapse; from the joint
+system--environment point of view, the evolution is unitary
+throughout. This view of measurement, developed systematically by
+Zurek and collaborators under the name \emph{environment-induced
+superselection} (or einselection)~\cite{zurek2003} and reviewed at
+book length by Schlosshauer~\cite{schlosshauer2007}, is the
+dominant practical perspective in quantum optics and cQED.
+
+What the decoherence argument does \emph{not} explain is why we
+observe a single outcome rather than a coherent superposition of
+outcomes. The answer to that depends on the interpretation one
+adopts.
+
+\paragraph{The main interpretations.}
+The mathematical content of quantum mechanics --- the Hilbert-space
+formalism, unitary evolution, the Born rule --- is not in dispute.
+What \emph{is} in dispute is the metaphysics: what (if anything)
+the wave function corresponds to in reality, and what happens at a
+measurement. The most widely discussed interpretations, and where
+each places the ``extra'' structure beyond the bare formalism,
+are:
+\begin{itemize}
+  \item \emph{Copenhagen} (Bohr, Heisenberg).
+  The wave function describes the observer's knowledge, not an
+  objective state. A ``classical/quantum cut'' is drawn between
+  observer and observed; on the observer's side everything is
+  classical, and the Born rule is an irreducible postulate. No
+  further explanation of measurement is required.
+  \item \emph{Many-worlds / relative-state} (Everett~\cite{everett1957}).
+  The wave function is the only physical object and evolves only
+  unitarily. ``Outcomes'' are decoherent branches of a universal
+  wave function that no longer interfere; an observer perceives
+  one branch but all branches are equally real. The Born
+  probabilities must be derived from the branching structure
+  itself, which is the subject of an ongoing technical literature.
+  \item \emph{de Broglie--Bohm pilot wave}~\cite{bohm1952}.
+  The wave function is a real, non-local guiding field for definite
+  particle trajectories. Outcomes are deterministic given full
+  initial conditions; the apparent randomness comes from
+  initial-condition ignorance. The theory is empirically equivalent
+  to standard quantum mechanics and explicitly non-local in the
+  sense forced by Bell's theorem.
+  \item \emph{QBism} (Fuchs--Mermin--Schack~\cite{fuchs2014}).
+  The wave function is an agent's personal degree of belief about
+  the outcomes of measurements they may perform. The Born rule is a
+  normative coherence condition on those beliefs, and
+  ``measurement'' is just a Bayesian update.
+\end{itemize}
+Several other consistent interpretations exist (consistent
+histories, modal interpretations, spontaneous-collapse models such
+as GRW, and so on); Cabello~\cite{cabello2017} provides a useful
+map of the broader territory. Crucially, the interpretations listed
+above are \emph{empirically equivalent} for every experiment we
+will analyse in these notes: they are choices of conceptual framing,
+not of physical content.
+
+\paragraph{Practical takeaway.}
+For doing physics on cQED hardware, the operationally relevant
+story is short: \cref{eq:born} gives the probabilities of
+measurement outcomes, and the apparent ``collapse'' is what
+happens when the system becomes entangled with the readout chain
+and the measurement record is recorded. Whether one then says the
+unobserved branches have ``vanished'', ``become inaccessible'',
+``always existed'', or ``were never real'' is a question the
+apparatus does not answer. What the apparatus answers, very
+precisely, is the histogram of outcomes and the post-measurement
+state of the system. We use the Born rule and the partial trace to
+compute both throughout the rest of these notes, and leave the
+metaphysics to the interpretation of the reader's choice.
+
 \paragraph{Transition.}
 The fact that two observables share or fail to share an eigenbasis
 controls whether they can be measured jointly. This is what
