@@ -481,20 +481,78 @@ qubit.
 \end{application}
 
 % --------------------------------------------------------------
-\section*{Chapter summary and outlook}
+\section*{Chapter takeaways and outlook}
 
-We have moved from a single isolated system described by a ket to
-a much richer setting: composite systems live in tensor products,
-mixtures and reductions are described by density matrices, and the
-partial trace makes the relationship between joint and marginal
-states explicit. Entanglement emerges as the generic property of
-non-product joint states, and shows up in cQED both as the resource
-exploited by gates and as the mechanism behind decoherence.
+\begin{chaptersummary}
 
-The final chapter of this part deals with one further question that
-the postulates do not, by themselves, answer: how does a system
-respond to a small or near-resonant time-dependent drive? The
-answer assembles two of the workhorses of quantum optics ---
-time-dependent perturbation theory (and Fermi's golden rule) and the
-rotating-wave approximation --- both of which we will use repeatedly
-in Parts~III and IV.
+\paragraph{Composite systems.}
+The Hilbert space of a composite system $AB$ is the tensor product
+$\hilbert_{AB}=\hilbert_A\otimes\hilbert_B$. Operators on a single
+subsystem are extended by the identity:
+$\op{O}_A\to\op{O}_A\otimes\id_B$,
+$\op{O}_B\to\id_A\otimes\op{O}_B$. The four Bell states
+\begin{equation}
+\ket{\Phi^\pm}=\tfrac{1}{\sqrt 2}(\ket{00}\pm\ket{11}),\quad
+\ket{\Psi^\pm}=\tfrac{1}{\sqrt 2}(\ket{01}\pm\ket{10})
+\end{equation}
+form a maximally entangled basis of $\C^2\otimes\C^2$.
+
+\paragraph{Density matrix (general).}
+A density matrix on $\hilbert$ is Hermitian, positive semi-definite,
+and trace-one. Pure states are
+$\op{\rho}=\ket{\psi}\bra{\psi}$ (purity $\Tr\op{\rho}^2=1$);
+all other density matrices are mixed. Born rule and unitary
+evolution take their density-matrix forms,
+\begin{equation}
+\expval{\op{A}} \;=\; \Tr(\op{\rho}\,\op{A}),
+\qquad
+i\hbar\,\dv{t}\op{\rho} \;=\; [\op{H},\op{\rho}],
+\end{equation}
+the latter (Liouville--von~Neumann) being the Schr\"odinger
+equation rewritten for mixtures. For an isolated system the two
+formulations are strictly equivalent.
+
+\paragraph{Partial trace.}
+For $\op{\rho}_{AB}$ on $\hilbert_A\otimes\hilbert_B$, the reduced
+density matrix of $A$ is
+\begin{equation}
+\op{\rho}_A \;=\; \Tr_B\,\op{\rho}_{AB}
+\;=\; \sum_j\bra{j}_B\,\op{\rho}_{AB}\,\ket{j}_B.
+\end{equation}
+For a pure $\ket{\Psi}_{AB}$, the reduced state is mixed if and
+only if $\ket{\Psi}$ is entangled, sharpened by the Schmidt
+decomposition $\ket{\Psi}=\sum_k\lambda_k\ket{u_k}_A\ket{v_k}_B$.
+
+\paragraph{Entanglement and the ebit.}
+A pure bipartite state is separable iff its Schmidt rank is one.
+The canonical quantitative measure is the entanglement entropy of
+the reduced state,
+\begin{equation}
+S(\op{\rho}_A) \;=\; -\sum_k\lambda_k^2\,\log_2\lambda_k^2,
+\end{equation}
+in units of \emph{ebits}. One ebit is the entanglement contained
+in a single Bell pair. Two-qubit entangling gates such as CNOT
+generate ebits from separable inputs; quantum teleportation
+consumes them.
+
+\paragraph{Decoherence in three lines.}
+A system qubit in $\ket{+}_S$ plus an environment qubit in
+$\ket{0}_E$ becomes the joint Bell state $\ket{\Phi^+}$ after a
+state-copy interaction; tracing out $E$ leaves the system in
+$\op{\rho}_S=\id/2$, with its Bloch vector contracted from
+$(1,0,0)$ to the origin. The off-diagonal coherence has not been
+destroyed but transferred into $S$--$E$ correlations that we
+discard. This is the kernel of pure dephasing; the
+continuous-bath generalisation gives the smooth $T_2$ decay
+treated systematically in Part~II.
+
+\end{chaptersummary}
+
+\paragraph{Outlook.}
+The final chapter of this part deals with one further question
+that the postulates do not, by themselves, answer: how does a
+system respond to a small or near-resonant time-dependent drive?
+The answer assembles two of the workhorses of quantum optics ---
+time-dependent perturbation theory (with Fermi's golden rule) and
+the rotating-wave approximation --- both of which we will use
+repeatedly in Parts~III and IV.

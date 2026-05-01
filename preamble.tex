@@ -175,6 +175,52 @@
 \surroundwithmdframed[style=remarkbox]{remark}
 \surroundwithmdframed[style=remarkbox]{note}
 
+% ---- Chapter summary box ----
+% Used at the end of each chapter to highlight the take-home
+% concepts and formulas in a single full-frame coloured box.
+\mdfdefinestyle{summarybox}{%
+  topline=true, bottomline=true, leftline=true, rightline=true,
+  linecolor=primary, linewidth=1pt,
+  backgroundcolor=primary!4,
+  innertopmargin=14pt, innerbottommargin=14pt,
+  innerleftmargin=14pt, innerrightmargin=14pt,
+  skipabove=18pt, skipbelow=12pt,
+}
+\newenvironment{chaptersummary}{%
+  \begin{mdframed}[style=summarybox]%
+  \begin{center}
+    {\sffamily\bfseries\Large\color{primary}Chapter takeaways}
+  \end{center}
+  \vspace{0.3em}\par
+}{%
+  \end{mdframed}%
+}
+
+% ---- Exercises ----
+% A lightweight "Exercises" environment for the end of each chapter.
+% Each exercise gets a numbered heading followed by the problem,
+% then a "Solution" block. Solutions are shown by default; switch
+% to a hide-solutions mode by changing the \ifshowsolutions flag.
+\newif\ifshowsolutions
+\showsolutionstrue
+\newcounter{exercise}[chapter]
+\renewcommand{\theexercise}{\thechapter.\arabic{exercise}}
+\newenvironment{exercise}[1][]{%
+  \refstepcounter{exercise}%
+  \par\medskip
+  \noindent\textbf{\color{primary}Exercise \theexercise.}%
+  \ifx\\#1\\\else\ \emph{\color{primary!80}#1.}\fi
+  \par\noindent\ignorespaces
+}{\par\medskip}
+\newenvironment{solution}{%
+  \par\smallskip
+  \begingroup
+  \color{black!80}\small
+  \noindent\textit{\color{accent}Solution.\ }\ignorespaces
+}{%
+  \endgroup\par\medskip
+}
+
 % ---- Custom shortcuts ----
 % The physics package (and occasionally babel) define some of these
 % names already, so we \let\name\undefined before each definition.

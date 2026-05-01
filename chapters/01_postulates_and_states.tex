@@ -731,21 +731,84 @@ calculation there.
 \end{example}
 
 % --------------------------------------------------------------
-\section*{Chapter summary and outlook}
+\section*{Chapter takeaways and outlook}
 
-We now have everything we need to do physics: states are unit
-vectors in a Hilbert space; observables are Hermitian operators;
-measurements yield eigenvalues with the probabilities given by the
-Born rule; non-commuting observables obey the Robertson uncertainty
-relation; and unitary evolution under the Schr\"odinger equation
-governs the dynamics. The Heisenberg and interaction pictures give
-us complementary, frame-dependent ways of describing the same
-physics.
+\begin{chaptersummary}
 
-In the next chapter we apply this machinery to the two systems that,
-between them, account for almost all of the dynamics encountered in
-cQED: the quantum harmonic oscillator (which describes resonators
-and, through the Josephson nonlinearity, the leading behaviour of
-the transmon) and the two-level system (which describes a qubit and,
-in the Bloch-sphere picture, gives the geometric language of
-single-qubit gates).
+\paragraph{States.}
+The state of an isolated quantum system is a unit vector
+$\ket{\psi}\in\hilbert$ in a complex separable Hilbert space, defined
+up to an overall phase $e^{i\alpha}$. The bra-ket inner product
+$\braket{\phi}{\psi}\in\C$ is sesquilinear, conjugate-symmetric, and
+positive definite (\cref{def:hilbert}); a countable orthonormal
+basis $\{\ket{n}\}$ gives the resolution of the identity
+$\id=\sum_n\ket{n}\bra{n}$.
+
+\paragraph{Observables.}
+Observables are Hermitian operators (\cref{def:operator-types}). The
+spectral theorem decomposes any Hermitian
+$\op{A}=\sum_n a_n\,\op{P}_n$, with the eigenvalues $a_n$ the
+possible measurement outcomes and the projectors $\op{P}_n$
+orthogonal and complete.
+
+\paragraph{Measurement (Born rule).}
+A measurement of $\op{A}$ on $\ket{\psi}$ yields outcome $a_n$ with
+probability
+\begin{equation}
+p(a_n) \;=\; \bra{\psi}\op{P}_n\ket{\psi},
+\qquad
+\expval{\op{A}}_\psi \;=\; \bra{\psi}\op{A}\ket{\psi},
+\end{equation}
+and the post-measurement state is
+$\op{P}_n\ket{\psi}/\sqrt{p(a_n)}$.
+
+\paragraph{Commutators and uncertainty.}
+The position and momentum operators satisfy
+$[\op{x},\op{p}]=i\hbar\,\id$ (\cref{def:position-momentum}). The
+Robertson relation
+\begin{equation}
+\Delta A\,\Delta B \;\geq\; \tfrac{1}{2}\,
+\bigl|\expval{[\op{A},\op{B}]}_\psi\bigr|
+\end{equation}
+quantifies the cost of failing to commute, and reduces to the
+Heisenberg inequality $\Delta x\,\Delta p\geq\hbar/2$ for $\op{x},\op{p}$.
+
+\paragraph{Time evolution.}
+The Schr\"odinger equation
+\begin{equation}
+i\hbar\,\dv{t}\ket{\psi(t)} \;=\; \op{H}(t)\,\ket{\psi(t)}
+\end{equation}
+generates the dynamics; for time-independent $\op{H}$, the
+solution is $\ket{\psi(t)}=\op{U}(t)\ket{\psi(0)}$ with
+$\op{U}(t)=e^{-i\op{H}t/\hbar}$.
+
+\paragraph{Pictures.}
+The same physics can be described in three frames:
+\begin{itemize}
+  \item Schr\"odinger: $\ket{\psi}_S$ evolves; operators do not.
+  \item Heisenberg: states constant, operators evolve as
+        $\op{O}_H(t)=\op{U}^\dagger(t)\,\op{O}_S\,\op{U}(t)$, with
+        $\dv{t}\op{O}_H=\tfrac{i}{\hbar}[\op{H},\op{O}_H]$.
+  \item Interaction: with respect to a chosen reference $\op{H}_0$,
+        $\ket{\psi(t)}_I$ obeys
+        $i\hbar\,\dv{t}\ket{\psi(t)}_I=\op{V}_I(t)\,\ket{\psi(t)}_I$
+        where $\op{V}_I=\op{U}_0^\dagger\op{V}\op{U}_0$.
+\end{itemize}
+
+\paragraph{Foundations.}
+Born-rule randomness is irreducible \emph{within locality}: no
+local hidden-variable theory reproduces QM (Bell + the loophole-free
+2015 experiments). Apparent measurement collapse is the partial
+trace of system + apparatus + environment over apparatus and
+environment, made concrete in \cref{ex:decoherence-by-partial-trace}.
+The mainstream interpretations of QM (Copenhagen, many-worlds,
+Bohmian, QBism) are empirically equivalent for cQED.
+
+\end{chaptersummary}
+
+\paragraph{Outlook.}
+Equipped with this vocabulary, we now apply it to two systems that,
+between them, account for the bulk of cQED dynamics: the quantum
+harmonic oscillator (resonators; the leading behaviour of the
+transmon) and the two-level system (qubits; the geometric Bloch-sphere
+picture for single-qubit gates).

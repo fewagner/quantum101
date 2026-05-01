@@ -462,20 +462,78 @@ gates in superconducting hardware (\cref{sec:experimental-basics}).
 \end{example}
 
 % --------------------------------------------------------------
-\section*{Chapter summary and outlook}
+\section*{Chapter takeaways and outlook}
 
-We have solved the two systems that recur throughout the rest of the
-text. The harmonic oscillator gave us the ladder operators, the Fock
-basis, and the equally spaced spectrum that defines a linear
-resonator. The two-level system gave us the Pauli algebra, the
-geometric picture of the Bloch sphere, and Rabi oscillations under
-a coherent drive.
+\begin{chaptersummary}
 
+\paragraph{Quantum harmonic oscillator.}
+The Hamiltonian
+\begin{equation}
+\op{H} \;=\; \hbar\omega\bigl(\hat{a}^\dagger\hat{a}+\tfrac12\bigr),
+\qquad
+[\hat{a},\hat{a}^\dagger]=\id,
+\end{equation}
+has equally-spaced eigenvalues $E_n=\hbar\omega(n+\tfrac12)$ with
+ladder action $\hat{a}\ket{n}=\sqrt{n}\,\ket{n-1}$,
+$\hat{a}^\dagger\ket{n}=\sqrt{n+1}\,\ket{n+1}$ and Fock basis
+$\ket{n}=(\hat{a}^\dagger)^n\ket{0}/\sqrt{n!}$. This is the
+universal model for LC resonators, microwave cavities, and the
+leading behaviour of weakly-anharmonic qubits.
+
+\paragraph{Two-level system / qubit.}
+On $\C^2$ the Pauli operators $\hat\sigma_x,\hat\sigma_y,\hat\sigma_z$
+satisfy
+$\hat\sigma_i\hat\sigma_j=\delta_{ij}\,\id+i\epsilon_{ijk}\hat\sigma_k$.
+Together with $\id$ they span the Hermitian operators on $\C^2$.
+The most general TLS Hamiltonian, up to a constant, is
+\begin{equation}
+\op{H} = \tfrac{\hbar}{2}\,\bm{\Omega}\cdot\hat{\bm{\sigma}},
+\end{equation}
+with $\bm{\Omega}\in\R^3$ in angular-frequency units. Single-qubit
+unitaries are Pauli rotations
+$\hat{R}_{\hat{\bm{n}}}(\phi)=e^{-i(\phi/2)\hat{\bm{n}}\cdot\hat{\bm{\sigma}}}
+=\cos(\phi/2)\id-i\sin(\phi/2)\,\hat{\bm{n}}\cdot\hat{\bm{\sigma}}$.
+
+\paragraph{Density matrix and the Bloch sphere.}
+Every single-qubit density matrix can be written as
+\begin{equation}
+\op{\rho} \;=\; \tfrac12\bigl(\id+\bm{r}\cdot\hat{\bm{\sigma}}\bigr),
+\qquad |\bm{r}|\leq 1,
+\end{equation}
+with $|\bm{r}|=1$ for pure states (the unit sphere $S^2$) and
+$|\bm{r}|<1$ for mixed states. Hamiltonian dynamics under
+\cref{eq:tls-h} rotates $\bm{r}$ rigidly about $\bm{\Omega}$ at
+angular speed $|\bm{\Omega}|$.
+
+\paragraph{Driven qubit and Rabi oscillations.}
+For
+$\op{H}(t)=\tfrac{\hbar\omega_q}{2}\hat\sigma_z+\hbar\Omega\cos(\omega_d t)\hat\sigma_x$,
+moving to the frame rotating at $\omega_d$ and applying the RWA
+gives the static rotating-frame Hamiltonian
+\begin{equation}
+\op{H}_R \;=\; \tfrac{\hbar\Delta}{2}\hat\sigma_z+\tfrac{\hbar\Omega}{2}\hat\sigma_x,
+\qquad \Delta=\omega_q-\omega_d.
+\end{equation}
+Starting in $\ket{0}$,
+\begin{equation}
+P_{0\to 1}(t) \;=\; \frac{\Omega^2}{\Omega^2+\Delta^2}\,
+\sin^2\!\Bigl(\tfrac{\Omega_R t}{2}\Bigr),
+\qquad
+\Omega_R=\sqrt{\Omega^2+\Delta^2}.
+\end{equation}
+On resonance ($\Delta=0$) the qubit cycles fully between $\ket{0}$
+and $\ket{1}$ at rate $\Omega$; a $\pi$-pulse ($\Omega t=\pi$)
+implements $\hat\sigma_x$ up to a global phase.
+
+\end{chaptersummary}
+
+\paragraph{Outlook.}
 So far our quantum systems have been completely isolated and
-described by a single state vector. Real experiments are not isolated:
-the qubit and resonator are coupled, the system is entangled with
-its environment, and the experimenter has only partial information
-about its state. The next chapter introduces the language --- tensor
-products, density matrices, and the partial trace --- that is needed
-to handle composite and mixed states without giving up any of the
-machinery developed so far.
+described by a single state vector. Real experiments are not
+isolated: the qubit and resonator are coupled, the system is
+entangled with its environment, and the experimenter has only
+partial information about its state. The next chapter introduces
+the language --- tensor products, density matrices in their full
+generality, and the partial trace --- that is needed to handle
+composite and mixed states without giving up any of the machinery
+developed so far.
