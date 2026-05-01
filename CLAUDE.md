@@ -17,7 +17,7 @@ Six parts plus an appendix:
 | III | Quantum optics | not started |
 | IV | Superconducting circuits | not started |
 | V | Quantum error correction (introduction) | not started |
-| VI | Quantum sensing of fundamental physics with superconducting circuits | not started |
+| VI | Quantum sensing of fundamental physics with superconducting circuits | drafted (overview + four mechanisms) |
 | App. A | Auxiliary mathematical definitions | drafted |
 
 The full topic list lives in `README.md`. Treat it as the source of truth for
@@ -171,8 +171,9 @@ When introducing new terms in future chapters, **append to this table**.
 ## Open todos
 
 - Part I done; Parts II–V outlined in `README.md` only.
-- Bibliography active (15 entries; foundations + decoherence +
-  interpretations + superdeterminism). Add new entries thematically
-  grouped in `bibliography.bib` as future chapters acquire citations.
+- Bibliography active (24 entries; foundations + decoherence +
+  interpretations + superdeterminism + Part VI dark-matter
+  references). Add new entries thematically grouped in
+  `bibliography.bib` as future chapters acquire citations.
 - No figures yet. `figures/` is empty; consider TikZ for diagrams when
   needed (Bloch sphere, circuit diagrams, level diagrams, …).

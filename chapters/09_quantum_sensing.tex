@@ -4,55 +4,402 @@
 \section*{Chapter overview}
 
 Superconducting circuits combine three properties that make them
-attractive sensors for very weak signals: macroscopic quantum
-coherence (single quanta of microwave energy can drive a transmon
-between $\ket{0}$ and $\ket{1}$), gigahertz operating frequencies
-that match the wavelength of dark-photon and axion candidates over
-a broad mass range, and milli-kelvin operating temperatures that
-suppress thermal backgrounds well below the candidate signal
-energies. The same hardware that performs quantum information
-processing therefore doubles as a single-quantum particle detector,
-and a literature on cQED-based searches for dark matter, fifth
-forces, and exotic feebly-interacting particles has emerged in the
-last decade.
+attractive single-quantum sensors of feeble signals from beyond the
+Standard Model: macroscopic quantum coherence (a transmon flips
+between $\ket{0}$ and $\ket{1}$ on absorbing one microwave quantum
+of order $\hbar\omega_q\sim 20\,\mu\text{eV}$); gigahertz operating
+frequencies that sit in the candidate-mass window for many
+photon-coupled dark-matter species; and millikelvin operating
+temperatures that suppress thermal backgrounds well below the
+candidate signal energies. The same hardware that performs quantum
+information processing therefore doubles as a particle-physics
+front end, and a literature on cQED-based searches for dark matter
+has emerged in the last decade.
 
-This chapter is a guided tour of that literature. We start with a
-short introduction to the dark-matter problem and the two
-phenomenologically relevant interaction families (nuclear-recoil and
-electronic-recoil), specialise to the light, photon-mediated
-candidates (sub-GeV WIMP-like dark matter, dark photons, and
-axions) for which cQED is best suited, and then walk through four
-sensing mechanisms that use superconducting hardware: phonon
-absorption mediated by quasiparticle creation, infrared absorption
-in a Josephson junction, phonon-to-qubit coupling via piezoelectric
-substrates, and direct microwave absorption in a transmon. For
-each mechanism we sketch the signal model and quote a sensitivity
-estimate.
-
-\section*{Status}
-
-\paragraph{Note.}
-This chapter is a placeholder; the full text will follow. Topics
-to cover, in order:
+This chapter is a guided tour of that literature. We begin with a
+short primer on dark matter and on the kinematics of the two
+recoil families (nuclear and electronic), specialise to the light,
+photon-mediated candidates --- sub-GeV WIMP-like dark matter, dark
+photons, and axions --- for which cQED is best suited, and then
+walk through four sensing mechanisms based on superconducting
+hardware:
 \begin{itemize}
-  \item Dark matter primer: galactic halo, local density
-        $\rho_\chi\approx 0.3~\text{GeV}/\text{cm}^3$, velocity
-        distribution, mass windows.
-  \item Recoil signal models: nuclear vs.\ electronic recoils,
-        kinematic limits, light-mediator thresholds.
-  \item Light WIMP-like dark matter (sub-GeV $\chi$).
-  \item Dark photons (kinetic-mixing parameter $\varepsilon$,
-        coupling to $J^\mu_\text{em}$).
-  \item Axions (coupling $g_{a\gamma\gamma}$, mass--frequency relation
-        $f_a = m_a c^2/h$).
-  \item Mechanism 1: phonon--quasiparticle interactions and
-        athermal-phonon-induced quasiparticle bursts.
-  \item Mechanism 2: infrared absorption in the junction and
-        the resulting quasiparticle population.
-  \item Mechanism 3: phonon--qubit coupling via piezoelectric
-        substrates (e.g.\ AlN, GaAs).
-  \item Mechanism 4: direct microwave absorption in the transmon
-        as a haloscope front end.
-  \item Sensitivity reach for each mechanism (couplings as a
-        function of mass).
+  \item phonon absorption mediated by quasiparticle creation
+        (\cref{sec:phonon-qp}),
+  \item infrared absorption in the Josephson junction
+        (\cref{sec:ir-junction}),
+  \item phonon-to-qubit coupling via piezoelectric substrates
+        (\cref{sec:phonon-qubit-piezo}),
+  \item direct microwave absorption in the qubit
+        (\cref{sec:microwave-absorption}).
 \end{itemize}
+For each mechanism we sketch the signal model and quote a
+sensitivity estimate. The chapter ends with the usual takeaways
+box.
+
+% --------------------------------------------------------------
+\section{Dark matter, briefly}
+\label{sec:dm-overview}
+
+\paragraph{Why dark matter exists.}
+Several independent observations --- galactic rotation curves, the
+peaks of the cosmic-microwave-background power spectrum,
+gravitational lensing of clusters, and the abundance of light
+elements from big-bang nucleosynthesis --- agree on a universe
+whose mass-energy budget is roughly 5\% baryonic matter, 27\%
+non-luminous \emph{dark matter}, and 68\% dark energy. Dark matter
+behaves gravitationally as cold, collisionless, non-relativistic,
+non-baryonic matter; its particle physics, if any, is not in the
+Standard Model and is the target of the searches we describe here.
+A textbook account is given by Bertone, Hooper and
+Silk~\cite{bertone2005}.
+
+\paragraph{Local density and velocity.}
+The Earth orbits within a roughly virialised dark-matter halo. The
+locally relevant numbers are the mass density
+\begin{equation}
+\rho_\chi \;\approx\; 0.3\;\text{GeV}/\text{cm}^3,
+\end{equation}
+and a velocity distribution well approximated by a Maxwellian
+truncated at the galactic escape speed, with one-dimensional
+dispersion $\sigma_v\approx 156\,\text{km}/\text{s}\approx
+5.2\times 10^{-4}\,c$ and a most-probable speed
+$v_0\approx 220\,\text{km}/\text{s}\approx 7\times 10^{-4}\,c$. The
+flux through a unit area on Earth is
+\begin{equation}
+\Phi_\chi \;\sim\; n_\chi\,\bar v
+\;=\; \frac{\rho_\chi}{m_\chi}\,\bar v,
+\end{equation}
+which is large for light $\chi$ ($\sim 10^{12}\,\text{cm}^{-2}\,\text{s}^{-1}$
+for $m_\chi=1\,\text{MeV}$) and small for heavy
+($\sim 10^5\,\text{cm}^{-2}\,\text{s}^{-1}$ for $m_\chi=100\,\text{GeV}$).
+
+\paragraph{Mass windows.}
+The candidate mass spans nearly forty orders of magnitude. Three
+broad bands matter for the present chapter:
+\begin{itemize}
+  \item \emph{Heavy WIMPs} ($m_\chi \sim 10\text{--}1000\,\text{GeV}$):
+        targeted by traditional cryogenic phonon detectors and dual-phase
+        time-projection chambers, where the signal is a nuclear or
+        electronic recoil of $\mathcal{O}(\text{keV})$.
+  \item \emph{Light WIMPs / sub-GeV} ($m_\chi \sim 10\,\text{keV}\text{--}1\,\text{GeV}$):
+        recoil energies are at or below the eV scale; sub-eV
+        thresholds, achievable with athermal-phonon and
+        single-charge sensors built from superconducting hardware,
+        are required.
+  \item \emph{Ultralight bosons} ($m_\chi \sim 10^{-12}\text{--}10^{-3}\,\text{eV}$):
+        wave-like dark matter coherently filling the lab volume,
+        coupled to photons via either kinetic mixing (dark
+        photons) or the QED anomaly (axions). The Compton
+        frequency $f_\chi=m_\chi c^2/h$ falls naturally in the MHz
+        to GHz range, matching superconducting resonators directly.
+\end{itemize}
+
+\paragraph{Why cQED?}
+Superconducting circuits address the second and third bands with
+the same toolset they already use for quantum information:
+microwave-frequency operation, single-photon-level sensitivity,
+millikelvin background, and quantum-limited amplification chains.
+This chapter focuses on those bands.
+
+% --------------------------------------------------------------
+\section{Recoil signal models}
+\label{sec:recoils}
+
+\paragraph{Nuclear vs.\ electronic recoils.}
+A dark-matter particle scattering elastically in a detector
+deposits energy by recoiling against either a target nucleus
+(nuclear recoil) or a target electron (electronic recoil). For an
+incoming particle of mass $m_\chi$ and velocity $v_\chi$ on a
+target of mass $M_T$, conservation of energy and momentum gives
+the maximum recoil energy
+\begin{equation}
+\label{eq:recoil-max}
+E_R^\text{max} \;=\; \frac{2\,\mu_{\chi T}^2\,v_\chi^2}{M_T},
+\qquad
+\mu_{\chi T} \equiv \frac{m_\chi M_T}{m_\chi+M_T},
+\end{equation}
+where $\mu_{\chi T}$ is the reduced mass. For a galactic
+$v_\chi\sim 10^{-3}c$ and a silicon-target nucleus $M_T\approx 28\,m_p$,
+$E_R^\text{max}$ is keV-scale only when $m_\chi\gtrsim$ a few GeV;
+for $m_\chi\lesssim 100\,\text{MeV}$ it falls below an eV, and the
+event becomes invisible to any threshold above that. Electronic
+recoils are kinematically more favourable for light dark matter
+because $M_T$ is the much smaller electron mass.
+
+\paragraph{Threshold and rate.}
+A detector with energy threshold $E_\text{th}$ and exposure
+$\mathcal{E}=\text{(target mass)}\times\text{(live time)}$ is
+sensitive to dark-matter particles whose differential rate
+satisfies
+\begin{equation}
+\label{eq:rate}
+R \;=\; \mathcal{E}\,\frac{n_\chi}{m_T}\,\langle\sigma_{\chi T}\,v\rangle,
+\end{equation}
+where $m_T$ is the target-particle mass, $\sigma_{\chi T}$ the
+cross-section per target particle, and the brackets denote a
+velocity average over the halo distribution. Lower $E_\text{th}$
+opens up smaller $m_\chi$ via \cref{eq:recoil-max}; this is the
+push that has driven the cQED programme. State-of-the-art
+phonon-sensor thresholds reach $\mathcal{O}(\text{eV})$ today, with
+a roadmap towards $\mathcal{O}(\text{meV})$ that exploits the
+$\sim 0.34\,\text{meV}$ Cooper-pair binding energy of aluminium.
+
+\paragraph{Light mediators and form factors.}
+For a contact (heavy-mediator) interaction the velocity dependence
+of $\sigma_{\chi T}$ is $\propto v^{-2}$ at low recoil energy. For
+a light mediator (mass $\lesssim$ momentum transfer
+$q\sim\mu_{\chi T}v$), an extra form factor $1/q^4$ enhances soft
+recoils. The latter is what makes \emph{photon-mediated} dark
+matter (next section) particularly soft and well-matched to a
+microwave detector.
+
+% --------------------------------------------------------------
+\section{Photon-mediated dark matter}
+\label{sec:photon-mediated-dm}
+
+\paragraph{Dark photons.}
+A dark photon $A'$ is a $U(1)'$ gauge boson kinetically mixed with
+the Standard-Model photon~\cite{holdom1986},
+\begin{equation}
+\label{eq:dark-photon-mixing}
+\mathcal{L} \;\supset\; -\tfrac{1}{4}F'_{\mu\nu}F'^{\mu\nu}
+- \tfrac12 m_{A'}^2 A'_\mu A'^\mu
++ \tfrac{\varepsilon}{2}F'_{\mu\nu}F^{\mu\nu},
+\end{equation}
+with $\varepsilon$ the dimensionless mixing parameter. Field
+redefinitions move the mixing into the matter sector, where the
+dark photon couples to the electromagnetic current with effective
+charge $\varepsilon e$. A non-zero $m_{A'}$ allows the dark photon
+to be itself the dark matter; the local DM mass density then
+corresponds to a coherent classical field
+$\langle A'^2\rangle\propto\rho_\chi/m_{A'}^2$, oscillating at the
+Compton frequency $f_{A'}=m_{A'}c^2/h$. For
+$m_{A'}=4.1\,\mu\text{eV}$ this is $1\,\text{GHz}$, and a
+microwave resonator looks the dark-matter field as a tiny coherent
+RF source~\cite{caputo2021review}.
+
+\paragraph{Axions.}
+The axion is a pseudoscalar boson originally introduced to solve
+the strong-$CP$ problem; it acquires a small mass and a
+two-photon coupling
+\begin{equation}
+\label{eq:axion-coupling}
+\mathcal{L}_{a\gamma\gamma} \;=\; -\tfrac14\,g_{a\gamma\gamma}\,a\,F_{\mu\nu}\tilde F^{\mu\nu}
+\;=\; g_{a\gamma\gamma}\,a\,\bm E\!\cdot\!\bm B.
+\end{equation}
+In an external magnetic field $\bm B_0$, the axion field $a(t)$
+sources an oscillating electric field via \cref{eq:axion-coupling}.
+Inside a microwave cavity tuned to $\omega_a=m_a c^2/\hbar$, this
+drives the resonant TM mode coherently, producing a tiny but
+narrow-band signal --- the haloscope concept of
+Sikivie~\cite{sikivie1983}.
+
+\paragraph{Why microwave?}
+Both $\rho_\chi/m_\chi^2\sim$ field amplitude and the mass--frequency
+relation $f_\chi=m_\chi c^2/h$ make GHz the natural target band:
+$1\,\text{GHz}\leftrightarrow 4.1\,\mu\text{eV}$, the QCD-axion
+window of $\sim 1\text{--}40\,\mu\text{eV}$ corresponds to
+$240\,\text{MHz}\text{--}10\,\text{GHz}$, and a transmon's
+$\omega_q/2\pi\sim 5\,\text{GHz}$ sits inside it. Single-photon
+sensitivity at GHz, achievable in cQED, gives a fundamental
+advantage over heterodyne readout limited by quantum-noise
+amplification.
+
+% --------------------------------------------------------------
+\section{Sensing mechanism 1: phonon--quasiparticle conversion}
+\label{sec:phonon-qp}
+
+\paragraph{Idea.}
+A dark-matter particle scattering in a superconducting target
+deposits energy as athermal phonons; a phonon of energy
+$E_\text{ph}>2\Delta$ (where $2\Delta$ is the Cooper-pair binding
+energy, $0.34\,\text{meV}$ in aluminium and $\sim 1.4\,\text{meV}$
+in niobium) breaks a Cooper pair and creates two quasiparticles.
+The quasiparticles diffuse to a transition-edge or microwave
+kinetic-inductance sensor that reads them out as a small impedance
+or temperature change~\cite{kurinsky2020}.
+
+\paragraph{Threshold and reach.}
+The sensitivity scales roughly as
+\begin{equation}
+E_\text{th} \;\sim\; 2\Delta\,\frac{1}{\eta_\text{collect}},
+\end{equation}
+with $\eta_\text{collect}$ the fraction of athermal phonons that
+reach the sensor before downconverting to subgap energies. For Al
+($\Delta\approx 170\,\mu\text{eV}$) and $\eta_\text{collect}\sim 0.1$,
+$E_\text{th}\sim$ a few meV. This sets the kinematic floor at
+$m_\chi\sim 10\,\text{MeV}$ for nuclear recoils (\cref{eq:recoil-max}
+with $M_T=m_\text{Si nucleus}$, $v\sim 10^{-3}c$) --- already
+significantly better than dual-phase TPC's $\sim$ GeV reach.
+
+\paragraph{Sensitivity estimate.}
+For a 1\,kg-day exposure with $E_\text{th}=10\,\text{meV}$ and
+zero background, $\sigma_{\chi T}\sim 10^{-37}\,\text{cm}^2$ is
+reachable for $m_\chi\sim 100\,\text{MeV}$. This is several orders
+of magnitude beyond conventional WIMP searches at the same mass.
+
+% --------------------------------------------------------------
+\section{Sensing mechanism 2: infrared absorption in the junction}
+\label{sec:ir-junction}
+
+\paragraph{Idea.}
+A Josephson junction itself is a Cooper-pair-breaking absorber: an
+infrared or microwave photon of energy $\geq 2\Delta$, absorbed in
+the leads, breaks a pair and injects a quasiparticle pair into the
+junction, producing a measurable burst of poisoning. For a dark
+photon of mass $m_{A'}\geq 2\Delta/c^2\approx 0.34\,\text{meV}/c^2$
+(corresponding to $f_{A'}\geq 85\,\text{GHz}$), kinetic mixing
+\cref{eq:dark-photon-mixing} converts the coherent dark-photon
+field into ordinary photons inside the conductor, which then drive
+quasiparticle creation~\cite{hochberg2021}.
+
+\paragraph{Sensitivity to $\varepsilon$.}
+The conversion rate scales as $\varepsilon^2$, the dark-photon
+density as $\rho_\chi/m_{A'}^2$, and the absorption probability in
+the lead as the product of absorber thickness and the Mattis--Bardeen
+conductivity. Order-of-magnitude, a 1\,m$^2$-cm-thick aluminium
+absorber operated for 1\,year reaches
+$\varepsilon\sim 10^{-13}$ at $m_{A'}\sim 1\,\text{meV}$, an order
+of magnitude beyond solar lifetime constraints in that mass band.
+The shape of the reach curve $\varepsilon(m_{A'})$ is set by the
+absorber's frequency-dependent surface impedance.
+
+% --------------------------------------------------------------
+\section{Sensing mechanism 3: phonon--qubit coupling via piezoelectricity}
+\label{sec:phonon-qubit-piezo}
+
+\paragraph{Idea.}
+A phonon in a piezoelectric substrate (AlN, GaAs, sapphire-based
+sandwich structures) carries an electric polarisation that couples
+linearly to a transmon's charge, $\op{n}$. Single phonons of energy
+in the 1--10\,GHz band can therefore drive transmon transitions
+in exact analogy with single microwave photons in cavity QED. The
+qubit thus acts as a single-phonon detector, with the phonon
+playing the role of the readout
+quantum~\cite{karasik2014,linehan2024}.
+
+\paragraph{Coupling strength and detection.}
+The relevant Hamiltonian is, schematically,
+\begin{equation}
+\op{H}_\text{int} \;=\; \hbar g\,\hat\sigma_x\,(\hat b + \hat b^\dagger),
+\end{equation}
+with $\hat b$ the phonon-mode annihilation operator and
+$g\propto e_{14}\,d/\sqrt{\hbar/(2 M\Omega_\text{ph})}$ depending
+on the piezoelectric coefficient $e_{14}$, the qubit-phonon overlap
+length $d$, and the phonon mode mass and frequency. Typical
+$g/2\pi\sim 0.1\text{--}10\,\text{MHz}$. Detecting a single phonon
+with a transmon at $\omega_q/2\pi=5\,\text{GHz}$ is therefore
+competitive with conventional KID-based detection above the
+sub-meV phonon-energy threshold.
+
+\paragraph{Sensitivity reach.}
+For sub-GeV nuclear-recoil dark matter on Si, a piezoelectric
+target plus transmon readout reaches
+$\sigma_{\chi T}\sim 10^{-38}\,\text{cm}^2$ at
+$m_\chi\sim 1\,\text{MeV}$ for a few kg-day exposure --- the lowest
+mass reach yet projected for nuclear recoils.
+
+% --------------------------------------------------------------
+\section{Sensing mechanism 4: microwave absorption in the qubit}
+\label{sec:microwave-absorption}
+
+\paragraph{Idea.}
+A transmon driven by an oscillating microwave field at its
+transition frequency $\omega_q$ has an absorption cross-section set
+by its dipole moment. If the field is sourced by a dark-matter
+candidate --- a kinetically mixed dark photon, or an axion in a
+strong static $\bm B_0$ --- a population transfer
+$\ket{0}\to\ket{1}$ counts as a candidate event. The transmon
+operates as a single-microwave-photon counter in the 1--20\,GHz
+window~\cite{dixit2021}.
+
+\paragraph{Sensitivity formula.}
+For a dark photon of mass $m_{A'}$ and a cavity of volume $V$
+hosting a TM mode with form factor $C\sim O(1)$, the equivalent
+ordinary-photon power on resonance is
+\begin{equation}
+P_\text{sig} \;=\; \tfrac{1}{4}\,\varepsilon^2\,\rho_\chi\,V\,C\,\omega_{A'}.
+\end{equation}
+A transmon with photon-counting efficiency $\eta\sim 0.5$ and
+dark-count rate $\Gamma_\text{dc}\sim 1\,\text{Hz}$, integrating
+for $\tau$, reaches the SNR-1 limit
+\begin{equation}
+\varepsilon^2_\text{min}
+\;\sim\; \frac{\sqrt{\Gamma_\text{dc}/\tau}}{\eta\,(\rho_\chi V C\omega_{A'})}.
+\end{equation}
+Plugging the numbers: 1\,litre cavity, $\omega_{A'}/2\pi=5\,\text{GHz}$,
+$\tau=10$\,days, $\eta=0.5$, $\Gamma_\text{dc}=1\,\text{mHz}$:
+$\varepsilon_\text{min}\sim 10^{-15}$, which beats heterodyne
+amplification by $1\text{--}2$ orders of magnitude in this band.
+Repeating across the cavity tuning range fills out the
+$\varepsilon(m_{A'})$ reach.
+
+\paragraph{Axion case.}
+For axions in a static $\bm B_0$, the cavity power is the standard
+Sikivie haloscope formula
+$P_\text{sig}\propto g_{a\gamma\gamma}^2\,\rho_a\,B_0^2\,V\,Q_c$,
+which a single-photon-counting transmon converts into a count rate.
+The same accounting reaches $g_{a\gamma\gamma}\sim 10^{-15}\,\text{GeV}^{-1}$
+for a 1\,T field over a few-litre cavity, sweeping the QCD axion
+window.
+
+% --------------------------------------------------------------
+\section*{Chapter takeaways and outlook}
+
+\begin{chaptersummary}
+
+\paragraph{Why cQED for fundamental physics.}
+Macroscopic quantum coherence at GHz frequencies, single-microwave-photon
+sensitivity, and millikelvin operating temperature put
+superconducting hardware in a unique position to detect feeble
+signals from beyond the Standard Model in the sub-GeV and
+ultralight-boson dark-matter mass bands.
+
+\paragraph{Recoil kinematics.}
+For elastic dark-matter scattering on a target of mass $M_T$, the
+maximum recoil energy is
+$E_R^\text{max}=2\mu_{\chi T}^2 v_\chi^2/M_T$
+(\cref{eq:recoil-max}). At galactic velocities $v_\chi\sim 10^{-3}c$
+this drops below an eV for $m_\chi\lesssim 100\,\text{MeV}$,
+demanding sub-eV thresholds.
+
+\paragraph{Photon-mediated dark matter.}
+Dark photons couple to the electromagnetic current with effective
+charge $\varepsilon e$ via the kinetic-mixing Lagrangian
+\cref{eq:dark-photon-mixing}. Axions couple to two photons with
+strength $g_{a\gamma\gamma}$ \cref{eq:axion-coupling}, in a
+constant $\bm B_0$ producing an oscillating $\bm E$ at the Compton
+frequency $f_a=m_a c^2/h$. The mass--frequency relation puts the
+QCD-axion window in the 240\,MHz--10\,GHz range, exactly where
+transmons live.
+
+\paragraph{Four sensing mechanisms.}
+\begin{itemize}
+  \item Phonon-quasiparticle conversion (\cref{sec:phonon-qp}) reaches
+        $E_\text{th}\sim$ meV via Cooper-pair breaking
+        ($2\Delta\approx 0.34\,\text{meV}$ in Al), opening
+        $m_\chi\sim 10\,\text{MeV}$.
+  \item Infrared absorption in the junction
+        (\cref{sec:ir-junction}) reaches dark-photon mixing
+        $\varepsilon\sim 10^{-13}$ at $m_{A'}\sim 1\,\text{meV}$
+        with kg-scale Al absorbers.
+  \item Phonon-qubit coupling via piezoelectrics
+        (\cref{sec:phonon-qubit-piezo}) uses transmons as
+        single-phonon detectors with $g/2\pi\sim 1\,\text{MHz}$,
+        targeting nuclear recoils down to $m_\chi\sim 1\,\text{MeV}$.
+  \item Microwave absorption in the qubit
+        (\cref{sec:microwave-absorption}) implements a
+        single-photon-counting haloscope, reaching
+        $\varepsilon\sim 10^{-15}$ for dark photons and the QCD-axion
+        window for $g_{a\gamma\gamma}$.
+\end{itemize}
+
+\paragraph{Open questions.}
+The numbers above are best-case projections; the limiting
+backgrounds in practice are quasiparticle poisoning, two-level-system
+loss in the substrate, and stray IR/microwave radiation through the
+cryostat. Reducing each is an active programme, on the same critical
+path as scaling up quantum-information cQED itself.
+
+\end{chaptersummary}
