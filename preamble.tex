@@ -13,7 +13,7 @@
 
 % ---- Graphics & layout ----
 \usepackage{graphicx}
-\usepackage[margin=2.5cm]{geometry}
+\usepackage[margin=2.7cm,headheight=14pt]{geometry}
 \usepackage{xcolor}
 \usepackage{tikz}
 \usetikzlibrary{decorations.pathreplacing,arrows.meta,positioning,calc}
@@ -24,19 +24,83 @@
 \usepackage{subcaption}
 \usepackage{float}
 
+% ---- Colour palette ----
+% A small, deliberately restrained palette: a deep blue for the main
+% structural elements, a teal accent for paragraph headings and
+% definitions, a warm amber for examples, and a muted purple for
+% remark-like environments. The numeric saturation is low everywhere
+% so the document still reads as a quiet book, not a slide deck.
+\definecolor{primary}{RGB}{30, 70, 130}
+\definecolor{accent}{RGB}{0, 110, 125}
+\definecolor{example}{RGB}{180, 105, 35}
+\definecolor{remark}{RGB}{95, 55, 130}
+
+% ---- Headers / footers ----
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0pt}
+\fancyhead[LE]{\small\sffamily\color{primary!70}\thepage \hspace{1em} \leftmark}
+\fancyhead[RO]{\small\sffamily\color{primary!70}\rightmark \hspace{1em} \thepage}
+\renewcommand{\chaptermark}[1]{\markboth{\textsc{Ch.~\thechapter}\quad #1}{}}
+\renewcommand{\sectionmark}[1]{\markright{\thesection\quad #1}}
+\fancypagestyle{plain}{%
+  \fancyhf{}\renewcommand{\headrulewidth}{0pt}%
+  \fancyfoot[C]{\small\sffamily\color{primary!70}\thepage}%
+}
+
+% ---- Section / chapter / paragraph formatting ----
+\usepackage{titlesec}
+
+% Big numeral on the right, title to the right of it, thin rule below.
+\titleformat{\chapter}[display]
+  {\normalfont\sffamily\bfseries}
+  {\filleft\color{primary!35}\fontsize{72}{72}\selectfont\thechapter}
+  {-12pt}
+  {\filleft\color{primary}\Huge}
+  [\vspace{6pt}{\color{primary}\titlerule[1.2pt]}]
+\titlespacing*{\chapter}{0pt}{-30pt}{30pt}
+
+% Unnumbered chapters (Abstract, Introduction, Bibliography, ...) get
+% the same look without the numeral.
+\titleformat{name=\chapter,numberless}[display]
+  {\normalfont\sffamily\bfseries}{}{0pt}
+  {\filleft\color{primary}\Huge}
+  [\vspace{6pt}{\color{primary}\titlerule[1.2pt]}]
+
+\titleformat{\section}
+  {\normalfont\sffamily\Large\bfseries\color{primary}}
+  {\thesection}{0.7em}{}
+\titlespacing*{\section}{0pt}{1.6\baselineskip}{0.5\baselineskip}
+
+\titleformat{\subsection}
+  {\normalfont\sffamily\large\bfseries\color{primary!85}}
+  {\thesubsection}{0.7em}{}
+\titlespacing*{\subsection}{0pt}{1.2\baselineskip}{0.4\baselineskip}
+
+% Run-in paragraph headings, accent colour, terminated with a period.
+\titleformat{\paragraph}[runin]
+  {\normalfont\sffamily\bfseries\color{accent}}
+  {}{0pt}{}[.]
+\titlespacing*{\paragraph}{0pt}{0.6\baselineskip}{0.5em}
+
+% Coloured part pages.
+\titleformat{\part}[display]
+  {\normalfont\sffamily\bfseries\color{primary}\centering}
+  {\Large\MakeUppercase{\partname}~\thepart}{1em}{\Huge}
+
 % ---- References & links ----
 \usepackage{hyperref}
 \hypersetup{
   colorlinks=true,
-  linkcolor=blue!50!black,
-  citecolor=green!40!black,
-  urlcolor=blue!70!black
+  linkcolor=primary,
+  citecolor=accent,
+  urlcolor=primary,
+  pdfusetitle,
 }
 \usepackage{cleveref}
 
-% ---- Theorem-like environments ----
-% Style: phenomenon (motivation), then statement (theorem-like),
-% then proof/derivation, then example.
+% ---- Theorem-like environments (numbering) ----
 \theoremstyle{plain}
 \newtheorem{theorem}{Theorem}[chapter]
 \newtheorem{proposition}[theorem]{Proposition}
@@ -55,6 +119,61 @@
 \newtheorem*{intuition}{Intuition}
 \newtheorem*{remark}{Remark}
 \newtheorem*{note}{Note}
+
+% ---- Boxed presentation of the theorem-like environments ----
+% mdframed wraps an existing amsthm environment with a coloured
+% background and a thick left rule, without changing how the
+% environment is numbered or how its label is referenced. We
+% deliberately use the default framemethod (not TikZ) so the boxes
+% break across pages cleanly when a long theorem outgrows a page.
+\usepackage{mdframed}
+
+\mdfdefinestyle{thmbox}{%
+  rightline=false, topline=false, bottomline=false, leftline=true,
+  linecolor=primary, linewidth=3pt,
+  backgroundcolor=primary!4,
+  innerleftmargin=10pt, innerrightmargin=10pt,
+  innertopmargin=8pt, innerbottommargin=8pt,
+  skipabove=10pt, skipbelow=10pt,
+}
+\mdfdefinestyle{defbox}{%
+  rightline=false, topline=false, bottomline=false, leftline=true,
+  linecolor=accent, linewidth=3pt,
+  backgroundcolor=accent!4,
+  innerleftmargin=10pt, innerrightmargin=10pt,
+  innertopmargin=8pt, innerbottommargin=8pt,
+  skipabove=10pt, skipbelow=10pt,
+}
+\mdfdefinestyle{exbox}{%
+  rightline=false, topline=false, bottomline=false, leftline=true,
+  linecolor=example, linewidth=3pt,
+  backgroundcolor=example!4,
+  innerleftmargin=10pt, innerrightmargin=10pt,
+  innertopmargin=8pt, innerbottommargin=8pt,
+  skipabove=10pt, skipbelow=10pt,
+}
+\mdfdefinestyle{remarkbox}{%
+  rightline=false, topline=false, bottomline=false, leftline=true,
+  linecolor=remark, linewidth=2pt,
+  backgroundcolor=remark!3,
+  innerleftmargin=8pt, innerrightmargin=8pt,
+  innertopmargin=6pt, innerbottommargin=6pt,
+  skipabove=8pt, skipbelow=8pt,
+}
+
+\surroundwithmdframed[style=thmbox]{theorem}
+\surroundwithmdframed[style=thmbox]{proposition}
+\surroundwithmdframed[style=thmbox]{lemma}
+\surroundwithmdframed[style=thmbox]{corollary}
+\surroundwithmdframed[style=thmbox]{statement}
+\surroundwithmdframed[style=thmbox]{postulate}
+\surroundwithmdframed[style=defbox]{definition}
+\surroundwithmdframed[style=exbox]{example}
+\surroundwithmdframed[style=exbox]{application}
+\surroundwithmdframed[style=remarkbox]{phenomenon}
+\surroundwithmdframed[style=remarkbox]{intuition}
+\surroundwithmdframed[style=remarkbox]{remark}
+\surroundwithmdframed[style=remarkbox]{note}
 
 % ---- Custom shortcuts ----
 % The physics package (and occasionally babel) define some of these
