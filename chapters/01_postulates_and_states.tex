@@ -10,9 +10,24 @@ any physics with it, we need a vocabulary: the Hilbert space in which
 states live, the algebra of operators that represent observables, and
 the rules that govern measurement and time evolution. This chapter
 collects exactly that vocabulary. The development is concise and
-deliberately a-physical; intuition for what these objects mean will be
-built in Chapters~\ref{ch:model-systems}--\ref{ch:perturbations} once
-we apply the toolbox to concrete systems.
+deliberately a-physical; intuition for what these objects mean will
+be built in
+\crefrange{ch:model-systems}{ch:perturbations} once we apply the
+toolbox to concrete systems.
+
+The chapter has five sections, plus one short reflective subsection
+near its middle. \Cref{sec:states} introduces the Hilbert space of
+states. \Cref{sec:operators} introduces operators, observables, and
+the spectral theorem. \Cref{sec:measurement} states the Born rule
+and the projection postulate; \cref{sec:quantum-randomness}, a
+subsection of it, addresses three foundational questions about
+quantum randomness that the formalism alone does not answer.
+\Cref{sec:uncertainty} introduces commutators, the position and
+momentum operators, and the Robertson uncertainty relation.
+\Cref{sec:time-evolution} states the Schr\"odinger equation, the
+Heisenberg and interaction pictures, and works through a driven
+two-level system as a fully solved example. The chapter ends with
+the usual summary block.
 
 % --------------------------------------------------------------
 \section{States and Hilbert space}
@@ -422,9 +437,18 @@ compute both throughout the rest of these notes, and leave the
 metaphysics to the interpretation of the reader's choice.
 
 \paragraph{Transition.}
-The fact that two observables share or fail to share an eigenbasis
-controls whether they can be measured jointly. This is what
-commutators encode.
+This closes our excursion into foundations. We will sharpen the
+``information-loss-via-partial-trace'' picture in
+\cref{ch:composite}, where the formalism is built explicitly, and
+revisit decoherence systematically in Part~II. Returning to the
+immediate technical thread: the Born rule of the previous section
+described what happens when one observable is measured. A natural
+follow-up question is whether two observables can be measured
+\emph{jointly} to arbitrary precision --- and the answer, as we
+will see now, depends entirely on whether their operators commute
+or fail to commute. Commutators are the quantitative encoding of
+that constraint, and we devote the next section to them and to the
+celebrated uncertainty relation that follows.
 
 % --------------------------------------------------------------
 \section{Commutators and the uncertainty principle}
