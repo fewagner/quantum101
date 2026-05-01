@@ -52,6 +52,7 @@ $\op{O}_B\to\id_A\otimes\op{O}_B$.
 \end{postulate}
 
 \begin{example}[Two qubits and the Bell states]
+\label{ex:bell-states}
 For two qubits, $\hilbert_{AB}=\C^2\otimes\C^2=\C^4$ with basis
 $\{\ket{00},\ket{01},\ket{10},\ket{11}\}$. The four \emph{Bell
 states}
@@ -284,12 +285,76 @@ more entanglement; the entropy $S(\op{\rho}_A)=-\sum_k\lambda_k^2\log\lambda_k^2
 of the reduced state is the canonical quantitative measure.
 \end{statement}
 
-\begin{example}[Two-qubit entanglement]
-For $\ket{\Phi^+}$, both Schmidt coefficients are $1/\sqrt2$ and
-$S(\op{\rho}_A)=\log 2$ --- one bit of entanglement, the maximum
-possible for a two-qubit system. This single ebit is the resource
-consumed by quantum teleportation and produced by an idealised
-two-qubit gate acting on $\ket{+}\otimes\ket{0}$.
+\begin{example}[Two-qubit entanglement: one ``ebit'' in $\ket{\Phi^+}$]
+We compute the entanglement quantitatively for the Bell state of
+\cref{ex:bell-states}. By inspection, $\ket{\Phi^+}$ is already in
+Schmidt form,
+\begin{equation}
+\label{eq:phiplus-schmidt}
+\ket{\Phi^+} \;=\; \tfrac{1}{\sqrt2}\,\ket{0}_A\!\otimes\!\ket{0}_B
+                 + \tfrac{1}{\sqrt2}\,\ket{1}_A\!\otimes\!\ket{1}_B,
+\end{equation}
+with two non-zero Schmidt coefficients
+$\lambda_1=\lambda_2=\tfrac{1}{\sqrt2}$. Because the two
+$\lambda_k$ are equal, the bipartite state is \emph{maximally
+entangled} on $\C^2\otimes\C^2$: any other choice of unit-norm
+$\lambda_k$ with $\lambda_1^2+\lambda_2^2=1$ has at least one
+coefficient strictly larger than $1/\sqrt 2$ and is more
+``product-like'' in the sense that subsystem $A$ retains more
+information about its own state.
+
+\paragraph{The reduced state.}
+Applying the partial-trace formula \cref{eq:partial-trace} to
+\cref{eq:phiplus-schmidt} (or specialising the proof of
+\cref{stmt:reduced-pure} to this case) gives
+\begin{equation}
+\op{\rho}_A \;=\; \Tr_B\,\ket{\Phi^+}\bra{\Phi^+}
+              \;=\; \lambda_1^2\,\ket{0}\bra{0}
+                  + \lambda_2^2\,\ket{1}\bra{1}
+              \;=\; \tfrac12\,\id,
+\end{equation}
+i.e.\ qubit $A$ on its own is in the maximally mixed state ---
+Bloch vector at the origin. Even though the joint $\ket{\Phi^+}$
+is perfectly known, an observer with access only to $A$ has zero
+predictive information about $A$'s observables: this is the
+content of \cref{stmt:reduced-pure} made concrete.
+
+\paragraph{The entanglement entropy.}
+Plug $\lambda_1=\lambda_2=1/\sqrt 2$ into the entropy formula of
+\cref{stmt:schmidt}:
+\begin{equation}
+S(\op{\rho}_A)
+\;=\; -\sum_k \lambda_k^2\,\log_2 \lambda_k^2
+\;=\; -2\cdot\tfrac12\,\log_2\tfrac12
+\;=\; \log_2 2 \;=\; 1\;\text{bit}.
+\end{equation}
+This is the maximum value $S(\op{\rho}_A)$ can take on
+$\C^2\otimes\C^2$ (it is bounded by $\log_2\dim\hilbert_A=1$ for a
+qubit), confirming that $\ket{\Phi^+}$ is maximally entangled.
+
+\paragraph{The unit ``ebit''.}
+The result $S(\op{\rho}_A)=1$ bit motivates a unit of its own. An
+\emph{ebit} (entanglement bit) is the conventional unit of
+bipartite pure-state entanglement, defined as the amount of
+entanglement contained in one Bell pair: a state with
+$S(\op{\rho}_A)=n$ bits carries $n$ ebits. The unit is more than
+notational --- under local operations and classical communication
+(LOCC), bipartite pure entanglement is, asymptotically, freely
+convertible into ebits and back, so any pure-state entanglement
+resource can be quantified in this single unit. Quantum
+teleportation of one qubit consumes exactly one ebit; the
+production of $\ket{\Phi^+}$ by an idealised CNOT gate acting on
+$\ket{+}_A\otimes\ket{0}_B
+= \tfrac{1}{\sqrt 2}(\ket{0}+\ket{1})_A\!\otimes\!\ket{0}_B$
+\emph{produces} one ebit, since
+\begin{equation}
+\text{CNOT}\,\bigl(\tfrac{1}{\sqrt 2}(\ket{0}+\ket{1})_A\!\otimes\!\ket{0}_B\bigr)
+\;=\; \tfrac{1}{\sqrt 2}(\ket{00}+\ket{11})
+\;=\; \ket{\Phi^+}.
+\end{equation}
+This is also the motivation for calling two-qubit entangling gates
+``the ebit-generating part of any quantum-computational primitive''
+(\cref{app:entanglement-cqed}).
 \end{example}
 
 \begin{application}[Why entanglement matters in cQED]
