@@ -1,7 +1,7 @@
-# Quantum 101
+# Quantum 101 — Primer, Synthesis, Reflections
 
-Lecture-note style LaTeX summary of quantum physics and quantum optics, with
-focus on selected topics in superconducting circuits.
+Primer-style LaTeX summary of quantum physics and quantum optics, with
+focus on selected topics in superconducting circuits, by Felix Wagner.
 
 ## Pedagogical style
 

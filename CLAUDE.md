@@ -4,9 +4,11 @@ Working context for Claude Code sessions on this repository. Read this first.
 
 ## What this is
 
-LaTeX lecture notes on quantum mechanics, quantum optics, and superconducting
-circuits, in book form, aimed at someone building or analysing cQED hardware.
-Five parts plus an appendix:
+LaTeX notes on quantum mechanics, quantum optics, and superconducting
+circuits, by Felix Wagner. Self-styled as
+"Primer, Synthesis, Reflections" (the eyebrow on the title page) ---
+treat that phrasing as canonical and avoid the term "lecture notes".
+Six parts plus an appendix:
 
 | Part | Title | Status |
 |---|---|---|
@@ -15,6 +17,7 @@ Five parts plus an appendix:
 | III | Quantum optics | not started |
 | IV | Superconducting circuits | not started |
 | V | Quantum error correction (introduction) | not started |
+| VI | Quantum sensing of fundamental physics with superconducting circuits | not started |
 | App. A | Auxiliary mathematical definitions | drafted |
 
 The full topic list lives in `README.md`. Treat it as the source of truth for
