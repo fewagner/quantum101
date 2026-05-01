@@ -556,3 +556,172 @@ The answer assembles two of the workhorses of quantum optics ---
 time-dependent perturbation theory (with Fermi's golden rule) and
 the rotating-wave approximation --- both of which we will use
 repeatedly in Parts~III and IV.
+
+% --------------------------------------------------------------
+\section*{Exercises}
+\addcontentsline{toc}{section}{Exercises}
+
+\begin{exercise}[Bell states are orthonormal]
+Verify that the four Bell states
+$\ket{\Phi^\pm},\ket{\Psi^\pm}$ form an orthonormal basis of
+$\C^2\otimes\C^2$.
+\begin{solution}
+Each Bell state has norm $1$ by inspection of the
+$1/\sqrt 2$ coefficients. Pairwise:
+$\braket{\Phi^+}{\Phi^-}=\tfrac12(\braket{00}{00}-\braket{11}{11})=0$;
+$\braket{\Phi^+}{\Psi^+}=\tfrac12(\braket{00}{01}+\braket{11}{10})=0$;
+and so on for the remaining pairs --- in each case the four cross
+terms either pair $\ket{0i}$ with $\ket{0j}$ ($i\neq j$) or
+$\ket{1i}$ with $\ket{1j}$ ($i\neq j$), all of which vanish.
+Hence orthogonal, and together with normalisation an orthonormal
+basis of $\C^4$.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Partial trace of a product state]
+Compute $\Tr_B\,\bigl(\ket{\psi}_A\bra{\psi}\otimes\ket{\phi}_B\bra{\phi}\bigr)$
+explicitly. Confirm the result is $\ket{\psi}_A\bra{\psi}$.
+\begin{solution}
+Write $\ket{\phi}_B=\sum_j c_j\ket{j}_B$ in an orthonormal basis,
+so $\ket{\phi}\bra{\phi}=\sum_{jk}c_j\bar c_k\ket{j}\bra{k}$. Then
+$\Tr_B\bigl(\ket{\phi}\bra{\phi}\bigr)=\sum_l\bra{l}\bigl(\sum_{jk}c_j\bar c_k\ket{j}\bra{k}\bigr)\ket{l}
+=\sum_l|c_l|^2=\braket{\phi}{\phi}=1$.
+Hence the partial trace is
+$\ket{\psi}_A\bra{\psi}\cdot 1=\ket{\psi}_A\bra{\psi}$, as a product
+state has product reduced states.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Purity of the maximally mixed state]
+Compute the purity $\Tr\op{\rho}^2$ of $\op{\rho}=\id_d/d$ on a
+$d$-dimensional Hilbert space.
+\begin{solution}
+$\op{\rho}^2=\id_d/d^2$, so
+$\Tr\op{\rho}^2=\Tr\id_d/d^2=d/d^2=1/d$. For a qubit
+($d=2$) this is $1/2$, the minimum possible purity for a single
+qubit and the operational meaning of ``maximally mixed''.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Schmidt decomposition of $\ket{\Psi^+}$]
+Write $\ket{\Psi^+}=(\ket{01}+\ket{10})/\sqrt 2$ in Schmidt form.
+What are the Schmidt coefficients? Compute the entanglement
+entropy $S(\op{\rho}_A)$.
+\begin{solution}
+$\ket{\Psi^+}=\tfrac{1}{\sqrt 2}\ket{0}_A\!\otimes\!\ket{1}_B
++\tfrac{1}{\sqrt 2}\ket{1}_A\!\otimes\!\ket{0}_B$, already in
+Schmidt form with $\lambda_1=\lambda_2=1/\sqrt 2$. Hence
+$\op{\rho}_A=\tfrac12\ket{0}\bra{0}+\tfrac12\ket{1}\bra{1}=\id/2$,
+and $S(\op{\rho}_A)=-2\cdot\tfrac12\log_2\tfrac12=1$ bit ($1$
+ebit) --- maximally entangled, like all four Bell states.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Partially-entangled two-qubit state]
+For
+$\ket{\Psi}_{AB}=\alpha\ket{00}+\beta\ket{11}$ with
+$|\alpha|^2+|\beta|^2=1$, compute $\op{\rho}_A$ and
+$S(\op{\rho}_A)$. For what choice of $|\alpha|$ is the entanglement
+entropy maximal? minimal?
+\begin{solution}
+$\ket\Psi$ is in Schmidt form with $\lambda_1=|\alpha|$,
+$\lambda_2=|\beta|$, so
+$\op{\rho}_A=|\alpha|^2\ket{0}\bra{0}+|\beta|^2\ket{1}\bra{1}$.
+Hence $S(\op{\rho}_A)=-|\alpha|^2\log_2|\alpha|^2-|\beta|^2\log_2|\beta|^2
+=h(|\alpha|^2)$, the binary Shannon entropy. It is maximal
+($S=1$ ebit) for $|\alpha|=|\beta|=1/\sqrt 2$, minimal ($S=0$,
+separable) for $|\alpha|\in\{0,1\}$.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Bell-state correlations]
+For the Bell state $\ket{\Phi^+}$, compute the joint expectation
+values $\langle\hat\sigma_z\otimes\hat\sigma_z\rangle$,
+$\langle\hat\sigma_x\otimes\hat\sigma_x\rangle$, and
+$\langle\hat\sigma_y\otimes\hat\sigma_y\rangle$. Comment on the
+sign of each.
+\begin{solution}
+In the computational basis,
+$(\hat\sigma_z\otimes\hat\sigma_z)\ket{ij}=(-1)^{i+j}\ket{ij}$, so
+$\langle\hat\sigma_z\otimes\hat\sigma_z\rangle_{\Phi^+}
+=\tfrac12(+1)+\tfrac12(+1)=+1$ (perfect correlation: equal $z$-outcomes).
+$(\hat\sigma_x\otimes\hat\sigma_x)\ket{ij}=\ket{(1-i)(1-j)}$, so
+acting on $\ket{\Phi^+}$ swaps $\ket{00}\leftrightarrow\ket{11}$,
+giving $+1$ (perfect correlation in $x$).
+$(\hat\sigma_y\otimes\hat\sigma_y)\ket{ij}=(-1)^{i+j}(i)^2\ket{(1-i)(1-j)}$;
+acting on $\ket{\Phi^+}$ gives $-1$ (perfect anti-correlation in
+$y$). The pattern $\langle XX\rangle=+1$, $\langle YY\rangle=-1$,
+$\langle ZZ\rangle=+1$ is the diagonal signature of $\ket{\Phi^+}$.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Liouville--von Neumann from the Schr\"odinger equation]
+Derive \cref{eq:liouville} by differentiating
+$\op{\rho}(t)=\op{U}(t)\,\op{\rho}(0)\,\op{U}^\dagger(t)$ and using
+$i\hbar\,\dot{\op{U}}=\op{H}\op{U}$.
+\begin{solution}
+$\dv{t}\op{\rho}=\dot{\op{U}}\op{\rho}_0\op{U}^\dagger
++\op{U}\op{\rho}_0\dot{\op{U}}^\dagger$. Using
+$\dot{\op{U}}=-\tfrac{i}{\hbar}\op{H}\op{U}$ and the Hermitian
+conjugate $\dot{\op{U}}^\dagger=+\tfrac{i}{\hbar}\op{U}^\dagger\op{H}$,
+\[
+\dv{t}\op{\rho}=-\tfrac{i}{\hbar}\op{H}\op{U}\op{\rho}_0\op{U}^\dagger
++\tfrac{i}{\hbar}\op{U}\op{\rho}_0\op{U}^\dagger\op{H}
+=-\tfrac{i}{\hbar}\bigl(\op{H}\op{\rho}-\op{\rho}\op{H}\bigr)
+=-\tfrac{i}{\hbar}[\op{H},\op{\rho}],
+\]
+which rearranges to \cref{eq:liouville}.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Measurement backaction on a Bell pair]
+Alice holds qubit $A$ of $\ket{\Phi^+}_{AB}$ and measures
+$\hat\sigma_x$, obtaining the outcome $+1$. What is the
+post-measurement state of qubit $B$?
+\begin{solution}
+Rewrite $\ket{\Phi^+}=(\ket{++}+\ket{--})/\sqrt 2$, where
+$\ket{\pm}=(\ket{0}\pm\ket{1})/\sqrt 2$ are the
+$\hat\sigma_x$-eigenstates. The projection onto Alice's $+$
+eigenspace is $\op{P}^A_+\otimes\id_B
+=\ket{+}_A\bra{+}\otimes\id_B$. Acting on $\ket{\Phi^+}$ gives
+$\tfrac{1}{\sqrt 2}\ket{+}_A\!\otimes\!\ket{+}_B$, normalised:
+$\ket{+}_A\!\otimes\!\ket{+}_B$. So conditional on Alice's $+1$
+result, qubit $B$ is in $\ket{+}_B$. Measurement on Alice's qubit
+remotely projects qubit $B$ onto a definite state --- the
+classical-information channel that quantum teleportation
+formalises.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Coherence vs.\ population in pure dephasing]
+A qubit's density matrix in the energy basis is
+$\op{\rho}=\bigl(\begin{smallmatrix}p&c\\\bar c&1-p\end{smallmatrix}\bigr)$
+with $p\in[0,1]$ and $|c|\leq\sqrt{p(1-p)}$. Show that pure
+dephasing ($\hat\sigma_z$-noise on the system) can reduce $|c|$
+to $0$ \emph{without} changing $p$. What does this look like on
+the Bloch sphere?
+\begin{solution}
+Pure dephasing implements a phase-flip channel
+$\op{\rho}\to(1-q)\op{\rho}+q\,\hat\sigma_z\op{\rho}\hat\sigma_z$.
+$\hat\sigma_z\op{\rho}\hat\sigma_z=\bigl(\begin{smallmatrix}p&-c\\-\bar c&1-p\end{smallmatrix}\bigr)$,
+so the diagonal entries are unchanged and the off-diagonal becomes
+$c\to(1-2q)c$. For $q=1/2$ the off-diagonal vanishes; the
+populations $p,1-p$ are untouched. On the Bloch sphere this
+contracts the $(r_x,r_y)$ components to zero while leaving $r_z$
+fixed --- the Bloch vector slides toward the $z$-axis.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Reduced state of an entangled three-qubit GHZ]
+Compute $\op{\rho}_A=\Tr_{BC}\,\ket{\text{GHZ}}\bra{\text{GHZ}}$
+for $\ket{\text{GHZ}}=(\ket{000}+\ket{111})/\sqrt 2$. What is the
+purity of $\op{\rho}_A$?
+\begin{solution}
+Tracing out qubits $B$ and $C$ in the computational basis,
+$\op{\rho}_A=\sum_{jk}\bra{jk}_{BC}(\ket{\text{GHZ}}\bra{\text{GHZ}})\ket{jk}_{BC}
+=\tfrac12\ket{0}\bra{0}+\tfrac12\ket{1}\bra{1}=\id/2$. Purity
+$\Tr\op{\rho}_A^2=1/2$, the same as for a Bell-pair marginal:
+qubit $A$ is in the maximally mixed state, despite being only one
+of three constituents.
+\end{solution}
+\end{exercise}

@@ -537,3 +537,177 @@ the language --- tensor products, density matrices in their full
 generality, and the partial trace --- that is needed to handle
 composite and mixed states without giving up any of the machinery
 developed so far.
+
+% --------------------------------------------------------------
+\section*{Exercises}
+\addcontentsline{toc}{section}{Exercises}
+
+\begin{exercise}[Coherent states are eigenstates of $\hat a$]
+The \emph{coherent state} $\ket{\alpha}\in\hilbert$ for $\alpha\in\C$
+is defined by
+$\ket{\alpha}=e^{-|\alpha|^2/2}\sum_{n=0}^\infty(\alpha^n/\sqrt{n!})\ket{n}$.
+Verify that $\hat{a}\ket{\alpha}=\alpha\ket{\alpha}$.
+\begin{solution}
+Apply $\hat{a}$ termwise using $\hat{a}\ket{n}=\sqrt n\,\ket{n-1}$:
+\[
+\hat{a}\ket{\alpha}=e^{-|\alpha|^2/2}\sum_{n=1}^\infty\frac{\alpha^n}{\sqrt{n!}}\sqrt{n}\,\ket{n-1}
+=e^{-|\alpha|^2/2}\sum_{n=1}^\infty\frac{\alpha^n}{\sqrt{(n-1)!}}\,\ket{n-1}.
+\]
+Re-index $m=n-1$:
+$\hat{a}\ket{\alpha}=\alpha\,e^{-|\alpha|^2/2}\sum_{m=0}^\infty(\alpha^m/\sqrt{m!})\ket{m}
+=\alpha\ket{\alpha}$.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Photon-number statistics of a coherent state]
+Compute $\langle\hat n\rangle$ and $(\Delta n)^2$ for
+$\ket{\alpha}$, where $\hat n=\hat a^\dagger\hat a$.
+\begin{solution}
+Use $\hat a\ket{\alpha}=\alpha\ket{\alpha}$ and its Hermitian
+conjugate $\bra{\alpha}\hat a^\dagger=\bar\alpha\bra{\alpha}$:
+$\langle\hat n\rangle=\bra{\alpha}\hat a^\dagger\hat a\ket{\alpha}
+=|\alpha|^2$. For the variance,
+$\langle\hat n^2\rangle=\bra{\alpha}\hat a^\dagger\hat a\hat a^\dagger\hat a\ket{\alpha}
+=\bra{\alpha}\hat a^\dagger(\id+\hat a^\dagger\hat a)\hat a\ket{\alpha}
+=|\alpha|^2+|\alpha|^4$, so
+$(\Delta n)^2=|\alpha|^2=\langle\hat n\rangle$. The photon number
+in a coherent state is therefore Poisson-distributed.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[The Pauli-vector identity]
+Show that for any two real (or complex) vectors $\bm{a},\bm{b}$,
+\[
+(\hat{\bm{\sigma}}\!\cdot\!\bm{a})(\hat{\bm{\sigma}}\!\cdot\!\bm{b})
+=(\bm{a}\!\cdot\!\bm{b})\,\id+i\,\hat{\bm{\sigma}}\!\cdot\!(\bm{a}\!\times\!\bm{b}).
+\]
+\begin{solution}
+Expand using \cref{eq:pauli-algebra}:
+$(\hat\sigma_i a_i)(\hat\sigma_j b_j)=a_i b_j\hat\sigma_i\hat\sigma_j
+=a_i b_j(\delta_{ij}\id+i\epsilon_{ijk}\hat\sigma_k)$.
+The first piece is $a_i b_i\,\id=(\bm a\cdot\bm b)\id$; the second
+is $i\,a_i b_j\epsilon_{ijk}\hat\sigma_k=i\,(\bm a\times\bm b)_k\hat\sigma_k
+=i\,\hat{\bm\sigma}\cdot(\bm a\times\bm b)$.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Conjugation rotates a Pauli operator]
+Show, by direct computation or via the Pauli-vector identity, that
+$e^{-i\theta\hat\sigma_z/2}\hat\sigma_x\,e^{+i\theta\hat\sigma_z/2}
+=\cos\theta\,\hat\sigma_x+\sin\theta\,\hat\sigma_y$.
+\begin{solution}
+Differentiate
+$f(\theta)=e^{-i\theta\hat\sigma_z/2}\hat\sigma_x\,e^{+i\theta\hat\sigma_z/2}$
+to get $f'=-\tfrac{i}{2}[\hat\sigma_z,f]$. Use
+$[\hat\sigma_z,\hat\sigma_x]=2i\hat\sigma_y$,
+$[\hat\sigma_z,\hat\sigma_y]=-2i\hat\sigma_x$. Then $f$ satisfies
+$f''=-f$ with $f(0)=\hat\sigma_x$, $f'(0)=\hat\sigma_y$, giving
+$f(\theta)=\cos\theta\,\hat\sigma_x+\sin\theta\,\hat\sigma_y$.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Bloch-vector expectation values]
+For a qubit in state
+$\op{\rho}=\tfrac12(\id+\bm r\cdot\hat{\bm\sigma})$, show
+$\langle\hat\sigma_i\rangle=\Tr(\op{\rho}\hat\sigma_i)=r_i$.
+\begin{solution}
+$\Tr(\op{\rho}\hat\sigma_i)=\tfrac12\Tr\hat\sigma_i+\tfrac12 r_j\Tr(\hat\sigma_j\hat\sigma_i)$.
+The Pauli operators are traceless ($\Tr\hat\sigma_i=0$) and
+$\Tr(\hat\sigma_j\hat\sigma_i)=\Tr(\delta_{ij}\id+i\epsilon_{jik}\hat\sigma_k)
+=2\delta_{ij}$. Hence $\Tr(\op{\rho}\hat\sigma_i)=r_i$.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Calibrating $\pi$- and $\pi/2$-pulses]
+A qubit driven on resonance has on-resonance Rabi frequency
+$\Omega/2\pi=30\,\text{MHz}$. What pulse durations implement
+$\hat{R}_x(\pi)$ and $\hat{R}_x(\pi/2)$? What if the drive is
+detuned by $\Delta/2\pi=5\,\text{MHz}$?
+\begin{solution}
+On resonance the drive Hamiltonian is
+$\op{H}_R=\tfrac{\hbar\Omega}{2}\hat\sigma_x$ and the pulse area
+is $\Omega t$. A $\pi$-pulse needs $\Omega t=\pi$, i.e.\
+$t=\pi/\Omega=1/(2\cdot 30\,\text{MHz})\approx 16.7\,\text{ns}$;
+a $\pi/2$-pulse takes half that, $\approx 8.3\,\text{ns}$.
+Off-resonance the rotation is around the tilted axis
+$\hat{\bm n}=(\Omega,0,\Delta)/\Omega_R$ at the generalised
+frequency $\Omega_R=\sqrt{\Omega^2+\Delta^2}$; with the given
+numbers $\Omega_R/2\pi\approx 30.4\,\text{MHz}$, only marginally
+slower, but the rotation axis is no longer purely $\hat x$ and
+the maximum population in $\ket 1$ is
+$\Omega^2/(\Omega^2+\Delta^2)\approx 0.973$, not unity.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Rabi formula from the rotating-frame Hamiltonian]
+Starting from $\op{H}_R=(\hbar\Delta/2)\hat\sigma_z+(\hbar\Omega/2)\hat\sigma_x$
+and using the Pauli-vector identity, derive the Rabi formula
+\cref{eq:rabi-formula} explicitly.
+\begin{solution}
+$\op{H}_R=\tfrac{\hbar}{2}\,\bm{\Omega}\!\cdot\!\hat{\bm{\sigma}}$ with
+$\bm{\Omega}=(\Omega,0,\Delta)$ and $|\bm{\Omega}|=\Omega_R$. Hence
+$e^{-i\op{H}_R t/\hbar}=\cos(\Omega_R t/2)\,\id-i\sin(\Omega_R t/2)\,
+\hat{\bm{n}}\!\cdot\!\hat{\bm{\sigma}}$ with $\hat{\bm n}=\bm\Omega/\Omega_R$.
+Acting on $\ket{0}$ and projecting onto $\bra{1}$:
+$\bra{1}\hat n_z\hat\sigma_z\ket{0}=0$,
+$\bra{1}\hat n_x\hat\sigma_x\ket{0}=\Omega/\Omega_R$,
+$\bra{1}\hat n_y\hat\sigma_y\ket{0}=0$. Hence
+$\bra{1}e^{-i\op{H}_R t/\hbar}\ket{0}=-i\sin(\Omega_R t/2)\Omega/\Omega_R$,
+and squaring gives \cref{eq:rabi-formula}.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Off-resonance Rabi visibility]
+A driven qubit has $\Omega/2\pi=30\,\text{MHz}$ on-resonance Rabi
+frequency. Plot (analytically) $P_{0\to1}(t)$ for the detunings
+$\Delta/2\pi\in\{0,\,15,\,30,\,60\}\,\text{MHz}$ and quote the
+maximum value of $P_{0\to1}$ in each case.
+\begin{solution}
+The maximum of $P_{0\to1}$ is the contrast
+$\Omega^2/(\Omega^2+\Delta^2)$.
+For $\Delta/\Omega\in\{0,\tfrac12,1,2\}$ the contrasts are
+$\{1,\,4/5,\,1/2,\,1/5\}$, i.e.\ $\{100,80,50,20\}\%$. The
+oscillation frequency is $\Omega_R/2\pi=\sqrt{\Omega^2+\Delta^2}/2\pi
+=\{30,33.5,42.4,67\}\,\text{MHz}$. The plot is a sinusoid
+$P_{0\to1}(t)=\text{contrast}\cdot\sin^2(\Omega_R t/2)$ for each.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Free precession of a Bloch vector]
+A qubit prepared in $\ket{+}=(\ket{0}+\ket{1})/\sqrt 2$ is left to
+evolve under $\op{H}_0=(\hbar\omega_q/2)\hat\sigma_z$ for time $T$.
+Compute (i) the resulting state, (ii) the Bloch vector at time
+$T$, and (iii) the probability of obtaining $+1$ when measuring
+$\hat\sigma_x$ after a free-evolution time $T$ chosen to be
+$T=\pi/(2\omega_q)$.
+\begin{solution}
+(i) $\op{U}\ket{+}=(e^{-i\omega_q T/2}\ket{0}+e^{+i\omega_q T/2}\ket{1})/\sqrt 2
+\propto(\ket{0}+e^{i\omega_q T}\ket{1})/\sqrt 2$.
+(ii) Bloch vector $(\cos\omega_q T,\sin\omega_q T,0)$ --- equator
+precession at angular speed $\omega_q$, just as in
+Exercise~6 above.
+(iii) For $\omega_q T=\pi/2$, the state is
+$(\ket{0}+i\ket{1})/\sqrt 2=\ket{+_y}$, with
+$\langle\hat\sigma_x\rangle=0$, so $p_x(+1)=1/2$. After a quarter
+of a Larmor period the qubit has rotated from $\ket{+_x}$ to
+$\ket{+_y}$.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Order-of-magnitude RWA validity for a transmon]
+A transmon at $\omega_q/2\pi=5\,\text{GHz}$ is driven on resonance
+with $\Omega/2\pi=30\,\text{MHz}$. Estimate the small parameter
+$\epsilon_\text{RWA}=\Omega/(2\omega_q)$ that controls the leading
+correction to the rotating-wave approximation. Is the RWA reliable?
+\begin{solution}
+$\epsilon_\text{RWA}=\Omega/(2\omega_q)=30/(2\cdot 5000)=3\times 10^{-3}$.
+The leading Bloch--Siegert frequency shift is of order
+$\epsilon_\text{RWA}^2\,\omega_q\approx 9\times 10^{-6}\cdot 5\,\text{GHz}
+\approx 45\,\text{kHz}$. This is small compared to typical drive
+amplitudes but not always negligible compared to qubit linewidths
+($\sim$10\,kHz at the state of the art): single-qubit gates are
+calibrated empirically and the Bloch--Siegert shift is absorbed
+into the calibration. Faster drives ($\Omega/\omega_q\gtrsim 0.1$)
+require beyond-RWA modelling.
+\end{solution}
+\end{exercise}

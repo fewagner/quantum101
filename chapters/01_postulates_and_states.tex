@@ -812,3 +812,192 @@ between them, account for the bulk of cQED dynamics: the quantum
 harmonic oscillator (resonators; the leading behaviour of the
 transmon) and the two-level system (qubits; the geometric Bloch-sphere
 picture for single-qubit gates).
+
+% --------------------------------------------------------------
+\section*{Exercises}
+\addcontentsline{toc}{section}{Exercises}
+
+The exercises grow in difficulty from inspection-level checks of
+the formalism to applied calculations of the kind one runs in a
+qubit lab. Each exercise is followed by a worked solution.
+
+\begin{exercise}[Pauli operators are Hermitian, unitary, square to identity]
+Show, by direct matrix calculation, that the Pauli operators
+$\hat\sigma_x,\hat\sigma_y,\hat\sigma_z$ are simultaneously
+Hermitian and unitary, and that each squares to $\id$.
+\begin{solution}
+By inspection of \cref{def:pauli}, each of the three matrices is
+equal to its conjugate transpose, so
+$\hat\sigma_i^\dagger=\hat\sigma_i$ (Hermitian). Squaring,
+$\hat\sigma_x^2=\bigl(\begin{smallmatrix}0&1\\1&0\end{smallmatrix}\bigr)^2
+=\bigl(\begin{smallmatrix}1&0\\0&1\end{smallmatrix}\bigr)=\id$,
+and the same calculation for $\hat\sigma_y$ and $\hat\sigma_z$.
+Hence $\hat\sigma_i^\dagger \hat\sigma_i=\hat\sigma_i^2=\id$, so
+each is unitary as well.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Probabilities on the Bloch sphere]
+For $\ket{\psi}=\cos(\theta/2)\,\ket{0}+e^{i\varphi}\sin(\theta/2)\,\ket{1}$,
+compute the probability of obtaining the $+1$ outcome for each of
+$\hat\sigma_x,\hat\sigma_y,\hat\sigma_z$, and verify that the
+relation $\langle\hat\sigma_i\rangle=2\,p_i(+1)-1$ recovers the
+components of the Bloch vector
+$\bm{r}=(\sin\theta\cos\varphi,\sin\theta\sin\varphi,\cos\theta)$.
+\begin{solution}
+The $+1$-eigenstates are $\ket{+_z}=\ket{0}$,
+$\ket{+_x}=(\ket{0}+\ket{1})/\sqrt 2$,
+$\ket{+_y}=(\ket{0}+i\ket{1})/\sqrt 2$. The Born rule yields
+$p_z(+1)=|\bra{0}\ket{\psi}|^2=\cos^2(\theta/2)
+=\tfrac12(1+\cos\theta)$, and similarly
+$p_x(+1)=\tfrac12+\tfrac12\sin\theta\cos\varphi$,
+$p_y(+1)=\tfrac12+\tfrac12\sin\theta\sin\varphi$.
+Then $\langle\hat\sigma_z\rangle=2p_z(+1)-1=\cos\theta$,
+$\langle\hat\sigma_x\rangle=\sin\theta\cos\varphi$,
+$\langle\hat\sigma_y\rangle=\sin\theta\sin\varphi$, the Bloch
+vector.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Pauli commutator]
+Verify the algebra $[\hat\sigma_i,\hat\sigma_j]=2i\,\epsilon_{ijk}\hat\sigma_k$
+for the case $i=x,\,j=y$.
+\begin{solution}
+Direct multiplication:
+$\hat\sigma_x\hat\sigma_y=
+\bigl(\begin{smallmatrix}0&1\\1&0\end{smallmatrix}\bigr)
+\bigl(\begin{smallmatrix}0&-i\\i&0\end{smallmatrix}\bigr)
+=\bigl(\begin{smallmatrix}i&0\\0&-i\end{smallmatrix}\bigr)
+=i\hat\sigma_z$.
+Similarly $\hat\sigma_y\hat\sigma_x=-i\hat\sigma_z$. Hence
+$[\hat\sigma_x,\hat\sigma_y]=2i\hat\sigma_z=2i\,\epsilon_{xyz}\hat\sigma_z$,
+matching the general formula with $\epsilon_{xyz}=+1$.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Robertson for $\hat\sigma_x,\hat\sigma_y$ in $\ket{0}$]
+Apply the Robertson uncertainty relation \cref{eq:robertson} with
+$\op{A}=\hat\sigma_x$ and $\op{B}=\hat\sigma_y$ in the state
+$\ket{0}$. What is $\Delta\sigma_x\,\Delta\sigma_y$ and what is
+the right-hand side bound?
+\begin{solution}
+For $\ket{0}$, $\langle\hat\sigma_x\rangle=\langle\hat\sigma_y\rangle=0$
+and $\langle\hat\sigma_x^2\rangle=\langle\hat\sigma_y^2\rangle=1$
+(since each Pauli squares to $\id$), so
+$\Delta\sigma_x=\Delta\sigma_y=1$ and $\Delta\sigma_x\,\Delta\sigma_y=1$.
+The right-hand side is
+$\tfrac12|\langle[\hat\sigma_x,\hat\sigma_y]\rangle_0|=\tfrac12|2i\langle\hat\sigma_z\rangle_0|
+=|\langle\hat\sigma_z\rangle_0|=1$. The inequality is saturated.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Canonical commutator on a wave function]
+Verify $[\op{x},\op{p}]\,\psi(x)=i\hbar\,\psi(x)$ for an arbitrary
+smooth wave function by computing both terms explicitly using
+the position-representation forms of \cref{def:position-momentum}.
+\begin{solution}
+$(\op{x}\,\op{p}\,\psi)(x)=\op{x}\,(-i\hbar\,\psi'(x))=-i\hbar\,x\,\psi'(x)$,
+and
+$(\op{p}\,\op{x}\,\psi)(x)=-i\hbar\,\partial_x[x\,\psi(x)]
+=-i\hbar\,\psi(x)-i\hbar\,x\,\psi'(x)$.
+Subtracting,
+$[\op{x},\op{p}]\,\psi(x)=-i\hbar\,x\,\psi'(x)+i\hbar\,\psi(x)+i\hbar\,x\,\psi'(x)
+=i\hbar\,\psi(x)$, as required.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Time evolution under $\hat\sigma_z$ Hamiltonian]
+For $\op{H}=(\hbar\omega/2)\hat\sigma_z$, compute the time-evolution
+operator $\op{U}(t)=e^{-i\op{H}t/\hbar}$ as a $2\times 2$ matrix,
+and apply it to $\ket{+}=(\ket{0}+\ket{1})/\sqrt 2$. Sketch the
+Bloch-sphere trajectory.
+\begin{solution}
+Since $\hat\sigma_z^2=\id$,
+$\op{U}(t)=\cos(\omega t/2)\id-i\sin(\omega t/2)\hat\sigma_z
+=\bigl(\begin{smallmatrix}e^{-i\omega t/2}&0\\0&e^{+i\omega t/2}\end{smallmatrix}\bigr)$.
+Acting on $\ket{+}$,
+$\op{U}(t)\ket{+}=(e^{-i\omega t/2}\ket{0}+e^{+i\omega t/2}\ket{1})/\sqrt 2$.
+Up to global phase, this equals
+$(\ket{0}+e^{+i\omega t}\ket{1})/\sqrt 2$, with Bloch vector
+$(\cos\omega t,\sin\omega t,0)$. The state precesses on the equator
+of the Bloch sphere about the $z$-axis at angular speed $\omega$.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Heisenberg-conserved observables]
+Show that, for time-independent $\op{H}$, the Heisenberg-picture
+operator $\op{O}_H(t)$ is time-independent if and only if
+$[\op{H},\op{O}]=0$. Conclude that the expectation value
+$\expval{\op{O}}_\psi(t)$ is conserved in time iff $\op{O}$
+commutes with $\op{H}$.
+\begin{solution}
+The Heisenberg equation gives
+$\dv{t}\op{O}_H=\tfrac{i}{\hbar}[\op{H},\op{O}_H]$. The right-hand
+side vanishes for all $t$ iff $[\op{H},\op{O}_H]=0$, i.e.\ iff
+$[\op{H},\op{O}]=0$ (commutativity is preserved by conjugation by
+$\op{U}$). For expectation values,
+$\expval{\op{O}}_\psi(t)=\bra{\psi(0)}\op{O}_H(t)\ket{\psi(0)}$ in
+Heisenberg, which is constant in $t$ iff $\op{O}_H$ is, iff
+$[\op{H},\op{O}]=0$.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Gaussian wave packet saturates Heisenberg]
+For a Gaussian wave function
+$\psi(x)=(\pi a^2)^{-1/4}\,e^{-x^2/(2a^2)}$ with $a>0$, compute
+$\Delta x$ and $\Delta p$ and verify the Heisenberg inequality is
+saturated: $\Delta x\,\Delta p=\hbar/2$.
+\begin{solution}
+By symmetry $\langle\op{x}\rangle=\langle\op{p}\rangle=0$.
+Direct integration gives
+$\langle\op{x}^2\rangle=\int x^2|\psi|^2\,\dd x=a^2/2$, so
+$\Delta x=a/\sqrt 2$. For momentum, switch to Fourier space:
+$\tilde\psi(p)\propto e^{-p^2 a^2/(2\hbar^2)}$, a Gaussian with
+width $\hbar/a$ in $p$, so
+$\langle\op{p}^2\rangle=\hbar^2/(2a^2)$ and
+$\Delta p=\hbar/(a\sqrt 2)$. Hence
+$\Delta x\,\Delta p=(a/\sqrt 2)(\hbar/(a\sqrt 2))=\hbar/2$,
+saturating the Heisenberg inequality.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Pauli operators in the Heisenberg picture]
+Under $\op{H}=(\hbar\omega/2)\hat\sigma_z$, compute the
+Heisenberg-picture operators
+$\hat\sigma_x(t)$ and $\hat\sigma_y(t)$ explicitly. Interpret the
+result as a rotation in the $x$--$y$ plane.
+\begin{solution}
+Apply the formula
+$\hat\sigma_x(t)=\op{U}^\dagger\hat\sigma_x\op{U}$ with
+$\op{U}=e^{-i\omega t\hat\sigma_z/2}$ and using
+$e^{-i\theta\hat\sigma_z/2}\hat\sigma_x e^{+i\theta\hat\sigma_z/2}
+=\hat\sigma_x\cos\theta+\hat\sigma_y\sin\theta$ (which one verifies
+from the BCH expansion or by direct multiplication),
+\begin{align*}
+\hat\sigma_x(t) &= \cos(\omega t)\,\hat\sigma_x - \sin(\omega t)\,\hat\sigma_y, \\
+\hat\sigma_y(t) &= \cos(\omega t)\,\hat\sigma_y + \sin(\omega t)\,\hat\sigma_x.
+\end{align*}
+The two operators rotate rigidly in the $x$--$y$ plane at angular
+speed $\omega$, mirroring the Larmor precession of the Bloch vector.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Thermal occupation of a 5\,GHz qubit at 50\,mK]
+Estimate the equilibrium population of $\ket{1}$ for a qubit at
+$\omega_q/2\pi=5\,\text{GHz}$ in equilibrium with a thermal bath at
+$T=50\,\text{mK}$. Comment on the implication for state preparation
+in cQED experiments.
+\begin{solution}
+At thermal equilibrium $p_1/p_0=e^{-\hbar\omega_q/k_B T}$. Plug in
+$\hbar\omega_q\approx 6.6\times 10^{-34}\cdot 2\pi\cdot 5\times 10^9
+\approx 2.07\times 10^{-23}\,\text{J}$, and $k_B T\approx
+1.38\times 10^{-23}\cdot 0.05\approx 6.9\times 10^{-25}\,\text{J}$.
+Hence $\hbar\omega_q/(k_B T)\approx 30$ and
+$p_1/p_0\approx e^{-30}\approx 10^{-13}$, i.e.\ the qubit is in
+$\ket{0}$ with overwhelming probability. This is why cQED
+experiments operate at dilution-refrigerator temperatures: ensuring
+$k_B T \ll \hbar\omega_q$ keeps the residual thermal population
+negligible and lets the qubit be \emph{passively} initialised in
+$\ket{0}$ simply by waiting longer than $T_1$.
+\end{solution}
+\end{exercise}
