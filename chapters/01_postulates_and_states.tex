@@ -229,6 +229,61 @@ measurement-setting independence, spacelike separation of
 detectors), the simultaneous loophole-free Bell tests of
 2015~\cite{hensen2015,giustina2015,shalm2015}.
 
+\paragraph{The argument in CHSH form.}
+The cleanest version of Bell's theorem is the one due to Clauser,
+Horne, Shimony and Holt~\cite{chsh1969} (CHSH), which is the form
+all of the experiments above are cast in. The setup involves two
+distant observers who share a stream of entangled pairs (one of the
+maximally entangled Bell states of \cref{ex:bell-states} is the
+canonical choice). On each pair, Alice independently and randomly
+chooses one of two binary measurement settings labelled
+$\op{A}_1, \op{A}_2$, and Bob independently chooses one of two
+$\op{B}_1, \op{B}_2$; each measurement returns an outcome in
+$\{-1, +1\}$. Repeating many times yields the four correlation
+coefficients
+\begin{equation}
+E_{ij} \;=\; \langle A_i\,B_j\rangle,
+\qquad i,j \in \{1,2\},
+\end{equation}
+where the angled brackets are sample averages of the product of the
+two outcomes. The \emph{CHSH quantity} is
+\begin{equation}
+\label{eq:chsh}
+S \;=\; E_{11} + E_{12} + E_{21} - E_{22}.
+\end{equation}
+
+In any local hidden-variable theory, $S$ is bounded:
+\begin{equation}
+\label{eq:chsh-bound}
+|S| \;\leq\; 2.
+\end{equation}
+The argument is short. At the level of a single event, the four
+outcomes $A_1, A_2, B_1, B_2$ are all $\pm 1$ and are deterministic
+functions of the hidden variables and the local settings. Then
+\begin{equation}
+A_1 B_1 + A_1 B_2 + A_2 B_1 - A_2 B_2
+\;=\; A_1\,(B_1 + B_2) + A_2\,(B_1 - B_2)
+\;\in\; \{-2,\, +2\},
+\end{equation}
+because $B_1, B_2 \in \{-1, +1\}$ forces exactly one of the
+parentheses to be zero and the other to be $\pm 2$. Averaging both
+sides over the joint distribution of hidden variables and settings
+gives \cref{eq:chsh-bound}.
+
+Quantum mechanics, applied to a maximally entangled pair with
+measurement axes rotated by $22.5^\circ$ between adjacent pairs,
+predicts
+\begin{equation}
+\label{eq:tsirelson}
+S^{\text{QM}} \;=\; 2\sqrt 2 \;\approx\; 2.828
+\end{equation}
+(the so-called \emph{Tsirelson bound}, the largest value $|S|$ can
+take in any quantum theory). The four loophole-free experiments
+cited above measure $S$ in the range roughly $2.4$--$2.8$, well
+above the classical bound $2$ and consistent with $S^{\text{QM}}$
+within statistical error. The conclusion is that the world cannot
+be both local \emph{and} described by hidden variables.
+
 The supported conclusion is precise: \emph{no local hidden-variable
 theory can reproduce the predictions of quantum mechanics}. The
 Born-rule randomness is in this sense irreducible \emph{within the
@@ -240,6 +295,38 @@ remaining deterministic. What the Bell-inequality tests do show is
 that one cannot have both locality and hidden-variable determinism
 simultaneously, and this constrains what any future ``deeper''
 theory can look like.
+
+\paragraph{The superdeterminism loophole.}
+A more radical way out of the Bell argument is to question one of
+its silent assumptions: the \emph{statistical independence} between
+the experimenter's choice of measurement setting and the hidden
+variables of the entangled pair. The CHSH bound \cref{eq:chsh-bound}
+is derived by averaging over hidden variables \emph{and} settings
+\emph{independently}; if the two were correlated by a common cause
+in their joint past, the bound need not hold. In its strongest
+form, this loophole pictures every variable in the universe ---
+including the random-number generators in Alice's and Bob's
+laboratories --- as fixed by initial conditions at the Big Bang,
+when all of today's spacelike-separated regions were within a
+single light cone, and consistent in just the right way to
+reproduce the apparent quantum correlations. Theories of this kind
+are called \emph{superdeterministic}, and have been advocated, in
+different forms, by 't~Hooft~\cite{thooft2016} and by Hossenfelder
+and Palmer~\cite{hossenfelder2020}.
+
+Superdeterminism is consistent with all known experiments,
+including the loophole-free Bell tests, because no experiment can
+guarantee that the hardware used to choose measurement settings is
+uncorrelated with the underlying microphysics. Recent ``cosmic
+Bell tests'', which seed the setting choices using fluctuations of
+light from distant quasars emitted billions of years
+ago~\cite{rauch2018}, push the required common-cause horizon
+deeper into the past, but cannot rule out the loophole entirely.
+From a pragmatic standpoint, superdeterminism is in tension with
+the methodological assumptions of all of empirical science (which
+takes for granted that experimenters can independently sample
+inputs), but it remains a logically consistent way to recover
+local determinism, and is mentioned here for completeness.
 
 \paragraph{Where does the information go on measurement?}
 A naive reading of the projection rule \cref{eq:projection} is that

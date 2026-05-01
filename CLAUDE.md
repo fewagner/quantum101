@@ -168,8 +168,8 @@ When introducing new terms in future chapters, **append to this table**.
 ## Open todos
 
 - Part I done; Parts II–V outlined in `README.md` only.
-- Bibliography active (11 entries; foundations + decoherence +
-  interpretations). Add new entries thematically grouped in
-  `bibliography.bib` as future chapters acquire citations.
+- Bibliography active (15 entries; foundations + decoherence +
+  interpretations + superdeterminism). Add new entries thematically
+  grouped in `bibliography.bib` as future chapters acquire citations.
 - No figures yet. `figures/` is empty; consider TikZ for diagrams when
   needed (Bloch sphere, circuit diagrams, level diagrams, …).
