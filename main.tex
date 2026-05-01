@@ -2,16 +2,47 @@
 
 \input{preamble}
 
-\title{\Huge Quantum 101 \\[0.5em]
-       \Large Notes on Quantum Physics, Quantum Optics, \\
-       and Superconducting Circuits}
-\author{}
-\date{\today}
-
 \begin{document}
 
 \frontmatter
-\maketitle
+
+% ---- Title page ----
+\begin{titlepage}
+  \thispagestyle{empty}
+  \centering
+  \sffamily
+  \vspace*{0.18\textheight}
+
+  % Eyebrow above the title
+  {\large\color{primary!75}\MakeUppercase{Lecture notes}\par}
+  \vspace{1.4em}
+
+  % Coloured rule
+  {\color{primary}\rule{0.55\textwidth}{1.4pt}}\par
+  \vspace{2.2em}
+
+  % Main title
+  {\bfseries\color{primary}\fontsize{56}{60}\selectfont
+   Quantum 101\par}
+  \vspace{1.6em}
+
+  % Subtitle
+  {\Large\color{primary!70}
+   Quantum Physics, Quantum Optics,\\[0.25em]
+   and Superconducting Circuits\par}
+
+  \vspace{2.2em}
+  {\color{primary}\rule{0.55\textwidth}{1.4pt}}\par
+
+  \vfill
+
+  % Footer block: build date, repository
+  {\large\color{primary!60}\today\par}
+  \vspace{0.8em}
+  {\small\color{primary!50}
+   \href{https://github.com/fewagner/quantum101}{github.com/fewagner/quantum101}\par}
+  \vspace{1.5em}
+\end{titlepage}
 
 \input{abstract}
 
