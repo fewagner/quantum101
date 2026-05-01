@@ -248,6 +248,91 @@ its Bloch vector is the origin of the Bloch sphere --- even though
 the joint state is perfectly known.
 \end{example}
 
+\begin{example}[Decoherence as system--environment entanglement]
+\label{ex:decoherence-by-partial-trace}
+The Bell-state example above already showed that tracing out a
+subsystem can turn a pure joint state into a mixed marginal. That
+mechanism is the seed of \emph{decoherence} --- the loss of
+quantum coherence due to interaction with an environment --- which
+we treat systematically in \cref{ch:open-systems}. Here we exhibit
+it in its simplest possible form: a single environment qubit and a
+single round of interaction.
+
+\paragraph{Setup.}
+Take a system qubit $S$ in the equal superposition
+\begin{equation}
+\ket{\psi(0)}_S \;=\; \ket{+}_S
+\;\equiv\; \tfrac{1}{\sqrt 2}\bigl(\ket{0}+\ket{1}\bigr),
+\end{equation}
+and an environment qubit $E$ in $\ket{0}_E$. The joint state is a
+product, hence separable:
+\begin{equation}
+\ket{\Psi(0)}_{SE}
+\;=\; \ket{+}_S\!\otimes\!\ket{0}_E
+\;=\; \tfrac{1}{\sqrt 2}\bigl(\ket{00}+\ket{10}\bigr).
+\end{equation}
+The reduced state of $S$ is
+$\op{\rho}_S(0)=\ket{+}\bra{+}=\tfrac12(\id+\hat\sigma_x)$, with
+Bloch vector $\bm{r}(0)=(1,0,0)$ on the equator of the Bloch
+sphere; in particular $\op{\rho}_S(0)$ is pure and has off-diagonal
+coherence $\bra{0}\op{\rho}_S\ket{1}=\tfrac12$.
+
+\paragraph{Interaction.}
+Suppose $S$ and $E$ now interact through a unitary $\op{U}_{SE}$
+that copies the system's computational-basis state onto the
+environment,
+\begin{equation}
+\op{U}_{SE}\,\ket{0}_S\ket{0}_E = \ket{0}_S\ket{0}_E,
+\qquad
+\op{U}_{SE}\,\ket{1}_S\ket{0}_E = \ket{1}_S\ket{1}_E.
+\end{equation}
+(This is the action of a controlled-NOT gate; we encounter the
+gate again in \cref{ex:bell-states} as a way of \emph{producing}
+$\ket{\Phi^+}$, and its hardware realisation is in
+\cref{sec:two-qubit-gates}.) By linearity, applied to
+$\ket{\Psi(0)}_{SE}$ it gives
+\begin{equation}
+\ket{\Psi}_{SE}
+\;=\; \tfrac{1}{\sqrt 2}\bigl(\ket{00}+\ket{11}\bigr)
+\;=\; \ket{\Phi^+}.
+\end{equation}
+The joint state is still pure, the dynamics is unitary, and \emph{no
+information has been lost from the universe}.
+
+\paragraph{What the system sees.}
+Tracing out the environment, the reduced state of $S$ is
+\begin{equation}
+\op{\rho}_S \;=\; \Tr_E\,\ket{\Phi^+}\bra{\Phi^+}
+              \;=\; \tfrac12 \id.
+\end{equation}
+The Bloch vector has contracted from $(1,0,0)$ to the origin. The
+diagonal populations of $\op{\rho}_S$ are unchanged ($\tfrac12$ at
+both ends), but the off-diagonal coherence
+$\bra{0}\op{\rho}_S\ket{1}$ has gone from $\tfrac12$ to $0$. This
+process --- destruction of coherence without exchange of populations
+--- is \emph{pure dephasing}.
+
+\paragraph{Decoherence is hidden information.}
+The off-diagonal coherence was not destroyed: it was \emph{moved}
+into correlations between $S$ and $E$ that the partial trace
+discards. With access to $E$ we could in principle reverse the
+interaction (it is unitary) and recover the original pure state of
+$S$. We do not have that access; from $S$'s point of view the
+coherence is gone.
+
+\paragraph{Forward to Part II.}
+A real cQED environment is not a single qubit but a continuum of
+modes with effectively random phases (a transmission line, a phonon
+bath, two-level fluctuators), continuously interacting with the
+system. The same mechanism then produces a smooth exponential decay
+of the off-diagonal density-matrix elements, with characteristic
+timescale $T_2$. The systematic theory --- the Born--Markov
+approximation, the Lindblad master equation, the relaxation
+($T_1$), dephasing ($T_2$) and pure-dephasing ($T_2^*$) times --- is
+\cref{ch:open-systems}. The example above is its kernel in three
+lines.
+\end{example}
+
 \begin{remark}
 The same construction underlies the description of an open system
 coupled to a bath: the system's effective state is the partial trace
@@ -338,23 +423,49 @@ The result $S(\op{\rho}_A)=1$ bit motivates a unit of its own. An
 bipartite pure-state entanglement, defined as the amount of
 entanglement contained in one Bell pair: a state with
 $S(\op{\rho}_A)=n$ bits carries $n$ ebits. The unit is more than
-notational --- under local operations and classical communication
-(LOCC), bipartite pure entanglement is, asymptotically, freely
-convertible into ebits and back, so any pure-state entanglement
-resource can be quantified in this single unit. Quantum
-teleportation of one qubit consumes exactly one ebit; the
-production of $\ket{\Phi^+}$ by an idealised CNOT gate acting on
-$\ket{+}_A\otimes\ket{0}_B
-= \tfrac{1}{\sqrt 2}(\ket{0}+\ket{1})_A\!\otimes\!\ket{0}_B$
-\emph{produces} one ebit, since
+notational. Two protocols give it operational meaning --- one
+that \emph{consumes} ebits and one that \emph{produces} them ---
+and they let us introduce two pieces of quantum-information
+terminology that will recur in later parts.
+
+\paragraph{Where ebits are spent: quantum teleportation.}
+\emph{Quantum teleportation} is a protocol in which Alice
+transmits an unknown one-qubit state to Bob using only (i) one
+pre-shared Bell pair and (ii) two classical bits sent over a
+classical channel; no qubit physically travels from Alice to
+Bob. Each successful teleportation \emph{consumes} the shared
+Bell pair, i.e.\ exactly one ebit. The protocol thus turns ``one
+ebit + two classical bits'' into ``one transmitted qubit'', and
+is the canonical example of a task whose cost is an integer
+number of ebits. We treat it carefully in \cref{ch:qec}; the
+point here is only that ebits are a real, expendable resource.
+
+\paragraph{Where ebits are made: two-qubit entangling gates and CNOT.}
+A \emph{two-qubit gate} is a unitary on
+$\hilbert_A\otimes\hilbert_B$ that \emph{does not} factorise as a
+product $\op{U}_A\otimes\op{U}_B$ of single-qubit unitaries.
+Equivalently (\cref{app:entanglement-cqed}), it is a gate capable
+of taking a separable input to an entangled output. The canonical
+example, already used informally in
+\cref{ex:decoherence-by-partial-trace} above, is the
+\emph{controlled-NOT} or \emph{CNOT} gate: it flips the target
+qubit $B$ if and only if the control qubit $A$ is in $\ket{1}$,
+\begin{equation}
+\text{CNOT}\,\ket{a}_A\ket{b}_B
+\;=\; \ket{a}_A\,\ket{a\oplus b}_B,
+\end{equation}
+with $\oplus$ addition modulo $2$. Acting on the separable input
+$\ket{+}_A\otimes\ket{0}_B$ produces the maximally entangled
+$\ket{\Phi^+}$,
 \begin{equation}
 \text{CNOT}\,\bigl(\tfrac{1}{\sqrt 2}(\ket{0}+\ket{1})_A\!\otimes\!\ket{0}_B\bigr)
 \;=\; \tfrac{1}{\sqrt 2}(\ket{00}+\ket{11})
-\;=\; \ket{\Phi^+}.
+\;=\; \ket{\Phi^+},
 \end{equation}
-This is also the motivation for calling two-qubit entangling gates
-``the ebit-generating part of any quantum-computational primitive''
-(\cref{app:entanglement-cqed}).
+i.e.\ generates one ebit from a separable input. Hardware
+realisations of CNOT-equivalent gates in superconducting circuits
+(cross-resonance, iSWAP-based, and so on) are the subject of
+\cref{sec:two-qubit-gates}.
 \end{example}
 
 \begin{application}[Why entanglement matters in cQED]

@@ -148,7 +148,12 @@ without checking — the document should keep reading as a quiet book.
 | Density matrix (general) | `def:density` | ch. 3 §3.2 |
 | Partial trace | `def:partial-trace` | ch. 3 §3.3 |
 | Bell states | `ex:bell-states` | ch. 3 §3.1 |
+| Decoherence (kernel via partial trace) | `ex:decoherence-by-partial-trace` | ch. 3 §3.3 |
+| Pure dephasing (informally) | (within decoherence example) | ch. 3 §3.3 |
 | Ebit | (worked example) | ch. 3 §3.4 |
+| Quantum teleportation (qualitative) | (within ebit example) | ch. 3 §3.4 |
+| CNOT gate (qualitative) | (within ebit example) | ch. 3 §3.4 |
+| Two-qubit gate (qualitative) | (within ebit example) | ch. 3 §3.4 |
 | Rotating-wave approximation | `stmt:rwa` | ch. 4 §4.3 |
 | Sesquilinear, conjugate-symmetric, positive definite | `def:sesquilinear,…` | App. A |
 | Inner product, norm, Cauchy completeness, separability | `def:inner-product,…` | App. A |
