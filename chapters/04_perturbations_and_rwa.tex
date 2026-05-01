@@ -127,11 +127,16 @@ the interaction-picture Hamiltonian.
 \label{sec:rwa}
 
 \begin{phenomenon}
-A near-resonant drive on a quantum system produces both a slow,
-``co-rotating'' amplitude that drives transitions and a fast,
-``counter-rotating'' one that averages to zero on the timescale of
-the slow dynamics. Provided the slow and fast scales are well
-separated, the counter-rotating part can be discarded.
+A near-resonant drive produces both a slow, ``co-rotating''
+contribution that drives transitions coherently and a fast,
+``counter-rotating'' one that, when integrated over time, makes
+only a small bounded correction on top of the slow dynamics.
+Provided the slow and fast scales are well separated, the
+counter-rotating part can be dropped as a leading-order
+approximation. The point is \emph{not} that the state ignores the
+fast terms instantaneously --- it does not --- but that their
+cumulative effect over the dynamical timescale stays bounded and
+small.
 \end{phenomenon}
 
 \begin{statement}[RWA, generic form]
@@ -140,11 +145,79 @@ Consider $\op{H}(t)=\op{H}_0+\op{V}(t)$ with
 $\op{H}_0\ket{n}=E_n\ket{n}$ and $\op{V}(t)$ harmonic at frequency
 $\omega$. In the interaction picture,
 $\op{V}_I(t)=\sum_{m,n} V_{mn}\,e^{i\omega_{mn}t}\,e^{\pm i\omega t}\,
-\ket{m}\bra{n}$. Terms with $|\omega_{mn}\pm\omega|\gg|V_{mn}|/\hbar$
-oscillate fast on the scale of $\hbar/V$ and integrate to a
-negligible contribution; the RWA consists in dropping them and
-keeping only the resonant terms with $\omega_{mn}\pm\omega\approx0$.
+\ket{m}\bra{n}$. Terms for which the total oscillation frequency
+$|\omega_{mn}\pm\omega|$ is much larger than the interaction-strength
+scale $|V_{mn}|/\hbar$ contribute, when integrated, only an
+$O(|V_{mn}|/\hbar|\omega_{mn}\pm\omega|)$ correction to the state.
+The RWA consists in dropping them and keeping only the resonant
+terms with $\omega_{mn}\pm\omega\approx0$, which produce $O(1)$
+dynamics on the timescale of interest.
 \end{statement}
+
+\paragraph{Why discarding the fast terms is legitimate.}
+The naive ``fast oscillations average to zero'' justification is
+not quite right: the Hamiltonian is non-zero at every instant and
+the state \emph{is}, instantaneously, sensitive to every term in
+it. The honest justification is about the \emph{time-integrated}
+effect. From the first-order amplitude
+\cref{eq:c-first-order}, the contribution of a single oscillating
+piece $V_X\,e^{i\omega_X t}$ to the state at time $t$ is
+proportional to
+\begin{equation}
+\label{eq:rwa-integral}
+\int_0^t e^{i\omega_X t'}\,\dd t'
+\;=\; \frac{e^{i\omega_X t}-1}{i\omega_X},
+\qquad
+\biggl|\int_0^t e^{i\omega_X t'}\,\dd t'\biggr| \;\leq\; \frac{2}{|\omega_X|}.
+\end{equation}
+The key observation is that this integral is \emph{bounded for all
+$t$}, with a bound that shrinks as $|\omega_X|$ grows: the integral
+does not accumulate with time, because each new oscillation
+half-period cancels the previous one. A fast term therefore
+generates an amplitude of at most $\sim|V_\text{fast}|/(\hbar\,\omega_\text{fast})$,
+\emph{forever}.
+
+A slow term, by contrast, has $\omega_X\to 0$, and the integral in
+\cref{eq:rwa-integral} reduces to $t$: the amplitude grows
+\emph{linearly} in time, reaching $O(1)$ on the dynamical timescale
+$t\sim\hbar/|V_\text{slow}|$. Comparing the two, a fast term's
+contribution is smaller than a slow term's, on that same
+timescale, by the dimensionless ratio
+\begin{equation}
+\label{eq:rwa-small-parameter}
+\epsilon_\text{RWA} \;\sim\; \frac{|V_\text{fast}|}{\hbar\,\omega_\text{fast}}.
+\end{equation}
+Whenever $\epsilon_\text{RWA}\ll 1$ --- i.e.\ whenever the matrix
+element of the fast term is small compared to its oscillation
+energy $\hbar\,\omega_\text{fast}$ --- the fast term acts as a
+small additive correction on top of the slow dynamics. The RWA
+consists in keeping the leading $O(1)$ behaviour and dropping the
+$O(\epsilon_\text{RWA})$ correction. We are \emph{not} claiming
+the fast terms have no effect; we are saying that their cumulative
+effect on the dynamical timescale is bounded by
+$\epsilon_\text{RWA}$ while the slow terms drive the leading
+dynamics.
+
+\begin{intuition}
+Picture the state vector as a particle being pushed by a force that
+contains a steady component plus a rapidly oscillating one. The
+steady push moves the particle linearly in time. The oscillating
+push moves it back and forth so quickly that the cumulative
+displacement is at most one oscillation amplitude before the next
+half-cycle reverses it. After many oscillation periods, the
+steady displacement has grown without bound while the oscillating
+contribution is still bounded by its single-amplitude maximum.
+That is exactly the situation here, with ``displacement''
+replaced by ``state-vector amplitude''.
+\end{intuition}
+
+The first systematic correction beyond the RWA is the
+\emph{Bloch--Siegert shift}, an $O(\epsilon_\text{RWA}^2)$
+correction to the effective qubit frequency. It enters at second
+order because pairs of fast-term contributions can combine
+coherently to leave a residual dc piece, and it becomes
+experimentally measurable when the drive is so strong that
+$\epsilon_\text{RWA}\sim0.1$ or larger.
 
 \paragraph{Derivation, two-level example.}
 For the driven TLS of \cref{sec:rabi} with
