@@ -273,27 +273,21 @@ practical importance of having $\mathcal{W}$ tabulated as a
 function of both arguments, is what motivates the numerical-tools
 remark below.
 
-\begin{remark}[Numerical evaluation: \texttt{DarkELF}]
+\begin{remark}[Numerical evaluation of the energy-loss function]
 The energy-loss function $\mathcal{W}(q,\omega)$ is, unlike the
 nuclear form factor, intrinsically a many-body object: closed
-forms exist only for toy models (free electron gas, isolated
-hydrogen-like atom). For real semiconductor and metal targets
-it is computed numerically from density-functional theory or from
-extrapolations of optical-conductivity data. The
-\texttt{DarkELF} package~\cite{knapen2021} packages tabulated
-$\mathcal{W}(q,\omega)$ for Si, Ge, GaAs, GaN, SiC, sapphire and
-aluminium, together with python routines that wrap
-\cref{eq:dRdE-electron}, \cref{eq:vmin-electron} and the
-mean-inverse-speed function \cref{eq:eta} into a single
-\texttt{rate.dRdomega(omega, mX, sigma\_e, F\_DM)} call. The
-practical workflow for a DM--electron analysis is therefore: pick
-a target, pick a DM model (mediator + reference $\bar\sigma_e$),
-call \texttt{DarkELF} on a grid in $\omega$, and feed the
-resulting $\dd R/\dd\omega$ into the detector-response formula
-\cref{eq:N-exp} of \cref{sec:detector-response}. The numerical
-accuracy of $\mathcal{W}$ is limited by the underlying
-band-structure calculation; in regions where independent
-optical-loss data exist, agreement is at the
+forms exist only for toy models (free-electron gas, isolated
+hydrogen-like atom). For real semiconductor and metal targets it
+must be computed numerically from a band-structure calculation
+(typically density-functional theory) or extrapolated from
+optical-conductivity data. Public codes that tabulate
+$\mathcal{W}(q,\omega)$ for the materials commonly used in
+direct-detection experiments --- silicon, germanium, gallium
+arsenide, aluminium and sapphire --- and that wrap the rate
+integral \cref{eq:dRdE-electron} for use in analyses are
+available~\cite{knapen2021}. Their numerical accuracy is limited by
+the underlying band-structure calculation; in regions where
+independent optical-loss data exist, agreement is typically at the
 $\mathcal O(10\,\%)$ level.
 \end{remark}
 
