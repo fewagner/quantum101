@@ -132,14 +132,30 @@ needed. Each `[ ]` becomes a section or chapter.
 - [ ] Echo / CPMG sequences for $T_2$ (optional)
 - [ ] $T_1$ measurement (optional)
 
-### Part V — Quantum error correction (introduction)
+### Part V — Quantum information processing
 
+A general primer that progresses from the language of quantum
+computing into quantum error correction. Topics in order:
+
+- [ ] Quantum gates and the universal gate set; gate notation and
+      diagrammatic conventions for circuit diagrams
+- [ ] Quantum teleportation, fully worked
+- [ ] Magic states and stabiliser-vs-non-stabiliser dichotomy
+- [ ] Notes on quantum cryptography (BB84, E91) and quantum
+      communication (no-cloning, dense coding)
 - [ ] Why QEC: noise channels, no-cloning, the digitization theorem
 - [ ] Repetition codes: bit-flip and phase-flip
 - [ ] Shor and Steane codes (overview)
-- [ ] Stabilizer formalism (overview)
+- [ ] Stabiliser formalism
 - [ ] Surface code (overview)
 - [ ] Bosonic codes in cQED: cat / GKP (overview, optional)
+
+### Part VI — Quantum sensing
+
+- See `chapters/09_quantum_sensing.tex` for the current draft. Topics:
+  dark-matter primer, recoil signal models, photon-mediated dark
+  matter, four cQED-based sensing mechanisms with sensitivity
+  estimates.
 
 ### Appendices (optional)
 

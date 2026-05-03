@@ -17,8 +17,8 @@ Six parts plus an appendix:
 | II | Open quantum systems | not started |
 | III | Quantum optics | not started |
 | IV | Superconducting circuits | not started |
-| V | Quantum error correction (introduction) | not started |
-| VI | Quantum sensing of fundamental physics with superconducting circuits | drafted (overview + four mechanisms) |
+| V | Quantum information processing | not started |
+| VI | Quantum sensing | drafted (overview + four mechanisms) |
 | App. A | Auxiliary mathematical definitions | drafted |
 
 The full topic list lives in `README.md`. Treat it as the source of truth for
@@ -179,10 +179,11 @@ When introducing new terms in future chapters, **append to this table**.
 ## Open todos
 
 - Part I done; Parts II–V outlined in `README.md` only.
-- Bibliography active (46 entries; foundations + decoherence +
+- Bibliography active (47 entries; foundations + decoherence +
   interpretations + superdeterminism + Part VI dark-matter
   references + cQED textbooks/reviews and historical-milestone
-  papers cited in the introduction). Add new entries thematically
-  grouped in `bibliography.bib` as future chapters acquire citations.
+  papers cited in the introduction; one entry on magic-state
+  distillation for Part V). Add new entries thematically grouped
+  in `bibliography.bib` as future chapters acquire citations.
 - No figures yet. `figures/` is empty; consider TikZ for diagrams when
   needed (Bloch sphere, circuit diagrams, level diagrams, …).
