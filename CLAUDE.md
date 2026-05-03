@@ -18,7 +18,7 @@ Six parts plus an appendix:
 | III | Quantum optics | not started |
 | IV | Superconducting circuits | not started |
 | V | Quantum information processing | not started |
-| VI | Quantum sensing | drafted (overview + four mechanisms) |
+| VI | Quantum sensing | first chapter (dark-matter search) drafted; four mechanism chapters are placeholders |
 | App. A | Auxiliary mathematical definitions | drafted |
 
 The full topic list lives in `README.md`. Treat it as the source of truth for

@@ -152,10 +152,29 @@ computing into quantum error correction. Topics in order:
 
 ### Part VI — Quantum sensing
 
-- See `chapters/09_quantum_sensing.tex` for the current draft. Topics:
-  dark-matter primer, recoil signal models, photon-mediated dark
-  matter, four cQED-based sensing mechanisms with sensitivity
-  estimates.
+Five chapters total:
+
+- **Experimental search for dark matter** (`chapters/09_dark_matter_search.tex`,
+  drafted). Detector-agnostic walk-through of both detection
+  channels: fermion-like DM via elastic recoil and bosonic DM via
+  absorption. Pipeline: model parameters → predicted in-detector
+  spectrum → measured spectrum → statistical limit on the model
+  parameter (Poisson + profile likelihood). Cross-references to the
+  four mechanism chapters below.
+- **Phonon-to-quasiparticle conversion**
+  (`chapters/10_phonon_quasiparticle.tex`, placeholder). Cooper-pair
+  breaking by an athermal phonon above $2\Delta$, read out by a TES
+  or KID. Recoil channel.
+- **Infrared absorption in the Josephson junction**
+  (`chapters/11_ir_absorption_junction.tex`, placeholder). Direct
+  IR/THz photon absorption in a junction; sensitive to dark photons
+  with $m_{A'}\geq 2\Delta/c^2$. Absorption channel.
+- **Phonon-qubit coupling via piezoelectricity**
+  (`chapters/12_phonon_qubit_piezoelectric.tex`, placeholder).
+  Single-phonon detection on AlN/GaAs substrates. Recoil channel.
+- **Microwave absorption in the transmon**
+  (`chapters/13_microwave_absorption.tex`, placeholder).
+  Single-microwave-photon haloscope front end. Absorption channel.
 
 ### Appendices (optional)
 

@@ -1,5 +1,5 @@
-\chapter{Quantum sensing}
-\label{ch:quantum-sensing}
+\chapter{Experimental search for dark matter}
+\label{ch:dm-search}
 
 Direct laboratory searches for dark matter (DM) can be organised around
 the type of particle one is looking for and the way it interacts in
@@ -16,12 +16,14 @@ count then has to be turned into a statistical statement about the
 underlying model parameters. The chapter walks both channels through
 the same four-stage pipeline --- \emph{model parameters} $\to$
 \emph{predicted in-detector spectrum} $\to$ \emph{measured spectrum}
-$\to$ \emph{statistical limit on the model parameter} --- and
-ends with a short tour of how the four cQED-based sensing
-mechanisms covered earlier in the book sit on each channel. Most of
-the chapter is detector-agnostic; specialisations to superconducting
-hardware appear as worked numerical examples and in the closing
-\cref{sec:cqed-mechanisms}.
+$\to$ \emph{statistical limit on the model parameter} --- producing
+the formal apparatus that the four mechanism-specific chapters
+that follow
+(\cref{ch:phonon-qp,ch:ir-junction,ch:phonon-qubit-piezo,ch:microwave-absorption})
+plug their hardware into. Most of this chapter is detector-agnostic;
+specialisations to superconducting hardware appear as worked
+numerical examples and are taken up systematically in the
+subsequent chapters.
 
 % --------------------------------------------------------------
 \section{The dark-matter halo}
@@ -654,55 +656,8 @@ The curve cuts off sharply below $m_\chi\sim 30\,\text{MeV}$ where
 $E_R^\text{max}<E_\text{th}$.
 \end{example}
 
-\paragraph{Transition.}
-We have walked both channels through the four-stage pipeline. The
-final section collects the four cQED-based sensing mechanisms
-discussed earlier in this book and maps each onto the
-recoil--vs--absorption dichotomy.
-
 % --------------------------------------------------------------
-\section{Sensing mechanisms in superconducting circuits}
-\label{sec:cqed-mechanisms}
-
-The cQED toolkit provides four practical implementations of the
-recoil and absorption channels:
-
-\begin{itemize}
-  \item \emph{Phonon-quasiparticle conversion} (recoil channel).
-  A target deposits athermal phonons that, above the
-  $2\Delta\sim 0.34\,\text{meV}$ Cooper-pair binding energy in
-  aluminium, break Cooper pairs and create quasiparticles read out
-  by a transition-edge or kinetic-inductance
-  sensor~\cite{kurinsky2020}. Threshold $E_\text{th}\sim$
-  meV, mass reach $m_\chi\sim 10\,\text{MeV}$ for nuclear recoils.
-  \item \emph{Infrared absorption in the junction}
-  (absorption channel). A Josephson junction directly absorbs an
-  infrared or terahertz photon of energy $\geq 2\Delta$, with the
-  resulting quasiparticle pair read out as a poisoning
-  burst~\cite{hochberg2021}. Sensitive to dark photons with
-  $m_{A'}\geq 0.34\,\text{meV}/c^2$ at couplings down to
-  $\varepsilon\sim 10^{-13}$.
-  \item \emph{Phonon-qubit coupling via piezoelectric substrates}
-  (recoil channel). A piezoelectric substrate (AlN, GaAs)
-  converts a single phonon into a charge perturbation that drives
-  a transmon transition; the transmon acts as a single-phonon
-  detector with $g/2\pi\sim$ MHz~\cite{linehan2024}. Mass reach
-  $m_\chi\sim 1\,\text{MeV}$ for nuclear recoils.
-  \item \emph{Microwave absorption in the qubit} (absorption
-  channel). A transmon tuned to $\omega_q=m_\chi c^2/\hbar$ acts as
-  a single-microwave-photon counter for dark-photon or axion
-  haloscopes~\cite{dixit2021}. Sensitivity $\varepsilon\sim 10^{-15}$
-  in the GHz band.
-\end{itemize}
-
-The first and third belong to the recoil pipeline of
-\cref{sec:fermion-dm}; the second and fourth belong to the
-absorption pipeline of \cref{sec:boson-dm}. The detector-response
-and statistical machinery of \cref{sec:detector-response} and
-\cref{sec:limits} apply uniformly to all four.
-
-% --------------------------------------------------------------
-The chapter walked through two distinct dark-matter detection
+This chapter walked through two distinct dark-matter detection
 channels --- elastic recoil for fermion-like DM and absorption for
 bosonic DM --- and showed that the same four-stage pipeline (model
 parameters, predicted spectrum, detected counts, statistical limit)
@@ -712,13 +667,20 @@ $E_R^\text{max}=2\mu_{\chi T}^2 v^2/M_T$ and the velocity-averaged
 cross-section through the mean-inverse-speed function $\eta(v_\text{min})$.
 The absorption channel produces a near-monochromatic line at
 $\omega=m_\chi c^2/\hbar$ broadened only by the halo virial
-dispersion to $\Delta\omega/\omega\sim 10^{-6}$. Either signal, after
-folding with the detector response, becomes a Poisson count whose
-expectation depends on the coupling parameter; thresholding a
+dispersion to $\Delta\omega/\omega\sim 10^{-6}$. Either signal,
+after folding with the detector response, becomes a Poisson count
+whose expectation depends on the coupling parameter; thresholding a
 likelihood produces an exclusion curve in the coupling-mass plane.
-The four cQED-based sensing mechanisms covered in earlier chapters
-populate both pipelines, and the methodology of this chapter
-applies to all of them uniformly.
+
+The next four chapters take this generic apparatus and instantiate
+it on superconducting hardware: phonon-quasiparticle conversion
+(\cref{ch:phonon-qp}) and piezoelectric phonon-to-qubit coupling
+(\cref{ch:phonon-qubit-piezo}) for the recoil channel, and
+infrared absorption in the Josephson junction
+(\cref{ch:ir-junction}) and direct microwave absorption in the
+transmon (\cref{ch:microwave-absorption}) for the absorption
+channel. The methodology of this chapter applies to all four
+uniformly.
 
 \clearpage
 \begin{chaptersummary}
@@ -767,11 +729,10 @@ $N=0$, $b=0$); profile-likelihood ratio
 $\lambda(\mu)=L(\mu,\hat{\hat\nu}(\mu))/L(\hat\mu,\hat\nu)$ with
 test statistic $t_\mu=-2\ln\lambda(\mu)\sim\chi^2_1$ asymptotically.
 
-\paragraph{cQED sensing mechanisms (\cref{sec:cqed-mechanisms}).}
-Phonon-quasiparticle conversion and piezoelectric phonon-qubit
-coupling sit on the recoil pipeline; IR absorption in the junction
-and microwave absorption in the transmon sit on the absorption
-pipeline.
+\paragraph{Hardware specialisation.}
+The four mechanism-specific chapters that follow
+(\cref{ch:phonon-qp,ch:ir-junction,ch:phonon-qubit-piezo,ch:microwave-absorption})
+specialise this generic apparatus to superconducting hardware.
 
 \end{chaptersummary}
 
