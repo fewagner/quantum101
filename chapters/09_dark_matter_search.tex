@@ -296,23 +296,37 @@ $\mathcal O(10\,\%)$ level.
 \label{sec:recoil-rate}
 
 \begin{phenomenon}
-The detector sees not a single recoil but a distribution of recoils
-sampled over the velocity distribution of the DM halo. The shape
-of $\dd R/\dd E_R$ is the central observable of every recoil
-search.
+The detector sees not a single recoil but a distribution of
+recoils sampled over the velocity distribution of the DM halo.
+The shape of the spectrum is the central observable of every
+recoil search. Two case-specific formulas are required: one for
+elastic nuclear recoils, where the recoil energy $E_R$ is the
+single kinematic variable and the differential rate is
+$\dd R/\dd E_R$; and one for inelastic electronic recoils, where
+the deposited energy $\omega$ and the momentum transfer $q$ are
+independent and the differential rate is $\dd R/\dd \omega$ at
+fixed $q$, integrated over $q$.
 \end{phenomenon}
 
-\begin{statement}[Velocity-averaged differential rate]
+\paragraph{Nuclear recoils.}
+The nuclear case is the elastic free-target picture: $E_R$ and
+$q$ are related kinematically by $q=\sqrt{2 M_T E_R}$, so the
+velocity integral against the differential cross-section
+\cref{eq:dsigma-dE-SI} is one-dimensional.
+
+\begin{statement}[Velocity-averaged differential rate, nuclear recoils]
 \label{stmt:dRdE}
-For a target of total mass $\mathcal M$ comprised of nuclei of
-individual mass $M_T$ and number density $n_T=\mathcal M/(m_T \cdot V)$,
-the differential rate per unit detector mass is
+For a target of total mass $\mathcal{M}$ comprised of nuclei of
+individual mass $M_T$, the rate of elastic nuclear recoils per
+unit detector mass and unit recoil energy is
 \begin{equation}
 \label{eq:dRdE_R}
 \frac{1}{\mathcal M}\,\frac{\dd R}{\dd E_R}
 \;=\; \frac{n_\chi}{m_T}\;\int_{v_\text{min}(E_R)}^{v_\text{esc}}\!\!
-v\,f_\text{lab}(\bm v)\,\frac{\dd\sigma_{\chi T}}{\dd E_R}\,\dd^3v.
+v\,f_\text{lab}(\bm v)\,\frac{\dd\sigma_{\chi T}}{\dd E_R}\,\dd^3v,
 \end{equation}
+with $v_\text{min}(E_R)$ given by \cref{eq:v-min} and
+$\dd\sigma_{\chi T}/\dd E_R$ by \cref{eq:dsigma-dE-SI}.
 \end{statement}
 
 \begin{proof}
@@ -321,24 +335,24 @@ $[\bm v,\bm v+\dd^3 v]$ scatter into a recoil-energy bin
 $[E_R,E_R+\dd E_R]$ as the product (number density of DM in that
 velocity bin) $\times$ (number density of targets) $\times$
 (relative speed) $\times$ (differential cross-section). Each is
-read off straightforwardly from \cref{eq:flux},
-\cref{eq:halo-distribution} and \cref{eq:dsigma-dE-SI}; the
-$v_\text{min}$ lower limit on the velocity integral expresses the
-kinematic requirement \cref{eq:v-min}.
+read off from \cref{eq:flux}, \cref{eq:halo-distribution} and
+\cref{eq:dsigma-dE-SI}; the $v_\text{min}$ lower limit on the
+velocity integral expresses the kinematic requirement
+\cref{eq:v-min}.
 \end{proof}
 
-\paragraph{Mean-inverse-speed function.}
-For the standard halo model, the velocity integral in
-\cref{eq:dRdE_R} is conventionally written through the
-mean-inverse-speed function
+\paragraph{Mean-inverse-speed function (nuclear case).}
+For the standard halo model and the elastic-recoil kinematics
+above, the velocity integral in \cref{eq:dRdE_R} is conventionally
+written through the mean-inverse-speed function
 \begin{equation}
 \label{eq:eta}
 \eta(v_\text{min}) \;\equiv\; \int_{v\geq v_\text{min}}\frac{f_\text{lab}(\bm v)}{v}\,\dd^3v,
 \end{equation}
 which has a closed form in terms of error functions (see
 e.g.~\cite{lewin1996} for the explicit expression). Plugging
-\cref{eq:dsigma-dE-SI} into \cref{eq:dRdE_R}, the differential rate
-takes the often-quoted form
+\cref{eq:dsigma-dE-SI} into \cref{eq:dRdE_R}, the differential
+rate takes the often-quoted form
 \begin{equation}
 \label{eq:dRdE-final}
 \frac{1}{\mathcal M}\,\frac{\dd R}{\dd E_R}
@@ -357,21 +371,68 @@ of it. This trade-off, between threshold and dark-matter mass
 reach, is what motivates the cryogenic detection programme.
 \end{example}
 
+\paragraph{Electron recoils.}
+The electron case is qualitatively different because the
+electron is bound to the nucleus and the recoil is inelastic on
+the atom or crystal: the momentum transfer $q$ and the deposited
+energy $\omega$ are independent kinematic variables, and the
+mean-inverse-speed function $\eta(v_\text{min}(E_R))$ used above
+is replaced by $\eta(v_\text{min}(q,\omega))$ inside an integral
+over $q$.
+
+\begin{statement}[Velocity-averaged differential rate, electron recoils]
+\label{stmt:dRdomega}
+For a target of total mass $\mathcal M$ and bulk mass density
+$\rho_T$, the rate of inelastic DM-electron events per unit
+detector mass and unit deposited energy is
+\begin{equation}
+\label{eq:dRdomega-restated}
+\frac{1}{\mathcal M}\,\frac{\dd R}{\dd \omega}
+\;=\; \frac{\rho_\chi}{m_\chi}\,
+\frac{\bar\sigma_e}{\mu_{\chi e}^2}\,
+\frac{1}{4\pi\,\alpha\,m_e^2\,\rho_T}\,
+\int_{q_-(\omega)}^{q_+(\omega)}\!\! q^3\,\dd q\;
+|F_\text{DM}(q)|^2\,\mathcal{W}(q,\omega)\,
+\eta\!\bigl(v_\text{min}(q,\omega)\bigr),
+\end{equation}
+with $v_\text{min}(q,\omega)$ given by \cref{eq:vmin-electron},
+$\mathcal{W}(q,\omega)$ the energy-loss function of
+\cref{eq:elf-def}, and $q_\pm(\omega)$ the kinematic limits at
+which $v_\text{min}(q,\omega)=v_\text{esc}$.
+\Cref{eq:dRdomega-restated} is identical to \cref{eq:dRdE-electron};
+we restate it here so that \cref{stmt:dRdE} and \cref{stmt:dRdomega}
+sit side by side.
+\end{statement}
+
+\begin{proof}
+Repeat the bin-counting argument of \cref{stmt:dRdE} with the
+DM--electron differential cross-section in place of
+$\dd\sigma_{\chi T}/\dd E_R$. The inelasticity of the recoil
+turns the one-parameter family $E_R\leftrightarrow q$ of the
+nuclear case into the two-parameter family $(q,\omega)$, so that
+the differential rate at fixed $\omega$ is itself a $q$-integral.
+The role played by $\dd\sigma_{\chi T}/\dd E_R\,A^2 F^2(q)$ in the
+nuclear case is taken by the energy-loss function $\mathcal{W}(q,\omega)$
+weighted by the DM form factor $|F_\text{DM}(q)|^2$; the velocity
+integral for each $(q,\omega)$ pair gives $\eta(v_\text{min}(q,\omega))$.
+\end{proof}
+
 \begin{example}[Electron-recoil spectrum on silicon]
 \label{ex:Si-electron-spectrum}
-For $m_\chi=10\,\text{MeV}$, $\bar\sigma_e=10^{-37}\,\text{cm}^2$, a
-heavy mediator ($F_\text{DM}=1$), and a silicon target
-($\rho_T=2.33\,\text{g/cm}^3$), \cref{eq:dRdE-electron} evaluated
-with the \texttt{DarkELF}~\cite{knapen2021} ELF for crystalline
-silicon yields a spectrum dominated by the bulk-plasmon resonance
-near $\omega\approx 17\,\text{eV}$, with a low-energy tail above
-the indirect band gap of $E_g\approx 1.1\,\text{eV}$. The
-characteristic kinematic threshold is set by demanding that
+For $m_\chi=10\,\text{MeV}$, $\bar\sigma_e=10^{-37}\,\text{cm}^2$,
+a heavy mediator ($F_\text{DM}=1$), and a silicon target
+($\rho_T=2.33\,\text{g/cm}^3$), \cref{eq:dRdomega-restated}
+evaluated with the publicly tabulated~\cite{knapen2021} ELF for
+crystalline silicon yields a spectrum dominated by the
+bulk-plasmon resonance near $\omega\approx 17\,\text{eV}$, with a
+low-energy tail above the indirect band gap of
+$E_g\approx 1.1\,\text{eV}$. The characteristic kinematic threshold
+is set by demanding that
 $v_\text{min}(q,\omega)\leq v_\text{esc}$ in
-\cref{eq:vmin-electron}; with
-$\omega/q\sim 10^{-3}\,c$ around the gap, this places the lowest
-detectable DM mass at $m_\chi^\text{min}\sim E_g/(2 v_\text{esc}^2 m_e)\,m_e
-\approx 0.5\,\text{MeV}$ for $\omega=E_g$. A detector with
+\cref{eq:vmin-electron}; with $\omega/q\sim 10^{-3}\,c$ around the
+gap, this places the lowest detectable DM mass at
+$m_\chi^\text{min}\sim E_g/(2 v_\text{esc}^2 m_e)\,m_e\approx
+0.5\,\text{MeV}$ for $\omega=E_g$. A detector with
 $E_\text{th}=E_g$ thus reaches roughly two orders of magnitude
 lower in DM mass than a comparable nuclear-recoil analysis on the
 same crystal.
