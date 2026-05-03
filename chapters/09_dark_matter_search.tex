@@ -201,10 +201,100 @@ $F(q)\to 0$ at $qR\sim 1$ for nuclear radius $R$).
 interaction; for a mediator mass $m_M\lesssim q$, the cross-section
 acquires an extra propagator factor $\propto 1/(q^2+m_M^2)^2$, which
 softens the recoil spectrum by suppressing large momentum transfers
-and enhancing the small-$q$ region. For DM--electron scattering an
-analogous formula holds with the bound-electron wavefunction
-replacing the form factor; the atomic-physics details are reviewed
-in~\cite{essig2012}.
+and enhancing the small-$q$ region. We absorb this dependence into
+the dimensionless DM form factor $F_\text{DM}(q)$, defined so that
+$F_\text{DM}=1$ for a heavy mediator and
+$F_\text{DM}(q)=(\alpha m_e/q)^2$ for an ultralight (massless or
+sub-eV) mediator coupling to electrons through the photon.
+\end{remark}
+
+\paragraph{Transition.}
+The nuclear-recoil cross-section above presumes that the target
+particle is approximately free and recoils elastically. For a DM
+particle scattering off a bound electron in a condensed-matter
+target the recoil is intrinsically inelastic: energy goes into
+ionising or exciting the electron system, and the kinematics are
+no longer the constrained one-parameter family of the nuclear case.
+The natural rewriting that keeps the formulas compact uses the
+target's dielectric response.
+
+\begin{statement}[DM--electron scattering: energy-loss function form]
+\label{stmt:dme-xsec}
+For DM scattering inelastically off the bound electrons of a
+condensed-matter target, the momentum transfer $q$ and the energy
+deposit $\omega$ (the electronic recoil energy) are independent
+kinematic variables. The minimum DM speed required to transfer
+$(q,\omega)$ is
+\begin{equation}
+\label{eq:vmin-electron}
+v_\text{min}(q,\omega) \;=\; \frac{\omega}{q} \,+\, \frac{q}{2\,m_\chi}.
+\end{equation}
+The standard parametrisation of the inclusive scattering
+cross-section per unit detector mass uses the target's longitudinal
+\emph{energy-loss function} (ELF)
+\begin{equation}
+\label{eq:elf-def}
+\mathcal{W}(q,\omega) \;\equiv\; -\,\text{Im}\!\left[\frac{1}{\hat\epsilon_L(q,\omega)}\right],
+\end{equation}
+where $\hat\epsilon_L(q,\omega)$ is the longitudinal complex
+dielectric function. The differential rate per unit detector mass
+in terms of $\mathcal{W}$ is
+\begin{equation}
+\label{eq:dRdE-electron}
+\frac{1}{\mathcal{M}}\,\frac{\dd R}{\dd\omega}
+\;=\; \frac{\rho_\chi}{m_\chi}\,
+\frac{\bar\sigma_e}{\mu_{\chi e}^2}\,
+\frac{1}{4\pi\,\alpha\,m_e^2\,\rho_T}\,
+\int_{q_-(\omega)}^{q_+(\omega)}\!\! q^3\,\dd q\;
+|F_\text{DM}(q)|^2\,\mathcal{W}(q,\omega)\,\eta\!\bigl(v_\text{min}(q,\omega)\bigr).
+\end{equation}
+Here $\bar\sigma_e$ is the reference DM--electron cross-section,
+$\mu_{\chi e}=m_\chi m_e/(m_\chi+m_e)$ the DM--electron reduced
+mass, $\rho_T$ the target mass density, $\alpha\approx 1/137$ the
+fine-structure constant, $F_\text{DM}(q)$ the DM form factor of
+the previous remark, $\eta$ the mean-inverse-speed function
+\cref{eq:eta}, and $q_\pm(\omega)$ the kinematic limits at which
+$v_\text{min}(q,\omega)=v_\text{esc}$.
+\end{statement}
+
+\paragraph{Why the ELF.}
+The transition from the elastic, free-target picture of
+\cref{stmt:si-xsec} to the bound, inelastic picture of
+\cref{stmt:dme-xsec} amounts to replacing the nuclear form factor
+$A^2 F^2(q)$ (a static, kinematic-only object) with the dynamical
+response function $\mathcal{W}(q,\omega)$, which captures
+band-structure, plasmon dispersion and screening of the target. The
+fluctuation--dissipation theorem ensures that $\mathcal{W}$ is the
+same object that controls the absorption of an external
+electromagnetic perturbation at $(q,\omega)$, so the ELF is also
+what one would measure by inelastic electron-energy-loss
+spectroscopy on the same sample. This identification, and the
+practical importance of having $\mathcal{W}$ tabulated as a
+function of both arguments, is what motivates the numerical-tools
+remark below.
+
+\begin{remark}[Numerical evaluation: \texttt{DarkELF}]
+The energy-loss function $\mathcal{W}(q,\omega)$ is, unlike the
+nuclear form factor, intrinsically a many-body object: closed
+forms exist only for toy models (free electron gas, isolated
+hydrogen-like atom). For real semiconductor and metal targets
+it is computed numerically from density-functional theory or from
+extrapolations of optical-conductivity data. The
+\texttt{DarkELF} package~\cite{knapen2021} packages tabulated
+$\mathcal{W}(q,\omega)$ for Si, Ge, GaAs, GaN, SiC, sapphire and
+aluminium, together with python routines that wrap
+\cref{eq:dRdE-electron}, \cref{eq:vmin-electron} and the
+mean-inverse-speed function \cref{eq:eta} into a single
+\texttt{rate.dRdomega(omega, mX, sigma\_e, F\_DM)} call. The
+practical workflow for a DM--electron analysis is therefore: pick
+a target, pick a DM model (mediator + reference $\bar\sigma_e$),
+call \texttt{DarkELF} on a grid in $\omega$, and feed the
+resulting $\dd R/\dd\omega$ into the detector-response formula
+\cref{eq:N-exp} of \cref{sec:detector-response}. The numerical
+accuracy of $\mathcal{W}$ is limited by the underlying
+band-structure calculation; in regions where independent
+optical-loss data exist, agreement is at the
+$\mathcal O(10\,\%)$ level.
 \end{remark}
 
 % ----------- 6.3.3 Predicted spectrum
@@ -261,7 +351,7 @@ takes the often-quoted form
 \;=\; \frac{\rho_\chi\,\sigma_n}{2\,m_\chi\,\mu_{\chi n}^2}\;A^2\,F^2(q)\;\eta(v_\text{min}(E_R)).
 \end{equation}
 
-\begin{example}[Recoil spectrum on silicon]
+\begin{example}[Nuclear-recoil spectrum on silicon]
 \label{ex:Si-spectrum}
 For $m_\chi=10\,\text{GeV}$, $\sigma_n=10^{-40}\,\text{cm}^2$, on
 silicon ($A=28$): \cref{eq:dRdE-final} gives a spectrum that peaks
@@ -271,6 +361,26 @@ threshold $E_\text{th}\sim 100\,\text{eV}$ retains the bulk of the
 spectrum; $E_\text{th}\sim 1\,\text{keV}$ retains essentially none
 of it. This trade-off, between threshold and dark-matter mass
 reach, is what motivates the cryogenic detection programme.
+\end{example}
+
+\begin{example}[Electron-recoil spectrum on silicon]
+\label{ex:Si-electron-spectrum}
+For $m_\chi=10\,\text{MeV}$, $\bar\sigma_e=10^{-37}\,\text{cm}^2$, a
+heavy mediator ($F_\text{DM}=1$), and a silicon target
+($\rho_T=2.33\,\text{g/cm}^3$), \cref{eq:dRdE-electron} evaluated
+with the \texttt{DarkELF}~\cite{knapen2021} ELF for crystalline
+silicon yields a spectrum dominated by the bulk-plasmon resonance
+near $\omega\approx 17\,\text{eV}$, with a low-energy tail above
+the indirect band gap of $E_g\approx 1.1\,\text{eV}$. The
+characteristic kinematic threshold is set by demanding that
+$v_\text{min}(q,\omega)\leq v_\text{esc}$ in
+\cref{eq:vmin-electron}; with
+$\omega/q\sim 10^{-3}\,c$ around the gap, this places the lowest
+detectable DM mass at $m_\chi^\text{min}\sim E_g/(2 v_\text{esc}^2 m_e)\,m_e
+\approx 0.5\,\text{MeV}$ for $\omega=E_g$. A detector with
+$E_\text{th}=E_g$ thus reaches roughly two orders of magnitude
+lower in DM mass than a comparable nuclear-recoil analysis on the
+same crystal.
 \end{example}
 
 \paragraph{Transition.}
