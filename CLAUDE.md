@@ -6,8 +6,9 @@ Working context for Claude Code sessions on this repository. Read this first.
 
 LaTeX notes on quantum mechanics, quantum optics, and superconducting
 circuits, by Felix Wagner. Self-styled as
-"Primer, Synthesis, Reflections" (the eyebrow on the title page) ---
+"Primer, Notes, Exercises" (the eyebrow on the title page) ---
 treat that phrasing as canonical and avoid the term "lecture notes".
+The subtitle is "Mechanics, Optics, Circuits, Sensing".
 Six parts plus an appendix:
 
 | Part | Title | Status |
@@ -36,9 +37,16 @@ project evolves.
    later chapter where the result is used).
 
 Each chapter has:
-- a "Chapter overview" block at the top (motivation + roadmap),
-- `\paragraph{Transition.}` blocks between sections (mini-recap + outlook),
-- a "Chapter summary and outlook" block at the bottom.
+- an unheaded overview / motivation paragraph as the very first text after
+  the chapter title (no "Chapter overview" subheading; the chapter title
+  is the heading);
+- `\paragraph{Transition.}` blocks between sections (mini-recap + outlook);
+- at the end: a brief unheaded summary-and-outlook prose block (a few
+  sentences recapping the chapter, then a transition to the next), then a
+  `\clearpage`, then the boxed `\begin{chaptersummary}...\end{chaptersummary}`
+  with the take-home formulas. The takeaway box always starts on a new page;
+- after the takeaway box, an `\section*{Exercises}` block with ten worked
+  exercises.
 
 These structural blocks are non-optional — the user has explicitly asked for
 them more than once.
@@ -171,9 +179,10 @@ When introducing new terms in future chapters, **append to this table**.
 ## Open todos
 
 - Part I done; Parts II–V outlined in `README.md` only.
-- Bibliography active (24 entries; foundations + decoherence +
+- Bibliography active (46 entries; foundations + decoherence +
   interpretations + superdeterminism + Part VI dark-matter
-  references). Add new entries thematically grouped in
-  `bibliography.bib` as future chapters acquire citations.
+  references + cQED textbooks/reviews and historical-milestone
+  papers cited in the introduction). Add new entries thematically
+  grouped in `bibliography.bib` as future chapters acquire citations.
 - No figures yet. `figures/` is empty; consider TikZ for diagrams when
   needed (Bloch sphere, circuit diagrams, level diagrams, …).

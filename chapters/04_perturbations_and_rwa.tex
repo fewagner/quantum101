@@ -1,7 +1,6 @@
 \chapter{Driven systems: perturbation theory and the rotating-wave approximation}
 \label{ch:perturbations}
 
-\section*{Chapter overview}
 
 The Schr\"odinger equation can rarely be solved exactly when the
 Hamiltonian is time-dependent. Two systematic approximations carry us
@@ -256,8 +255,26 @@ takes its standard textbook form only after invoking the RWA.
 \end{example}
 
 % --------------------------------------------------------------
-\section*{Chapter takeaways and outlook}
+This chapter completed the toolkit needed to handle time-dependent
+problems: time-dependent perturbation theory gives transition
+amplitudes order by order, Fermi's golden rule converts those
+amplitudes into rates whenever a continuum of final states is
+available, and the rotating-wave approximation simplifies
+near-resonant drives to a static Hamiltonian in the appropriate
+rotating frame.
 
+Together with the postulates and operators of
+\cref{ch:postulates}, the model systems of \cref{ch:model-systems},
+and the composite-system formalism of \cref{ch:composite}, we have
+everything we need to start doing physics on real hardware. In
+Part~II we use this machinery to describe systems coupled to a
+noisy environment, producing the Lindblad master equation, the
+relaxation and dephasing times $T_1,T_2$, and the input--output
+formalism. From there Part~III turns to quantum optics proper, and
+Part~IV to superconducting circuits, where every approximation
+introduced in this chapter earns its keep.
+
+\clearpage
 \begin{chaptersummary}
 
 \paragraph{Time-dependent perturbation theory.}
@@ -304,18 +321,6 @@ first systematic correction beyond this is the Bloch--Siegert
 shift, $O(\epsilon_\text{RWA}^2)$ on the qubit frequency.
 
 \end{chaptersummary}
-
-\paragraph{Outlook.}
-Together with the postulates and operators of
-\cref{ch:postulates}, the model systems of \cref{ch:model-systems},
-and the composite-system formalism of \cref{ch:composite}, we have
-everything we need to start doing physics on real hardware. In
-Part~II we use this machinery to describe systems coupled to a
-noisy environment, producing the Lindblad master equation, the
-relaxation and dephasing times $T_1,T_2$, and the input--output
-formalism. From there Part~III turns to quantum optics proper, and
-Part~IV to superconducting circuits, where every approximation
-introduced in this chapter earns its keep.
 
 % --------------------------------------------------------------
 \section*{Exercises}

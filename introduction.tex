@@ -1,99 +1,113 @@
 \chapter*{Introduction}
 \addcontentsline{toc}{chapter}{Introduction}
 
-\section*{Why these notes?}
+The use of superconducting circuits as elements of a controllable
+quantum system has, over the last twenty-five years, evolved from
+the demonstration of a single Cooper-pair box~\cite{nakamura1999}
+to multi-qubit processors operating at the threshold of practical
+fault tolerance~\cite{arute2019,acharya2023}. The conceptual
+ingredients that made this trajectory possible were assembled
+gradually: the lumped-element quantisation of an electrical
+circuit~\cite{devoret1995,vool2017}, the recognition that the
+Josephson junction~\cite{josephson1962} provides the only known
+nonlinear, non-dissipative inductor at low temperatures, the
+design of a charge-noise-insensitive ``transmon''
+qubit~\cite{koch2007}, and the realisation that coupling such a
+qubit strongly to a microwave resonator implements an on-chip
+analogue of cavity quantum electrodynamics --- circuit QED, or
+cQED~\cite{blais2004,wallraff2004,blais2021}. The result is a
+hardware platform on which the toolkit of quantum optics,
+originally developed for atom--photon interactions in the optical
+band, is realised at gigahertz frequencies in a chip-scale, fully
+lithographic system, with single-quantum sensitivity to its own
+microwave environment.
 
-Superconducting circuits have, over the last two decades, become one of
-the leading hardware platforms for quantum computation, quantum simulation,
-and the experimental study of quantum optics in the microwave regime.
-Working in this field requires fluency in several different bodies of
-knowledge: the postulates and basic toolbox of non-relativistic quantum
-mechanics, the methods of quantum optics (originally developed for
-atom--photon interactions), and circuit theory adapted to the quantum
-regime.
+Working in this field requires fluency in three different bodies
+of knowledge that are usually taught separately. The first is the
+postulates and operational machinery of non-relativistic quantum
+mechanics, including density matrices, composite systems, and
+time-dependent perturbation theory~\cite{nielsen2010}. The second
+is quantum optics: quantisation of the electromagnetic field,
+Fock and coherent states, the Jaynes--Cummings model, and the
+dispersive regime that supports
+qubit-resonator readout~\cite{walls2008,haroche2006,blais2021}.
+The third is the methods of open-system dynamics: the
+Born--Markov approximation, the Lindblad master equation, and
+input--output theory, all needed to describe relaxation,
+dephasing, and continuous monitoring~\cite{lindblad1976,gardiner2004,breuer2002}.
+Excellent textbooks treat each subject individually, but a working
+practitioner of cQED uses only a particular cross-cut of each ---
+the parts that flow into the design and analysis of a specific
+experiment. The purpose of these notes is to collect that
+cross-cut in a single, self-contained document, and to do so in a
+uniform pedagogical style.
 
-Many excellent textbooks cover each of these subjects individually.
-The purpose of these notes is more modest: to collect, in one place
-and in a uniform style, the specific subset of results that one
-typically uses on a daily basis when designing, simulating or analysing
-a superconducting-qubit experiment. The text is therefore intentionally
-not exhaustive --- formal proofs, edge cases and historical context are
-mostly omitted in favour of clarity and density. Where a derivation
-is given, it is given in full; where it is not, a pointer to the
-relevant literature is provided.
+The six parts of these notes follow the order in which the
+material is typically used. Part~I sets the formalism: the
+postulates of quantum mechanics, the Hilbert-space and operator
+language, density matrices and partial traces, time-dependent
+perturbation theory, and the rotating-wave approximation that
+recurs in every drive calculation later in the
+text~\cite{nielsen2010}. Part~II builds on this to describe open
+quantum systems, deriving the Lindblad master
+equation~\cite{lindblad1976}, the relaxation and dephasing
+times $T_1, T_2, T_2^*$, and the input--output formalism that
+mediates between the system and its
+environment~\cite{gardiner2004,breuer2002}. Part~III treats
+quantum optics in the form needed for cQED: quantisation of the
+electromagnetic field, Fock and coherent states, the
+Jaynes--Cummings model, the dispersive regime, the
+photon-number-dependent AC Stark shift, and the Purcell
+effect~\cite{haroche2006,walls2008,blais2021}. Part~IV specialises
+to superconducting circuits proper, applying the lumped-element
+quantisation procedure to the LC resonator and the Josephson
+junction, working through the transmon~\cite{koch2007} and related
+qubit architectures, and discussing dispersive readout, single-
+and two-qubit gates, the basic calibration sequence
+(resonator and qubit spectroscopy, Rabi, Ramsey), and the leading
+decoherence channels~\cite{krantz2019,blais2021,vool2017}.
+Part~V is a primer on quantum error
+correction~\cite{shor1995,steane1996}, the stabiliser
+formalism~\cite{gottesman1997}, the surface
+code~\cite{fowler2012} that has come to dominate the
+fault-tolerance literature, and bosonic-code variants relevant to
+cQED hardware~\cite{michael2016}. Part~VI is a tour of a more
+recent research direction in which the same hardware doubles as a
+particle-physics front end~\cite{dixit2021,hochberg2021,linehan2024}:
+superconducting circuits as single-quantum detectors of
+sub-GeV dark matter, dark photons, and axions in mass bands
+inaccessible to traditional cryogenic detectors. An appendix
+collects the elementary mathematical definitions
+(sesquilinearity, completeness, dual space, tensor product) that
+the main text uses without re-deriving.
 
-\section*{Scope and structure}
-
-The document is organised in five parts.
-\begin{itemize}
-  \item \textbf{Part~I --- Quantum mechanics foundations.} Postulates,
-        Hilbert space and operators, the harmonic oscillator and
-        two-level system, density matrices and composite systems,
-        time-dependent perturbation theory, and the rotating-wave
-        approximation.
-  \item \textbf{Part~II --- Open quantum systems.} The Lindblad master
-        equation, $T_1$ and $T_2$, input--output theory, and the
-        quantum Zeno effect.
-  \item \textbf{Part~III --- Quantum optics.} Quantisation of the
-        electromagnetic field, Fock, coherent and squeezed states, the
-        Jaynes--Cummings model, dispersive coupling, the AC Stark
-        shift, and the Purcell effect.
-  \item \textbf{Part~IV --- Superconducting circuits.} Circuit
-        quantisation, the Josephson effects, the transmon and related
-        qubits, parametric and four-wave-mixing processes, dispersive
-        readout, single- and two-qubit gates, and the standard
-        calibration experiments (resonator and qubit spectroscopy,
-        Rabi, Ramsey).
-  \item \textbf{Part~V --- Quantum error correction.} Codes, the
-        stabiliser formalism, the surface code and a brief look at
-        bosonic codes.
-\end{itemize}
-
-\section*{Pedagogical convention}
-
-Every topic follows a four-step structure that we adopt deliberately
-throughout the document:
-\begin{enumerate}
-  \item \emph{Phenomenon.} A short description, in words, of what is
-        observed and why it deserves attention.
-  \item \emph{Statement.} The result, stated formally as a theorem,
-        proposition, definition or postulate.
-  \item \emph{Derivation.} The mathematical argument that establishes
-        the statement.
-  \item \emph{Example / application.} A pointer (sometimes worked out,
-        sometimes not) to a context in which the result is used.
-\end{enumerate}
-A reader who already knows the topic can scan the statements and skip
-the rest; a reader meeting the topic for the first time can build
-intuition from the phenomenon, then follow the derivation, then see
-where it lands.
-
-\section*{Notation and conventions}
-
-We carry all factors of $\hbar$ explicitly throughout: angular
-frequencies $\omega$ enter Hamiltonians as $\hbar\omega$, the
-canonical commutator reads $[\hat{x},\hat{p}]=i\hbar$, time evolution
-is generated by $e^{-i\hat{H}t/\hbar}$, and so on. Nothing is absorbed
-into ``natural units''.
-
-State vectors are written as $\ket{\psi}$ and their duals as
-$\bra{\psi}$, with $\braket{\phi}{\psi}\in\C$ the inner product.
-\emph{All operators are decorated with a hat} --- $\hat{O}$, $\hat{H}$,
-$\hat{a}$, $\hat{\sigma}_x$ and so on --- whether or not a classical
-counterpart could in principle be confused with them. Pauli operators
-are denoted $\hat\sigma_x,\hat\sigma_y,\hat\sigma_z$ with the
-convention $\hat\sigma_z\ket{0}=+\ket{0}$ and
-$\hat\sigma_z\ket{1}=-\ket{1}$, so that $\ket{0}$ is the qubit ground
-state. The bosonic ladder operators $\hat a,\hat a^\dagger$ satisfy
-$[\hat a,\hat a^\dagger]=\id$. Throughout, $\hilbert$ denotes a
-complex separable Hilbert space and $\id$ the identity operator on
-it; we render the identity by the standard mathematical unit symbol
-$\mathbf{1}$.
-
-\section*{How to read this document}
+A few global conventions are in force throughout. Operators carry
+a hat, $\op{O}$, even when no classical counterpart could
+realistically be confused with them; we never absorb $\hbar$ into
+``natural units'', so Hamiltonians built from angular frequencies
+read $\hbar\omega\dots$, the canonical commutator is
+$[\op{x},\op{p}]=i\hbar\,\id$, and time evolution is
+$e^{-i\op{H}t/\hbar}$. The identity is rendered as
+$\mathbf{1}\equiv\id$. Pauli operators are denoted
+$\hat\sigma_x,\hat\sigma_y,\hat\sigma_z$, with the convention
+$\hat\sigma_z\ket{0}=+\ket{0}$ so that $\ket{0}$ is the qubit
+ground state; bosonic ladder operators
+$\hat a,\hat a^\dagger$ satisfy
+$[\hat a,\hat a^\dagger]=\id$. Each topic in the main text is
+presented in a small number of structural blocks --- a
+description of the phenomenon, a formal statement, a derivation,
+and an example or pointer to an application --- which makes it
+easy to skim what one already knows and slow down where one does
+not. Each chapter ends with a boxed Chapter-takeaways summary that
+collects the key concepts and formulas, and a set of ten
+exercises with worked solutions that invite the reader to
+recompute the central results in applied form.
 
 Readers familiar with non-relativistic quantum mechanics may skim
-Part~I, treating it as a reference for notation, and proceed directly
-to Part~III. Readers new to the field are encouraged to read in order:
-the parts are deliberately layered, with later parts using results,
-notation, and intuition built up earlier.
+Part~I, treating it as a reference for notation, and proceed
+directly to Part~III. Readers new to the field are encouraged to
+read in order: the parts are deliberately layered, with later
+parts using results, notation and intuition built up
+earlier. Comments, corrections, and suggestions are warmly invited
+on the public repository,
+\href{https://github.com/fewagner/quantum101}{github.com/fewagner/quantum101}.
