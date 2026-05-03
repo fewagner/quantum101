@@ -179,10 +179,9 @@ When introducing new terms in future chapters, **append to this table**.
 ## Open todos
 
 - Part I done; Parts II–V outlined in `README.md` only.
-- Bibliography active (47 entries; foundations + decoherence +
+- Bibliography active (52 entries; foundations + decoherence +
   interpretations + superdeterminism + Part VI dark-matter
-  references + cQED textbooks/reviews and historical-milestone
-  papers cited in the introduction; one entry on magic-state
+  references including Lewin-Smith / Helm form factor / Essig-Mardon-Volansky / Feldman-Cousins / Cowan-Cranmer-Gross-Vitells profile-likelihood + cQED textbooks/reviews and historical-milestone papers cited in the introduction; one entry on magic-state
   distillation for Part V). Add new entries thematically grouped
   in `bibliography.bib` as future chapters acquire citations.
 - No figures yet. `figures/` is empty; consider TikZ for diagrams when

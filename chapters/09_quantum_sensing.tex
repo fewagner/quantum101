@@ -1,419 +1,981 @@
 \chapter{Quantum sensing}
 \label{ch:quantum-sensing}
 
-
-Superconducting circuits combine three properties that make them
-attractive single-quantum sensors of feeble signals from beyond the
-Standard Model: macroscopic quantum coherence (a transmon flips
-between $\ket{0}$ and $\ket{1}$ on absorbing one microwave quantum
-of order $\hbar\omega_q\sim 20\,\mu\text{eV}$); gigahertz operating
-frequencies that sit in the candidate-mass window for many
-photon-coupled dark-matter species; and millikelvin operating
-temperatures that suppress thermal backgrounds well below the
-candidate signal energies. The same hardware that performs quantum
-information processing therefore doubles as a particle-physics
-front end, and a literature on cQED-based searches for dark matter
-has emerged in the last decade.
-
-This chapter is a guided tour of that literature. We begin with a
-short primer on dark matter and on the kinematics of the two
-recoil families (nuclear and electronic), specialise to the light,
-photon-mediated candidates --- sub-GeV WIMP-like dark matter, dark
-photons, and axions --- for which cQED is best suited, and then
-walk through four sensing mechanisms based on superconducting
-hardware:
-\begin{itemize}
-  \item phonon absorption mediated by quasiparticle creation
-        (\cref{sec:phonon-qp}),
-  \item infrared absorption in the Josephson junction
-        (\cref{sec:ir-junction}),
-  \item phonon-to-qubit coupling via piezoelectric substrates
-        (\cref{sec:phonon-qubit-piezo}),
-  \item direct microwave absorption in the qubit
-        (\cref{sec:microwave-absorption}).
-\end{itemize}
-For each mechanism we sketch the signal model and quote a
-sensitivity estimate. The chapter ends with the usual takeaways
-box.
+Direct laboratory searches for dark matter (DM) can be organised around
+the type of particle one is looking for and the way it interacts in
+the detector. In this chapter we treat two channels separately:
+\emph{recoil}, in which a fermion-like DM particle scatters elastically
+off a nucleus or a bound electron and deposits a small fraction of
+its kinetic energy; and \emph{absorption}, in which a coherent
+bosonic DM field is absorbed by the detector and deposits its full
+rest energy at once. The two channels demand different kinematics
+and different rate formulas, but they share the same downstream
+machinery: the predicted spectrum has to be folded with detector
+threshold, efficiency and resolution to produce a count, and the
+count then has to be turned into a statistical statement about the
+underlying model parameters. The chapter walks both channels through
+the same four-stage pipeline --- \emph{model parameters} $\to$
+\emph{predicted in-detector spectrum} $\to$ \emph{measured spectrum}
+$\to$ \emph{statistical limit on the model parameter} --- and
+ends with a short tour of how the four cQED-based sensing
+mechanisms covered earlier in the book sit on each channel. Most of
+the chapter is detector-agnostic; specialisations to superconducting
+hardware appear as worked numerical examples and in the closing
+\cref{sec:cqed-mechanisms}.
 
 % --------------------------------------------------------------
-\section{Dark matter, briefly}
-\label{sec:dm-overview}
+\section{The dark-matter halo}
+\label{sec:dm-halo}
 
-\paragraph{Evidence for dark matter.}
+\begin{phenomenon}
+The Earth orbits within a roughly virialised, dynamically cold halo
+of dark matter. Whatever else dark matter is, it has a definite
+local density and a definite velocity distribution in the
+laboratory frame, both of which are inputs to every direct-detection
+rate calculation.
+\end{phenomenon}
+
 Several independent observations --- galactic rotation curves, the
 peaks of the cosmic-microwave-background power spectrum,
-gravitational lensing of clusters, and the abundance of light
-elements from big-bang nucleosynthesis --- agree on a universe
-whose mass-energy budget is roughly 5\% baryonic matter, 27\%
-non-luminous \emph{dark matter}, and 68\% dark energy. Dark matter
-behaves gravitationally as cold, collisionless, non-relativistic,
-non-baryonic matter; its particle physics, if any, is not in the
-Standard Model and is the target of the searches we describe here.
-A textbook account is given by Bertone, Hooper and
-Silk~\cite{bertone2005}.
+gravitational lensing, and the abundance of light elements from
+big-bang nucleosynthesis --- agree on a universe whose mass-energy
+budget is roughly 5\% baryonic matter, 27\% non-luminous dark
+matter, and 68\% dark energy~\cite{bertone2005}. The dark
+component behaves gravitationally as cold, collisionless,
+non-relativistic, non-baryonic matter; the search for the underlying
+particle physics is what motivates the present chapter.
 
-\paragraph{Local density and velocity.}
-The Earth orbits within a roughly virialised dark-matter halo. The
-locally relevant numbers are the mass density
+\begin{statement}[Standard halo model]
+\label{stmt:halo}
+The local dark-matter density is taken to be
 \begin{equation}
+\label{eq:rho-chi}
 \rho_\chi \;\approx\; 0.3\;\text{GeV}/\text{cm}^3,
 \end{equation}
-and a velocity distribution well approximated by a Maxwellian
-truncated at the galactic escape speed, with one-dimensional
-dispersion $\sigma_v\approx 156\,\text{km}/\text{s}\approx
-5.2\times 10^{-4}\,c$ and a most-probable speed
-$v_0\approx 220\,\text{km}/\text{s}\approx 7\times 10^{-4}\,c$. The
-flux through a unit area on Earth is
+and the velocity distribution in the galactic rest frame to be
+isotropic Maxwell--Boltzmann, truncated at the galactic escape
+velocity $v_\text{esc}$:
 \begin{equation}
-\Phi_\chi \;\sim\; n_\chi\,\bar v
-\;=\; \frac{\rho_\chi}{m_\chi}\,\bar v,
+\label{eq:halo-distribution}
+f_\text{gal}(\bm v) \;=\; \frac{1}{N_\text{esc}\,(\pi v_0^2)^{3/2}}\,
+\exp\!\left(-\frac{|\bm v|^2}{v_0^2}\right)\,\Theta\!\left(v_\text{esc}-|\bm v|\right),
 \end{equation}
-which is large for light $\chi$ ($\sim 10^{12}\,\text{cm}^{-2}\,\text{s}^{-1}$
-for $m_\chi=1\,\text{MeV}$) and small for heavy
-($\sim 10^5\,\text{cm}^{-2}\,\text{s}^{-1}$ for $m_\chi=100\,\text{GeV}$).
+with most-probable speed $v_0\approx 220\,\text{km}/\text{s}$ and
+$v_\text{esc}\approx 544\,\text{km}/\text{s}$, normalised such that
+$\int f_\text{gal}\,\dd^3v=1$.
+\end{statement}
 
-\paragraph{Mass windows.}
-The candidate mass spans nearly forty orders of magnitude. Three
-broad bands matter for the present chapter:
+\begin{remark}[Lab-frame distribution]
+The Earth moves through the halo at
+$\bm v_E$ with $|\bm v_E|\approx 232\,\text{km}/\text{s}$ (the
+solar-system motion plus the small annual modulation due to the
+Earth's orbit). The lab-frame distribution is obtained by Galilean
+boost,
+$f_\text{lab}(\bm v)=f_\text{gal}(\bm v+\bm v_E)$. This is the
+distribution that enters every rate formula below. The annual
+modulation in $|\bm v_E|$ at the few-percent level is a powerful
+discriminator of a putative dark-matter signal against
+backgrounds, but plays no role in the leading-order analyses of
+this chapter.
+\end{remark}
+
+The number density and flux follow immediately:
+\begin{equation}
+\label{eq:flux}
+n_\chi \;=\; \frac{\rho_\chi}{m_\chi},
+\qquad
+\Phi_\chi \;=\; n_\chi\,\langle v\rangle,
+\end{equation}
+with $\langle v\rangle\sim v_0$ a velocity-averaged speed of order
+the galactic dispersion. For $m_\chi=1\,\text{GeV}$, $\Phi_\chi\sim
+10^7\,\text{cm}^{-2}\,\text{s}^{-1}$; for $m_\chi=1\,\text{MeV}$,
+$\Phi_\chi\sim 10^{10}\,\text{cm}^{-2}\,\text{s}^{-1}$. Light DM is
+plentiful but soft; heavy DM is rare but energetic. The crossover
+that determines which of the next two channels is in business is
+controlled by the detector threshold.
+
+\paragraph{Transition.}
+With local density and velocity in hand, we now treat the two
+channels in turn: fermion-like DM that scatters
+(\cref{sec:fermion-dm}) and bosonic DM that is absorbed
+(\cref{sec:boson-dm}).
+
+% --------------------------------------------------------------
+\section{Fermion-like dark matter: detection by elastic recoil}
+\label{sec:fermion-dm}
+
+\begin{phenomenon}
+A dark-matter particle that interacts via a contact-like
+short-range force scatters elastically off a target particle in the
+detector. The energy deposited is the recoil energy of the target
+nucleus or electron; the cross-section per target encodes the
+microphysics of the interaction.
+\end{phenomenon}
+
+% ----------- 6.3.1 Kinematics
+\subsection{Kinematics: the recoil energy}
+\label{sec:recoil-kinematics}
+
+For a non-relativistic DM particle of mass $m_\chi$ and velocity
+$\bm v$ scattering elastically off a target of mass $M_T$ at rest,
+energy and momentum conservation in the lab frame fix the recoil
+energy entirely in terms of the scattering angle.
+
+\begin{statement}[Recoil-energy range]
+\label{stmt:recoil-energy}
+The recoil energy $E_R$ of the target after elastic scattering
+runs from $0$ to a maximum
+\begin{equation}
+\label{eq:E_R-max}
+E_R^\text{max} \;=\; \frac{2\,\mu_{\chi T}^2\,v^2}{M_T},
+\qquad
+\mu_{\chi T}\equiv\frac{m_\chi M_T}{m_\chi+M_T},
+\end{equation}
+where $\mu_{\chi T}$ is the reduced mass of the $\chi$--target
+system. For a fixed recoil energy $E_R$, the minimum DM speed
+needed to produce it is
+\begin{equation}
+\label{eq:v-min}
+v_\text{min}(E_R) \;=\; \sqrt{\frac{M_T\,E_R}{2\,\mu_{\chi T}^2}}.
+\end{equation}
+\end{statement}
+
+\begin{proof}
+Take the lab frame in which the target is at rest. After
+scattering, the DM and target have momenta $\bm p_\chi'$ and
+$\bm p_T'$ satisfying
+$\bm p_\chi'+\bm p_T'=m_\chi\bm v$ and
+$|\bm p_\chi'|^2/(2m_\chi)+|\bm p_T'|^2/(2 M_T)=\tfrac12 m_\chi v^2$.
+Eliminate $\bm p_\chi'$ between the two and use
+$E_R=|\bm p_T'|^2/(2M_T)$ to obtain a quadratic in
+$|\bm p_T'|$ whose physical root gives
+$E_R(\theta)=2\mu_{\chi T}^2 v^2(1-\cos\theta^*)/M_T$ in the
+centre-of-mass scattering angle $\theta^*$. The maximum
+\cref{eq:E_R-max} corresponds to backscatter
+($\cos\theta^*=-1$); the minimum velocity \cref{eq:v-min} is the
+inverse relation $v(E_R)$ at $\theta^*=\pi$.
+\end{proof}
+
+\begin{example}[Light WIMP on a silicon nucleus]
+\label{ex:wimp-on-Si}
+For a $m_\chi=1\,\text{GeV}/c^2$ WIMP scattering off a silicon
+nucleus ($M_T\approx 28\,m_p\approx 26\,\text{GeV}/c^2$), the
+reduced mass is $\mu_{\chi T}\approx 0.96\,\text{GeV}/c^2$. With
+$v\approx 220\,\text{km}/\text{s}=7.3\times 10^{-4}\,c$,
+$E_R^\text{max}\approx 2(0.96)^2(7.3\times 10^{-4})^2/26\,\text{GeV}
+\approx 38\,\text{eV}$. The maximum recoil falls below an eV for
+$m_\chi\lesssim 100\,\text{MeV}$, a strong push to lower the
+detector threshold.
+\end{example}
+
+% ----------- 6.3.2 Cross-section
+\subsection{Differential cross-section}
+\label{sec:recoil-xsec}
+
+The cross-section per target encodes the unknown microphysics. We
+quote the standard parametrisations used throughout the
+direct-detection literature~\cite{lewin1996}, deferring derivations
+to the references.
+
+\begin{statement}[Spin-independent nuclear recoil]
+\label{stmt:si-xsec}
+For coherent (spin-independent) elastic scattering on a nucleus of
+mass number $A$, the differential cross-section is
+\begin{equation}
+\label{eq:dsigma-dE-SI}
+\frac{\dd\sigma_{\chi T}}{\dd E_R}
+\;=\; \frac{M_T\,\sigma_n}{2\,\mu_{\chi n}^2\,v^2}\;A^2\,F^2(q),
+\end{equation}
+where $\sigma_n$ is the per-nucleon cross-section,
+$\mu_{\chi n}=m_\chi m_n/(m_\chi+m_n)$ is the DM--nucleon reduced
+mass, $A^2$ is the coherent enhancement, $q=\sqrt{2\,M_T\,E_R}$ is
+the momentum transfer, and $F(q)$ is the nuclear form factor (we
+use the standard Helm parametrisation~\cite{helm1956}, $F(0)=1$,
+$F(q)\to 0$ at $qR\sim 1$ for nuclear radius $R$).
+\end{statement}
+
+\begin{remark}[Light vs heavy mediator]
+\Cref{eq:dsigma-dE-SI} corresponds to a heavy-mediator (contact)
+interaction; for a mediator mass $m_M\lesssim q$, the cross-section
+acquires an extra propagator factor $\propto 1/(q^2+m_M^2)^2$, which
+softens the recoil spectrum by suppressing large momentum transfers
+and enhancing the small-$q$ region. For DM--electron scattering an
+analogous formula holds with the bound-electron wavefunction
+replacing the form factor; the atomic-physics details are reviewed
+in~\cite{essig2012}.
+\end{remark}
+
+% ----------- 6.3.3 Predicted spectrum
+\subsection{Predicted differential rate}
+\label{sec:recoil-rate}
+
+\begin{phenomenon}
+The detector sees not a single recoil but a distribution of recoils
+sampled over the velocity distribution of the DM halo. The shape
+of $\dd R/\dd E_R$ is the central observable of every recoil
+search.
+\end{phenomenon}
+
+\begin{statement}[Velocity-averaged differential rate]
+\label{stmt:dRdE}
+For a target of total mass $\mathcal M$ comprised of nuclei of
+individual mass $M_T$ and number density $n_T=\mathcal M/(m_T \cdot V)$,
+the differential rate per unit detector mass is
+\begin{equation}
+\label{eq:dRdE_R}
+\frac{1}{\mathcal M}\,\frac{\dd R}{\dd E_R}
+\;=\; \frac{n_\chi}{m_T}\;\int_{v_\text{min}(E_R)}^{v_\text{esc}}\!\!
+v\,f_\text{lab}(\bm v)\,\frac{\dd\sigma_{\chi T}}{\dd E_R}\,\dd^3v.
+\end{equation}
+\end{statement}
+
+\begin{proof}
+Write the rate at which DM particles in a velocity bin
+$[\bm v,\bm v+\dd^3 v]$ scatter into a recoil-energy bin
+$[E_R,E_R+\dd E_R]$ as the product (number density of DM in that
+velocity bin) $\times$ (number density of targets) $\times$
+(relative speed) $\times$ (differential cross-section). Each is
+read off straightforwardly from \cref{eq:flux},
+\cref{eq:halo-distribution} and \cref{eq:dsigma-dE-SI}; the
+$v_\text{min}$ lower limit on the velocity integral expresses the
+kinematic requirement \cref{eq:v-min}.
+\end{proof}
+
+\paragraph{Mean-inverse-speed function.}
+For the standard halo model, the velocity integral in
+\cref{eq:dRdE_R} is conventionally written through the
+mean-inverse-speed function
+\begin{equation}
+\label{eq:eta}
+\eta(v_\text{min}) \;\equiv\; \int_{v\geq v_\text{min}}\frac{f_\text{lab}(\bm v)}{v}\,\dd^3v,
+\end{equation}
+which has a closed form in terms of error functions (see
+e.g.~\cite{lewin1996} for the explicit expression). Plugging
+\cref{eq:dsigma-dE-SI} into \cref{eq:dRdE_R}, the differential rate
+takes the often-quoted form
+\begin{equation}
+\label{eq:dRdE-final}
+\frac{1}{\mathcal M}\,\frac{\dd R}{\dd E_R}
+\;=\; \frac{\rho_\chi\,\sigma_n}{2\,m_\chi\,\mu_{\chi n}^2}\;A^2\,F^2(q)\;\eta(v_\text{min}(E_R)).
+\end{equation}
+
+\begin{example}[Recoil spectrum on silicon]
+\label{ex:Si-spectrum}
+For $m_\chi=10\,\text{GeV}$, $\sigma_n=10^{-40}\,\text{cm}^2$, on
+silicon ($A=28$): \cref{eq:dRdE-final} gives a spectrum that peaks
+at $E_R\approx 0$ and falls off exponentially with characteristic
+scale $E_R^\text{max}\approx 1\,\text{keV}$. A detector with
+threshold $E_\text{th}\sim 100\,\text{eV}$ retains the bulk of the
+spectrum; $E_\text{th}\sim 1\,\text{keV}$ retains essentially none
+of it. This trade-off, between threshold and dark-matter mass
+reach, is what motivates the cryogenic detection programme.
+\end{example}
+
+\paragraph{Transition.}
+This is the predicted in-detector spectrum for the recoil channel.
+Before turning to the detector-response and statistics steps that
+convert it into a measurement and a limit, we work the parallel
+walk-through for the absorption channel.
+
+% --------------------------------------------------------------
+\section{Bosonic dark matter: detection by absorption}
+\label{sec:boson-dm}
+
+\begin{phenomenon}
+A sufficiently light bosonic DM candidate (mass below an eV) is
+better thought of as a coherent classical field filling the
+detector volume than as a stream of particles. If the field couples
+to ordinary matter, the detector can absorb a quantum from it,
+depositing the full rest energy $m_\chi c^2$ at once. The signature
+is a narrow, near-monochromatic line at $f_\chi=m_\chi c^2/h$,
+broadened only by the small virial dispersion of the halo.
+\end{phenomenon}
+
+% ----------- 6.4.1 Kinematics of absorption
+\subsection{Kinematics of absorption: a virial-broadened line}
+\label{sec:absorption-kinematics}
+
+\begin{statement}[Line spectrum at the Compton frequency]
+\label{stmt:line}
+Absorption of a non-relativistic bosonic DM particle deposits
+energy
+\begin{equation}
+\label{eq:E-deposited}
+E_\text{dep} \;=\; m_\chi c^2 \,+\, \tfrac12 m_\chi v^2
+\;\approx\; m_\chi c^2\,\bigl(1+\tfrac{1}{2}(v/c)^2\bigr).
+\end{equation}
+The kinetic correction is small: with $v/c\sim 10^{-3}$ the line
+sits at $f_\chi=m_\chi c^2/h$ with fractional width
+$\Delta f/f_\chi \sim (v/c)^2/2 \sim 10^{-6}$.
+\end{statement}
+
+\begin{example}[Frequency--mass dictionary]
+\label{ex:freq-mass}
+Useful conversions:
+$1\,\mu\text{eV}\leftrightarrow 242\,\text{MHz}$,
+$4\,\mu\text{eV}\leftrightarrow 1\,\text{GHz}$,
+$1\,\text{meV}\leftrightarrow 242\,\text{GHz}$,
+$1\,\text{eV}\leftrightarrow 242\,\text{THz}$. The QCD-axion
+window of $1\text{--}40\,\mu\text{eV}$ corresponds to
+$240\,\text{MHz}\text{--}10\,\text{GHz}$, exactly the band in
+which superconducting transmons operate.
+\end{example}
+
+% ----------- 6.4.2 Coupling Lagrangians
+\subsection{Coupling Lagrangians: dark photons and axions}
+\label{sec:absorption-couplings}
+
+The two photon-mediated bosonic candidates that dominate the
+literature, and the only ones we treat here, are the dark photon
+$A'_\mu$ and the QCD axion $a$. Each couples to ordinary matter
+through a single dimensionful parameter --- the kinetic-mixing
+parameter $\varepsilon$ for dark photons, or the photon coupling
+$g_{a\gamma\gamma}$ for axions --- and the detection rate is
+quadratic in that parameter.
+
+\begin{statement}[Dark photon kinetic mixing]
+\label{stmt:dark-photon}
+A dark photon $A'_\mu$ kinetically mixes with the Standard-Model
+photon~\cite{holdom1986},
+\begin{equation}
+\label{eq:dark-photon-L}
+\mathcal{L}\;\supset\;-\tfrac{1}{4}F'_{\mu\nu}F'^{\mu\nu}-\tfrac12 m_{A'}^2 A'_\mu A'^\mu
++\tfrac{\varepsilon}{2}F'_{\mu\nu}F^{\mu\nu}.
+\end{equation}
+A field redefinition transfers the mixing into the matter sector,
+where the dark photon couples to the electromagnetic current with
+effective charge $\varepsilon e$. A mass eigenstate $A'$ identified
+with cold dark matter has, in any sample of volume $V$, an average
+field amplitude $\langle |\bm A'|^2\rangle\propto \rho_\chi/m_{A'}^2$
+oscillating at the Compton frequency $\omega_{A'}=m_{A'}c^2/\hbar$.
+\end{statement}
+
+\begin{statement}[Axion-photon coupling]
+\label{stmt:axion}
+The axion couples to two photons through
+\begin{equation}
+\label{eq:axion-L}
+\mathcal{L}_{a\gamma\gamma} \;=\; -\tfrac14\,g_{a\gamma\gamma}\,a\,F_{\mu\nu}\tilde F^{\mu\nu}
+\;=\; g_{a\gamma\gamma}\,a\,\bm{E}\!\cdot\!\bm{B}.
+\end{equation}
+In an external static magnetic field $\bm B_0$, the axion field
+$a(t)\sim\sqrt{2\rho_\chi}/m_a\,\cos(m_a c^2 t/\hbar)$ acts as a
+time-dependent source for an oscillating electric field
+$\bm E_a\sim g_{a\gamma\gamma}\,a\,\bm B_0$. Inside a microwave
+cavity tuned to $\omega_a=m_a c^2/\hbar$, $\bm E_a$ drives the
+resonant TM mode coherently; this is the Sikivie haloscope
+concept~\cite{sikivie1983}.
+\end{statement}
+
+% ----------- 6.4.3 Absorption rate
+\subsection{Predicted absorption rate}
+\label{sec:absorption-rate}
+
+\begin{phenomenon}
+A coherent oscillating DM field acts on the detector as an external
+classical drive at frequency $m_\chi c^2/\hbar$. By Fermi's golden
+rule, the absorption rate per absorbing target is set by the matrix
+element of the coupling and by the detector's response at that
+frequency.
+\end{phenomenon}
+
+\begin{statement}[Dark-photon absorption rate]
+\label{stmt:dark-photon-rate}
+For a dark photon with mass $m_{A'}$ and kinetic mixing $\varepsilon$,
+the absorption rate per unit absorber volume is
+\begin{equation}
+\label{eq:dark-photon-rate}
+\frac{\dd N_\text{abs}}{\dd t \,\dd V} \;=\; \varepsilon^2\,\frac{\rho_\chi}{m_{A'}}\,
+\sigma_\text{abs}^\text{ord}(\omega_{A'}),
+\end{equation}
+where $\sigma_\text{abs}^\text{ord}(\omega)$ is the ordinary-photon
+absorption cross-section per unit volume of the same absorber at
+frequency $\omega$, and the right-hand side is evaluated at
+$\omega=\omega_{A'}=m_{A'}c^2/\hbar$.
+\end{statement}
+
+\paragraph{Derivation.}
+The kinetic mixing in \cref{eq:dark-photon-L} makes the dark
+photon, when present at density $\rho_\chi$, equivalent to an
+ordinary photon flux of suppression $\varepsilon^2$ at frequency
+$\omega_{A'}$~\cite{caputo2021review}. The probability per unit
+time per unit volume of absorbing one such ordinary photon is
+$\Phi_\text{ord}\,\sigma_\text{abs}^\text{ord}$, with $\Phi_\text{ord}$
+the equivalent photon flux. Substituting
+$\Phi_\text{ord}=\varepsilon^2\,\rho_\chi/m_{A'}$ (the local DM
+energy density rewritten as a photon flux) gives
+\cref{eq:dark-photon-rate}. The same logic applied via Fermi's
+golden rule (\cref{thm:fermi}), with $\op V$ the kinetically-mixed
+electromagnetic interaction, yields the same answer.
+
+\begin{statement}[Axion haloscope signal power]
+\label{stmt:axion-power}
+For an axion of mass $m_a$ and coupling $g_{a\gamma\gamma}$, an
+external magnetic field $B_0$, and a microwave cavity of volume
+$V$ and loaded quality factor $Q_L$ tuned to $\omega_a=m_a c^2/\hbar$,
+the on-resonance signal power deposited in the cavity is
+\begin{equation}
+\label{eq:axion-power}
+P_\text{sig} \;=\; \kappa\,g_{a\gamma\gamma}^2\,\rho_\chi\,
+\frac{B_0^2 V}{m_a^2}\,\omega_a\,Q_L\,C_{nlm},
+\end{equation}
+with $C_{nlm}\in[0,1]$ the form-factor of the cavity mode and
+$\kappa\in[0,1]$ the cavity-coupling factor (typically $\kappa=1/2$
+for critical coupling).
+\end{statement}
+
+\begin{example}[Numerical absorption rate, dark photon at 1 meV]
+\label{ex:dark-photon-rate}
+Take $m_{A'}=1\,\text{meV}/c^2$ ($\omega_{A'}/2\pi=242\,\text{GHz}$),
+$\rho_\chi=0.3\,\text{GeV}/\text{cm}^3$, and an aluminium absorber
+of volume $1\,\text{cm}^3$ with $\sigma_\text{abs}^\text{ord}\sim
+10^4\,\text{cm}^{-1}$ at $1\,\text{meV}$ (well above the
+$2\Delta\approx 0.34\,\text{meV}$ Cooper-pair threshold). For
+$\varepsilon=10^{-13}$, \cref{eq:dark-photon-rate} gives an
+absorption rate of order $10^{-3}\,\text{Hz}/\text{cm}^3$, or
+$\sim 10^2$ counts per kg per day --- comparable with the
+quasiparticle background of present-generation devices.
+\end{example}
+
+\begin{example}[Numerical signal power, 4 µeV axion haloscope]
+\label{ex:axion-power}
+For $m_a=4\,\mu\text{eV}/c^2$ ($\omega_a/2\pi=1\,\text{GHz}$),
+$g_{a\gamma\gamma}=10^{-15}\,\text{GeV}^{-1}$,
+$B_0=8\,\text{T}$, $V=1\,\text{L}$, $Q_L=10^5$, $C_{010}\approx 0.7$,
+$\kappa=1/2$, \cref{eq:axion-power} gives
+$P_\text{sig}\sim 10^{-23}\,\text{W}\sim 10^{-2}\,\text{photons}/\text{s}$
+in a cavity bandwidth, marginally detectable with a
+single-microwave-photon counter (the resonant scan covers a
+relative-bandwidth $\sim 1/Q_L$ per integration time).
+\end{example}
+
+\paragraph{Transition.}
+Both channels now have a predicted in-detector spectrum
+($\dd R/\dd E_R$ for recoils, a near-monochromatic line at
+$\omega=m_\chi c^2/\hbar$ for absorption). The next two sections
+turn that spectrum into a number of detector counts and then into
+a statistical limit on the underlying coupling.
+
+% --------------------------------------------------------------
+\section{From spectrum to detected counts}
+\label{sec:detector-response}
+
+\begin{phenomenon}
+A real detector samples the predicted spectrum with finite energy
+threshold, finite efficiency, and finite resolution. The measurable
+quantity is not the underlying signal spectrum but its convolution
+with the detector response, integrated over the experimental
+exposure.
+\end{phenomenon}
+
+\begin{statement}[Expected event count]
+\label{stmt:N-exp}
+For a detector with exposure $\mathcal E$ (target mass times live
+time), efficiency $\eta(E)$, and Gaussian energy-resolution kernel
+\begin{equation}
+G_\sigma(E\,|\,E') \;=\; \frac{1}{\sqrt{2\pi}\,\sigma(E')}\,
+\exp\!\left(-\frac{(E-E')^2}{2\sigma^2(E')}\right),
+\end{equation}
+the expected number of signal events above threshold $E_\text{th}$
+is
+\begin{equation}
+\label{eq:N-exp}
+N_\text{exp} \;=\; \mathcal E \int_{E_\text{th}}^\infty\!\!\dd E\;
+\eta(E)\,\bigl[(\dd R/\dd E')\!\ast\!G_\sigma\bigr](E),
+\end{equation}
+where the convolution acts on the predicted differential rate
+($\dd R/\dd E_R$ for recoils, or a Gaussian of width
+$\Delta f/f\sim 10^{-6}$ centred at $f_\chi$ for absorption).
+\end{statement}
+
+\begin{remark}[Resonant absorption searches]
+For absorption searches with a resonant cavity (the haloscope),
+``threshold and resolution'' are replaced by the cavity
+bandwidth $\Delta\omega\sim\omega/Q_L$ and the scan strategy: each
+cavity tune covers a frequency range $\sim\omega/Q_L$ for a time
+$\tau$, and the experimentally relevant quantity is the integrated
+power $P_\text{sig}\,\tau$ collected per scan step.
+\end{remark}
+
+\begin{example}[Phonon detector, recoil channel]
+\label{ex:phonon-detector}
+A $1\,\text{kg}$ silicon target with athermal-phonon readout has
+$E_\text{th}\sim 10\,\text{meV}$, $\sigma(E_R)\sim 1\,\text{meV}$,
+and $\eta(E_R)\approx 1$ above threshold. With a $30$-day live
+time, $\mathcal E=30\,\text{kg-day}$. For
+$m_\chi=100\,\text{MeV}$, $\sigma_n=10^{-37}\,\text{cm}^2$ and the
+spectrum of \cref{eq:dRdE-final}, \cref{eq:N-exp} gives
+$N_\text{exp}\sim 10$ events --- at the threshold of detectability,
+just above background.
+\end{example}
+
+\begin{example}[Transmon counter, absorption channel]
+\label{ex:transmon-counter}
+A transmon at $\omega_q/2\pi=5\,\text{GHz}$ tuned to $\omega_{A'}$
+acts as a single-microwave-photon detector with photon-counting
+efficiency $\eta\sim 0.5$ and dark-count rate
+$\Gamma_\text{dc}\sim 1\,\text{mHz}$~\cite{dixit2021}. For
+$\varepsilon=10^{-15}$ and an integration time of $1\,\text{day}$,
+\cref{eq:dark-photon-rate} integrated over the cavity bandwidth
+gives $\langle N_\text{exp}\rangle\sim 1$, comparable with the
+expected number of dark counts ($\Gamma_\text{dc}\,\tau\sim 100$
+in a day, but the resonant cavity bandwidth narrows this
+substantially).
+\end{example}
+
+% --------------------------------------------------------------
+\section{From counts to limits}
+\label{sec:limits}
+
+\begin{phenomenon}
+A finite exposure with $N$ observed events constrains the
+underlying coupling. In the absence of an observed signal one
+quotes an upper limit; in the presence of one, a confidence
+interval. Both reduce, in the simplest cases, to thresholding a
+likelihood function constructed from a Poisson model of the count.
+\end{phenomenon}
+
+\subsection{Poisson upper limit}
+\label{sec:poisson-limit}
+
+\begin{statement}[Poisson 90 \% CL upper limit]
+\label{stmt:poisson-UL}
+Suppose the expected count is the sum of a signal contribution
+$\mu(\theta)$ depending on the coupling parameter $\theta$ (with
+$\mu\propto\theta^2$ for the bosonic and $\mu\propto\sigma_n$ for
+the fermionic case) and a known background rate $b$. The number of
+observed events $N$ is Poisson-distributed with mean
+$\mu(\theta)+b$. The 90\% confidence-level upper limit
+$\theta_{90}$ on the coupling is the smallest $\theta$ such that
+\begin{equation}
+\label{eq:poisson-UL}
+P(n\leq N \,|\,\mu(\theta_{90})+b)
+\;=\;\sum_{n=0}^{N}\frac{[\mu(\theta_{90})+b]^n\,e^{-[\mu(\theta_{90})+b]}}{n!}
+\;\leq\; 0.10.
+\end{equation}
+For $b=0$ and $N=0$, $\mu_{90}=2.30$; for $N=1$, $\mu_{90}=3.89$;
+for $N=2$, $\mu_{90}=5.32$.
+\end{statement}
+
+\begin{remark}[Feldman--Cousins for low counts]
+The naive Poisson upper limit \cref{eq:poisson-UL} can over-cover
+or under-cover the true coverage in the small-$N$ regime,
+particularly when $N$ fluctuates below the expected background. The
+\emph{Feldman--Cousins unified construction}~\cite{feldman1998}
+provides a properly-covering interval that smoothly transitions
+between two-sided and upper-limit regimes. We use the simpler
+\cref{eq:poisson-UL} when $b\ll N_\text{exp}$ and Feldman--Cousins
+otherwise.
+\end{remark}
+
+\subsection{Profile likelihood}
+\label{sec:profile-likelihood}
+
+\begin{phenomenon}
+Real experiments have nuisance parameters --- detection efficiency,
+background normalisation, energy calibration --- whose uncertainty
+must be propagated into the limit. The profile-likelihood approach
+maximises the likelihood over the nuisance parameters at each value
+of the parameter of interest, producing a one-dimensional test
+statistic.
+\end{phenomenon}
+
+\begin{statement}[Profile likelihood ratio]
+\label{stmt:profile-likelihood}
+Let $\bm{\theta}=(\mu,\bm{\nu})$ where $\mu$ is the parameter of
+interest (signal strength) and $\bm{\nu}$ the nuisance parameters.
+For an observed dataset $\bm x$, the likelihood is
+$L(\mu,\bm\nu\,|\,\bm x)$ and the profile likelihood ratio is
+\begin{equation}
+\label{eq:profile-ratio}
+\lambda(\mu) \;=\; \frac{L(\mu,\hat{\hat{\bm\nu}}(\mu)\,|\,\bm x)}
+{L(\hat\mu,\hat{\bm\nu}\,|\,\bm x)},
+\end{equation}
+where $\hat\mu,\hat{\bm\nu}$ are the global maximum-likelihood
+estimators and $\hat{\hat{\bm\nu}}(\mu)$ is the conditional maximum
+of $\bm\nu$ at fixed $\mu$. Under the regularity conditions of
+Wilks' theorem, the test statistic
+\begin{equation}
+\label{eq:wilks}
+t_\mu \;\equiv\; -2\ln\lambda(\mu)
+\end{equation}
+follows a $\chi^2_1$ distribution asymptotically, and the
+$1-\alpha$ confidence interval is the set of $\mu$ for which
+$t_\mu\leq F^{-1}_{\chi^2_1}(1-\alpha)$ (e.g.\ $t_\mu\leq 2.71$ for
+$1-\alpha=0.90$).
+\end{statement}
+
+\paragraph{Derivation.}
+For Poisson data with mean $\mu+b$, the log-likelihood is
+$\ln L=-\mu-b+N\ln(\mu+b)$, with the global maximum at
+$\hat\mu=N-b$. Substituting in \cref{eq:wilks},
+$t_\mu=2[(\mu-\hat\mu)+N\ln(\hat\mu/\mu)]$ at $b=0$, and the
+$\chi^2_1$ asymptotic distribution follows from the standard
+saddle-point expansion around the maximum (Cowan, Cranmer, Gross
+and Vitells \cite{cowan2011} give explicit closed-form expressions
+including the case of one or two-sided intervals).
+
+\begin{example}[Comparison of the two limits, no nuisance parameters]
+\label{ex:limits-compare}
+For a single-bin Poisson experiment with $N=0$ observed events and
+no background, the simple Poisson upper limit \cref{eq:poisson-UL}
+is $\mu_{90}=2.30$. The corresponding profile-likelihood limit
+\cref{eq:wilks} gives $t_\mu=2\mu$ (for $b=0$, $N=0$), so
+$\mu_{90}=1.35$ for one-sided $90\%$ CL. The two differ because
+the profile-likelihood interval uses a likelihood ratio rather
+than a tail-probability cut; both are widely quoted in
+direct-detection papers, and \cref{eq:poisson-UL} is the more
+conservative.
+\end{example}
+
+\subsection{From the limit to an exclusion curve}
+\label{sec:exclusion-curves}
+
+The mass of the DM candidate enters the limit indirectly, through
+the differential rate \cref{eq:dRdE-final} or absorption rate
+\cref{eq:dark-photon-rate}. Solving \cref{eq:poisson-UL} or
+\cref{eq:wilks} for the coupling at each mass produces a
+one-dimensional curve --- the exclusion curve $\sigma_n(m_\chi)$,
+$\varepsilon(m_{A'})$, or $g_{a\gamma\gamma}(m_a)$ --- that bounds
+the model parameter space. The shape of the curve is dominated by
+two effects: the kinematic threshold $E_R^\text{max}\geq E_\text{th}$
+(in the recoil case) or the resonant-bandwidth coverage of the
+detector (in the haloscope case), and the energy-dependent
+detection efficiency $\eta(E)$.
+
+\begin{example}[Sketch of an exclusion curve]
+\label{ex:exclusion-sketch}
+For the silicon phonon detector of \cref{ex:phonon-detector}, no
+observed events at $E_\text{th}=10\,\text{meV}$ and exposure
+$\mathcal E=30\,\text{kg-day}$ would set
+$\mu_{90}=2.30$ on the expected count, translating to
+$\sigma_n\lesssim 10^{-39}\,\text{cm}^2$ at $m_\chi=100\,\text{MeV}$.
+The curve cuts off sharply below $m_\chi\sim 30\,\text{MeV}$ where
+$E_R^\text{max}<E_\text{th}$.
+\end{example}
+
+\paragraph{Transition.}
+We have walked both channels through the four-stage pipeline. The
+final section collects the four cQED-based sensing mechanisms
+discussed earlier in this book and maps each onto the
+recoil--vs--absorption dichotomy.
+
+% --------------------------------------------------------------
+\section{Sensing mechanisms in superconducting circuits}
+\label{sec:cqed-mechanisms}
+
+The cQED toolkit provides four practical implementations of the
+recoil and absorption channels:
+
 \begin{itemize}
-  \item \emph{Heavy WIMPs} ($m_\chi \sim 10\text{--}1000\,\text{GeV}$):
-        targeted by traditional cryogenic phonon detectors and dual-phase
-        time-projection chambers, where the signal is a nuclear or
-        electronic recoil of $\mathcal{O}(\text{keV})$.
-  \item \emph{Light WIMPs / sub-GeV} ($m_\chi \sim 10\,\text{keV}\text{--}1\,\text{GeV}$):
-        recoil energies are at or below the eV scale; sub-eV
-        thresholds, achievable with athermal-phonon and
-        single-charge sensors built from superconducting hardware,
-        are required.
-  \item \emph{Ultralight bosons} ($m_\chi \sim 10^{-12}\text{--}10^{-3}\,\text{eV}$):
-        wave-like dark matter coherently filling the lab volume,
-        coupled to photons via either kinetic mixing (dark
-        photons) or the QED anomaly (axions). The Compton
-        frequency $f_\chi=m_\chi c^2/h$ falls naturally in the MHz
-        to GHz range, matching superconducting resonators directly.
+  \item \emph{Phonon-quasiparticle conversion} (recoil channel).
+  A target deposits athermal phonons that, above the
+  $2\Delta\sim 0.34\,\text{meV}$ Cooper-pair binding energy in
+  aluminium, break Cooper pairs and create quasiparticles read out
+  by a transition-edge or kinetic-inductance
+  sensor~\cite{kurinsky2020}. Threshold $E_\text{th}\sim$
+  meV, mass reach $m_\chi\sim 10\,\text{MeV}$ for nuclear recoils.
+  \item \emph{Infrared absorption in the junction}
+  (absorption channel). A Josephson junction directly absorbs an
+  infrared or terahertz photon of energy $\geq 2\Delta$, with the
+  resulting quasiparticle pair read out as a poisoning
+  burst~\cite{hochberg2021}. Sensitive to dark photons with
+  $m_{A'}\geq 0.34\,\text{meV}/c^2$ at couplings down to
+  $\varepsilon\sim 10^{-13}$.
+  \item \emph{Phonon-qubit coupling via piezoelectric substrates}
+  (recoil channel). A piezoelectric substrate (AlN, GaAs)
+  converts a single phonon into a charge perturbation that drives
+  a transmon transition; the transmon acts as a single-phonon
+  detector with $g/2\pi\sim$ MHz~\cite{linehan2024}. Mass reach
+  $m_\chi\sim 1\,\text{MeV}$ for nuclear recoils.
+  \item \emph{Microwave absorption in the qubit} (absorption
+  channel). A transmon tuned to $\omega_q=m_\chi c^2/\hbar$ acts as
+  a single-microwave-photon counter for dark-photon or axion
+  haloscopes~\cite{dixit2021}. Sensitivity $\varepsilon\sim 10^{-15}$
+  in the GHz band.
 \end{itemize}
 
-\paragraph{The cQED programme.}
-Superconducting circuits address the second and third bands with
-the same toolset they already use for quantum information:
-microwave-frequency operation, single-photon-level sensitivity,
-millikelvin background, and quantum-limited amplification chains.
-This chapter focuses on those bands.
+The first and third belong to the recoil pipeline of
+\cref{sec:fermion-dm}; the second and fourth belong to the
+absorption pipeline of \cref{sec:boson-dm}. The detector-response
+and statistical machinery of \cref{sec:detector-response} and
+\cref{sec:limits} apply uniformly to all four.
 
 % --------------------------------------------------------------
-\section{Recoil signal models}
-\label{sec:recoils}
-
-\paragraph{Nuclear vs.\ electronic recoils.}
-A dark-matter particle scattering elastically in a detector
-deposits energy by recoiling against either a target nucleus
-(nuclear recoil) or a target electron (electronic recoil). For an
-incoming particle of mass $m_\chi$ and velocity $v_\chi$ on a
-target of mass $M_T$, conservation of energy and momentum gives
-the maximum recoil energy
-\begin{equation}
-\label{eq:recoil-max}
-E_R^\text{max} \;=\; \frac{2\,\mu_{\chi T}^2\,v_\chi^2}{M_T},
-\qquad
-\mu_{\chi T} \equiv \frac{m_\chi M_T}{m_\chi+M_T},
-\end{equation}
-where $\mu_{\chi T}$ is the reduced mass. For a galactic
-$v_\chi\sim 10^{-3}c$ and a silicon-target nucleus $M_T\approx 28\,m_p$,
-$E_R^\text{max}$ is keV-scale only when $m_\chi\gtrsim$ a few GeV;
-for $m_\chi\lesssim 100\,\text{MeV}$ it falls below an eV, and the
-event becomes invisible to any threshold above that. Electronic
-recoils are kinematically more favourable for light dark matter
-because $M_T$ is the much smaller electron mass.
-
-\paragraph{Threshold and rate.}
-A detector with energy threshold $E_\text{th}$ and exposure
-$\mathcal{E}=\text{(target mass)}\times\text{(live time)}$ is
-sensitive to dark-matter particles whose differential rate
-satisfies
-\begin{equation}
-\label{eq:rate}
-R \;=\; \mathcal{E}\,\frac{n_\chi}{m_T}\,\langle\sigma_{\chi T}\,v\rangle,
-\end{equation}
-where $m_T$ is the target-particle mass, $\sigma_{\chi T}$ the
-cross-section per target particle, and the brackets denote a
-velocity average over the halo distribution. Lower $E_\text{th}$
-opens up smaller $m_\chi$ via \cref{eq:recoil-max}; this is the
-push that has driven the cQED programme. State-of-the-art
-phonon-sensor thresholds reach $\mathcal{O}(\text{eV})$ today, with
-a roadmap towards $\mathcal{O}(\text{meV})$ that exploits the
-$\sim 0.34\,\text{meV}$ Cooper-pair binding energy of aluminium.
-
-\paragraph{Light mediators and form factors.}
-For a contact (heavy-mediator) interaction the velocity dependence
-of $\sigma_{\chi T}$ is $\propto v^{-2}$ at low recoil energy. For
-a light mediator (mass $\lesssim$ momentum transfer
-$q\sim\mu_{\chi T}v$), an extra form factor $1/q^4$ enhances soft
-recoils. The latter is what makes \emph{photon-mediated} dark
-matter (next section) particularly soft and well-matched to a
-microwave detector.
-
-% --------------------------------------------------------------
-\section{Photon-mediated dark matter}
-\label{sec:photon-mediated-dm}
-
-\paragraph{Dark photons.}
-A dark photon $A'$ is a $U(1)'$ gauge boson kinetically mixed with
-the Standard-Model photon~\cite{holdom1986},
-\begin{equation}
-\label{eq:dark-photon-mixing}
-\mathcal{L} \;\supset\; -\tfrac{1}{4}F'_{\mu\nu}F'^{\mu\nu}
-- \tfrac12 m_{A'}^2 A'_\mu A'^\mu
-+ \tfrac{\varepsilon}{2}F'_{\mu\nu}F^{\mu\nu},
-\end{equation}
-with $\varepsilon$ the dimensionless mixing parameter. Field
-redefinitions move the mixing into the matter sector, where the
-dark photon couples to the electromagnetic current with effective
-charge $\varepsilon e$. A non-zero $m_{A'}$ allows the dark photon
-to be itself the dark matter; the local DM mass density then
-corresponds to a coherent classical field
-$\langle A'^2\rangle\propto\rho_\chi/m_{A'}^2$, oscillating at the
-Compton frequency $f_{A'}=m_{A'}c^2/h$. For
-$m_{A'}=4.1\,\mu\text{eV}$ this is $1\,\text{GHz}$, and a
-microwave resonator looks the dark-matter field as a tiny coherent
-RF source~\cite{caputo2021review}.
-
-\paragraph{Axions.}
-The axion is a pseudoscalar boson originally introduced to solve
-the strong-$CP$ problem; it acquires a small mass and a
-two-photon coupling
-\begin{equation}
-\label{eq:axion-coupling}
-\mathcal{L}_{a\gamma\gamma} \;=\; -\tfrac14\,g_{a\gamma\gamma}\,a\,F_{\mu\nu}\tilde F^{\mu\nu}
-\;=\; g_{a\gamma\gamma}\,a\,\bm E\!\cdot\!\bm B.
-\end{equation}
-In an external magnetic field $\bm B_0$, the axion field $a(t)$
-sources an oscillating electric field via \cref{eq:axion-coupling}.
-Inside a microwave cavity tuned to $\omega_a=m_a c^2/\hbar$, this
-drives the resonant TM mode coherently, producing a tiny but
-narrow-band signal --- the haloscope concept of
-Sikivie~\cite{sikivie1983}.
-
-\paragraph{The microwave window.}
-Both $\rho_\chi/m_\chi^2\sim$ field amplitude and the mass--frequency
-relation $f_\chi=m_\chi c^2/h$ make GHz the natural target band:
-$1\,\text{GHz}\leftrightarrow 4.1\,\mu\text{eV}$, the QCD-axion
-window of $\sim 1\text{--}40\,\mu\text{eV}$ corresponds to
-$240\,\text{MHz}\text{--}10\,\text{GHz}$, and a transmon's
-$\omega_q/2\pi\sim 5\,\text{GHz}$ sits inside it. Single-photon
-sensitivity at GHz, achievable in cQED, gives a fundamental
-advantage over heterodyne readout limited by quantum-noise
-amplification.
-
-% --------------------------------------------------------------
-\section{Sensing mechanism 1: phonon--quasiparticle conversion}
-\label{sec:phonon-qp}
-
-\paragraph{Idea.}
-A dark-matter particle scattering in a superconducting target
-deposits energy as athermal phonons; a phonon of energy
-$E_\text{ph}>2\Delta$ (where $2\Delta$ is the Cooper-pair binding
-energy, $0.34\,\text{meV}$ in aluminium and $\sim 1.4\,\text{meV}$
-in niobium) breaks a Cooper pair and creates two quasiparticles.
-The quasiparticles diffuse to a transition-edge or microwave
-kinetic-inductance sensor that reads them out as a small impedance
-or temperature change~\cite{kurinsky2020}.
-
-\paragraph{Threshold and reach.}
-The sensitivity scales roughly as
-\begin{equation}
-E_\text{th} \;\sim\; 2\Delta\,\frac{1}{\eta_\text{collect}},
-\end{equation}
-with $\eta_\text{collect}$ the fraction of athermal phonons that
-reach the sensor before downconverting to subgap energies. For Al
-($\Delta\approx 170\,\mu\text{eV}$) and $\eta_\text{collect}\sim 0.1$,
-$E_\text{th}\sim$ a few meV. This sets the kinematic floor at
-$m_\chi\sim 10\,\text{MeV}$ for nuclear recoils (\cref{eq:recoil-max}
-with $M_T=m_\text{Si nucleus}$, $v\sim 10^{-3}c$) --- already
-significantly better than dual-phase TPC's $\sim$ GeV reach.
-
-\paragraph{Sensitivity estimate.}
-For a 1\,kg-day exposure with $E_\text{th}=10\,\text{meV}$ and
-zero background, $\sigma_{\chi T}\sim 10^{-37}\,\text{cm}^2$ is
-reachable for $m_\chi\sim 100\,\text{MeV}$. This is several orders
-of magnitude beyond conventional WIMP searches at the same mass.
-
-% --------------------------------------------------------------
-\section{Sensing mechanism 2: infrared absorption in the junction}
-\label{sec:ir-junction}
-
-\paragraph{Idea.}
-A Josephson junction itself is a Cooper-pair-breaking absorber: an
-infrared or microwave photon of energy $\geq 2\Delta$, absorbed in
-the leads, breaks a pair and injects a quasiparticle pair into the
-junction, producing a measurable burst of poisoning. For a dark
-photon of mass $m_{A'}\geq 2\Delta/c^2\approx 0.34\,\text{meV}/c^2$
-(corresponding to $f_{A'}\geq 85\,\text{GHz}$), kinetic mixing
-\cref{eq:dark-photon-mixing} converts the coherent dark-photon
-field into ordinary photons inside the conductor, which then drive
-quasiparticle creation~\cite{hochberg2021}.
-
-\paragraph{Sensitivity to $\varepsilon$.}
-The conversion rate scales as $\varepsilon^2$, the dark-photon
-density as $\rho_\chi/m_{A'}^2$, and the absorption probability in
-the lead as the product of absorber thickness and the Mattis--Bardeen
-conductivity. Order-of-magnitude, a 1\,m$^2$-cm-thick aluminium
-absorber operated for 1\,year reaches
-$\varepsilon\sim 10^{-13}$ at $m_{A'}\sim 1\,\text{meV}$, an order
-of magnitude beyond solar lifetime constraints in that mass band.
-The shape of the reach curve $\varepsilon(m_{A'})$ is set by the
-absorber's frequency-dependent surface impedance.
-
-% --------------------------------------------------------------
-\section{Sensing mechanism 3: phonon--qubit coupling via piezoelectricity}
-\label{sec:phonon-qubit-piezo}
-
-\paragraph{Idea.}
-A phonon in a piezoelectric substrate (AlN, GaAs, sapphire-based
-sandwich structures) carries an electric polarisation that couples
-linearly to a transmon's charge, $\op{n}$. Single phonons of energy
-in the 1--10\,GHz band can therefore drive transmon transitions
-in exact analogy with single microwave photons in cavity QED. The
-qubit thus acts as a single-phonon detector, with the phonon
-playing the role of the readout
-quantum~\cite{karasik2014,linehan2024}.
-
-\paragraph{Coupling strength and detection.}
-The relevant Hamiltonian is, schematically,
-\begin{equation}
-\op{H}_\text{int} \;=\; \hbar g\,\hat\sigma_x\,(\hat b + \hat b^\dagger),
-\end{equation}
-with $\hat b$ the phonon-mode annihilation operator and
-$g\propto e_{14}\,d/\sqrt{\hbar/(2 M\Omega_\text{ph})}$ depending
-on the piezoelectric coefficient $e_{14}$, the qubit-phonon overlap
-length $d$, and the phonon mode mass and frequency. Typical
-$g/2\pi\sim 0.1\text{--}10\,\text{MHz}$. Detecting a single phonon
-with a transmon at $\omega_q/2\pi=5\,\text{GHz}$ is therefore
-competitive with conventional KID-based detection above the
-sub-meV phonon-energy threshold.
-
-\paragraph{Sensitivity reach.}
-For sub-GeV nuclear-recoil dark matter on Si, a piezoelectric
-target plus transmon readout reaches
-$\sigma_{\chi T}\sim 10^{-38}\,\text{cm}^2$ at
-$m_\chi\sim 1\,\text{MeV}$ for a few kg-day exposure --- the lowest
-mass reach yet projected for nuclear recoils.
-
-% --------------------------------------------------------------
-\section{Sensing mechanism 4: microwave absorption in the qubit}
-\label{sec:microwave-absorption}
-
-\paragraph{Idea.}
-A transmon driven by an oscillating microwave field at its
-transition frequency $\omega_q$ has an absorption cross-section set
-by its dipole moment. If the field is sourced by a dark-matter
-candidate --- a kinetically mixed dark photon, or an axion in a
-strong static $\bm B_0$ --- a population transfer
-$\ket{0}\to\ket{1}$ counts as a candidate event. The transmon
-operates as a single-microwave-photon counter in the 1--20\,GHz
-window~\cite{dixit2021}.
-
-\paragraph{Sensitivity formula.}
-For a dark photon of mass $m_{A'}$ and a cavity of volume $V$
-hosting a TM mode with form factor $C\sim O(1)$, the equivalent
-ordinary-photon power on resonance is
-\begin{equation}
-P_\text{sig} \;=\; \tfrac{1}{4}\,\varepsilon^2\,\rho_\chi\,V\,C\,\omega_{A'}.
-\end{equation}
-A transmon with photon-counting efficiency $\eta\sim 0.5$ and
-dark-count rate $\Gamma_\text{dc}\sim 1\,\text{Hz}$, integrating
-for $\tau$, reaches the SNR-1 limit
-\begin{equation}
-\varepsilon^2_\text{min}
-\;\sim\; \frac{\sqrt{\Gamma_\text{dc}/\tau}}{\eta\,(\rho_\chi V C\omega_{A'})}.
-\end{equation}
-Plugging the numbers: 1\,litre cavity, $\omega_{A'}/2\pi=5\,\text{GHz}$,
-$\tau=10$\,days, $\eta=0.5$, $\Gamma_\text{dc}=1\,\text{mHz}$:
-$\varepsilon_\text{min}\sim 10^{-15}$, which beats heterodyne
-amplification by $1\text{--}2$ orders of magnitude in this band.
-Repeating across the cavity tuning range fills out the
-$\varepsilon(m_{A'})$ reach.
-
-\paragraph{Axion case.}
-For axions in a static $\bm B_0$, the cavity power is the standard
-Sikivie haloscope formula
-$P_\text{sig}\propto g_{a\gamma\gamma}^2\,\rho_a\,B_0^2\,V\,Q_c$,
-which a single-photon-counting transmon converts into a count rate.
-The same accounting reaches $g_{a\gamma\gamma}\sim 10^{-15}\,\text{GeV}^{-1}$
-for a 1\,T field over a few-litre cavity, sweeping the QCD axion
-window.
-
-% --------------------------------------------------------------
-The combination of macroscopic quantum coherence at GHz, single
-microwave-photon sensitivity, and millikelvin operating
-temperature places superconducting circuits in an unusually
-favourable position to detect feeble signals from beyond the
-Standard Model. The four sensing mechanisms surveyed above ---
-phonon-quasiparticle conversion, infrared absorption in the
-junction, piezoelectric phonon-qubit coupling, and direct
-microwave absorption in the qubit --- between them cover the
-sub-GeV recoil and ultralight-boson windows that traditional
-cryogenic detectors and dual-phase TPCs do not reach. Each is at
-a different stage of experimental maturity; the limiting
-backgrounds (quasiparticle poisoning, two-level-system loss in
-the substrate, stray IR through the cryostat) are the same ones
-that limit cQED quantum-information hardware, and progress on one
-front feeds the other.
+The chapter walked through two distinct dark-matter detection
+channels --- elastic recoil for fermion-like DM and absorption for
+bosonic DM --- and showed that the same four-stage pipeline (model
+parameters, predicted spectrum, detected counts, statistical limit)
+applies to both. The recoil channel produces a continuum spectrum
+$\dd R/\dd E_R$ whose shape is set by the kinematic threshold
+$E_R^\text{max}=2\mu_{\chi T}^2 v^2/M_T$ and the velocity-averaged
+cross-section through the mean-inverse-speed function $\eta(v_\text{min})$.
+The absorption channel produces a near-monochromatic line at
+$\omega=m_\chi c^2/\hbar$ broadened only by the halo virial
+dispersion to $\Delta\omega/\omega\sim 10^{-6}$. Either signal, after
+folding with the detector response, becomes a Poisson count whose
+expectation depends on the coupling parameter; thresholding a
+likelihood produces an exclusion curve in the coupling-mass plane.
+The four cQED-based sensing mechanisms covered in earlier chapters
+populate both pipelines, and the methodology of this chapter
+applies to all of them uniformly.
 
 \clearpage
 \begin{chaptersummary}
 
-\paragraph{cQED as a fundamental-physics front end.}
-Macroscopic quantum coherence at GHz frequencies, single-microwave-photon
-sensitivity, and millikelvin operating temperature put
-superconducting hardware in a unique position to detect feeble
-signals from beyond the Standard Model in the sub-GeV and
-ultralight-boson dark-matter mass bands.
+\paragraph{Two detection channels.}
+Direct-detection searches split cleanly into two cases. A
+fermion-like DM particle scatters elastically off a target and
+deposits a recoil energy; a bosonic DM field is absorbed wholesale
+and deposits its rest energy $m_\chi c^2$ at once.
 
-\paragraph{Recoil kinematics.}
-For elastic dark-matter scattering on a target of mass $M_T$, the
-maximum recoil energy is
-$E_R^\text{max}=2\mu_{\chi T}^2 v_\chi^2/M_T$
-(\cref{eq:recoil-max}). At galactic velocities $v_\chi\sim 10^{-3}c$
-this drops below an eV for $m_\chi\lesssim 100\,\text{MeV}$,
-demanding sub-eV thresholds.
+\paragraph{Halo inputs (\cref{sec:dm-halo}).}
+Local density $\rho_\chi\approx 0.3\,\text{GeV}/\text{cm}^3$;
+truncated isotropic Maxwellian velocity distribution
+\cref{eq:halo-distribution} with $v_0\approx 220\,\text{km}/\text{s}$
+and $v_\text{esc}\approx 544\,\text{km}/\text{s}$ (galactic frame);
+flux $\Phi_\chi=n_\chi\bar v$.
 
-\paragraph{Photon-mediated dark matter.}
-Dark photons couple to the electromagnetic current with effective
-charge $\varepsilon e$ via the kinetic-mixing Lagrangian
-\cref{eq:dark-photon-mixing}. Axions couple to two photons with
-strength $g_{a\gamma\gamma}$ \cref{eq:axion-coupling}, in a
-constant $\bm B_0$ producing an oscillating $\bm E$ at the Compton
-frequency $f_a=m_a c^2/h$. The mass--frequency relation puts the
-QCD-axion window in the 240\,MHz--10\,GHz range, exactly where
-transmons live.
-
-\paragraph{Four sensing mechanisms.}
+\paragraph{Recoil pipeline (\cref{sec:fermion-dm}).}
 \begin{itemize}
-  \item Phonon-quasiparticle conversion (\cref{sec:phonon-qp}) reaches
-        $E_\text{th}\sim$ meV via Cooper-pair breaking
-        ($2\Delta\approx 0.34\,\text{meV}$ in Al), opening
-        $m_\chi\sim 10\,\text{MeV}$.
-  \item Infrared absorption in the junction
-        (\cref{sec:ir-junction}) reaches dark-photon mixing
-        $\varepsilon\sim 10^{-13}$ at $m_{A'}\sim 1\,\text{meV}$
-        with kg-scale Al absorbers.
-  \item Phonon-qubit coupling via piezoelectrics
-        (\cref{sec:phonon-qubit-piezo}) uses transmons as
-        single-phonon detectors with $g/2\pi\sim 1\,\text{MHz}$,
-        targeting nuclear recoils down to $m_\chi\sim 1\,\text{MeV}$.
-  \item Microwave absorption in the qubit
-        (\cref{sec:microwave-absorption}) implements a
-        single-photon-counting haloscope, reaching
-        $\varepsilon\sim 10^{-15}$ for dark photons and the QCD-axion
-        window for $g_{a\gamma\gamma}$.
+  \item Kinematics: $E_R^\text{max}=2\mu_{\chi T}^2 v^2/M_T$.
+  \item Cross-section: spin-independent
+        $\dd\sigma/\dd E_R=M_T\sigma_n A^2 F^2(q)/(2\mu_{\chi n}^2 v^2)$.
+  \item Differential rate
+        $\dd R/\dd E_R=\rho_\chi\sigma_n A^2 F^2(q)\,\eta(v_\text{min})/(2 m_\chi\mu_{\chi n}^2)$
+        per unit detector mass.
 \end{itemize}
 
-\paragraph{Open questions.}
-The numbers above are best-case projections; the limiting
-backgrounds in practice are quasiparticle poisoning, two-level-system
-loss in the substrate, and stray IR/microwave radiation through the
-cryostat. Reducing each is an active programme, on the same critical
-path as scaling up quantum-information cQED itself.
+\paragraph{Absorption pipeline (\cref{sec:boson-dm}).}
+\begin{itemize}
+  \item Line at $E=m_\chi c^2$ with fractional width
+        $\Delta E/E\sim (v/c)^2/2\sim 10^{-6}$.
+  \item Dark-photon rate per unit volume:
+        $\dd N/(\dd t\,\dd V)=\varepsilon^2\rho_\chi\sigma_\text{abs}^\text{ord}/m_{A'}$.
+  \item Axion-haloscope on-resonance signal power
+        $P_\text{sig}=\kappa g_{a\gamma\gamma}^2\rho_\chi B_0^2 V \omega_a Q_L C_{nlm}/m_a^2$.
+\end{itemize}
+
+\paragraph{Detector response (\cref{sec:detector-response}).}
+$N_\text{exp}=\mathcal E\!\int_{E_\text{th}}^\infty\!\dd E\,\eta(E)\,
+\bigl[(\dd R/\dd E')\!\ast\!G_\sigma\bigr](E)$.
+
+\paragraph{Statistical limits (\cref{sec:limits}).}
+Poisson 90\%~CL upper limit
+$\sum_{n=0}^N P(n|\mu_{90})\leq 0.10$ (e.g.\ $\mu_{90}=2.30$ for
+$N=0$, $b=0$); profile-likelihood ratio
+$\lambda(\mu)=L(\mu,\hat{\hat\nu}(\mu))/L(\hat\mu,\hat\nu)$ with
+test statistic $t_\mu=-2\ln\lambda(\mu)\sim\chi^2_1$ asymptotically.
+
+\paragraph{cQED sensing mechanisms (\cref{sec:cqed-mechanisms}).}
+Phonon-quasiparticle conversion and piezoelectric phonon-qubit
+coupling sit on the recoil pipeline; IR absorption in the junction
+and microwave absorption in the transmon sit on the absorption
+pipeline.
 
 \end{chaptersummary}
+
+% --------------------------------------------------------------
+\section*{Exercises}
+\addcontentsline{toc}{section}{Exercises}
+
+The exercises grow in difficulty from inspection-level checks of
+the formulas to applied calculations of the kind one runs when
+designing a search.
+
+\begin{exercise}[DM number density and flux]
+For $\rho_\chi=0.3\,\text{GeV}/\text{cm}^3$ and a galactic
+mean speed $\bar v\approx 240\,\text{km}/\text{s}$, compute the
+number density $n_\chi$ and flux $\Phi_\chi$ for
+$m_\chi\in\{1\,\text{MeV},\,1\,\text{GeV},\,100\,\text{GeV}\}$.
+\begin{solution}
+$n_\chi=\rho_\chi/m_\chi$ and $\Phi_\chi=n_\chi\bar v$. With
+$\bar v=2.4\times 10^7\,\text{cm}/\text{s}$:
+$n_\chi=\{300,\,0.3,\,3\times 10^{-3}\}\,\text{cm}^{-3}$ and
+$\Phi_\chi=\{7\times 10^9,\,7\times 10^6,\,7\times 10^4\}\,\text{cm}^{-2}\text{s}^{-1}$.
+Light dark matter is plentiful; heavy dark matter is rare.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Maximum recoil energy on silicon]
+Compute $E_R^\text{max}$ for a silicon nucleus ($A=28$,
+$M_T\approx 26\,\text{GeV}/c^2$) struck by a DM particle of mass
+$m_\chi=1\,\text{GeV}/c^2$ and speed $v=220\,\text{km}/\text{s}$.
+What if instead $m_\chi=10\,\text{MeV}/c^2$?
+\begin{solution}
+Reduced mass $\mu_{\chi T}=m_\chi M_T/(m_\chi+M_T)$.
+For $m_\chi=1\,\text{GeV}$, $\mu_{\chi T}\approx 0.96\,\text{GeV}$,
+$v/c=7.3\times 10^{-4}$, so
+$E_R^\text{max}=2(0.96)^2(7.3\times 10^{-4})^2/26\,\text{GeV}\approx 38\,\text{eV}$.
+For $m_\chi=10\,\text{MeV}$, $\mu_{\chi T}\approx 10\,\text{MeV}$,
+$E_R^\text{max}\approx 2(10\times 10^{-3})^2(7.3\times 10^{-4})^2/26\,\text{GeV}
+\approx 4\,\text{meV}$ --- below the meV threshold of any current
+phonon detector.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Threshold-driven mass reach]
+A phonon detector has threshold $E_\text{th}=10\,\text{meV}$ on
+silicon. What is the minimum DM mass for which a recoil at
+$v=v_\text{esc}\approx 544\,\text{km}/\text{s}$ can produce a
+detectable event?
+\begin{solution}
+Demand $E_R^\text{max}(v_\text{esc})\geq E_\text{th}$, i.e.\
+$2\mu_{\chi T}^2 v_\text{esc}^2/M_T\geq E_\text{th}$. Solving for
+$\mu_{\chi T}^2$ with $v_\text{esc}/c=1.8\times 10^{-3}$ and
+$M_T=26\,\text{GeV}$ gives
+$\mu_{\chi T}^2\geq E_\text{th}M_T/(2 v_\text{esc}^2)
+\approx 4\times 10^{-2}\,\text{GeV}^2$, i.e.\
+$\mu_{\chi T}\gtrsim 200\,\text{MeV}$. Since
+$\mu_{\chi T}\to m_\chi$ for $m_\chi\ll M_T$, this gives
+$m_\chi\gtrsim 200\,\text{MeV}$. A 10\,meV phonon detector on
+silicon thus probes nuclear recoils for $m_\chi$ above a few
+hundred MeV.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Compton frequency of an axion]
+The QCD-axion mass window is $1\,\mu\text{eV}\lesssim m_a c^2\lesssim
+40\,\mu\text{eV}$. Compute the corresponding Compton frequency
+range $f_a=m_a c^2/h$ and the fractional line width
+$\Delta f/f_a$.
+\begin{solution}
+$f_a=m_a c^2/h$, with $1\,\mu\text{eV}=0.242\,\text{GHz}$, so
+$f_a\in[0.24,\,9.7]\,\text{GHz}$. Fractional line width
+$\Delta f/f_a\sim (v/c)^2/2\sim 10^{-6}$, i.e.\ a few hundred Hz to
+a few kHz absolute width across the window.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Coherence volume of a dark photon field]
+The bosonic-DM picture is valid when the de Broglie wavelength
+$\lambda_\text{dB}\sim h/(m_\chi v)$ is much larger than the
+detector. For a $1\,\mu\text{eV}$ dark photon at $v=220\,\text{km}/\text{s}$,
+compute $\lambda_\text{dB}$ and compare it with a 1 cm cavity.
+\begin{solution}
+$p=m_\chi v=10^{-6}\,\text{eV}/c\cdot 7\times 10^{-4}\,c=7\times 10^{-10}\,\text{eV}/c$.
+$\lambda_\text{dB}=h/p=(6.6\times 10^{-25}\,\text{eV s}\cdot
+3\times 10^8\,\text{m/s})/(7\times 10^{-10}\,\text{eV})\approx 280\,\text{m}$.
+Far larger than a 1 cm cavity, so the dark-photon field is coherent
+across the detector volume --- the haloscope picks up the same
+phase everywhere inside the cavity, and the rate is enhanced by a
+coherence factor.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Dark-photon absorption in aluminium]
+For the dark-photon parameters of \cref{ex:dark-photon-rate}
+($m_{A'}=1\,\text{meV}$, $\varepsilon=10^{-13}$, Al absorber), the
+absorption cross-section per unit volume is
+$\sigma_\text{abs}^\text{ord}\sim 10^4\,\text{cm}^{-1}$ at
+$\omega=242\,\text{GHz}$. Verify the rate quoted in the example,
+$\sim 10^{-3}\,\text{Hz}/\text{cm}^3$.
+\begin{solution}
+$\dd N/(\dd t\,\dd V)=\varepsilon^2\rho_\chi\sigma_\text{abs}^\text{ord}/m_{A'}$.
+With $\rho_\chi/m_{A'}=0.3\,\text{GeV}/\text{cm}^3 / 10^{-3}\,\text{eV}
+=3\times 10^{14}\,\text{cm}^{-3}$, $\varepsilon^2=10^{-26}$, and
+$\sigma_\text{abs}^\text{ord}\cdot c=10^4\,\text{cm}^{-1}\cdot 3\times 10^{10}\,\text{cm/s}
+=3\times 10^{14}\,\text{cm}^{-1}\,\text{s}^{-1}$ (taking the rate
+form $n\,\sigma\,c$ with $n$ the photon-equivalent density), we
+obtain $\sim 10^{-26}\cdot 3\times 10^{14}\cdot 3\times 10^{14}\cdot
+3\times 10^{-15}\,\text{s}^{-1}\,\text{cm}^{-3}\sim 10^{-3}$,
+matching the order-of-magnitude estimate.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Poisson upper limit for low counts]
+Solve \cref{eq:poisson-UL} for $\mu_{90}$ at $b=0$ for $N=0,1,2,3$
+observed events.
+\begin{solution}
+For $N=0$: $e^{-\mu_{90}}=0.10\Rightarrow\mu_{90}=2.30$.
+For $N=1$: $(1+\mu_{90})e^{-\mu_{90}}=0.10\Rightarrow\mu_{90}\approx 3.89$.
+For $N=2$: $(1+\mu_{90}+\mu_{90}^2/2)e^{-\mu_{90}}=0.10\Rightarrow\mu_{90}\approx 5.32$.
+For $N=3$: $(1+\mu_{90}+\mu_{90}^2/2+\mu_{90}^3/6)e^{-\mu_{90}}=0.10
+\Rightarrow\mu_{90}\approx 6.68$.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Profile-likelihood limit, $b=0$]
+Show that for a one-bin Poisson experiment with $b=0$ and $N$
+observed, the profile-likelihood test statistic
+\cref{eq:wilks} is
+$t_\mu=2[\mu-N+N\ln(N/\mu)]$ for $N>0$ and $t_\mu=2\mu$ for $N=0$.
+Compute the one-sided 90 \% CL upper limit for $N=0$.
+\begin{solution}
+The log-likelihood $\ln L=-\mu+N\ln\mu-\ln N!$ has global maximum
+at $\hat\mu=N$ for $N>0$ and the boundary maximum at $\hat\mu=0$
+for $N=0$. Substituting,
+$t_\mu=-2\ln L(\mu)+2\ln L(\hat\mu)=2[\mu-\hat\mu+N\ln(\hat\mu/\mu)]$,
+which gives the two cases above. For $N=0$, the one-sided 90\,\%
+CL upper limit comes from $t_\mu= 2\mu \leq z_{90}^2 = (1.28)^2$
+giving $\mu_{90}\approx 0.82$, smaller than the Poisson UL of
+$2.30$ because the test statistic uses the likelihood ratio rather
+than a tail-probability cut.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Exposure scaling]
+A search reports zero events with $\mathcal E_1=10\,\text{kg-day}$,
+giving $\mu_{90}=2.30$ on the count and a corresponding
+$\sigma_{n,90}=10^{-39}\,\text{cm}^2$ at fixed $m_\chi$. By how
+much does the limit improve at exposure
+$\mathcal E_2=100\,\text{kg-day}$, assuming background-free
+operation?
+\begin{solution}
+Background-free: the limit on $\mu$ stays at $2.30$ but the
+limit on $\sigma_n$ scales inversely with exposure. Hence
+$\sigma_{n,90}\to\sigma_{n,90}\cdot\mathcal E_1/\mathcal E_2=10^{-39}\cdot 10^{-1}
+=10^{-40}\,\text{cm}^2$ --- one order of magnitude better at ten
+times the exposure. With background, the improvement scales as
+$\sqrt{\mathcal E}$ instead of $\mathcal E$, motivating the
+``low-background'' frontier.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Designing an axion haloscope]
+A QCD axion is to be searched for around $m_a c^2=4\,\mu\text{eV}$
+with a $V=1\,\text{L}$ cavity in $B_0=8\,\text{T}$, loaded
+$Q_L=10^5$, $C_{010}=0.7$, $\kappa=1/2$, single-photon-counting
+efficiency $\eta=0.5$, dark-count rate
+$\Gamma_\text{dc}=1\,\text{mHz}$. Compute the minimum
+$g_{a\gamma\gamma}$ at which a $5$-day scan would produce
+a $\geq 5\sigma$ excess over the dark-count background.
+\begin{solution}
+The signal photon rate is
+$\dot N_\text{sig}=\eta P_\text{sig}/(\hbar\omega_a)$ from
+\cref{eq:axion-power}. With $\rho_\chi=0.3\,\text{GeV}/\text{cm}^3$,
+$\omega_a/2\pi=1\,\text{GHz}$, plug in the numerical prefactors:
+$P_\text{sig}\sim 10^{-22}\,(g_{a\gamma\gamma}/10^{-15}\,\text{GeV}^{-1})^2\,\text{W}$,
+giving $\dot N_\text{sig}\sim 10^{-2}\,(g/10^{-15})^2\,\text{photons/s}$.
+The background count over $T=5\,\text{days}=4\times 10^5\,\text{s}$
+is $N_b=\Gamma_\text{dc}T=400$, with Poisson noise
+$\sqrt{N_b}=20$. Demanding signal exceeds $5\sqrt{N_b}=100$ over
+$T$:
+$\dot N_\text{sig} T\geq 100\Rightarrow (g/10^{-15})^2\geq
+2.5\times 10^{-2}/(\text{factor})$, giving roughly
+$g_{a\gamma\gamma}\gtrsim 10^{-15}\,\text{GeV}^{-1}$
+(neglecting cavity-bandwidth-coverage corrections), at the boundary of the QCD-axion band.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Reading an exclusion curve]
+The exclusion curves of \cref{ex:exclusion-sketch} typically run
+flat above some characteristic mass and turn upward sharply below
+a threshold-driven floor. Explain qualitatively, in terms of
+\cref{eq:E_R-max} and \cref{eq:N-exp}, why the curve cuts off at
+low mass and how the cutoff scales with the detector threshold
+$E_\text{th}$.
+\begin{solution}
+For $m_\chi\to 0$, $\mu_{\chi T}\to m_\chi$ and
+$E_R^\text{max}\propto m_\chi^2$, so the recoil-energy spectrum
+shifts to lower and lower energies. Once $E_R^\text{max}<E_\text{th}$
+no recoil is detectable, and \cref{eq:N-exp} drops to zero
+regardless of cross-section --- there is no useful constraint
+on $\sigma_n$ at that mass. The threshold of the exclusion curve
+in $m_\chi$ is therefore set by
+$m_\chi^\text{min}\sim\sqrt{M_T E_\text{th}}/v_\text{esc}$:
+lowering $E_\text{th}$ by a factor of $10$ pushes the reach
+downward by $\sqrt{10}\sim 3$. This is the central engineering
+incentive of the cQED phonon-detector programme.
+\end{solution}
+\end{exercise}
