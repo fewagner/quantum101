@@ -1,0 +1,511 @@
+\chapter{Superconducting sensors and quasiparticle-based detection}
+\label{ch:ir-junction}
+
+The first and most mature route by which superconducting hardware
+contributes to dark-matter searches is as a \emph{phonon /
+quasiparticle sensor}: an athermal phonon produced by a recoil or
+absorption event in a target propagates into a superconducting
+absorber, breaks Cooper pairs, and creates an excess of
+quasiparticles that is read out as a small change in resistance,
+inductance, or qubit population. The same physics is studied --- as
+a nuisance --- in the cQED quantum-information community, where
+correlated quasiparticle bursts induced by cosmic rays and ambient
+radioactivity show up as sudden bursts of qubit decay errors. This
+chapter takes the recoil and absorption pipelines of
+\cref{ch:dm-search} and instantiates them on quasiparticle-based
+detectors. We start with a self-contained primer on the relevant
+sensor physics, summarise what has been learned about
+quasiparticle bursts in qubits, turn to the dedicated
+direct-detection programme, the limiting backgrounds (most
+prominently the low-energy excess), and the resulting sensitivity
+estimates.
+
+% --------------------------------------------------------------
+\section{Superconducting sensors at millikelvin}
+\label{sec:sc-sensors}
+
+\begin{phenomenon}
+At a bath temperature well below the superconducting critical
+temperature $T_c$, a superconductor has a small electronic heat
+capacity, a small dissipation, and a Cooper-pair binding energy
+$2\Delta$ that is several orders of magnitude below the
+electron-hole pair-creation energy of a typical semiconductor.
+Energy depositions that would be invisible to a semiconductor
+electron-hole-pair sensor produce many measurable
+quasiparticle excitations in a superconducting absorber, and the
+ratio fixes the threshold advantage of cryogenic SC detection.
+\end{phenomenon}
+
+\paragraph{Why superconductors and not semiconductors.}
+A semiconductor liberates one electron-hole pair per
+$\sim 3\,\text{eV}$ (Si) or $\sim 1\,\text{eV}$ (Ge) deposited;
+silicon detectors with a single-$e^{-}$ readout therefore have
+$\mathcal O(\text{eV})$ thresholds at best.  A superconductor, by
+contrast, breaks one Cooper pair per $\sim 2\Delta$:
+$2\Delta\approx 0.34\,\text{meV}$ in aluminium, $\sim 1.4\,\text{meV}$
+in niobium, $\sim 0.05\,\text{meV}$ in hafnium~\cite{tinkham2004,bcs1957}.
+Reading out individual quasiparticles thus pushes the deposited-energy
+threshold three to four orders of magnitude lower. The
+sensor-readout chain (TES / KID / qubit) does add its own noise
+floor, but the underlying advantage --- one quantum per meV rather
+than per eV --- is what makes meV-threshold dark-matter searches
+realistic.
+
+\paragraph{Relevant low-temperature physics.}
+The thermodynamics of the absorber and sensor at millikelvin
+follows the standard low-$T$ expansions~\cite{tinkham2004}:
+
+\begin{itemize}
+  \item \emph{Specific heat.}  In a normal metal the electronic
+        heat capacity is $c_e^{\rm N}=\gamma T$ with Sommerfeld
+        coefficient $\gamma$, and the lattice contribution is
+        $c_{\rm ph}=\beta T^3$ from the Debye model with
+        $\beta\propto 1/T_D^3$ and $T_D$ the Debye temperature.
+        In the superconducting phase the electronic part is
+        suppressed exponentially below the gap,
+        $c_e^{\rm SC}\sim \gamma\, T_c\,(\Delta/k_B T)^{3/2}\,e^{-\Delta/k_B T}$,
+        so that at $T\ll T_c$ the lattice dominates the absorber's
+        thermal mass.
+  \item \emph{Wiedemann--Franz law.}  In the normal phase the
+        electronic thermal conductivity satisfies
+        $\kappa_e/(\sigma\,T) = L_0$ with the universal Lorenz
+        number $L_0=\pi^2 k_B^2/(3 e^2)$. In the superconducting
+        phase $\kappa_e$ drops together with the carrier density
+        below the gap; phonon thermal conductivity continues
+        to grow as $T^3$ at low $T$ and dominates the heat
+        transport.
+  \item \emph{Phonon spectrum and Debye temperature.}  Single-phonon
+        energies up to $\hbar\omega_D=k_B T_D$ are accessible
+        ($T_D\approx 428\,\text{K}$ in Al, $\sim 645\,\text{K}$ in
+        Si), so the phonon density of states extends well above
+        $2\Delta$ and a single energetic phonon can break a Cooper
+        pair if it propagates without down-converting.
+  \item \emph{Athermal vs thermal phonons.}  An ``athermal'' phonon
+        is one whose energy exceeds $k_B T_\text{bath}$ and that
+        propagates ballistically across the chip before it
+        thermalises. A ``thermal'' phonon is one that has
+        equilibrated to the bath. Cryogenic detectors are
+        designed so that the recoil energy is captured while it
+        is still athermal --- before it down-converts on the
+        substrate boundary or radiates into a phonon bath ---
+        because thermalised phonons spread over a much larger
+        thermal mass and produce a much smaller signal.
+  \item \emph{Phonon collection efficiency.}  In a real device
+        only a fraction $\eta_{\rm coll}$ of the deposited energy
+        ends up in the sensor's active volume. With absorber-fin
+        designs $\eta_{\rm coll}$ ranges from $\sim 10\,\%$ in
+        legacy detectors to $\sim 30\text{--}50\,\%$ in
+        present-generation devices; the threshold scales as
+        $E_\text{th}\sim 2\Delta/\eta_{\rm coll}$, so engineering
+        of the sensitive area is a major lever.
+\end{itemize}
+
+\subsection{Transition-edge sensors}
+\label{sec:tes}
+
+\begin{phenomenon}
+A thin superconducting film biased on its resistive transition has
+a steep $\dd R/\dd T$, so a small temperature rise from absorbed
+phonons produces a large resistance change that can be measured as
+a current with a SQUID amplifier.
+\end{phenomenon}
+
+\begin{statement}[TES energy resolution~\cite{irwin2005}]
+\label{stmt:tes-resolution}
+A TES with heat capacity $C$, transition steepness
+$\alpha = (T/R)\,\dd R/\dd T$ and bath temperature $T$ has, in the
+strong-electrothermal-feedback limit, an intrinsic
+phonon-noise-limited energy resolution
+\begin{equation}
+\label{eq:tes-resolution}
+\Delta E_{\rm rms} \;\approx\; \sqrt{\frac{4\,k_B\,T^2\,C}{\alpha}}\,,
+\end{equation}
+which decreases with smaller heat capacity, lower bath temperature,
+and steeper transition.
+\end{statement}
+
+\begin{remark}[Use cases]
+TES devices have provided the energy-resolution baseline of every
+cryogenic dark-matter and CMB experiment for the past two
+decades~\cite{irwin2005}: they are the readout in CDMS, EDELWEISS,
+CRESST, and SuperCDMS, and the baseline pixel of essentially every
+ground-based CMB experiment. The same architecture is the
+standard choice in quantum calorimetry of single keV to MeV
+quanta.
+\end{remark}
+
+\subsection{Microwave kinetic inductance detectors}
+\label{sec:kid}
+
+\begin{phenomenon}
+Athermal phonons absorbed in the inductor of a high-$Q$
+microwave-frequency superconducting LC resonator break Cooper
+pairs into quasiparticles, increasing the kinetic inductance of
+the wire. The resulting downward shift of the resonant frequency
+is monitored through the resonator's transmission, and many
+resonators on a single feedline are read out simultaneously by
+frequency-domain multiplexing.
+\end{phenomenon}
+
+The kinetic-inductance change per quasiparticle is, schematically,
+$\delta L_k/L_k\propto \delta n_{\rm qp}/n_{\rm Cp}$, with
+$n_{\rm Cp}$ the Cooper-pair density. The resulting frequency
+shift per absorbed photon, the quasiparticle recombination time,
+and the multiplexing limits are reviewed by
+Zmuidzinas~\cite{zmuidzinas2012}. KIDs trade some energy
+resolution relative to TES devices for substantially easier
+scaling: arrays of $\mathcal O(10^3$--$10^4)$ pixels are routinely
+read out through a single coaxial line.
+
+\subsection{Superconducting nanowire detectors}
+\label{sec:snspd}
+
+\begin{phenomenon}
+A current-biased superconducting nanowire absorbs a single
+high-energy photon, locally drives the wire normal, and produces
+a transient voltage pulse that can be counted with picosecond
+timing resolution. With superconducting gap $\sim$ meV and wire
+cross-section $\sim$ nm$^2$, a single absorbed event produces a
+macroscopic resistive feature.
+\end{phenomenon}
+
+Originally developed for IR / visible single-photon counting in
+quantum optics~\cite{natarajan2012}, superconducting nanowire
+single-photon detectors (SNSPDs) have been proposed and
+demonstrated as direct sensors of light dark matter, both via
+photon absorption (dark-photon dark matter) and via phonon-induced
+Cooper-pair breaking (recoil channel)~\cite{hochberg2021}. The
+nanowire architecture has the lowest energy threshold of any
+operating quantum sensor today.
+
+% --------------------------------------------------------------
+\section{Quasiparticle bursts and ionising radiation in cQED hardware}
+\label{sec:qp-cqed}
+
+\begin{phenomenon}
+The same Cooper-pair-breaking process that gives a superconducting
+sensor its low threshold for dark matter shows up as a
+\emph{nuisance} in superconducting-qubit hardware: a single
+high-energy event (a cosmic ray, a gamma from ambient
+radioactivity, an X-ray from the cryostat structure) produces a
+shower of athermal phonons in the substrate that propagate to the
+qubit's leads, break Cooper pairs, and inject excess
+quasiparticles. The resulting transient quasiparticle population
+shortens $T_1$, induces correlated decay errors across many qubits
+of an array, and limits the achievable surface-code logical-error
+rate.  Reducing the burst rate is now a central design lever for
+fault-tolerant superconducting quantum computing.
+\end{phenomenon}
+
+\begin{statement}[Quasiparticle-induced relaxation rate~\cite{catelani2011}]
+\label{stmt:qp-relaxation}
+For a transmon qubit at angular frequency $\omega_q$ and gap
+$\Delta$, with a normalised quasiparticle density
+$x_{\rm qp}\equiv n_{\rm qp}/n_{\rm Cp}$, the additional
+relaxation rate from quasiparticle tunnelling across the
+Josephson junction is
+\begin{equation}
+\label{eq:qp-rate}
+\Gamma_{1}^{\rm qp} \;=\; \frac{8}{\pi}\,\omega_q\,
+\sqrt{\frac{2\Delta}{\hbar\,\omega_q}}\,x_{\rm qp},
+\end{equation}
+which adds linearly to any other (dielectric, Purcell, two-level
+fluctuator) decay channel.
+\end{statement}
+
+\paragraph{Numerical sensitivity.}
+For $\omega_q/2\pi=5\,\text{GHz}$ and $\Delta=200\,\mu\text{eV}$
+($T_c\sim 1.2\,\text{K}$, aluminium), \cref{eq:qp-rate} gives
+$\Gamma_1^{\rm qp}\approx 1.4\times 10^9\,x_{\rm qp}\,\text{s}^{-1}$.
+A target $T_1=100\,\mu\text{s}$ corresponds to $\Gamma_1\sim
+10^4\,\text{s}^{-1}$, so the qubit becomes QP-limited as soon as
+$x_{\rm qp}\gtrsim 7\times 10^{-6}$. The thermal-equilibrium
+density at $T=20\,\text{mK}$ is exponentially suppressed,
+$x_{\rm qp}^{\rm eq}\propto e^{-\Delta/k_B T}\sim 10^{-50}$, so
+the observed $x_{\rm qp}\sim 10^{-7}$--$10^{-5}$ in real
+devices~\cite{catelani2011,sun2012} is overwhelmingly
+non-equilibrium and is set by background photons and ionising
+radiation.
+
+\begin{statement}[Energy-deposition floor for a quasiparticle burst]
+\label{stmt:qp-burst}
+A single ionising event of energy $E$ deposited in the substrate
+generates of order $N_{\rm qp}\sim \eta_{\rm br}\, E /(2\Delta)$
+non-equilibrium quasiparticles in nearby leads, with
+$\eta_{\rm br}\sim 0.3$ a typical phonon-to-quasiparticle
+branching efficiency after down-conversion below the substrate
+phonon energies. For a chip with total Cooper-pair number
+$N_{\rm Cp}\sim 10^{10}$, an energy deposition $E\gtrsim 1\,\text{keV}$
+is enough to drive $x_{\rm qp}$ above the relaxation floor of
+\cref{eq:qp-rate} and produce a measurable transient $T_1$ drop.
+\end{statement}
+
+\paragraph{Experimental observations.}
+\Cref{stmt:qp-burst} is consistent with the observation that
+ionising events in the keV--MeV range from environmental and
+cosmic backgrounds produce transient $T_1$ reductions of order
+$10\,\%$ to a factor of two on millisecond timescales. The
+phenomenon was first characterised by
+Vepsäläinen~et~al.~\cite{vepsalainen2020}, who showed that
+operating a transmon device in a low-radiation underground
+facility extends $T_1$, and by
+Wilen~et~al.~\cite{wilen2021}, who correlated
+quasiparticle-tunnelling charge jumps with simultaneous
+relaxation events on multiple qubits.
+McEwen~et~al.~\cite{mcewen2022} demonstrated catastrophic
+correlated error bursts across large transmon arrays from cosmic
+rays, with arrival rates that match the expected sea-level
+cosmic-ray flux. Cardani~et~al.~\cite{cardani2021} have since
+shown that operation in a deep-underground low-radioactivity
+environment substantially reduces the burst rate.
+
+\begin{remark}[Gap engineering as a mitigation~\cite{sun2012,riwar2016,pan2022}]
+\label{rem:gap-engineering}
+A natural mitigation is to engineer the Josephson junction so
+that the superconducting gap of the leads, $\Delta_{\rm L}$, is
+\emph{larger} than the gap of the junction-region superconductor,
+$\Delta_{\rm J}$. Quasiparticles created in the leads then have
+energy below $\Delta_{\rm L}$ and cannot tunnel into states above
+$\Delta_{\rm J}$ in the junction; they relax inelastically in the
+leads instead. Sun~et~al.~\cite{sun2012} demonstrated this
+``band-gap engineering'' with a junction sandwiched between
+higher-gap ground planes. Subsequent work has extended the scheme
+to use normal-metal quasiparticle traps at the leads' boundaries
+(Riwar~et~al.~\cite{riwar2016}) and refined fabrication recipes
+for producing the gap profile reproducibly~\cite{pan2022}.
+\end{remark}
+
+% --------------------------------------------------------------
+\section{Quasiparticle detection as a dark-matter signal}
+\label{sec:qp-dm}
+
+\begin{phenomenon}
+The same chain that creates a quasiparticle burst from an ionising
+event --- recoil or absorption $\to$ athermal phonons $\to$
+Cooper-pair breaking $\to$ excess quasiparticles --- is exactly
+what we exploit for dark-matter detection. The detector geometry
+is intentionally inverted relative to a quantum-information
+device: where a qubit chip wants to \emph{minimise} quasiparticle
+collection, a sensor chip is engineered to \emph{maximise} it,
+typically by introducing low-gap traps in which quasiparticles
+can accumulate and be read out before they recombine.
+\end{phenomenon}
+
+\paragraph{Mapping onto the chapter-5 pipeline.}
+This is a recoil-channel detector for particle-like DM
+(\cref{sec:fermion-dm}) when the deposited energy is small enough
+that nuclear-recoil phonons cannot be resolved individually but
+can be aggregated into a quasiparticle population, and an
+absorption-channel detector for dark-photon dark matter
+(\cref{sec:boson-dm}) when the dark-photon mass is above the
+superconducting gap and absorbed photons directly break Cooper
+pairs.  Both are read out through the quasiparticle population
+in the sensitive volume; the difference is only in the upstream
+kinematics and is captured by the differential rates
+\cref{eq:dRdE-final} and \cref{eq:dark-photon-rate}, respectively.
+
+\paragraph{The Kurinsky-style detector concept.}
+Kurinsky~et~al.~\cite{kurinsky2020} proposed using a
+superconducting absorber whose Josephson junctions have an
+engineered \emph{lower} gap $\Delta_{\rm J}$ than the surrounding
+leads ($\Delta_{\rm L} > \Delta_{\rm J}$): exactly the inverse of
+the qubit gap engineering of \cref{rem:gap-engineering}.
+Quasiparticles created in the bulk leads cannot escape into the
+junction region except by losing energy below $\Delta_{\rm L}$,
+but once inside the junction they are trapped between two higher
+walls and tunnel back and forth multiple times before recombining.
+Each tunnel cycle delivers either a charge step (in a
+charge-sensitive readout) or a small energy loss (in a thermal
+readout), so the integrated signal is enhanced over a single-tunnel
+event by the multiplicity
+$N_{\rm tun}\sim\tau_{\rm rec}/\tau_{\rm tun}$ of tunnel events
+during the QP lifetime $\tau_{\rm rec}$.
+
+\begin{statement}[Multi-tunnelling pulse height]
+\label{stmt:multi-tunnel}
+For a junction trap with single-tunnel charge transfer $e$, mean
+tunnelling rate $\Gamma_{\rm tun}=\tau_{\rm tun}^{-1}$, and mean
+trap dwell time $\tau_{\rm rec}$ before quasiparticle
+recombination/escape, a single quasiparticle injected into the
+trap delivers an integrated charge
+$Q\approx e\,\Gamma_{\rm tun}\,\tau_{\rm rec}$ to the readout
+electrode. With typical trap dwell times of microseconds and
+junction tunnel rates of GHz, the integrated charge per
+quasiparticle is of order $10^3$--$10^4$ elementary charges ---
+a much easier signal to read out than a single $e$.
+\end{statement}
+
+\paragraph{Pulse shape: pulses get larger with deposited energy.}
+For an event of recoil energy $E_R$ that delivers
+$N_{\rm qp}\propto E_R$ quasiparticles into the trap, the
+integrated charge signal is
+$Q_{\rm event}\propto N_{\rm qp}\,e\,\Gamma_{\rm tun}\,\tau_{\rm rec}\propto E_R$.
+The pulse shape is the convolution of the QP injection profile
+(set by phonon-down-conversion times) with the multi-tunnelling
+random walk (set by $\tau_{\rm tun}$ and $\tau_{\rm rec}$);
+typical durations are $1$--$100\,\mu\text{s}$, well within the
+bandwidth of cQED-style readout chains. In an offline analysis
+this appears as an event whose integrated pulse area scales with
+$E_R$ and whose width is set by detector physics; the absolute
+calibration uses a known monoenergetic source (e.g.\ $^{55}$Fe
+X-rays, fluorescence lines) to fix the charge-per-eV conversion.
+
+\paragraph{Two readout strategies.}
+The same physics admits two operationally different readout
+schemes, both demonstrated in cQED hardware:
+\begin{itemize}
+  \item \emph{Decay-rate (energy-relaxation) readout.} A transmon
+        qubit operated near its sweet spot has a $T_1$ that drops
+        transiently when a quasiparticle burst arrives. Tracking
+        $\Gamma_1(t)$ in real time, e.g.\ via repeated single-shot
+        readout, yields a pulse-shaped trace whose area is
+        proportional to the integrated $\int x_{\rm qp}(t)\dd t$
+        and hence to the deposited energy. This is the readout
+        used by Vepsäläinen~et~al.~\cite{vepsalainen2020} and
+        McEwen~et~al.~\cite{mcewen2022}.
+  \item \emph{Charge-sensitive readout.} A transmon biased to
+        have appreciable charge dispersion --- or, more cleanly,
+        a true charge qubit --- has a frequency that depends on
+        the offset charge $n_g$ on the island. A single
+        quasiparticle tunnelling event changes the parity of the
+        island and shifts $n_g$ by exactly $1\,e$, producing a
+        discrete frequency jump in the qubit spectroscopy that is
+        resolved as a square-wave-like trace in time. The
+        Wilen~et~al.\ device of~\cite{wilen2021} uses arrays of
+        such charge-sensitive qubits to count individual tunnel
+        events in coincidence across the chip.
+\end{itemize}
+The two strategies are complementary: decay-rate readout
+integrates the quasiparticle population (good signal-to-background
+for high-energy events), while charge-sensitive readout counts
+individual tunnel events (good for low-energy events where only a
+few quasiparticles are produced and the integrated $\Gamma_1^{\rm qp}$
+shift is below the dielectric noise floor).
+
+\paragraph{Theoretical reach for sub-GeV DM.}
+Combining the multi-tunnelling enhancement of
+\cref{stmt:multi-tunnel} with the optical-phonon scattering
+channels of Knapen~et~al.~\cite{knapen2018} and the ELF-based
+scattering rates of \cref{sec:fermion-dm}, the projected
+spin-independent cross-section reach for a 1\,kg$\cdot$day
+exposure with a meV-threshold superconducting quasiparticle
+detector is~\cite{kurinsky2020,knapen2018} of order
+$\sigma_n\sim 10^{-39}\text{--}10^{-38}\,\text{cm}^2$ for
+$m_\chi$ between a few MeV and a few hundred MeV --- several
+orders of magnitude beyond the conventional WIMP frontier in the
+same mass band.
+
+% --------------------------------------------------------------
+\section{Backgrounds: the low-energy excess and conventional sources}
+\label{sec:qp-backgrounds}
+
+\begin{phenomenon}
+The dominant nuisance for any cryogenic, low-threshold detector
+is not the low-energy primary signal one is searching for but the
+low-energy \emph{background}.  A class of unidentified events
+known as the ``low-energy excess'' (LEE) appears as a steeply
+rising spectrum below $\sim 100\,\text{eV}$ in essentially every
+cryogenic dark-matter detector that has reached this threshold,
+including CRESST, EDELWEISS, SuperCDMS, and NUCLEUS.
+\end{phenomenon}
+
+\paragraph{Origin candidates.}
+The LEE is the focus of active investigation; current candidates
+for its origin~\cite{adari2022} include
+\begin{itemize}
+  \item cosmic-ray-induced athermal-phonon showers in the
+        substrate and detector mounts;
+  \item mechanical-stress relaxation of clamped detector
+        crystals (microfractures producing meV-scale phonon
+        bursts), which shows correlation with thermal cycling and
+        crystal-mounting geometry;
+  \item crystal-defect or surface luminescence near the detector
+        sensors, producing low-energy photons that mimic phonon
+        events;
+  \item holdup of trapped charge or quasiparticles from
+        higher-energy events that bleed into the low-energy
+        signal region.
+\end{itemize}
+At present the LEE puts an effective $\mathcal O(10$--$100\,\text{eV})$
+floor on the discovery reach of cryogenic detectors --- well
+above what would be expected from intrinsic detector physics
+alone.
+
+\paragraph{Mitigation.}
+Active mitigation work, surveyed at the EXCESS workshop
+series~\cite{adari2022}, includes operation in deep-underground
+low-background environments (\cref{sec:qp-cqed} for the
+qubit-coherence analogue), revisiting crystal-mounting and
+surface-treatment recipes, and segmenting the detector volume so
+that an event in one segment can veto a correlated event in
+another.  These techniques transfer directly to the cQED
+quasiparticle-burst problem; the cryogenic DM and
+quantum-information communities increasingly share detectors,
+vetoes, and analysis tools.
+
+\paragraph{Other backgrounds.}
+Above the LEE band the standard cryogenic-detector background
+budget applies: $^{40}$K and $^{232}$Th--$^{238}$U decays in the
+detector materials and shielding, $^{210}$Pb on surfaces, neutron
+backgrounds from $(\alpha,n)$ and spontaneous fission, and
+muon-induced cascades. These are constrained by underground
+operation, low-radioactivity material screening, and active
+muon vetoes; they are well documented in the corresponding
+collaboration papers.
+
+% --------------------------------------------------------------
+\section{Sensitivity estimates}
+\label{sec:qp-sensitivity}
+
+We close the chapter with back-of-envelope estimates that connect
+the formal pipeline of \cref{ch:dm-search} to the detector physics
+introduced above. The numbers are illustrative; cited collaboration
+papers should be consulted for the published reach curves.
+
+\paragraph{Recoil channel: nuclear recoils on Si or Al.}
+For a meV-threshold quasiparticle detector
+($E_\text{th}\approx 2\Delta/\eta_{\rm coll}\sim 1\,\text{meV}$
+in Al with $\eta_{\rm coll}\sim 0.3$), a 1-kg$\cdot$day exposure,
+zero observed events and zero background, the Poisson upper
+limit on the expected count is $\mu_{90}=2.30$ from
+\cref{stmt:poisson-UL}.  Translating this through the
+spin-independent recoil rate \cref{eq:dRdE-final} on a silicon
+target with the standard halo model gives
+$\sigma_n\lesssim 10^{-37}$--$10^{-38}\,\text{cm}^2$ for $m_\chi$
+in the few-MeV to few-hundred-MeV range. Below
+$m_\chi\sim 5\,\text{MeV}$ the kinematic floor of
+\cref{eq:E_R-max} closes the channel, and the experiment becomes
+insensitive regardless of cross-section.
+
+\paragraph{Recoil channel: DM--electron scattering.}
+For DM-electron scattering on an Al absorber with the same
+exposure and threshold, evaluating \cref{eq:dRdomega-restated}
+with the publicly tabulated Al ELF gives a spin-independent
+reference cross-section reach
+$\bar\sigma_e\lesssim 10^{-37}\,\text{cm}^2$ at
+$m_\chi=10\,\text{MeV}$ for a heavy mediator, with a sharp
+mass cutoff at $m_\chi^{\min}\sim 0.3\,\text{MeV}$ set by the
+inelastic kinematic constraint
+$v_{\rm min}^{\min}=\sqrt{2\omega/m_\chi}\leq v_{\rm max}$.
+
+\paragraph{Absorption channel: dark-photon dark matter.}
+For a dark photon with $m_{A'}\geq 2\Delta/c^2\approx 0.34\,\text{meV}/c^2$
+(so that direct Cooper-pair breaking is energetically allowed)
+and the unscreened mixing rate \cref{eq:dark-photon-rate}, the
+naive estimate yields a kinetic-mixing reach
+$\varepsilon\sim 10^{-13}$ at $m_{A'}\approx 1\,\text{meV}/c^2$
+for a 1\,kg$\cdot$year exposure with the same threshold. The
+realistic limit is reduced by the in-medium response of the
+absorber by a material- and frequency-dependent factor that
+suppresses the rate near a plasma edge or above the
+superconducting gap; we follow~\cite{caputo2021review} for the
+full in-medium expression.
+
+\paragraph{Outlook.}
+These estimates put quasiparticle-based cryogenic detectors into
+the same sub-GeV mass band as the SENSEI / DAMIC-M Skipper-CCD
+programme (\cref{sec:representative-experiments}) but at lower
+threshold and on different (typically Al) targets. Combining the
+two over the next decade is expected to push direct-detection
+reach toward the keV-mass floor, where DM is produced thermally
+in the early universe.
