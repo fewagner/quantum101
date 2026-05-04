@@ -49,13 +49,16 @@ particle physics is what motivates the present chapter.
 
 \begin{statement}[Standard halo model]
 \label{stmt:halo}
-The local dark-matter density is taken to be
+The local dark-matter density at the position of the Earth, as
+inferred from solar-neighbourhood stellar dynamics and from
+rotation-curve fits~\cite{read2014,catena2010}, is taken to be
 \begin{equation}
 \label{eq:rho-chi}
-\rho_\chi \;\approx\; 0.3\;\text{GeV}/\text{cm}^3,
+\rho_\chi \;\approx\; 0.3\;\text{GeV}/\text{cm}^3
 \end{equation}
-and the velocity distribution in the galactic rest frame to be
-isotropic Maxwell--Boltzmann, truncated at the galactic escape
+to within a factor of two depending on the analysis. The velocity
+distribution in the galactic rest frame is isotropic
+Maxwell--Boltzmann, truncated at the galactic escape
 velocity $v_\text{esc}$:
 \begin{equation}
 \label{eq:halo-distribution}
@@ -233,7 +236,7 @@ no longer the constrained one-parameter family of the nuclear case.
 The natural rewriting that keeps the formulas compact uses the
 target's dielectric response.
 
-\begin{statement}[DM--electron scattering: energy-loss function form]
+\begin{statement}[DM--electron scattering: energy-loss function form~\cite{essig2012,essig2016,trickle2020,knapen2021}]
 \label{stmt:dme-xsec}
 For DM scattering inelastically off the bound electrons of a
 condensed-matter target, the momentum transfer $q$ and the energy
@@ -542,7 +545,7 @@ dimensionful axion-photon coupling $g_{a\gamma\gamma}$ (units of
 inverse energy) for axions. The detection rate is quadratic in
 that parameter in both cases.
 
-\begin{statement}[Dark photon kinetic mixing]
+\begin{statement}[Dark photon kinetic mixing~\cite{holdom1986,pospelov2008,caputo2021review}]
 \label{stmt:dark-photon}
 A dark photon $A'_\mu$ kinetically mixes with the Standard-Model
 photon~\cite{holdom1986},
@@ -559,7 +562,7 @@ field amplitude $\langle |\bm A'|^2\rangle\propto \rho_\chi/m_{A'}^2$
 oscillating at the Compton frequency $\omega_{A'}=m_{A'}c^2/\hbar$.
 \end{statement}
 
-\begin{statement}[Axion-photon coupling]
+\begin{statement}[Axion-photon coupling~\cite{pq1977,weinberg1978,wilczek1978,sikivie1983}]
 \label{stmt:axion}
 The axion couples to two photons through
 \begin{equation}
@@ -784,7 +787,7 @@ likelihood function constructed from a Poisson model of the count.
 \subsection{Poisson upper limit}
 \label{sec:poisson-limit}
 
-\begin{statement}[Poisson 90 \% CL upper limit]
+\begin{statement}[Poisson 90 \% CL upper limit~\cite{feldman1998,readcls2002,cowan2011}]
 \label{stmt:poisson-UL}
 Suppose the expected count is the sum of a signal contribution
 $\mu(\theta)$ depending on the coupling parameter $\theta$ (with
@@ -923,6 +926,74 @@ $\sigma_n\lesssim 10^{-39}\,\text{cm}^2$ at $m_\chi=100\,\text{MeV}$.
 The curve cuts off sharply below $m_\chi\sim 30\,\text{MeV}$ where
 $E_R^\text{max}<E_\text{th}$.
 \end{example}
+
+% --------------------------------------------------------------
+\section{Representative experiments}
+\label{sec:representative-experiments}
+
+To put the formal apparatus above into context, we close the
+chapter with a brief, non-exhaustive list of the present
+experimental landscape, organised by candidate model. Listings
+are illustrative rather than exhaustive; the corresponding
+sensitivities update on a year-or-two cadence and are best
+followed in the corresponding collaboration papers.
+
+\paragraph{Heavy WIMPs ($m_\chi$ from a few GeV to $\sim$ TeV).}
+Dual-phase xenon time-projection chambers dominate this regime:
+XENONnT~\cite{xenonnt2023}, LZ~\cite{lz2023} and
+PandaX-4T~\cite{pandax2021} each operate multi-tonne fiducial
+masses with $\mathcal O(\text{keV})$ thresholds and currently set
+the strongest spin-independent limits at $m_\chi\gtrsim 10\,\text{GeV}$.
+Cryogenic-bolometer arrays (SuperCDMS, EDELWEISS) and
+liquid-argon TPCs (DarkSide) provide complementary coverage at
+lower masses. The DAMA/LIBRA collaboration has long reported an
+unconfirmed annual-modulation signal in NaI~\cite{dama2018}; the
+signal has not been reproduced by independent searches of
+comparable exposure.
+
+\paragraph{Sub-GeV particle-like dark matter.}
+Single-charge-sensitive silicon CCDs (SENSEI~\cite{sensei2020},
+DAMIC-M~\cite{damicm2023}) and athermal-phonon detectors with
+single-electron-hole resolution (SuperCDMS HVeV~\cite{supercdms2020})
+push DM--electron and light-mediator nuclear-recoil reach into
+the $1\,\text{MeV}$--$1\,\text{GeV}$ mass range. These devices
+operate at $\mathcal O(\text{eV})$ thresholds and are the typical
+context in which the ELF-based analysis tools developed in
+\cref{stmt:dme-xsec} are deployed. Next-generation devices target
+the meV regime, where the cQED-based mechanisms covered in
+\cref{ch:phonon-qp,ch:phonon-qubit-piezo} take over.
+
+\paragraph{Dark photons.}
+Aboveground searches for dark photons via direct photoelectric
+absorption have been conducted with XENONnT and SENSEI; cryogenic
+absorbers extend this to the meV range above the superconducting
+gap (\cref{ch:ir-junction}). At sub-meV masses the resonant-cavity
+techniques associated with the axion programme also constrain
+dark photons through the same mixing parameter, with the
+single-microwave-photon transmon counter
+(\cref{ch:microwave-absorption}) the most recent quantum readout.
+
+\paragraph{QCD axions.}
+Microwave-cavity haloscopes have provided the strongest limits on
+the axion-photon coupling $g_{a\gamma\gamma}$ in the $\mu$eV mass
+range. ADMX~\cite{admx2018} has reached DFSZ-axion sensitivity in
+the $2.7$--$4.2\,\mu\text{eV}$ band; HAYSTAC~\cite{haystac2021}
+demonstrated the first quantum-enhanced (squeezed-state)
+haloscope readout. Several next-generation experiments (CAPP,
+ORGAN, MADMAX, ABRACADABRA / DMRadio) push to higher and lower
+masses with qualitatively different cavity architectures, and
+single-microwave-photon counting in transmon-based detectors
+(\cref{ch:microwave-absorption}) is the most recent quantum
+readout applied to the search.
+
+\paragraph{Annual modulation searches.}
+The annual-modulation signature of \cref{eq:halo-distribution}
+boosted by $\bm v_E$ is, in principle, model-independent: a
+genuine dark-matter signal must inherit the few-percent yearly
+oscillation in $|\bm v_E|$ regardless of the underlying particle
+physics. Several collaborations have looked for it directly
+(DAMA/LIBRA~\cite{dama2018}, COSINE-100, ANAIS-112); the results
+remain inconclusive at present.
 
 % --------------------------------------------------------------
 This chapter walked through two distinct dark-matter detection
