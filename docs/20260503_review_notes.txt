@@ -1,0 +1,246 @@
+Review notes for https://fewagner.github.io/quantum101/
+Reviewed file: main.pdf, dated May 3, 2026, 93 PDF pages.
+
+Scope of this review
+--------------------
+I checked the visible PDF for conceptual mistakes, mathematical/numerical inconsistencies, missing derivation steps, unresolved references, and wording that may mislead a reader. I focused on issues that would matter pedagogically or technically. Items marked "major" are worth fixing before sharing the notes as a reliable primer. Items marked "minor" are wording, notation, or presentation improvements.
+
+High-level / structural issues
+------------------------------
+
+1. IGNORE THIS ONE FOR NOW Major: The abstract and introduction describe a much more complete document than the PDF currently contains.
+   The abstract says that the notes move to quantum optics, superconducting circuits, quantum information processing, readout, gates, decoherence, etc. The introduction likewise says that Parts II-V derive open-systems theory, quantum optics, cQED, gates, and QEC. In the PDF, however, Parts II-V are only empty part-title pages, and chapters 6-9 are placeholders. This is potentially misleading. Either label the PDF clearly as a partial draft, or rewrite the abstract/introduction to say that these parts are planned.
+
+2. IGNORE THIS ONE FOR NOW Major: Many cross-references are unresolved as "??".
+   Examples occur in chapter 2 (transmon, cavity photons, LC oscillator, calibration), chapter 3 (Part II, hardware CNOT, teleportation, decoherence), chapter 4 (Jaynes-Cummings, dispersive readout, Purcell effect, AC Stark shift), and elsewhere. This should be fixed before public release. It also makes it hard for a reader to know whether a concept is covered later or still missing.
+
+3. Major: The document often refers to Definitions/Examples/Statements as "theorem".
+   Examples: "theorem 1.5" refers to Definition 1.5; "theorem 1.15" refers to Example 1.15; "theorem 2.4" refers to Definition 2.4; "theorem 2.6" refers to Definition 2.6; "theorem 3.2" refers to Example 3.2; appendix definitions are also called theorems in the main text. This is confusing pedagogically. Either make the environments share a neutral counter and refer to them as "Definition/Example/Statement", or use a generic label such as "item" or "result".
+
+4. Major: Conventions for the qubit basis, sigma_z, ground/excited state, and raising/lowering operators are internally inconsistent.
+   In Definition 2.4, sigma_z |0> = + |0> and sigma_z |1> = - |1>, while sigma_+ = (sigma_x+i sigma_y)/2 maps |1> to |0>. This convention is mathematically fine if |0> is the upper sigma_z state. But later the text treats |0> as the ground state and |1> as the excited state, e.g. in the thermal-occupation exercise and in the Rabi-control discussion. With the given Pauli convention, the physical qubit Hamiltonian with |0> ground and |1> excited should be
+       H = - (hbar omega_q / 2) sigma_z
+   up to an additive constant, not + (hbar omega_q / 2) sigma_z. Alternatively, keep H = +(hbar omega_q/2)sigma_z but swap the physical meaning of |0> and |1>, or redefine sigma_z = |1><1| - |0><0|. This sign convention propagates into the identification between Example 1.15 and section 2.4.
+
+5. Major: Several numerical examples in chapter 5 contain order-of-magnitude errors or unit inconsistencies. See the detailed dark-matter section below, especially Exercise 5.3 and the dark-photon absorption estimate.
+
+6. Minor but important: The document mixes British and American spelling: quantisation/quantization, specialise/specialize, realisation/realization. This is not wrong, but it looks inconsistent. Pick one style.
+
+Detailed comments by section
+============================
+
+Front matter / introduction
+---------------------------
+
+7. IGNORE THIS FOR NOW Minor: The subtitle "Mechanics, Optics, Circuits, Information Processing, Sensing" promises coverage of optics, circuits, and information processing. Since those sections are presently empty, consider adding "draft" or "foundations + planned extensions" on the title page.
+
+8. Minor: Introduction, first paragraph: "Josephson junction provides the only known nonlinear, non-dissipative inductor at low temperatures" is a bit too absolute. It is the standard and most useful non-dissipative nonlinear element in superconducting circuits, but "only known" invites objections. Suggested wording: "provides a practical, lithographically controllable, nearly non-dissipative nonlinear inductance at low temperatures."
+
+9. Minor: "multi-qubit processors operating at the threshold of practical fault tolerance" is a strong claim. You may want to soften this to "approaching regimes relevant for fault-tolerant operation" unless you want to defend the exact phrase.
+
+Chapter 1: Postulates and language of quantum mechanics
+-------------------------------------------------------
+
+10. Minor/technical: Definition 1.2 calls a Hilbert space a complex vector space with an inner product and then cites appendix items as "theorem A.4" etc. These are definitions, not theorems. The same issue repeats throughout the document.
+
+11. Minor/technical: Postulate 1.4 says observables are "self-adjoint (Hermitian)". In finite dimensions this is harmless, but in infinite-dimensional Hilbert spaces "Hermitian/symmetric" and "self-adjoint" are not the same because of domain issues. Since you later mention x and p as unbounded operators, it would be better to write "self-adjoint; in finite dimensions, Hermitian".
+
+12. Minor/technical: Postulate 1.7 gives the post-measurement state P_n |psi> / sqrt(p(a_n)). Add the caveat that this formula is meaningful only for p(a_n)>0.
+
+13. Minor: Example 1.8 says measuring sigma_z gives p(0)=cos^2(theta/2) and p(1)=sin^2(theta/2). Strictly, the measurement outcomes of sigma_z are +1 and -1, not 0 and 1. Better: "p(+1)=... and p(-1)=...", or explicitly say you are labeling outcomes by the corresponding basis states.
+
+14. Minor/technical: The statement "Two Hermitian operators share an orthonormal eigenbasis iff [A,B]=0" should be qualified as finite-dimensional, or at least as applying under the spectral assumptions used in the notes. In infinite dimensions, commuting self-adjoint operators require stronger statements about spectral measures/strong commutativity.
+
+15. Minor/conceptual: "When [A,B] != 0 the two observables cannot be sharply specified at the same time" is too broad. Noncommuting observables can have some common eigenvectors, so a specific state may have sharp values for both. The safer statement is that they cannot be simultaneously diagonalized and cannot be assigned sharp values for all states.
+
+16. Major: Statement 1.14 defines U(t)=exp(-i H t / hbar) even though H=H0+V(t) is allowed to be time-dependent. For a time-dependent Hamiltonian, the correct propagator is
+       U(t) = T exp[-(i/hbar) int_0^t H(t') dt']
+   unless [H(t),H(t')]=0 for all times. This matters because the section explicitly discusses time-dependent drives.
+
+17. Major/technical: In Statement 1.14, the Heisenberg equation is written as dO_H/dt = (i/hbar)[H,O_H]. This is correct only if the Schrödinger-picture operator has no explicit time dependence and with the appropriate picture-transformed Hamiltonian. The more general equation is
+       dO_H/dt = U^dagger (partial O_S / partial t) U + (i/hbar)[H_H(t), O_H(t)]
+   with H_H(t)=U^dagger H_S(t) U, depending on convention.
+
+18. Minor: In the interaction-picture derivation, make explicit that H0 is assumed time-independent. Otherwise U0(t)=exp(-iH0t/hbar) is not generally correct.
+
+19. Major: Exercise 1.7 says the expectation value <O>_psi(t) is conserved "iff" [H,O]=0. This is true as a statement for all initial states. For a particular initial state, <O>(t) can be constant even when [H,O] != 0, e.g. for special symmetry/eigenstate reasons. Suggested fix: "Conclude that <O>(t) is conserved for every initial state iff [H,O]=0."
+
+20. Major/numerical: Exercise 1.10, thermal occupation of a 5 GHz qubit at 50 mK, is wrong by a factor 2*pi in the exponent. For omega_q/2pi = 5 GHz,
+       hbar omega_q = h * 5 GHz = 3.31e-24 J,
+       k_B T at 50 mK = 6.90e-25 J,
+       hbar omega_q / k_B T = 4.8,
+       p1/p0 = exp(-4.8) ~= 8e-3.
+   The text instead computes about 30 and concludes p1/p0 ~= 1e-13. That double-counts 2*pi by using h but multiplying by 2*pi f. This is a serious pedagogical error. Also, in real cQED residual excited-state populations can be limited by non-equilibrium radiation/quasiparticles, so "passively initialized with overwhelming probability" should be softened.
+
+21. Minor: The subsection on quantum randomness is generally good, but "Born-rule randomness is irreducible within locality" should be worded carefully. Bell tests rule out local hidden-variable explanations under assumptions including measurement independence. Since you discuss superdeterminism later, this is mostly okay, but the takeaway should mention the assumptions.
+
+Chapter 2: Harmonic oscillator and two-level system
+---------------------------------------------------
+
+22. Major: The convention issue noted above becomes explicit in section 2.4. The text identifies the Hamiltonian in Example 1.15, where |0> has energy 0 and |1> has energy hbar omega_0, with +(hbar omega_q/2) sigma_z "up to a 1/2-identity additive constant". With your Pauli definition sigma_z|0>=+|0>, sigma_z|1>=-|1>, the correct mapping is
+       hbar omega_q |1><1| = (hbar omega_q/2) I - (hbar omega_q/2) sigma_z.
+   The sign in the sigma_z term should be negative, not positive.
+
+23. Minor/wording: Remark after Definition 2.4 says the Pauli operators themselves "(theta -> infinity in some sense) are not rotations". This is confusing. A Pauli matrix is a pi rotation up to a phase: R_i(pi) = -i sigma_i, so sigma_i = i R_i(pi). Suggested wording: "The Pauli matrices are generators of rotations; a Pauli operator itself is proportional to a pi rotation, but it is not usually described as the rotation operator without the phase factor."
+
+24. Minor: Statement 2.5 says the most general TLS Hamiltonian is H=(hbar/2) Omega dot sigma. Add "after dropping an additive scalar term proportional to the identity" in the displayed statement, not only in the prose, because this is important for the spectrum.
+
+25. Minor: Section 2.4 says a time-dependent Hamiltonian is "in general" not exponentiable, which is true. But then the rotating-frame transform is presented as if it directly gives an exact time-independent Hamiltonian before the RWA. It would help to separate (i) exact frame transformation, (ii) still time-dependent counter-rotating terms, (iii) RWA to make it static.
+
+26. Minor/notation: In Exercise 2.8, the expression for Omega_R/2pi is typeset ambiguously in the extracted text. Ensure the source reads
+       Omega_R/(2 pi) = sqrt[(Omega/2pi)^2 + (Delta/2pi)^2]
+   or equivalent.
+
+27. Minor: Exercise 2.10 estimates a Bloch-Siegert shift of about 45 kHz for Omega/2pi=30 MHz and omega_q/2pi=5 GHz. That numerical estimate is reasonable, but the sentence "typical qubit linewidths (~10 kHz at the state of the art)" may be too sweeping; linewidth depends strongly on platform and operating point. Consider removing or qualifying it.
+
+Chapter 3: Composite systems, density matrices, entanglement
+------------------------------------------------------------
+
+28. Minor/technical: Definition 3.3, "all other density matrices are mixed", is fine in finite dimension, but for infinite-dimensional Hilbert spaces it is better to specify trace-class positive operators. Since the notes are introductory, this is optional.
+
+29. Major/reference: Example 3.8 says the CNOT gate is encountered again in "theorem 3.2 as a way of producing Phi+". But 3.2 is the Bell-state example, not a CNOT theorem. This is a wrong internal reference.
+
+30. Major/terminology: Example 3.8 says the systematic theory includes "relaxation (T1), dephasing (T2) and pure-dephasing (T2*) times". This is not standard. Pure dephasing is usually denoted T_phi or Gamma_phi, with
+       1/T2 = 1/(2T1) + 1/T_phi.
+   T2* is the inhomogeneous/free-induction dephasing time, including quasi-static detuning noise and ensemble/shot-to-shot frequency variations. It should not be called the pure-dephasing time.
+
+31. Minor: In the chapter 3 takeaways, "tracing out E leaves the system in rho_S = 1/2" should be "rho_S = I/2". The scalar 1/2 alone is not a density matrix.
+
+32. Minor/wording: "an observer with access only to A has zero predictive information about A's observables" is a bit too broad. For a maximally mixed qubit, the observer has no information about nontrivial Pauli components, but can still predict the identity and knows the state is maximally mixed. Suggested wording: "has no bias for any nontrivial single-qubit observable."
+
+Chapter 4: Perturbation theory and RWA
+--------------------------------------
+
+33. Minor/technical: The RWA justification is pedagogically good, but the phrase "fast contributions remain bounded ... forever" is only first-order language. At second order, fast terms can produce secular effects such as the Bloch-Siegert shift. You mention this later, but it would be better to write "remain bounded at first order" or "do not produce the leading O(1) resonant dynamics."
+
+34. Major/math: Exercise 4.6 has an hbar power error in the golden-rule derivation. Starting from a cosine drive with co-rotating matrix element V/2,
+       Gamma = (2 pi / hbar) |V/2|^2 rho(E_f)
+              = (pi |V|^2 / (2 hbar)) rho(E_f),
+   if rho is a density per unit energy. The text writes an intermediate/final expression proportional to pi V^2/(2 hbar^2) rho_f, which has the wrong dimensions. The final comparison to (2pi/hbar)|V/2|^2 rho_f is correct, so the hbar^2 is likely a typo introduced in the derivation.
+
+35. Minor/technical: Exercise 4.10 says the far-detuned tone gives a small "AC-Stark-like correction" of order Omega_2/(omega_2-omega_1). The direct off-resonant transition amplitude is suppressed by Omega_2/detuning, but the AC Stark shift itself is second order, of order Omega_2^2/(4 detuning). Distinguish these two effects.
+
+36. Minor: In Statement 4.2, be explicit about the convention for rho_f(E): density of final states per unit energy. This prevents hbar-factor confusion in the exercises.
+
+Parts II-V
+----------
+
+37. IGNORE THIS FOR NOW Major: Parts II-V are present only as empty divider pages. If this is intentional, mark them as "planned" in the part-title pages or omit the part pages until drafted. Otherwise readers will think the PDF build failed or the document is incomplete.
+
+Chapter 5: Dark-matter search
+-----------------------------
+
+38. Major/wording: "Fermion-like dark matter" is not the right organizing label for the recoil channel. Scattering/recoil dark matter need not be fermionic, and bosons can also scatter. The physical distinction here is better called "particle-like DM scattering" versus "coherent bosonic-field absorption".
+
+39. Major/math: In the recoil kinematics proof, the angular formula has a factor-of-two error. The text says
+       E_R(theta*) = 2 mu_chiT^2 v^2 (1 - cos theta*) / M_T.
+   But the standard relation is
+       E_R(theta*) = [mu_chiT^2 v^2 / M_T] (1 - cos theta*).
+   Then theta*=pi gives E_R^max = 2 mu_chiT^2 v^2 / M_T, matching eq. (5.4). With the text's extra factor of 2, backscatter would give 4 mu^2 v^2/M_T, contradicting eq. (5.4).
+
+40. Minor/physics: The light-mediator remark after eq. (5.6) mixes nuclear and electron conventions. F_DM(q)=(alpha m_e/q)^2 is the common electron-scattering reference convention; for nuclear scattering one often uses a different reference momentum. Consider separating the nuclear and electron cases or warning that F_DM conventions are process-dependent.
+
+41. Major/technical: The energy-loss-function rate formula, eqs. (5.9)/(5.13), needs a clearer convention statement. As written, with W(q,omega) dimensionless, q^3 dq, rho_T, alpha, m_e, etc., the formula is not dimensionally transparent unless natural units and the precise DarkELF/Knapen convention are stated. If this is copied from a reference, cite the exact equation and define all units. Otherwise readers cannot safely use the prefactor.
+
+42. Minor/technical: In Statement 5.5, q_-(omega) and q_+(omega) are described as the points where v_min(q,omega)=v_esc. In the lab frame the relevant maximum speed is usually v_esc+v_E (with details from the boosted truncated distribution), not simply v_esc. If you keep v_esc, state that this is a simplified galactic-frame estimate.
+
+43. Major/wording/math: Example 5.9 gives a confusing formula for the lowest detectable electron-scattering DM mass: "m_min ~ E_g/(2 v_esc^2 m_e) m_e". The m_e cancels in the written expression. The usual rough kinematic lower bound from minimizing v_min(q,omega)=omega/q+q/(2m_chi) is m_chi >= 2 omega / v_max^2, subject to material-response restrictions on q. For E_g=1.1 eV and v_max ~ v_esc or v_esc+v_E, this gives a few 10^5 eV to ~10^6 eV, so the quoted 0.5 MeV may be plausible, but the displayed reasoning should be rewritten.
+
+44. Major/wording: Section 5.3.2 says dark photons and axions each couple through a "single dimensionful parameter — epsilon or g_a gamma gamma". Epsilon is dimensionless. Suggested wording: "through a single coupling parameter: dimensionless kinetic mixing epsilon for dark photons, or the dimensionful axion-photon coupling g_a gamma gamma."
+
+45. Major/units: Dark-photon absorption eq. (5.17) and Example 5.16 have unclear/mismatched units. If sigma_abs^ord is an absorption coefficient per unit length (cm^-1), then converting a number density into an absorption rate requires a factor of c (or c=1 must be stated). In Exercise 5.6 you do multiply sigma_abs by c, but eq. (5.17) does not show it. More importantly, the number density is also miscomputed there:
+       rho_chi / m_A' = (0.3 GeV/cm^3) / (1 meV) = 3e11 cm^-3,
+   not 3e14 cm^-3. Using epsilon^2=1e-26 and sigma_abs c ~ 3e14 s^-1 gives a naive rate of order 1 s^-1 cm^-3, not 1e-3 s^-1 cm^-3, before any in-medium mixing/screening factors. The example needs to be recalculated from a consistent formula including the correct in-medium dark-photon absorption factor.
+
+46. Major/physics: Dark-photon absorption in a medium is not generally just epsilon^2 times the ordinary photon absorption rate. The effective mixing is modified by the dielectric function / in-medium polarization tensor, and this can be important in metals/superconductors. Since the chapter later uses aluminium and superconducting gaps, this caveat should be included.
+
+47. Minor/units: Statement 5.15, axion haloscope signal power, is written in natural-unit style but the examples use SI quantities (tesla, litres, watts). The formula should state the unit convention or include the appropriate SI conversion factors. Otherwise readers cannot reproduce the numerical powers.
+
+48. Minor/physics: Example 5.17 quotes P_sig ~1e-23 W ~1e-2 photons/s for a 1 L, 8 T, Q=1e5 cavity at g=1e-15 GeV^-1. This may be order-of-magnitude plausible depending on conventions, but it should be checked carefully against the standard haloscope power formula because 1 L is much smaller than classic ADMX-scale volumes. A one-line reproducible numerical calculation would help.
+
+49. Major/logic: Example 5.20 says a 1 mHz dark-count rate gives ~100 dark counts/day, "but the resonant cavity bandwidth narrows this substantially." The intrinsic dark-count number Gamma_dc * tau is not reduced merely by the cavity bandwidth. Bandwidth affects the signal acceptance, scan step, and noise power in a linear amplifier search; for a photon counter, dark counts accumulated during the integration time remain dark counts unless an event-selection/gating scheme is specified. This sentence is misleading.
+
+50. Major/statistics: Statement 5.22 uses Wilks' theorem and then Example 5.23/Exercise 5.8 derive a profile-likelihood "90%" upper limit of mu_90 ~= 0.82 for N=0, b=0. This is not a valid exact low-count upper confidence limit and severely undercovers: P(N=0 | mu=0.82)=exp(-0.82)=0.44, not 0.10. The standard exact one-sided Poisson 90% upper limit for N=0 is 2.30. Asymptotic profile-likelihood thresholds are not reliable at the boundary and at N=0. If you want to discuss profile likelihoods, separate the asymptotic large-sample case from exact Poisson/Feldman-Cousins intervals.
+
+51. Major/statistics: The threshold values in Statement 5.22 mix central/two-sided and one-sided conventions. For a chi^2_1 interval, Delta(-2lnL)=2.71 corresponds to 90% central/two-sided coverage. For a one-sided Gaussian 90% upper limit, the threshold is z_0.90^2 ~= 1.64. HEP 95% one-sided upper limits often use 2.71. The document should state which convention is being used.
+
+52. Minor/statistics: In the derivation below Statement 5.22, the global MLE for a Poisson mean mu+b with physical constraint mu>=0 is max(0,N-b), not N-b. This matters when N<b.
+
+53. Major/numerical: Exercise 5.3 has a serious unit error. For E_th=10 meV on silicon, M_T=26 GeV, and v_esc/c=1.8e-3,
+       mu_chiT^2 >= E_th M_T / (2 v_esc^2).
+   Since 10 meV = 1e-2 eV = 1e-11 GeV, this gives
+       mu_chiT^2 >= 4e-5 GeV^2,
+       mu_chiT >= 6e-3 GeV = 6 MeV,
+   not 4e-2 GeV^2 and 200 MeV. The text's answer is what one would get for a threshold closer to 10 eV, not 10 meV.
+
+54. Minor/numerical: Exercise 5.6 repeats the dark-photon density error: rho/m for 0.3 GeV/cm^3 and 1 meV is 3e11 cm^-3, not 3e14 cm^-3. The extra factor "3e-15" in the last product is not explained. This calculation should be redone from first principles with consistent units.
+
+55. Major/statistics: Exercise 5.8 should not present mu_90=0.82 as a meaningful low-count 90% upper limit. It is an asymptotic likelihood-ratio result outside its validity regime. At minimum add a warning: "This illustrates the failure of naive Wilks asymptotics at N=0; do not use this as an exact Poisson upper limit."
+
+56. Minor/wording: The chapter says "bosonic DM field is absorbed wholesale and deposits its rest energy at once." "Wholesale" sounds informal; suggested wording: "a single quantum of the field is absorbed and deposits approximately its rest energy."
+
+57. Minor/wording: "QCD-axion window of 1-40 micro-eV corresponds to 240 MHz-10 GHz, exactly the band in which superconducting transmons operate." "Exactly" is too strong; many transmons operate around 3-8 GHz, and 240 MHz is not typical for a transmon qubit. Suggested: "overlaps strongly with microwave frequencies used in superconducting circuits."
+
+Chapters 6-9 placeholders IGNORE ALL THESE COMMENTS FOR NOW 
+-------------------------
+
+58. Major: Chapters 6-9 are only placeholders, but the abstract and chapter 5 transition describe them as if they contain detailed mechanism-specific derivations. Either keep them as explicit one-page "planned chapter" placeholders, or remove the claims that the detailed treatment follows.
+
+59. Minor/physics: Chapter 6 says a phonon of energy at least the Cooper-pair binding 2Delta breaks a Cooper pair "into two quasiparticles." Good. But if you later derive energy resolution, remember that the average energy to create long-lived quasiparticles can exceed 2Delta because of phonon downconversion losses; do not equate deposited energy / Delta too naively.
+
+60. Minor/physics: Chapter 7 says a Josephson junction absorbs an IR/THz photon "directly into the leads". Depending on geometry and frequency, absorption may occur in electrodes, dielectric, junction oxide, or antenna structures. If the chapter is about quasiparticle poisoning of the junction, specify the absorber volume and where pair-breaking is assumed to occur.
+
+61. Minor/physics: Chapter 8 lists sapphire-based sandwich heterostructures as piezoelectric. Sapphire itself is not piezoelectric. If the intended platform is a piezoelectric film on sapphire, say that explicitly.
+
+62. Minor/physics: Chapter 9 says the transmon is "tuned to the Compton frequency" of DM and absorbs the coherent field as |0> -> |1>. For a realistic dark-photon/axion haloscope, the transmon usually detects photons in a resonator mode or readout chain rather than directly absorbing the raw dark-matter field. If direct absorption by the qubit is intended, the coupling Hamiltonian and selection rules need to be stated carefully.
+
+Appendix A
+----------
+
+63. Major/math: Definition A.2 is wrong as written. Conjugate symmetry should be
+       <phi,psi> = overline{<psi,phi>},
+   not <phi,psi> = <psi,phi>. Without the complex conjugate the definition would make the form symmetric rather than Hermitian and is incompatible with complex Hilbert spaces. The subsequent statement "In particular <psi,psi> in R" relies on the missing conjugate.
+
+64. Minor/technical: Definition A.7 says the Riesz representation theorem identifies V* "canonically with V itself." With the physics convention (antilinear in the first slot, linear in the second), the map chi -> <chi| is anti-linear in chi. This is not a problem for physics notation, but if the appendix is meant to be mathematically precise, mention the anti-linearity.
+
+65. Minor/technical: Definition A.8 defines a linear operator A:V->V, then says x and p are unbounded and require domain restrictions. Good. But the main text earlier treats x and p as self-adjoint without mentioning domains. Consider adding a one-sentence warning in section 1.4 as well.
+
+Style / wording issues seen repeatedly
+--------------------------------------
+
+66. "theorem" vs "definition" vs "statement" is inconsistent throughout. Use the environment type in references, or use a neutral shared label.
+
+67. "Theorem 1.15", "theorem 2.4", "theorem 2.6", "theorem 3.2" etc. should be changed to the correct labels.
+
+68. "a-physical" in chapter 1 sounds odd. Suggested replacement: "abstract", "formal", or "not tied to a specific hardware example".
+
+69. "read-out" and "readout" both appear. Choose one; in superconducting-circuit writing, "readout" is more common as a noun/adjective.
+
+70. "fully-worked" should usually be "fully worked" before a noun, unless you intentionally use the compound adjective.
+
+71. Some pedagogical statements are very strong: "zero predictive information", "only known nonlinear non-dissipative inductor", "exactly the band", "all empirical interpretations equivalent". These can be made more robust by softening the wording.
+
+Suggested priority list
+-----------------------
+
+A. Fix before using as teaching material:
+   - the sigma_z / |0>, |1> / Hamiltonian sign convention;
+   - time-dependent propagator U(t) in Statement 1.14;
+   - thermal occupation calculation in Exercise 1.10;
+   - Appendix A.2 conjugate symmetry;
+   - recoil angular factor in section 5.2.1;
+   - Exercise 5.3 threshold mass;
+   - dark-photon absorption units/rate;
+   - profile-likelihood low-count limit discussion.
+
+B. Fix before public release:
+   - unresolved "??" references;
+   - abstract/introduction overclaiming contents not present;
+   - empty Parts II-V and placeholder chapters labeling;
+   - theorem/definition/example reference labels.
+
+C. Improve for polish:
+   - consistent spelling style;
+   - soften over-strong wording;
+   - add unit conventions to dark-matter formulas;
+   - add caveats on infinite-dimensional self-adjoint operators and density matrices.
