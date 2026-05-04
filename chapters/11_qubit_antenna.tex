@@ -1,0 +1,328 @@
+\chapter{Qubit antenna modes and infrared absorption}
+\label{ch:qubit-antenna}
+
+A superconducting qubit chip is, electromagnetically, an open
+metal-on-dielectric structure. The metallic features support the
+guided modes the designer intended (the qubit, the readout
+resonator, the bus), but they also act as
+\emph{antennas} at frequencies the designer did not intend. Above
+the superconducting gap of the leads ($\sim 85\,\text{GHz}$ in
+aluminium), free-space photons coupled into these antenna modes
+break Cooper pairs in the qubit's leads and generate the
+quasiparticle bursts of \cref{ch:qp-detection}. Two recent
+experiments have established that infrared radiation incident on
+the chip is one of the dominant non-equilibrium quasiparticle
+sources in present cQED hardware~\cite{vepsalainen2020,liu2024}, and
+that careful infrared shielding plus chip-mode engineering is
+necessary to extend qubit coherence times beyond the millisecond
+scale~\cite{pan2022}. Inverted, the same physics turns the qubit
+into a candidate single-quantum sensor for infrared photons of the
+type produced by dark-photon dark matter
+(\cref{ch:dm-search}, \cref{stmt:dark-photon}) at masses above
+$2\Delta$. This chapter develops the antenna-theory primer needed
+to read those measurements quantitatively, works through the
+qubit-antenna problem, and applies the formalism to the
+direct-detection pipeline.
+
+% --------------------------------------------------------------
+\section{Antenna theory primer}
+\label{sec:antenna-theory}
+
+\begin{phenomenon}
+A localised oscillating current radiates electromagnetic energy
+into space. Reciprocally, a structure of the right geometry and
+impedance match captures incoming radiation and delivers the
+power to a load. The two halves of this duality are the
+\emph{transmitting} and \emph{receiving} responses of an
+\emph{antenna}; they are related by the reciprocity theorem and
+are characterised by the same set of quantities (radiation
+resistance, gain, effective area).
+\end{phenomenon}
+
+\begin{statement}[Antenna modes from Maxwell's equations]
+\label{stmt:antenna-modes}
+The vector potential $\bm A(\bm r)e^{-i\omega t}$ of a source-free
+mode in a region of space with conductor boundaries satisfies the
+Helmholtz equation
+\begin{equation}
+\label{eq:helmholtz-A}
+\bigl(\nabla^2 + k^2\bigr)\,\bm A(\bm r) \;=\; 0,
+\qquad k=\omega/c,
+\end{equation}
+together with the boundary condition $\hat n\times\bm E = 0$ on
+each perfect-conductor surface, which translates into a Dirichlet
+or Neumann condition on $\bm A$ depending on polarisation
+\cite{pozar2011}. Solving \cref{eq:helmholtz-A} for the
+chip-and-substrate geometry produces the discrete antenna mode
+spectrum.
+\end{statement}
+
+\paragraph{Radiation resistance and effective area.}
+For an antenna driven by a current $I_0$ at frequency $\omega$, the
+power radiated into the far field is $P_{\rm rad}=\tfrac12 R_{\rm rad} |I_0|^2$
+with $R_{\rm rad}$ the \emph{radiation resistance}. By reciprocity
+the same antenna receives an incident plane wave of power
+density $S$ (W/m$^2$) and delivers to a matched load a power
+\begin{equation}
+\label{eq:effective-area}
+P_{\rm rec} \;=\; A_{\rm eff}(\omega)\,S,
+\qquad
+A_{\rm eff}(\omega) \;=\; \frac{G(\omega)\,\lambda^2}{4\pi},
+\end{equation}
+with $G(\omega)$ the antenna's gain (dimensionless,
+$G\geq 1$ for a directive antenna and $G=1$ for an isotropic one)
+and $\lambda=2\pi c/\omega$ the free-space wavelength. The
+effective area is independent of the antenna's physical size: a
+small but well-matched antenna at long wavelength can have an
+effective area much larger than its outer dimensions.
+
+\paragraph{Common antenna geometries.}
+Three are particularly relevant for a chip-scale sensor:
+\begin{itemize}
+  \item \emph{Slot antenna.} A narrow rectangular slot in a
+        ground plane. By Babinet's principle, a slot of length
+        $\ell$ in a metal plane has the same radiation pattern as
+        a complementary metal strip of the same length, with
+        electric and magnetic fields exchanged.  Slot antennas
+        sit naturally on planar superconducting circuits, and
+        their lowest mode is at $\lambda/2 = \ell$.
+  \item \emph{Horn antenna.} A flared waveguide that matches the
+        impedance of free space to the impedance of a transmission
+        line; gives gain $G\sim 10$--$100$ and is the standard
+        front end for radio-astronomy receivers.
+  \item \emph{Parabolic dish.} A reflector of effective area
+        equal to the geometric aperture; concentrates a plane wave
+        onto a feed at the focus. Used to push effective area to
+        well beyond a wavelength when the candidate signal is
+        narrow-band and the available real estate large.
+\end{itemize}
+For a chip-scale sensor, the natural geometries are slot antennas
+and on-chip horn-coupling structures. Free-space radiation is
+brought to the chip through a feed horn (~1\,cm aperture at
+$\lambda\sim 3\,\text{mm}$) coupled into a transmission line that
+terminates on the antenna pattern of the qubit itself.
+
+% --------------------------------------------------------------
+\section{Qubits as antennas}
+\label{sec:qubit-as-antenna}
+
+\begin{phenomenon}
+A transmon qubit is geometrically a metallic structure --- typically
+a cross-shaped capacitor pad on a substrate --- that supports a
+designed resonance at the qubit frequency $\omega_q/2\pi\sim
+3$--$8\,\text{GHz}$.  At much higher frequencies the same
+metallic structure has additional, undesigned resonances: the
+two arms of an Xmon, viewed as a pair of half-wave dipoles,
+support $\lambda/4$ and $\lambda/2$ standing-wave modes at tens
+to hundreds of GHz, exactly the band where free-space photons
+have enough energy to break Cooper pairs.
+\end{phenomenon}
+
+\begin{statement}[Qubit-antenna coupled Hamiltonian]
+\label{stmt:qubit-antenna}
+Let $\hat a, \hat a^\dagger$ be the creation/annihilation
+operators of a single high-frequency antenna mode of the chip
+geometry at frequency $\omega_{\rm ant}\gg\omega_q$. The free
+Hamiltonian is
+\begin{equation}
+\label{eq:antenna-mode}
+\op{H}_{\rm ant} \;=\; \hbar\omega_{\rm ant}\,\hat a^\dagger\hat a,
+\end{equation}
+and the linear coupling of the antenna mode to the qubit's leads
+takes the dipole form
+\begin{equation}
+\label{eq:antenna-qubit-coupling}
+\op{H}_{\rm int} \;=\; \hbar g_{\rm ant}\,(\hat a + \hat a^\dagger)\,\hat\sigma_x
+\;+\; \hbar\,(\text{lead-mode terms}),
+\end{equation}
+with $g_{\rm ant}$ the coupling strength fixed by the antenna's
+voltage profile at the position of the JJ. For
+$\omega_{\rm ant}\geq 2\Delta/\hbar$, an antenna-mode quantum
+that decays into the leads has enough energy to break a Cooper
+pair; the resulting quasiparticle pair is exactly the burst
+discussed in \cref{stmt:qp-burst}.
+\end{statement}
+
+\paragraph{Estimating the lowest antenna mode of an Xmon.}
+For an Xmon with arm length $L\sim 200\,\mu\text{m}$, the lowest
+$\lambda/2$ standing-wave mode of an isolated dipole arm is at
+$\omega_{\rm ant}/2\pi\approx c/(2L\,\sqrt{\epsilon_{\rm eff}})$.
+With effective dielectric constant
+$\epsilon_{\rm eff}\approx (\epsilon_{\rm sub}+1)/2\approx 6.5$
+for sapphire, this gives
+$\omega_{\rm ant}/2\pi\approx 3\times 10^8/(2\cdot 2\times 10^{-4}
+\cdot 2.55)\approx 300\,\text{GHz}$.  The next-lowest design
+(slot, ground-plane resonance) is typically at lower frequency
+but always above the gap. Pan~et~al.~\cite{pan2022} report direct
+measurements of antenna modes of present transmon designs in the
+$50$--$300\,\text{GHz}$ band, in good agreement with this
+geometric estimate.
+
+\paragraph{Coupling efficiency to free-space photons.}
+The probability that an incident photon at the antenna mode
+frequency couples into the qubit's leads is
+\begin{equation}
+\label{eq:antenna-eta}
+\eta_{\rm coup}(\omega_{\rm ant})
+\;=\; \frac{4\,R_{\rm rad}\,R_{\rm load}}{(R_{\rm rad}+R_{\rm load})^2}
+\;\leq\; 1,
+\end{equation}
+maximised for $R_{\rm rad}=R_{\rm load}$ (impedance match). For
+the qubit-antenna mode, $R_{\rm load}$ is the effective real
+impedance presented to the antenna by the JJ and shunting
+capacitors at frequency $\omega_{\rm ant}$. In present designs
+$\eta_{\rm coup}\sim 0.1$--$1$, depending on geometry and the
+leads' surface impedance above the gap~\cite{liu2024}. The
+total quasiparticle production rate from a free-space radiation
+flux $\Phi$ (photons / m$^2$ / s) is
+$\Gamma_{\rm qp}=\eta_{\rm coup}\,A_{\rm eff}\,\Phi\cdot \eta_{\rm br}\,\hbar\omega_{\rm ant}/(2\Delta)$,
+with $\eta_{\rm br}\sim 0.3$ the phonon-to-quasiparticle branching
+of \cref{stmt:qp-burst}.
+
+% --------------------------------------------------------------
+\section{Backgrounds: blackbody and CMB photons}
+\label{sec:antenna-backgrounds}
+
+\begin{phenomenon}
+A chip operated at millikelvin is bathed in blackbody radiation
+from every component in the cryostat that has a finite temperature.
+The blackbody flux falls exponentially above $\hbar\omega>k_B T$,
+so the relevant background is set by the highest-temperature
+surface that has a clear radiative path to the chip --- typically
+the warmer cryostat stages or, in a poorly shielded device, the
+room-temperature lab.
+\end{phenomenon}
+
+\begin{statement}[Planck photon flux density]
+\label{stmt:planck-flux}
+The number of photons per unit area, time, and frequency emitted
+isotropically by a blackbody of temperature $T$ at frequency $\nu$
+is
+\begin{equation}
+\label{eq:planck-flux}
+\frac{\dd N}{\dd t\,\dd A\,\dd\nu}
+\;=\; \frac{2\pi\,\nu^2}{c^2}\,
+\frac{1}{\exp\!\bigl(h\nu/k_B T\bigr)-1}.
+\end{equation}
+Integrated over a frequency band $\Delta\nu$ around the peak of
+\cref{eq:planck-flux} this gives a flux that scales as $T^3$ at
+low temperature (Stefan-Boltzmann inside a band).
+\end{statement}
+
+\paragraph{CMB-photon count-rate estimate.}
+Take an antenna at the gap frequency
+$\nu_{\rm ant}=2\Delta/h\approx 85\,\text{GHz}$ for aluminium.
+The cosmic microwave background has $T_{\rm CMB}=2.73\,\text{K}$,
+so $h\nu_{\rm ant}/(k_B T_{\rm CMB})\approx 1.5$ and
+$1/(e^{1.5}-1)\approx 0.29$. \Cref{eq:planck-flux} gives
+\begin{equation}
+\frac{\dd N}{\dd t\,\dd A\,\dd\nu}\big|_{\rm CMB,\,85\,\text{GHz}}
+\;\approx\; \frac{2\pi (85\times 10^9)^2}{(3\times 10^8)^2}\cdot 0.29
+\;\approx\; 1.4\times 10^{5}\,\text{photons}/(\text{s}\,\text{m}^2\,\text{Hz}).
+\end{equation}
+For an antenna of effective area $A_{\rm eff}=\lambda^2/(4\pi)
+\approx 1\,\text{mm}^2$ at $85\,\text{GHz}$ (isotropic gain) and
+a bandwidth $\Delta\nu\sim\omega_{\rm ant}/Q\sim 10\,\text{GHz}$
+(low-Q antenna mode), the per-antenna count rate is
+\begin{equation}
+\Gamma_{\rm CMB} \;\approx\; A_{\rm eff}\,\Delta\nu\,
+\frac{\dd N}{\dd t\,\dd A\,\dd\nu}
+\;\approx\; 10^{-6}\,\text{m}^2 \cdot 10^{10}\,\text{Hz}\cdot 1.4\times 10^{5}
+\;\approx\; 10^{9}\,\text{photons}/\text{s}.
+\end{equation}
+The full $4\pi$ steradian of CMB radiation, of course, does not
+hit a single chip antenna; the geometric solid-angle factor is
+already built into \cref{eq:effective-area}, so this is the
+relevant rate. Even a $10^{-2}$ matching efficiency
+$\eta_{\rm coup}$ leaves a $10^{7}\,\text{s}^{-1}$ photon
+absorption rate --- many orders of magnitude above the
+quasiparticle-burst signal of any DM candidate. The CMB by itself
+would saturate a naively designed qubit antenna sensor.
+
+\paragraph{Mitigation.}
+Practical detectors solve this by some combination of (i)
+narrow-band filters in the antenna feed that admit only a few
+hundred MHz of bandwidth around the candidate signal frequency,
+(ii) cold blackbody loads at the same physical temperature as the
+device that absorb the unwanted DC-coupled blackbody flux, (iii)
+underground operation that shields against thermal-source
+photons leaked through cryostat penetrations, and (iv) coincidence
+vetoes between qubits in an array that statistically rejects
+correlated multi-qubit hits from cosmic-ray showers.
+
+% --------------------------------------------------------------
+\section{Sensitivity projections for dark-photon and axion DM}
+\label{sec:antenna-sensitivity}
+
+\begin{phenomenon}
+A qubit antenna with a tuned narrow-band feed at frequency
+$\nu_{\rm sig}=m_\chi c^2/h$ acts as a single-photon counter for
+the candidate dark-matter field of the same Compton frequency.
+Provided the in-band blackbody background is suppressed below
+the candidate signal flux, integrated counts over
+$\sim$kg-day exposures translate directly into limits on
+$\varepsilon$ (dark photons) and $g_{a\gamma\gamma}$ (axions, in
+the presence of an applied $B_0$).
+\end{phenomenon}
+
+\paragraph{Dark photons.}
+For an antenna tuned to $\nu_{\rm sig}=m_{A'}c^2/h$ and effective
+area $A_{\rm eff}$, the dark-photon-induced photon flux on the
+antenna is, from \cref{stmt:dark-photon-rate}, the
+$\varepsilon^2$-suppressed equivalent of the ordinary photon
+flux at the same frequency:
+\begin{equation}
+\Gamma_{\rm sig}\bigl(\varepsilon\bigr)
+\;\sim\; \varepsilon^2\,\frac{\rho_\chi}{m_{A'}}\,
+A_{\rm eff}\,c\,F_{\rm med}(m_{A'}),
+\end{equation}
+with $F_{\rm med}(m_{A'})\leq 1$ the in-medium-screening factor of
+\cref{ex:dark-photon-rate}. For $m_{A'}=350\,\mu\text{eV}/c^2$
+($\nu_{\rm sig}=85\,\text{GHz}$, just above the Al gap),
+$\rho_\chi/m_{A'}\approx 10^{12}\,\text{cm}^{-3}$, $A_{\rm eff}\sim
+1\,\text{mm}^2$, $c=3\times 10^{10}\,\text{cm}/\text{s}$:
+\begin{equation}
+\Gamma_{\rm sig}(\varepsilon)
+\;\sim\; \varepsilon^2 \cdot 10^{12} \cdot 10^{-2}\cdot 3\times 10^{10}\,\text{s}^{-1}
+\;\sim\; 3\times 10^{20}\,\varepsilon^2\,\text{s}^{-1}.
+\end{equation}
+With a 1-day live time and a Poisson 90\,\% CL of
+$N_{90}=2.3$ events~(\cref{stmt:poisson-UL}),
+$\varepsilon_{90}\sim\sqrt{2.3/(3\times 10^{20}\cdot 86400)}
+\sim 10^{-13}$, comparable with the unscreened
+estimate of \cref{ex:dark-photon-rate}. Once the in-medium factor
+$F_{\rm med}$ is included the reach degrades by 1-2 orders of
+magnitude, and the achievable limit is
+$\varepsilon\lesssim 10^{-12}$. This is one to two orders of
+magnitude beyond solar-lifetime constraints in the same mass
+band.
+
+\paragraph{Axions.}
+A qubit antenna without an applied $B_0$ is insensitive to the
+axion-photon coupling \cref{eq:axion-L}, because the axion
+sources an oscillating $\bm E$ only in the presence of a static
+$\bm B_0$. The natural extension is to operate the qubit chip
+inside a Helmholtz coil providing a few-tesla field; the antenna
+then couples to the resulting field as a low-Q haloscope, with
+sensitivity set by \cref{eq:axion-power} and $A_{\rm eff}\,c$
+playing the role of the cavity volume times $\omega Q$. The
+antenna picture trades the high $Q\sim 10^5$ of a tuned cavity
+for the larger bandwidth $\Delta\nu\sim\omega/Q\sim 1\,\text{GHz}$,
+so a single chip scans a wider mass window per unit time at a
+correspondingly weaker per-mass reach. Combined with axion
+haloscopes (\cref{ch:microwave-absorption}), the qubit-antenna
+chip therefore plays the role of a wideband first-pass scanner
+rather than the dedicated high-Q haloscope.
+
+\paragraph{Comparison to dedicated cQED sensors.}
+The qubit-antenna picture should be understood as the natural
+\emph{response} of any cQED chip to free-space radiation rather
+than as a dedicated-detector design. It sets the baseline rate at
+which infrared photons leak in via undesigned antenna modes ---
+the same mechanism that limits qubit coherence in
+\cref{ch:qp-detection} --- and quantifies it in dark-matter
+language. The dedicated-detector designs of
+\cref{ch:phonon-qubit-piezo,ch:microwave-absorption} engineer the
+coupling, the bandwidth and the readout for a specific mass
+window and out-perform the bare qubit antenna by orders of
+magnitude in their respective bands.

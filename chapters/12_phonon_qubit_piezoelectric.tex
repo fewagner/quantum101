@@ -1,16 +1,259 @@
 \chapter{Phonon-qubit coupling via piezoelectricity}
 \label{ch:phonon-qubit-piezo}
 
-On a piezoelectric substrate (AlN, GaAs, or sapphire-based
-sandwich heterostructures), a single phonon of frequency in the
-1--10\,GHz band carries an electric polarisation that couples
-linearly to a transmon's charge. The transmon thus operates as a
-single-phonon detector, with the phonon playing the role that a
-single microwave photon plays in cavity QED. Coupling rates of
-order $g/2\pi\sim 0.1\text{--}10\,\text{MHz}$ are reachable, making
-the transmon competitive with conventional kinetic-inductance
-detectors above the sub-meV phonon-energy threshold. This chapter
-takes the recoil pipeline of \cref{ch:dm-search} and instantiates
-it on the piezoelectric phonon-qubit channel, with mass reach
-extending below $1\,\text{MeV}/c^2$ for nuclear recoils. The
-detailed treatment is in preparation; this chapter is a placeholder.
+The complementary recoil-channel readout, parallel to the
+phonon-quasiparticle conversion of \cref{ch:qp-detection}, is to
+read out individual phonons in the substrate directly --- before
+they break Cooper pairs or thermalise --- by coupling them to a
+superconducting qubit through the piezoelectric response of the
+substrate material. The same physics is the workhorse of
+\emph{quantum acoustics}: a body of work in which superconducting
+transmons are coherently entangled with single phonons of GHz
+acoustic resonators, with the phonon playing the role that a
+single microwave photon plays in cavity QED. The chapter starts
+with the elastic-wave background needed to enumerate phonon modes
+in the relevant geometries, surveys the experimental quantum
+acoustics literature, and then maps the same coupling onto the
+recoil pipeline of \cref{ch:dm-search} as a single-phonon
+dark-matter sensor.
+
+% --------------------------------------------------------------
+\section{Phonons and strain in solids}
+\label{sec:phonon-modes}
+
+\begin{phenomenon}
+A solid body responds to small deformations as a continuum elastic
+medium. Its normal modes of vibration are quantised as phonons,
+each carrying energy $\hbar\omega$ at angular frequency $\omega$.
+The mode spectrum is fixed by the body's geometry, by its
+elastic constants, and by the boundary conditions on its
+surfaces.
+\end{phenomenon}
+
+\begin{statement}[Elastic wave equation and mode spectrum]
+\label{stmt:elastic-modes}
+For a solid of mass density $\rho$ and elastic-stiffness tensor
+$c_{ijkl}$, the displacement field $\bm u(\bm r,t)$ satisfies the
+elastic wave equation~\cite{tinkham2004}
+\begin{equation}
+\label{eq:elastic-wave}
+\rho\,\frac{\partial^2 u_i}{\partial t^2}
+\;=\; \frac{\partial}{\partial x_j}
+\left[c_{ijkl}\,\frac{\partial u_k}{\partial x_l}\right],
+\end{equation}
+with appropriate boundary conditions: free surfaces require
+$\sigma_{ij}\hat n_j = c_{ijkl}\partial_l u_k\,\hat n_j = 0$ (no
+applied stress), clamped surfaces require $\bm u = 0$. Phonon
+modes are the time-harmonic solutions
+$\bm u(\bm r,t) = \bm u_n(\bm r) e^{-i\omega_n t}$ with mode
+profile $\bm u_n$ satisfying the eigenvalue equation
+$\rho \omega_n^2 u_{n,i} = -\partial_j(c_{ijkl}\partial_l u_{n,k})$.
+\end{statement}
+
+\paragraph{Mode families.}
+Three families of modes recur in the structures used for cQED
+quantum acoustics and for cryogenic dark-matter detection:
+\begin{itemize}
+  \item \emph{Bulk longitudinal and transverse acoustic modes.}
+        In an unbounded crystal, plane-wave solutions of
+        \cref{eq:elastic-wave} give the acoustic-phonon
+        dispersion $\omega(\bm k)\approx c_s |\bm k|$ at low
+        $|\bm k|$, with longitudinal and transverse polarisation
+        propagating at sound speeds $c_L,\,c_T$. In silicon,
+        $c_L\approx 8.4\,\text{km/s}$ and
+        $c_T\approx 5.8\,\text{km/s}$; in sapphire,
+        $c_L\approx 11\,\text{km/s}$.
+  \item \emph{Surface acoustic waves (SAWs, Rayleigh modes).}
+        On a free surface, an additional family of modes lives
+        near the surface and decays exponentially into the bulk
+        on a length scale of one wavelength. SAWs propagate
+        along the surface at a speed slightly below $c_T$ and
+        have energy concentrated within a few $\lambda$ of the
+        surface, which makes them efficient at coupling to
+        surface-mounted electrodes.
+  \item \emph{Confined modes of a finite body.}
+        For a body of finite extent (slab, beam, dome), the
+        spectrum becomes discrete with mode spacing
+        $\Delta\omega\sim c_s/L$. Thin-film thickness modes of an
+        AlN or GaAs film of thickness $d\sim\mu\text{m}$ live at
+        $\omega/2\pi\sim c_s/(2d)\sim$ GHz, exactly the band of
+        a transmon qubit, which is why HBAR (high-overtone bulk
+        acoustic resonator) and SAW devices are the standard
+        platforms for quantum acoustics.
+\end{itemize}
+
+\paragraph{Density of states.}
+For a bulk solid the low-energy density of states is the Debye
+form $\rho_{\rm ph}(\omega)\propto\omega^2$ up to a cutoff at the
+Debye frequency $\omega_D=k_B T_D/\hbar$. Optical phonon branches
+in polar crystals (e.g.\ the LO-TO splitting in GaAs) sit at
+finite energy near the zone centre and are particularly relevant
+for sub-GeV DM scattering~\cite{knapen2018}, because their dipole
+moments couple efficiently to the electromagnetic response of
+the medium and because their energies of $\sim$ tens of meV are
+matched to the DM kinematic threshold.
+
+% --------------------------------------------------------------
+\section{Quantum acoustics with superconducting qubits}
+\label{sec:quantum-acoustics}
+
+\begin{phenomenon}
+A single phonon of an acoustic resonator on a piezoelectric
+substrate carries an electric polarisation. Coupled to the charge
+degree of freedom of a transmon qubit, this polarisation acts as
+an effective electric dipole interaction, with the phonon playing
+the role that a single microwave photon plays in cavity QED. In
+the strong-coupling regime, the qubit and the phonon undergo
+coherent vacuum-Rabi oscillations and form the acoustic analogue
+of dressed states.
+\end{phenomenon}
+
+\begin{statement}[Phonon-qubit Jaynes--Cummings coupling]
+\label{stmt:phonon-qubit-jc}
+On a piezoelectric substrate with electromechanical coupling
+$\hat e_{14}$, the linear coupling between a single confined
+phonon mode of frequency $\omega_{\rm ph}$ and a transmon at
+frequency $\omega_q$ takes, in the rotating-wave approximation
+(\cref{sec:rwa}), the Jaynes--Cummings form
+\begin{equation}
+\label{eq:phonon-qubit-jc}
+\op{H}_{\rm int} \;=\; \hbar g\,
+\bigl(\hat b\,\hat\sigma_+ \,+\, \hat b^\dagger\,\hat\sigma_-\bigr),
+\end{equation}
+with $\hat b,\hat b^\dagger$ the phonon mode operators and
+$g$ the single-phonon coupling strength
+\begin{equation}
+\label{eq:phonon-coupling}
+g \;\propto\; e_{14}\,d\,\sqrt{\frac{\hbar\,\omega_{\rm ph}}{2\,M\,\Omega_{\rm ph}}},
+\end{equation}
+where $d$ is the spatial-overlap length between the phonon mode
+and the qubit electrode and $M$ is the effective phonon-mode
+mass. Typical experimental values are
+$g/2\pi\sim 0.1\text{--}10\,\text{MHz}$, well within the
+strong-coupling regime $g\gg\kappa_{\rm ph},\,1/T_2$.
+\end{statement}
+
+\paragraph{Two device families: SAW and HBAR.}
+Two architectures dominate the quantum-acoustics literature.
+\begin{itemize}
+  \item \emph{Surface acoustic-wave devices.}
+        An interdigital transducer (IDT) on a piezoelectric
+        substrate (LiNbO$_3$, GaAs, AlN) launches and receives
+        Rayleigh waves; coupling to a transmon comes from the IDT
+        electrodes capacitively driving the qubit. Gustafsson
+        et~al.~\cite{gustafsson2014} demonstrated the first
+        artificial-atom-SAW system in the strong-coupling regime.
+        Manenti et~al.~\cite{manenti2016} demonstrated SAW
+        resonators with quality factors approaching $10^5$ in the
+        single-phonon limit. Satzinger et~al.~\cite{satzinger2018}
+        achieved deterministic single-phonon control on a SAW
+        resonator using a flux-tunable transmon.
+  \item \emph{High-overtone bulk acoustic resonators.}
+        A piezoelectric thin film (typically AlN, $\sim\mu$m
+        thick) is sandwiched between two electrodes; the film
+        supports thickness-mode bulk-acoustic standing waves at
+        $\omega/2\pi\sim$ GHz with extraordinarily high quality
+        factors ($Q\gtrsim 10^{6}$ at low temperature) because the
+        confining surfaces are atomically flat. Chu
+        et~al.~\cite{chu2017} demonstrated the first
+        Jaynes--Cummings coupling between a transmon and an HBAR
+        single-phonon mode; Chu~et~al.~\cite{chu2018} subsequently
+        showed deterministic preparation and tomography of
+        multi-phonon Fock states up to $|7\rangle$. The HBAR is
+        essentially the acoustic analogue of a 3D microwave
+        cavity for cQED, but with $10^5$ times shorter wavelength
+        (a single phonon in a 1\,GHz HBAR fits in 5\,$\mu$m of
+        sapphire), enabling extreme miniaturisation.
+\end{itemize}
+The original demonstration that a discrete mechanical mode could
+be cooled to the quantum ground state and operated as a single
+quantum object was the dilatational-mode dilation experiment of
+O'Connell et~al.~\cite{oconnell2010}, which set the template that
+the present cQED-coupled quantum-acoustics platforms inherited.
+
+% --------------------------------------------------------------
+\section{Dark-matter detection via single-phonon readout}
+\label{sec:phonon-dm}
+
+\begin{phenomenon}
+A dark-matter particle that scatters in a piezoelectric crystal
+deposits energy as a population of athermal phonons. Each phonon
+that survives long enough to reach a coupled qubit can be detected
+as a $\ket{0}\to\ket{1}$ transition --- exactly as a single
+microwave photon is detected in cavity QED, but with phonon
+masses of order an MeV per quantum rather than 0 for a photon. The
+recoil pipeline of \cref{sec:fermion-dm} combined with the
+single-phonon readout of \cref{sec:quantum-acoustics} therefore
+gives a sub-eV-threshold direct-detection scheme for sub-GeV DM.
+\end{phenomenon}
+
+\begin{statement}[Single-phonon DM detection]
+\label{stmt:phonon-dm}
+For a target of total mass $\mathcal M$ on a piezoelectric
+substrate that supports a confined phonon mode of frequency
+$\omega_{\rm ph}$ coupled to a transmon at the same frequency
+with single-phonon coupling $g$, an event of recoil energy
+$E_R=\hbar\omega_{\rm ph}$ on resonance has a phonon-creation
+probability
+\begin{equation}
+\label{eq:phonon-eta}
+\eta_{\rm ph}(E_R) \;\sim\; \eta_{\rm coll}(E_R)\;\frac{|\langle 1|\hat b^\dagger|0\rangle|^2}{\bigl(E_R-\hbar\omega_{\rm ph}\bigr)^2/(\hbar\,\Gamma_{\rm ph})^2 + 1},
+\end{equation}
+which peaks for resonant deposition. Off-resonance deposition
+produces phonons at the corresponding bath energies, which
+thermalise and diffuse out of the readout band; the on-resonance
+sensitivity is therefore narrow-band, but optimised for whichever
+phonon mode the qubit is tuned to.
+\end{statement}
+
+\paragraph{Mass reach.}
+For a meV-scale phonon mode and a kg-scale piezoelectric target
+(silicon-on-AlN composite, sapphire-on-GaAs heterostructure, or
+similar), the kinematic threshold of \cref{eq:E_R-max} for
+$E_R=\hbar\omega_{\rm ph}$ gives
+$m_\chi^{\rm min}\sim\sqrt{M_T E_R}/v_{\rm esc}$. With
+$M_T = 28\,m_p$ (Si nucleus) and
+$E_R=10\,\text{meV}\sim 10^{-11}\,\text{GeV}$,
+$m_\chi^{\rm min}\sim 6\,\text{MeV}$. Linehan
+et~al.~\cite{linehan2024} present the detailed analysis for a
+realistic device including substrate phonon-mode density and
+qubit-readout efficiency, and project a reach of order
+$\sigma_n\lesssim 10^{-38}\,\text{cm}^2$ at
+$m_\chi\sim 1$--$10\,\text{MeV}$ for a kg-day exposure. These
+numbers compare favourably with the phonon-quasiparticle
+detectors of \cref{ch:qp-detection} in the same mass band, and
+together the two approaches define the sub-GeV reach plot of the
+contemporary cQED dark-matter programme.
+
+\paragraph{Light-DM advantages of piezoelectric coupling.}
+Two features make the piezoelectric approach particularly
+attractive at low DM mass:
+\begin{itemize}
+  \item \emph{Single-phonon readout, not energy resolution.}
+        A transmon coupled to an acoustic mode gives a
+        \emph{binary} signal --- the phonon mode is occupied or
+        not --- so the threshold is set by the qubit dark-count
+        rate, typically $\Gamma_{\rm dc}\sim 1\,\text{mHz}$, and
+        not by an analog energy-resolution floor as in a TES.
+  \item \emph{Optical-phonon coupling.}
+        For polar crystals, the optical-phonon dipole moment
+        couples directly to the DM-electron and DM-photon
+        interaction channels~\cite{knapen2018}, opening detection
+        modes for dark photons, axion-like dark matter, and
+        light-mediator DM-electron scattering that are not
+        accessible to non-polar absorbers.
+\end{itemize}
+
+\paragraph{Limitations and outlook.}
+The narrow-band character of \cref{eq:phonon-eta} is the main
+constraint: a single qubit-phonon system covers a narrow
+$\Delta\omega/\omega\sim 1/Q$ slice of the recoil-energy spectrum.
+Realistic experiments either tile multiple qubit-phonon systems at
+different frequencies to broaden the response or scan the qubit
+frequency in time. Both strategies are demonstrated in present
+quantum-information hardware (the same multiplexing solutions
+used for KIDs), so the scaling path to a kg-day-class device is
+identical to the scaling path of a multi-thousand-qubit processor.
+This is the deepest cross-talk between the dark-matter and
+fault-tolerant-computing programmes that drives the
+chapter-6 / chapter-8 connection.

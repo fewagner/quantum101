@@ -1,18 +1,369 @@
-\chapter{Microwave absorption in the transmon}
+\chapter{Cavity microwave-photon counting}
 \label{ch:microwave-absorption}
 
-A transmon tuned to the Compton frequency
-$\omega_q = m_\chi c^2/\hbar$ of a candidate ultralight bosonic
-dark-matter particle absorbs the corresponding coherent dark-matter
-field as a population transfer $\ket{0}\to\ket{1}$, providing a
-single-microwave-photon-counting front end for dark-photon and
-axion haloscopes in the GHz band. With photon-counting efficiency
-$\eta\sim 0.5$ and dark-count rate
-$\Gamma_\text{dc}\sim 1\,\text{mHz}$, the transmon-haloscope
-combination reaches kinetic-mixing parameters
-$\varepsilon\sim 10^{-15}$ and axion couplings into the QCD-axion
-band $g_{a\gamma\gamma}\sim 10^{-15}\,\text{GeV}^{-1}$ for
-multi-litre cavities in tesla-scale magnetic fields. This chapter
-takes the absorption pipeline of \cref{ch:dm-search} and
-instantiates it on this mechanism. The detailed treatment is in
-preparation; this chapter is a placeholder.
+A high-$Q$ microwave cavity tuned to the Compton frequency
+$\omega_\chi=m_\chi c^2/\hbar$ of a candidate bosonic dark-matter
+particle accumulates a coherent intracavity photon population that
+a transmon, operated as a single-microwave-photon counter, reads
+out one quantum at a time. This chapter develops the cavity-mode
+toolbox, surveys the cQED single-microwave-photon detectors that
+implement the readout, works through the dispersive-shift and
+four-wave-mixing photon-counting schemes in detail, and translates
+the resulting performance into dark-photon and axion sensitivity.
+
+% --------------------------------------------------------------
+\section{Electromagnetic modes in a resonant cavity}
+\label{sec:cavity-modes}
+
+\begin{phenomenon}
+A closed conducting cavity supports a discrete set of resonant
+electromagnetic modes, each carrying a fixed spatial profile and
+a fixed quality factor. A bosonic dark-matter field at the same
+frequency drives the resonant mode coherently, producing an
+intracavity photon population whose magnitude is proportional to
+$|\bm A_{\rm DM}|^2$, the square of the dark-matter field
+amplitude.
+\end{phenomenon}
+
+\begin{statement}[Helmholtz cavity modes~\cite{pozar2011}]
+\label{stmt:cavity-modes}
+The vector potential of a free electromagnetic mode in a vacuum
+cavity bounded by a perfect conductor satisfies
+\begin{equation}
+\label{eq:helmholtz-cavity}
+\bigl(\nabla^2 + k^2\bigr)\,\bm A(\bm r) \;=\; 0,
+\qquad k=\omega/c,
+\end{equation}
+with the conductor boundary condition $\hat n\times\bm E = 0$ on
+each cavity wall. The discrete eigenvalues
+$k_{nml}=\omega_{nml}/c$ label TE and TM modes. For a rectangular
+cavity of dimensions $a\times b\times d$,
+\begin{equation}
+\label{eq:rect-cavity-modes}
+\omega_{nml} \;=\; c\sqrt{\Bigl(\frac{n\pi}{a}\Bigr)^2 + \Bigl(\frac{m\pi}{b}\Bigr)^2 + \Bigl(\frac{l\pi}{d}\Bigr)^2}.
+\end{equation}
+For a cylindrical cavity of radius $R$ and height $L$ the modes
+are labelled by $(n,m,l)$ with the radial profile of the $m$-th
+mode given by Bessel functions $J_m(k_{nm}\rho)$. Each mode has
+a loaded quality factor $Q_L$ set by the wall conductivity, the
+input/output coupling and any dielectric loss; the corresponding
+linewidth is $\kappa=\omega/Q_L$.
+\end{statement}
+
+\paragraph{Form factor and effective volume.}
+For a haloscope mode of profile $\bm E_{nml}(\bm r)$ in a static
+field $\bm B_0\,\hat z$, the dimensionless form factor that enters
+the Sikivie signal-power formula \cref{eq:axion-power} is
+\begin{equation}
+\label{eq:cavity-form-factor}
+C_{nml} \;=\; \frac{\bigl|\!\int\!\dd^3 r\;\bm E_{nml}\!\cdot\!\hat z\bigr|^2}
+{V\,\int\!\dd^3 r\;|\bm E_{nml}|^2},
+\end{equation}
+maximised by modes whose electric field is parallel to $\bm B_0$
+over the entire mode volume $V$ (the TM$_{010}$ mode of a
+cylindrical cavity, $C_{010}\approx 0.69$). For dark-photon
+absorption the same mode quantities appear, with the form factor
+weighted by the dark-photon polarisation rather than by $\bm B_0$.
+
+% --------------------------------------------------------------
+\section{Single-microwave-photon detectors}
+\label{sec:single-photon}
+
+\begin{phenomenon}
+At the noise floor of a quantum-limited heterodyne microwave
+amplifier, $\sim 1\,\text{photon}/\sqrt{\text{Hz}}/\text{mode}$,
+the relevant question for a haloscope is no longer the analog
+power level but the discrete arrival of single photons in the
+cavity. A transmon coupled to the cavity provides exactly this
+single-photon counting capability, and three families of
+implementations have been demonstrated.
+\end{phenomenon}
+
+The three implementations differ in whether they operate on
+\emph{intracavity} photons (counting the steady-state mode
+population) or on \emph{itinerant} photons (counting photons that
+pass through a one-port or two-port device).
+
+\begin{itemize}
+  \item \emph{Dispersive-shift readout}~\cite{schuster2007}: a
+        transmon coupled to a microwave cavity in the dispersive
+        regime, $\Delta=\omega_q-\omega_c\gg g$, has its
+        frequency shifted by $2\chi$ per intracavity photon, where
+        $\chi=g^2/\Delta$ is the dispersive shift. Resolving
+        these shifts in qubit spectroscopy gives photon-number-resolved
+        readout of the cavity (\cref{sec:disp-photon-counting}
+        below).
+  \item \emph{Lambda-system QND counters}~\cite{inomata2016,kono2018}:
+        an artificial $\Lambda$-type three-level system arranged
+        so that an incoming photon drives the qubit irreversibly
+        from a ground to an auxiliary state, where it is read out.
+        Used for itinerant photons (Inomata~et~al., Kono~et~al.).
+  \item \emph{Direct QND single-shot detection}~\cite{besse2018}:
+        a cavity-coupled transmon operates as a $\sigma_z$
+        measurement on the photon-number basis, with single-shot
+        fidelity sufficient to register an itinerant photon as a
+        click. Demonstrated by Besse~et~al.\ in the Wallraff group.
+  \item \emph{Irreversible four-wave-mixing photon counters}~\cite{lescanne2020}:
+        a JJ nonlinearity engineered to give an irreversible
+        $\hat a^\dagger\,\hat\sigma_-$ coupling between a signal
+        photon and a transmon excitation. Demonstrated by
+        Lescanne~et~al.\ in the Quantronics group; works for
+        itinerant signal photons in a wide bandwidth
+        (\cref{sec:fwm-photon-counting} below).
+  \item \emph{Cavity-coupled transmon for dark matter}~\cite{dixit2021}:
+        Dixit~et~al.\ showed the first application of a
+        photon-number-resolving transmon to a dark-matter haloscope,
+        with photon-counting efficiency $\eta\sim 0.5$ and
+        dark-count rate $\Gamma_{\rm dc}\sim 1\,\text{mHz}$.
+\end{itemize}
+
+The two architectures developed in detail below ---
+dispersive-shift readout and four-wave-mixing irreversible
+coupling --- represent the two complementary routes to
+single-photon sensitivity in cQED, and are the schemes adopted by
+present and proposed haloscope front ends.
+
+% --------------------------------------------------------------
+\section{Dispersive-shift photon counting}
+\label{sec:disp-photon-counting}
+
+\begin{phenomenon}
+A transmon coupled to a microwave cavity in the dispersive regime
+has its transition frequency shifted by an integer multiple of
+the dispersive shift per intracavity photon. Photon-number
+resolution follows from spectroscopy on the qubit at frequencies
+$\omega_q + 2\chi n$ for each non-negative integer $n$.
+\end{phenomenon}
+
+\begin{statement}[Dispersive Hamiltonian]
+\label{stmt:dispersive-H}
+A Jaynes--Cummings interaction
+\begin{equation}
+\op{H}_{\rm JC} \;=\; \hbar\omega_c\,\hat a^\dagger\hat a
+\,+\, \tfrac{\hbar\omega_q}{2}\,\hat\sigma_z
+\,+\, \hbar g\,(\hat a\,\hat\sigma_+ + \hat a^\dagger\,\hat\sigma_-),
+\end{equation}
+in the dispersive limit $|\Delta|=|\omega_q-\omega_c|\gg g$, is
+unitarily equivalent (to leading order in $g/\Delta$) to the
+\emph{dispersive Hamiltonian}
+\begin{equation}
+\label{eq:dispersive-H}
+\op{H}_{\rm disp} \;=\; \hbar\omega_c\,\hat a^\dagger\hat a
+\,+\, \tfrac{\hbar(\omega_q+\chi)}{2}\,\hat\sigma_z
+\,+\, \hbar\chi\,\hat\sigma_z\,\hat a^\dagger\hat a,
+\qquad \chi=\frac{g^2}{\Delta}.
+\end{equation}
+The qubit's transition frequency depends on the photon number
+$n=\langle\hat a^\dagger\hat a\rangle$ as
+$\omega_q^{(n)}=\omega_q+(2n+1)\chi$, so the qubit spectrum
+\emph{is} the photon-number distribution.
+\end{statement}
+
+\paragraph{Derivation sketch.}
+Apply the Schrieffer--Wolff transformation
+$\op{U}=\exp[\,(g/\Delta)(\hat a\,\hat\sigma_+ - \hat a^\dagger\,\hat\sigma_-)\,]$
+to the JC Hamiltonian and expand to second order in $g/\Delta$.
+The off-diagonal cross-coupling cancels at first order, and the
+remaining second-order term is the $\sigma_z\,\hat a^\dagger\hat a$
+operator with prefactor $g^2/\Delta$, plus an irrelevant Lamb-style
+shift to the qubit frequency. Schuster~et~al.~\cite{schuster2007}
+demonstrated photon-number-resolved spectroscopy on a transmon
+following this procedure, observing comb-like qubit-spectroscopy
+peaks at $\omega_q + 2\chi n$ corresponding to photon numbers up
+to $n\sim 5$.
+
+\begin{statement}[Photon-number resolution requirement]
+\label{stmt:disp-resolution}
+Number-resolved readout requires the per-photon shift to exceed
+both the cavity linewidth $\kappa$ (photon lifetime) and the
+qubit dephasing rate $1/T_2$:
+\begin{equation}
+\label{eq:photon-resolution}
+2\,\chi \;>\; \kappa,\qquad
+2\,\chi \;>\; 1/T_2.
+\end{equation}
+With $\chi/2\pi\sim 1\,\text{MHz}$, $\kappa/2\pi\sim 100\,\text{kHz}$
+and $T_2\sim 50\,\mu\text{s}$, both conditions are comfortably
+satisfied in present cQED hardware.
+\end{statement}
+
+\paragraph{Use as a photon counter.}
+Drive the qubit at the spectroscopy frequency $\omega_q^{(0)}$
+that selects $n=0$. A measurable Rabi response indicates the cavity
+is in the vacuum; the absence of a response indicates a non-zero
+photon population, and the population can then be resolved by
+sweeping through $n=1,2,\dots$ The Dixit~et~al.\
+haloscope~\cite{dixit2021} uses this protocol with the qubit gated
+on a known time window, achieving an effective dark-count rate
+$\Gamma_{\rm dc}\sim 1\,\text{mHz}$ that is set primarily by
+spurious thermal photons reaching the cavity from the readout chain.
+
+% --------------------------------------------------------------
+\section{Four-wave-mixing photon counting}
+\label{sec:fwm-photon-counting}
+
+\begin{phenomenon}
+A Josephson junction is intrinsically nonlinear: its potential
+$-E_J\cos\hat\varphi$ contains a $\hat\varphi^4$ term that, in
+second quantisation, generates four-wave mixing between the modes
+of the circuit. Engineered correctly, this nonlinearity converts
+an incoming signal photon into a qubit excitation in an
+\emph{irreversible} way --- the click of a single-microwave-photon
+counter for itinerant photons.
+\end{phenomenon}
+
+\begin{statement}[Josephson nonlinearity in second quantisation]
+\label{stmt:josephson-fwm}
+Expanding the Josephson Hamiltonian around the equilibrium phase
+$\hat\varphi=0$,
+\begin{equation}
+\label{eq:josephson-expansion}
+\op{H}_J \;=\; -E_J\cos\hat\varphi
+\;\approx\; -E_J + \frac{E_J}{2}\,\hat\varphi^2
+\,-\, \frac{E_J}{24}\,\hat\varphi^4
+\,+\, \mathcal O(\hat\varphi^6),
+\end{equation}
+where the quadratic term combines with the capacitive energy to
+form the linear LC oscillator (the qubit) and the $\hat\varphi^4$
+term is the leading nonlinearity. Writing
+$\hat\varphi=\sum_i \varphi_{{\rm zpf},i}\,(\hat a_i+\hat a_i^\dagger)$
+as a sum over circuit modes (signal, qubit, ancilla), the
+$\hat\varphi^4$ term contains four-wave-mixing products
+$\hat a_i^\dagger \hat a_j^\dagger \hat a_k \hat a_l$, with the
+selection rules controlled by the engineered mode frequencies
+and zero-point fluctuations $\varphi_{{\rm zpf}}$.
+\end{statement}
+
+\paragraph{Engineering the irreversible coupling.}
+The Quantronics scheme of Lescanne~et~al.~\cite{lescanne2020} uses
+three modes:
+\begin{itemize}
+  \item a \emph{signal} mode (the incoming itinerant photon to
+        be detected, frequency $\omega_s$),
+  \item a \emph{qubit/buffer} mode (transmon, frequency $\omega_q$),
+  \item a \emph{drive} mode (an external pump at frequency
+        $\omega_d$).
+\end{itemize}
+Choosing $\omega_s + \omega_d = \omega_q + \omega_e$ for an
+auxiliary excited state $|e\rangle$ above the qubit, the
+relevant four-wave-mixing process becomes
+\begin{equation}
+\label{eq:fwm-process}
+\op{H}_{\rm FWM}^{(\rm res)}
+\;\propto\; g_4\,\bigl(\hat a_s\,\hat a_d\,|e\rangle\langle g| + \hbox{h.c.}\bigr),
+\end{equation}
+in which a signal photon plus a drive photon together excite the
+qubit from $|g\rangle$ to $|e\rangle$. The drive is then
+adiabatically removed; the qubit decay $|e\rangle\to|g\rangle$ is
+read out conventionally, leaving the signal-photon information
+imprinted as a click. The \emph{irreversibility} comes from the
+qubit decay channel: once the qubit decays from $|e\rangle$, the
+signal photon is gone, so the detector is one-shot, not
+demolition-free. This is the key innovation that makes the
+\cref{eq:fwm-process} sensitive to single itinerant photons of
+arbitrary signal-mode amplitude.
+
+\begin{statement}[Detection efficiency and bandwidth]
+\label{stmt:fwm-efficiency}
+For a four-wave-mixing photon counter operating at signal
+frequency $\omega_s/2\pi$, with mode-coupling rate
+$\kappa_s\sim 1\,\text{MHz}$ to the signal port, drive amplitude
+chosen to give an irreversible-coupling rate
+$\gamma\sim 1\,\text{MHz}$, and qubit measurement fidelity
+$\eta_{\rm meas}\sim 0.95$, the achievable single-photon
+detection efficiency is~\cite{lescanne2020}
+\begin{equation}
+\label{eq:fwm-efficiency}
+\eta \;\sim\; \eta_{\rm meas}\,\frac{4\,\kappa_s\,\gamma}{(\kappa_s+\gamma)^2}\,,
+\end{equation}
+maximised at $\gamma=\kappa_s$ to give $\eta\sim 0.5$, with
+detection bandwidth set by $\kappa_s$. The dark-count rate is
+limited by spurious drive-induced excitations of the qubit and
+is reported in the few-mHz range.
+\end{statement}
+
+% --------------------------------------------------------------
+\section{Sensitivity for bosonic dark matter}
+\label{sec:cavity-sensitivity}
+
+\begin{phenomenon}
+A high-$Q$ microwave cavity tuned to the Compton frequency
+$\omega_\chi=m_\chi c^2/\hbar$ of bosonic dark matter accumulates
+an intracavity photon population proportional to the dark-matter
+field amplitude squared. A single-microwave-photon counter
+reads this population out at the standard quantum limit set by
+its dark-count rate; the resulting sensitivity to the underlying
+coupling parameter ($\varepsilon$ for dark photons,
+$g_{a\gamma\gamma}$ for axions) is set by the
+counter's $\Gamma_{\rm dc}$, the cavity's $Q$ and form factor,
+and the integration time.
+\end{phenomenon>
+
+\paragraph{Signal photon rate.}
+Combining \cref{stmt:dark-photon-rate} (dark-photon absorption
+rate per unit volume) with the cavity boundary conditions of
+\cref{stmt:cavity-modes}, the signal photon rate inside the
+cavity is
+\begin{equation}
+\label{eq:cavity-signal-rate}
+\Gamma_{\rm sig}^{\rm DP} \;\sim\;
+\varepsilon^2\,\frac{\rho_\chi}{m_{A'}}\,
+V\,Q\,\omega_{A'}\,F_{\rm geom},
+\end{equation}
+with $V$ the cavity volume, $Q$ the loaded quality factor,
+$\omega_{A'}=m_{A'}c^2/\hbar$, and $F_{\rm geom}\leq 1$ a
+geometric factor that depends on the cavity-mode overlap with
+the dark-photon polarisation. For axions, the corresponding rate
+follows from the Sikivie signal-power
+formula~\cref{eq:axion-power} divided by $\hbar\omega_a$:
+\begin{equation}
+\label{eq:cavity-signal-rate-axion}
+\Gamma_{\rm sig}^{\rm a} \;\sim\;
+\frac{P_{\rm sig}}{\hbar\,\omega_a} \;=\;
+\frac{\kappa\,g_{a\gamma\gamma}^2\,\rho_\chi\,B_0^2\,V\,Q_L\,C_{nml}}{\hbar\,m_a^2}.
+\end{equation}
+
+\paragraph{Numerical reach: dark photons.}
+For a 1\,litre cavity at $\omega_{A'}/2\pi=5\,\text{GHz}$
+(corresponding to $m_{A'}\approx 20\,\mu\text{eV}$), $Q=10^5$,
+$\rho_\chi/m_{A'}\approx 10^{15}/$cm$^3$, and
+$F_{\rm geom}\approx 0.5$:
+\begin{equation}
+\Gamma_{\rm sig}^{\rm DP} \;\sim\; \varepsilon^2\,\cdot 10^{15}/\text{cm}^3\,\cdot
+10^{-3}\,\text{m}^3\,\cdot 10^5\,\cdot 3\times 10^{10}/\text{s}
+\;\sim\; 3\times 10^{27}\,\varepsilon^2\,\text{s}^{-1}.
+\end{equation}
+With $\Gamma_{\rm dc}=1\,\text{mHz}$ and a $10$-day integration
+($\tau=8.6\times 10^5\,\text{s}$), the SNR-1 sensitivity is at
+$\varepsilon\sim\sqrt{\Gamma_{\rm dc}\,\tau\,/\,(3\times 10^{27}\,\tau)}
+\sim 10^{-15}$, in line with the order-of-magnitude estimate of
+\cref{ex:transmon-counter}.
+
+\paragraph{Numerical reach: axions.}
+For an axion at $m_a c^2=4\,\mu\text{eV}$
+($\omega_a/2\pi=1\,\text{GHz}$), $B_0=8\,\text{T}$, $V=1\,\text{L}$,
+$Q_L=10^5$, $C_{010}=0.69$, $\kappa=1/2$, the signal-photon rate
+from \cref{eq:cavity-signal-rate-axion} (in natural units, with
+the standard SI conversion) gives the order-of-magnitude
+estimate of \cref{ex:axion-power}: a few$\times 10^{-2}$ photons per
+second at $g_{a\gamma\gamma}=10^{-15}\,\text{GeV}^{-1}$. A
+ten-day integration gives $\sim 10^4$ signal photons but $\sim
+10^3$ background, giving signal-to-background of order $10$ ---
+just inside the QCD-axion floor $g_{a\gamma\gamma}\sim 10^{-15}\,\text{GeV}^{-1}$
+in this mass band.
+
+\paragraph{Comparison and outlook.}
+The cavity microwave-photon-counting picture is the most
+quantum-information-engineering-mature of the four cQED-based DM
+mechanisms (\cref{ch:qp-detection,ch:qubit-antenna,ch:phonon-qubit-piezo,ch:microwave-absorption}):
+the photon-number-resolved transmon was demonstrated in
+2007~\cite{schuster2007}, the irreversible photon counter in
+2020~\cite{lescanne2020}, and the first DM application in
+2021~\cite{dixit2021}. Future improvements will come from larger
+cavity volumes, higher Q (superconducting cavities approach
+$Q\sim 10^{10}$), and squeezed-state input that beats the
+standard quantum limit (HAYSTAC~\cite{haystac2021}). Together
+with the complementary mass coverage of the recoil and
+absorption-with-quasiparticle channels covered earlier in
+Part~VI, this gives the cQED dark-matter programme its
+mass-vs-coupling envelope.
