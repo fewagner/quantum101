@@ -327,7 +327,10 @@ system. The same mechanism then produces a smooth exponential decay
 of the off-diagonal density-matrix elements, with characteristic
 timescale $T_2$. The systematic theory --- the Born--Markov
 approximation, the Lindblad master equation, the relaxation
-($T_1$), dephasing ($T_2$) and pure-dephasing ($T_2^*$) times --- is
+($T_1$), the (total) dephasing ($T_2$) and the pure-dephasing
+($T_\phi$) times, related by $1/T_2 = 1/(2T_1) + 1/T_\phi$, with
+the inhomogeneous/free-induction time $T_2^*\leq T_2$ further
+shortened by quasi-static frequency noise --- is
 \cref{ch:open-systems}. The example above is its kernel in three
 lines.
 \end{example}
@@ -399,9 +402,10 @@ Applying the partial-trace formula \cref{eq:partial-trace} to
 \end{equation}
 i.e.\ qubit $A$ on its own is in the maximally mixed state ---
 Bloch vector at the origin. Even though the joint $\ket{\Phi^+}$
-is perfectly known, an observer with access only to $A$ has zero
-predictive information about $A$'s observables: this is the
-content of \cref{stmt:reduced-pure} made concrete.
+is perfectly known, an observer with access only to $A$ has no
+bias for any nontrivial single-qubit observable: every Pauli
+measurement on $A$ alone returns $\pm 1$ with equal probability.
+This is the content of \cref{stmt:reduced-pure} made concrete.
 
 \paragraph{The entanglement entropy.}
 Plug $\lambda_1=\lambda_2=1/\sqrt 2$ into the entropy formula of
@@ -553,13 +557,13 @@ consumes them.
 \paragraph{Decoherence in three lines.}
 A system qubit in $\ket{+}_S$ plus an environment qubit in
 $\ket{0}_E$ becomes the joint Bell state $\ket{\Phi^+}$ after a
-state-copy interaction; tracing out $E$ leaves the system in
-$\op{\rho}_S=\id/2$, with its Bloch vector contracted from
-$(1,0,0)$ to the origin. The off-diagonal coherence has not been
-destroyed but transferred into $S$--$E$ correlations that we
-discard. This is the kernel of pure dephasing; the
-continuous-bath generalisation gives the smooth $T_2$ decay
-treated systematically in Part~II.
+state-copy interaction; tracing out $E$ leaves the system in the
+\emph{maximally mixed} state $\op{\rho}_S=\tfrac12\,\id$, with its
+Bloch vector contracted from $(1,0,0)$ to the origin. The
+off-diagonal coherence has not been destroyed but transferred into
+$S$--$E$ correlations that we discard. This is the kernel of pure
+dephasing; the continuous-bath generalisation gives the smooth
+$T_2$ decay treated systematically in Part~II.
 
 \end{chaptersummary}
 

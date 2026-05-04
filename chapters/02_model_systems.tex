@@ -87,7 +87,7 @@ $\ket{n}=(\hat{a}^\dagger)^n/\sqrt{n!}\,\ket{0}$.
 
 \begin{example}[Photons in a cavity]
 A single mode of the electromagnetic field, treated in
-\cref{ch:em-quantization}, has exactly this Hamiltonian with
+\cref{ch:em-quantisation}, has exactly this Hamiltonian with
 $\op{N}$ counting photons. The same algebra describes phonons in a
 crystal and, with the right choice of variables, the LC oscillator
 of a superconducting circuit (\cref{ch:circuit-qed}).
@@ -163,28 +163,38 @@ qubit's Hilbert space about the three coordinate axes. Concretely,
 \end{equation}
 implements a rotation by angle $\theta$ about the $i$-axis: it
 takes the Bloch vector $\bm{r}$ (\cref{sec:bloch}) to the rotated
-vector $R_i(\theta)\bm{r}$. The Pauli operators themselves
-($\theta\to\infty$ in some sense) are not rotations --- they have
-eigenvalues $\pm1$ and square to $\id$ --- but they generate the
-rotation group through \cref{eq:pauli-rotation}. The factor
-$\frac12$ in the exponent reflects the spinor structure of $\C^2$:
-a $2\pi$ rotation maps $\ket{\psi}\to-\ket{\psi}$ rather than back
-to $\ket{\psi}$, and only a $4\pi$ rotation is the identity. This
+vector $R_i(\theta)\bm{r}$. A Pauli operator itself is, up to an
+overall phase, a rotation by $\pi$: substituting $\theta=\pi$ in
+\cref{eq:pauli-rotation} gives $\hat{R}_i(\pi)=-i\hat\sigma_i$,
+i.e.\ $\hat\sigma_i = i\,\hat{R}_i(\pi)$. We do not usually call
+$\hat\sigma_i$ ``the rotation'' because of the explicit phase
+factor, but the relation makes the geometric meaning of the Pauli
+operators precise: they are the generators of $SU(2)$ and, with a
+phase, the half-turn rotations themselves. The factor $\frac12$ in
+the exponent reflects the spinor structure of $\C^2$: a $2\pi$
+rotation maps $\ket{\psi}\to-\ket{\psi}$ rather than back to
+$\ket{\psi}$, and only a $4\pi$ rotation is the identity. This
 geometric picture is what makes the Bloch sphere
 (\cref{sec:bloch}) such a useful tool.
 \end{remark}
 
 \begin{statement}[Most general TLS Hamiltonian]
 \label{stmt:tls-hamiltonian}
-Up to an irrelevant additive constant, every Hermitian operator on
-$\C^2$ has the form
+Every Hermitian operator on $\C^2$ has the form
 \begin{equation}
 \label{eq:tls-h}
-\op{H} \;=\; \tfrac{\hbar}{2}\,\bm{\Omega}\cdot\hat{\bm{\sigma}},
+\op{H} \;=\; c_0\,\id \,+\, \tfrac{\hbar}{2}\,\bm{\Omega}\cdot\hat{\bm{\sigma}},
 \end{equation}
-for some real vector $\bm{\Omega}=(\Omega_x,\Omega_y,\Omega_z)\in\R^3$
-of angular frequencies. (We pull $\hbar$ out explicitly so that the
-components of $\bm{\Omega}$ have units of $1/\text{time}$.)
+for some real scalar $c_0$ and real vector
+$\bm{\Omega}=(\Omega_x,\Omega_y,\Omega_z)\in\R^3$ of angular
+frequencies. The $c_0\,\id$ term is an overall energy shift that
+drops out of all dynamics and observable predictions and is
+typically dropped; we will quote ``the TLS Hamiltonian'' as
+$(\hbar/2)\,\bm{\Omega}\cdot\hat{\bm{\sigma}}$ from here on,
+restoring $c_0$ only when needed (for instance to make a chosen
+state have a particular total energy). We pull $\hbar$ out
+explicitly so that the components of $\bm{\Omega}$ have units of
+$1/\text{time}$.
 \end{statement}
 
 The eigenvalues of \cref{eq:tls-h} are $\pm\hbar|\bm{\Omega}|/2$, and the
@@ -321,17 +331,24 @@ itself is what every single-qubit gate exploits.
 Consider the driven-qubit Hamiltonian
 \begin{equation}
 \label{eq:driven-tls}
-\op{H}(t) = \frac{\hbar\omega_q}{2}\hat\sigma_z
+\op{H}(t) = -\,\frac{\hbar\omega_q}{2}\hat\sigma_z
           + \hbar\Omega\cos(\omega_d t)\,\hat\sigma_x,
 \end{equation}
 with qubit angular frequency $\omega_q$, drive (angular) frequency
 $\omega_d$, and drive amplitude $\Omega$ (also an angular
-frequency). This is the same physical setup as
+frequency). The minus sign on $\hat\sigma_z$ is required by the
+notation convention $\hat\sigma_z\ket{0}=+\ket{0}$, $\ket{0}$
+ground: with this sign, $\ket{0}$ has energy
+$-\hbar\omega_q/2$ and $\ket{1}$ has energy $+\hbar\omega_q/2$,
+so the level spacing is $\hbar\omega_q>0$ and $\ket{0}$ is indeed
+the lowest-energy state. This is the same physical setup as
 \cref{ex:tls-rotating-frame} of \cref{ch:postulates}, now written
 in the Pauli-operator language of \cref{def:pauli}: the
-identification is $\op{H}_0\,(\text{from Ex.\,\ref{ex:tls-rotating-frame}})
-\leftrightarrow\frac{\hbar\omega_q}{2}\hat\sigma_z$ (up to a
-$\frac12$-Identity additive constant) and
+identification is
+$\hbar\omega_q\,\ket{1}\bra{1}\,(\text{from Ex.\,\ref{ex:tls-rotating-frame}})
+\,=\,\frac{\hbar\omega_q}{2}\,\id-\frac{\hbar\omega_q}{2}\hat\sigma_z$,
+i.e.\ $-\frac{\hbar\omega_q}{2}\hat\sigma_z$ up to an additive
+$\frac12 \hbar\omega_q\,\id$ that drops out of all dynamics, and
 $\ket{0}\bra{1}+\ket{1}\bra{0}\leftrightarrow\hat\sigma_x$.
 \Cref{ex:tls-rotating-frame} stopped after deriving the
 interaction-picture Hamiltonian and identifying its slow and fast
@@ -367,14 +384,17 @@ $\op{H}_0$ itself, ending up in a frame rotating at the system
 frequency $\omega_q$. The terms then oscillated at the detuning
 $\omega_q-\omega_d$ (slow) and at $\omega_q+\omega_d$ (fast). Here
 we make the slightly different --- and stronger --- choice of
-rotating at the \emph{drive} frequency $\omega_d$:
+co-rotating with the drive at frequency $\omega_d$,
 \begin{equation}
 \label{eq:rabi-rotating-unitary}
-\op{U}_0(t) \;=\; e^{-i\omega_d t\,\hat\sigma_z/2}.
+\op{U}_0(t) \;=\; e^{+i\omega_d t\,\hat\sigma_z/2},
 \end{equation}
-That choice is engineered to cancel the explicit $\cos(\omega_d t)$
-in \cref{eq:driven-tls}; it leaves us with a time-\emph{independent}
-Hamiltonian once the fast counter-rotating piece is dropped, which
+where the sign in the exponent is chosen consistently with
+\cref{eq:driven-tls} so that the inertial frame term partially
+cancels the qubit Hamiltonian. This choice is engineered to cancel
+the explicit $\cos(\omega_d t)$ in \cref{eq:driven-tls}; it leaves
+us with a time-\emph{independent} Hamiltonian once the fast
+counter-rotating piece is dropped, which
 \cref{ex:tls-rotating-frame} did not achieve.
 
 \paragraph{Carry out the transformation.}
@@ -382,25 +402,25 @@ Differentiating \cref{eq:rabi-rotating-unitary} gives the inertial
 term
 \begin{equation}
 -i\hbar\,\op{U}_0^\dagger\dot{\op{U}}_0
-\;=\; -\frac{\hbar\omega_d}{2}\hat\sigma_z.
+\;=\; +\,\frac{\hbar\omega_d}{2}\hat\sigma_z.
 \end{equation}
 Because $\op{U}_0$ commutes with $\hat\sigma_z$, the diagonal piece
 of $\op{H}$ is unchanged by conjugation, and combining with the
 inertial term yields
 \begin{equation}
-\op{U}_0^\dagger\,\frac{\hbar\omega_q}{2}\hat\sigma_z\,\op{U}_0
-- \frac{\hbar\omega_d}{2}\hat\sigma_z
-\;=\; \frac{\hbar\Delta}{2}\hat\sigma_z,
+\op{U}_0^\dagger\!\Bigl(-\frac{\hbar\omega_q}{2}\hat\sigma_z\Bigr)\op{U}_0
++ \frac{\hbar\omega_d}{2}\hat\sigma_z
+\;=\; -\frac{\hbar\Delta}{2}\hat\sigma_z,
 \qquad \Delta\equiv\omega_q-\omega_d.
 \end{equation}
-For the off-diagonal piece, use the same identity as in
-\cref{ex:tls-rotating-frame},
+For the off-diagonal piece, the conjugation identity (with the
+sign flip following from \cref{eq:rabi-rotating-unitary}) reads
 \begin{equation}
 \op{U}_0^\dagger\,\hat\sigma_\pm\,\op{U}_0
-\;=\; e^{\pm i\omega_d t}\,\hat\sigma_\pm,
+\;=\; e^{\mp i\omega_d t}\,\hat\sigma_\pm,
 \quad\text{hence}\quad
 \op{U}_0^\dagger\,\hat\sigma_x\,\op{U}_0
-\;=\; e^{+i\omega_d t}\hat\sigma_+ + e^{-i\omega_d t}\hat\sigma_-.
+\;=\; e^{-i\omega_d t}\hat\sigma_+ + e^{+i\omega_d t}\hat\sigma_-.
 \end{equation}
 Multiplying by
 $\cos(\omega_d t)=\tfrac12(e^{i\omega_d t}+e^{-i\omega_d t})$ gives
@@ -408,7 +428,7 @@ four terms,
 \begin{equation}
 \hbar\Omega\cos(\omega_d t)\,\op{U}_0^\dagger\hat\sigma_x\op{U}_0
 \;=\; \tfrac{\hbar\Omega}{2}\bigl[\hat\sigma_+ + \hat\sigma_- \bigr]
-\;+\; \tfrac{\hbar\Omega}{2}\bigl[e^{+2i\omega_d t}\hat\sigma_+ + e^{-2i\omega_d t}\hat\sigma_-\bigr],
+\;+\; \tfrac{\hbar\Omega}{2}\bigl[e^{-2i\omega_d t}\hat\sigma_+ + e^{+2i\omega_d t}\hat\sigma_-\bigr],
 \end{equation}
 of which the first bracket is the time-independent
 \emph{co-rotating} piece (it equals
@@ -419,14 +439,16 @@ $\Omega\ll\omega_q+\omega_d$ --- finally yields the static
 rotating-frame Hamiltonian
 \begin{equation}
 \label{eq:rabi-h-rwa}
-\op{H}_R \;=\; \frac{\hbar\Delta}{2}\hat\sigma_z + \frac{\hbar\Omega}{2}\hat\sigma_x.
+\op{H}_R \;=\; -\frac{\hbar\Delta}{2}\hat\sigma_z + \frac{\hbar\Omega}{2}\hat\sigma_x.
 \end{equation}
 This is exactly the form \cref{eq:tls-h} with
-$\bm{\Omega}=(\Omega,0,\Delta)$, so the Bloch vector precesses about
-$\bm{\Omega}$ at the \emph{generalised Rabi frequency}
+$\bm{\Omega}=(\Omega,0,-\Delta)$, so the Bloch vector precesses
+about $\bm{\Omega}$ at the \emph{generalised Rabi frequency}
 \begin{equation}
-\Omega_R = \sqrt{\Omega^2+\Delta^2}.
+\Omega_R = \sqrt{\Omega^2+\Delta^2},
 \end{equation}
+with the magnitude depending only on $\Delta^2$ and so independent
+of the sign convention.
 
 \begin{theorem}[Rabi formula]
 \label{thm:rabi}
@@ -522,11 +544,13 @@ angular speed $|\bm{\Omega}|$.
 
 \paragraph{Driven qubit and Rabi oscillations.}
 For
-$\op{H}(t)=\tfrac{\hbar\omega_q}{2}\hat\sigma_z+\hbar\Omega\cos(\omega_d t)\hat\sigma_x$,
-moving to the frame rotating at $\omega_d$ and applying the RWA
-gives the static rotating-frame Hamiltonian
+$\op{H}(t)=-\tfrac{\hbar\omega_q}{2}\hat\sigma_z+\hbar\Omega\cos(\omega_d t)\hat\sigma_x$
+(the minus sign on $\hat\sigma_z$ is fixed by
+$\hat\sigma_z\ket{0}=+\ket{0}$ with $\ket{0}$ ground), moving to
+the frame co-rotating with the drive and applying the RWA gives
+the static rotating-frame Hamiltonian
 \begin{equation}
-\op{H}_R \;=\; \tfrac{\hbar\Delta}{2}\hat\sigma_z+\tfrac{\hbar\Omega}{2}\hat\sigma_x,
+\op{H}_R \;=\; -\tfrac{\hbar\Delta}{2}\hat\sigma_z+\tfrac{\hbar\Omega}{2}\hat\sigma_x,
 \qquad \Delta=\omega_q-\omega_d.
 \end{equation}
 Starting in $\ket{0}$,
@@ -679,22 +703,25 @@ $P_{0\to1}(t)=\text{contrast}\cdot\sin^2(\Omega_R t/2)$ for each.
 
 \begin{exercise}[Free precession of a Bloch vector]
 A qubit prepared in $\ket{+}=(\ket{0}+\ket{1})/\sqrt 2$ is left to
-evolve under $\op{H}_0=(\hbar\omega_q/2)\hat\sigma_z$ for time $T$.
+evolve under $\op{H}_0=-(\hbar\omega_q/2)\hat\sigma_z$ for time
+$T$ (the sign is the one that makes $\ket{0}$ the ground state).
 Compute (i) the resulting state, (ii) the Bloch vector at time
 $T$, and (iii) the probability of obtaining $+1$ when measuring
 $\hat\sigma_x$ after a free-evolution time $T$ chosen to be
 $T=\pi/(2\omega_q)$.
 \begin{solution}
-(i) $\op{U}\ket{+}=(e^{-i\omega_q T/2}\ket{0}+e^{+i\omega_q T/2}\ket{1})/\sqrt 2
-\propto(\ket{0}+e^{i\omega_q T}\ket{1})/\sqrt 2$.
-(ii) Bloch vector $(\cos\omega_q T,\sin\omega_q T,0)$ --- equator
-precession at angular speed $\omega_q$, just as in
-Exercise~6 above.
+(i) $\op{U}=e^{-i\op{H}_0 T/\hbar}=e^{+i\omega_q T\hat\sigma_z/2}$,
+so
+$\op{U}\ket{+}=(e^{+i\omega_q T/2}\ket{0}+e^{-i\omega_q T/2}\ket{1})/\sqrt 2
+\propto(\ket{0}+e^{-i\omega_q T}\ket{1})/\sqrt 2$.
+(ii) Bloch vector $(\cos\omega_q T,-\sin\omega_q T,0)$ --- equator
+precession at angular speed $\omega_q$ in the opposite sense from
+the textbook $H=+(\hbar\omega_q/2)\hat\sigma_z$ convention.
 (iii) For $\omega_q T=\pi/2$, the state is
-$(\ket{0}+i\ket{1})/\sqrt 2=\ket{+_y}$, with
-$\langle\hat\sigma_x\rangle=0$, so $p_x(+1)=1/2$. After a quarter
+$(\ket{0}-i\ket{1})/\sqrt 2=\ket{-_y}$, with
+$\langle\hat\sigma_x\rangle=0$ so $p_x(+1)=1/2$. After a quarter
 of a Larmor period the qubit has rotated from $\ket{+_x}$ to
-$\ket{+_y}$.
+$\ket{-_y}$.
 \end{solution}
 \end{exercise}
 
@@ -708,10 +735,10 @@ $\epsilon_\text{RWA}=\Omega/(2\omega_q)=30/(2\cdot 5000)=3\times 10^{-3}$.
 The leading Bloch--Siegert frequency shift is of order
 $\epsilon_\text{RWA}^2\,\omega_q\approx 9\times 10^{-6}\cdot 5\,\text{GHz}
 \approx 45\,\text{kHz}$. This is small compared to typical drive
-amplitudes but not always negligible compared to qubit linewidths
-($\sim$10\,kHz at the state of the art): single-qubit gates are
-calibrated empirically and the Bloch--Siegert shift is absorbed
-into the calibration. Faster drives ($\Omega/\omega_q\gtrsim 0.1$)
-require beyond-RWA modelling.
+amplitudes; whether it is also small compared to the qubit
+linewidth depends strongly on the platform and operating point.
+In practice single-qubit gates are calibrated empirically and the
+Bloch--Siegert shift is absorbed into the calibration. Faster
+drives ($\Omega/\omega_q\gtrsim 0.1$) require beyond-RWA modelling.
 \end{solution}
 \end{exercise}

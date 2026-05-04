@@ -100,6 +100,29 @@
 }
 \usepackage{cleveref}
 
+% Cleveref otherwise reports every theorem-like environment as
+% "theorem N.M" because they share the theorem counter; declare a
+% per-environment name so cref reports "Definition / Example /
+% Statement / ..." correctly.
+\crefname{theorem}{Theorem}{Theorems}
+\Crefname{theorem}{Theorem}{Theorems}
+\crefname{proposition}{Proposition}{Propositions}
+\Crefname{proposition}{Proposition}{Propositions}
+\crefname{lemma}{Lemma}{Lemmas}
+\Crefname{lemma}{Lemma}{Lemmas}
+\crefname{corollary}{Corollary}{Corollaries}
+\Crefname{corollary}{Corollary}{Corollaries}
+\crefname{definition}{Definition}{Definitions}
+\Crefname{definition}{Definition}{Definitions}
+\crefname{statement}{Statement}{Statements}
+\Crefname{statement}{Statement}{Statements}
+\crefname{postulate}{Postulate}{Postulates}
+\Crefname{postulate}{Postulate}{Postulates}
+\crefname{example}{Example}{Examples}
+\Crefname{example}{Example}{Examples}
+\crefname{application}{Application}{Applications}
+\Crefname{application}{Application}{Applications}
+
 % ---- Theorem-like environments (numbering) ----
 \theoremstyle{plain}
 \newtheorem{theorem}{Theorem}[chapter]

@@ -1,0 +1,467 @@
+Response to docs/20260503_review_notes.txt
+==========================================
+
+Item numbering matches the review file.  "Done." means the issue
+is fixed in the source as of this commit; longer comments either
+explain what was done (when it was non-trivial) or argue why I did
+not implement the suggestion.  Items the review explicitly marked
+"IGNORE FOR NOW" are listed but not addressed.
+
+High-level / structural issues
+------------------------------
+
+1. Ignored per the review (label PDF as partial draft / rewrite
+   abstract).
+
+2. Ignored per the review (unresolved "??" cross-references).
+
+3. Done.  Added crefname / Crefname declarations in preamble.tex
+   for theorem, proposition, lemma, corollary, definition,
+   statement, postulate, example, application.  cref now reports
+   "Definition 1.5", "Example 1.15", "Statement 2.4", etc., not
+   "theorem N.M".  Items 10, 29, 66, 67 are the same fix and are
+   covered by this change.
+
+4. Done.  This was the largest single fix.  Approach: keep the
+   existing convention sigma_z|0> = +|0> (so |0> is the +1
+   eigenstate) and *change the sign* on the qubit Hamiltonian to
+   H = -(hbar omega_q / 2) sigma_z so that |0> is the ground
+   state.  Propagated through:
+     * eq:driven-tls (chapter 2 section 2.4) and the surrounding
+       identification with example 1.15 in chapter 1;
+     * eq:rabi-rotating-unitary: U_0 sign flipped to e^{+i omega_d t
+       sigma_z/2} so the rotating-frame algebra still cancels the
+       cosine drive;
+     * inertial term and conjugation identities updated;
+     * eq:rabi-h-rwa now -(hbar Delta/2) sigma_z + (hbar Omega/2)
+       sigma_x; the Bloch vector is (Omega, 0, -Delta) and the
+       Rabi formula is unchanged because |bm Omega| does not
+       depend on the sign of Delta;
+     * chapter 2 takeaway box;
+     * Exercise 2.9 (free precession): updated the H_0 sign and
+       the resulting Bloch vector / final state;
+     * chapter 4 section 4.3 RWA two-level example.
+   I did NOT change the basis labelling or the matrix definition
+   of sigma_z (these stay sigma_z = diag(+1, -1)) because that
+   would silently break the Pauli algebra
+   [sigma_x, sigma_y] = 2i sigma_z.
+
+5. Subitems on numerical errors are addressed individually below
+   (53, 54, 45, etc.).
+
+6. Done in spirit.  Did a sweep for American spellings of words
+   that recur in the document and corrected them ("quantization"
+   -> "quantisation" in abstract.tex and chapters/02_model_systems.tex
+   including the chapter label "ch:em-quantisation").  The rest
+   of the document already uses British spelling consistently
+   (quantisation, specialise, realise, optimise, stabiliser, etc.).
+   There may still be one-off Americanisms in the long bibliography
+   entries; left those alone since they reproduce paper titles.
+
+Front matter / introduction
+---------------------------
+
+7. Ignored per the review.
+
+8. Done.  Reworded "the only known nonlinear, non-dissipative
+   inductor at low temperatures" -> "a practical, lithographically
+   controllable, nearly non-dissipative nonlinear inductance at
+   low temperatures."
+
+9. Done.  Reworded "operating at the threshold of practical fault
+   tolerance" -> "approaching regimes relevant for fault-tolerant
+   operation."
+
+Chapter 1
+---------
+
+10. Done.  Same fix as item 3 (cref naming).
+
+11. Done.  Postulate 1.4 now reads "a self-adjoint linear operator
+    on H (in finite dimensions equivalently called Hermitian; in
+    infinite dimensions self-adjoint is the strictly correct
+    condition --- see def:linear-op)".
+
+12. Done.  Postulate 1.7 now adds "...provided p(a_n) > 0..." to
+    the projection-rule clause.
+
+13. Done.  Example 1.8 now reads p(+1)=cos^2(theta/2),
+    p(-1)=sin^2(theta/2) for the eigenvalues +-1 of sigma_z,
+    rather than p(0), p(1).
+
+14. Done.  Sentence now reads "In finite dimensions (and, with
+    appropriate spectral assumptions, in the infinite-dimensional
+    cases relevant for these notes), two Hermitian operators share
+    an orthonormal eigenbasis if and only if [A,B]=0."
+
+15. Done.  Replaced "the two observables cannot be sharply
+    specified at the same time" with "they cannot be simultaneously
+    diagonalised, so they cannot be assigned sharp values for every
+    state at once --- although a particular state may still happen
+    to give a sharp value for both when it lies in their joint
+    eigenspace."
+
+16. Done.  Statement 1.14 now states "For time-independent H the
+    full propagator reduces to U(t)=exp(-iHt/hbar); for
+    time-dependent H it is the time-ordered exponential
+    U(t,t_0) = T exp[-(i/hbar) int H(t') dt'], which equals the
+    simple exponential only when H(t) commutes with itself at
+    different times."  The assumption that H_0 is time-independent
+    is also called out explicitly.
+
+17. Done.  The Heisenberg equation in Statement 1.14 now reads
+    dO_H/dt = U^dag (partial_t O_S) U + (i/hbar) [H_H(t), O_H(t)],
+    with H_H(t) defined and a closing sentence noting the explicit
+    partial-time term vanishes for time-independent O_S to recover
+    the textbook form.
+
+18. Done.  Subsumed in item 17: the new Statement 1.14 makes
+    "H_0 time-independent" explicit at the top.
+
+19. Done.  Exercise 1.7 now reads "<O>(t) is conserved for every
+    initial state iff [H,O]=0", with an explicit caveat that a
+    particular state can still have constant <O> when [H,O] != 0
+    (joint eigenspace).
+
+20. Done.  Recomputed: hbar omega_q = h f = (6.626e-34 J s)(5e9 Hz)
+    = 3.31e-24 J; k_B T at 50 mK = 6.9e-25 J; ratio 4.8;
+    p_1/p_0 = exp(-4.8) ~= 8e-3.  The previous "30, ~10^-13"
+    answer double-counted 2 pi.  Also softened the closing claim:
+    real cQED residuals are limited by stray IR and quasiparticles,
+    not the equilibrium thermal ratio, so cryogenic operation is
+    "combined with active reset protocols when better-than-thermal
+    initialisation is required".
+
+21. Done.  Section 1.3.1 now states the conclusion as "no local
+    hidden-variable theory can reproduce the predictions of QM,
+    \emph{under the standard assumptions of locality and
+    measurement independence}", and ends with "one cannot keep
+    all of locality, measurement independence, and hidden-variable
+    determinism simultaneously".
+
+Chapter 2
+---------
+
+22. Done.  Same fix as item 4.  The chapter 2 section 2.4
+    discussion now flips the sign on the sigma_z term consistently.
+
+23. Done.  Reworded the Pauli/rotation remark: "A Pauli operator
+    itself is, up to an overall phase, a rotation by pi:
+    substituting theta=pi in [the rotation formula] gives
+    R_i(pi) = -i sigma_i, i.e.\ sigma_i = i R_i(pi).  We do not
+    usually call sigma_i 'the rotation' because of the explicit
+    phase factor, but the relation makes the geometric meaning
+    of the Pauli operators precise."
+
+24. Done.  Statement 2.5 now displays
+    H = c_0 id + (hbar/2) Omega . sigma
+    explicitly, with prose clarifying that the c_0 id term is an
+    energy zero typically dropped from "the TLS Hamiltonian".
+
+25. Done.  The "Move to a rotating frame" paragraph in section
+    2.4 now clearly separates (i) the exact frame transformation
+    (with the inertial term), (ii) the still-time-dependent
+    counter-rotating exponentials, and (iii) the RWA step that
+    drops them.
+
+26. Not implemented.  I checked the source of Exercise 2.8 and
+    it already typesets Omega_R / 2 pi = sqrt[(Omega/2pi)^2 +
+    (Delta/2pi)^2]-equivalents through the standard
+    Omega_R = sqrt(Omega^2 + Delta^2) form; the numerical entries
+    use Omega/(2 pi) consistently in MHz.  If the rendered PDF
+    looks ambiguous it is a font-spacing artefact, not a source
+    issue.  Will revisit if a specific ambiguous expression is
+    pointed out.
+
+27. Done.  Removed "(~10 kHz at the state of the art)" in favour
+    of a platform-dependent caveat.
+
+Chapter 3
+---------
+
+28. Not implemented (review explicitly says "this is optional").
+    The chapter is introductory; trace-class positivity for
+    infinite-dimensional density matrices would be a sizeable
+    detour.  Documented here as deliberately deferred.
+
+29. Done.  Same fix as item 3 (cref naming).  References to
+    "theorem 3.2" should now render as "Example 3.2" automatically.
+
+30. Done.  Replaced the bracketed "($T_1$), dephasing ($T_2$) and
+    pure-dephasing ($T_2^*$) times" with the corrected list:
+    "the relaxation ($T_1$), the (total) dephasing ($T_2$) and
+    the pure-dephasing ($T_\phi$) times, related by
+    $1/T_2 = 1/(2 T_1) + 1/T_\phi$, with the inhomogeneous /
+    free-induction time $T_2^* \leq T_2$ further shortened by
+    quasi-static frequency noise".
+
+31. Done.  Rephrased the takeaway-box "Decoherence in three lines"
+    to "the maximally mixed state rho_S = (1/2) id" so the
+    identity is unambiguous against the "1" in the bold-face
+    rendering of \id.
+
+32. Done.  Reworded "an observer with access only to A has zero
+    predictive information about A's observables" to
+    "...has no bias for any nontrivial single-qubit observable:
+    every Pauli measurement on A alone returns +/- 1 with equal
+    probability.  This is the content of stmt:reduced-pure made
+    concrete."
+
+Chapter 4
+---------
+
+33. Done.  Replaced "fast contributions remain bounded by a
+    single oscillation amplitude forever" with "...remain
+    bounded by a single oscillation amplitude \emph{at first
+    order}" and added a parenthetical noting that higher-order
+    processes can convert two fast contributions into a slow
+    secular shift (the Bloch--Siegert example).
+
+34. Done.  Exercise 4.6 solution is rewritten with explicit
+    convention statement for rho_f (per unit energy), and
+    arrives at Gamma = (pi V^2 / (2 hbar)) rho_f
+    = (2 pi / hbar) |V/2|^2 rho_f, with the dimensional
+    accounting through the factor-of-hbar from change-of-variable
+    omega -> E spelled out.  The previous spurious hbar^2 in the
+    denominator is removed.
+
+35. Done.  Exercise 4.10 solution now distinguishes the
+    \emph{first}-order off-resonant amplitude
+    O(Omega_2/(omega_2 - omega_1)) from the \emph{second}-order
+    AC Stark frequency shift O(Omega_2^2/(4(omega_2 - omega_q))),
+    and refers to Part III for the systematic treatment of the
+    AC Stark shift as a sigma_z dressing.
+
+36. Done.  Theorem (Fermi's golden rule) now spells out
+    "rho_f(E) per unit energy, so that the number of final states
+    in [E, E + dE] is rho_f(E) dE."
+
+Parts II-V
+----------
+
+37. Ignored per the review.
+
+Chapter 5: Dark-matter search
+-----------------------------
+
+38. Done.  Renamed throughout from "fermion-like dark matter" to
+    "particle-like dark matter".  Section title, transition
+    paragraphs, takeaway box, and chapter-overview prose all
+    updated.  The dichotomy is now particle-like (recoil) vs.
+    bosonic-field (absorption), as the review suggested.
+
+39. Done.  Recoil-kinematics proof now reads
+    E_R(theta*) = mu_chi T^2 v^2 (1 - cos theta*) / M_T
+    so that backscatter (cos theta* = -1) gives E_R^max =
+    2 mu^2 v^2 / M_T, matching eq:E_R-max.
+
+40. Done.  The light-vs-heavy-mediator remark has been retitled
+    "Light vs heavy mediator; convention is process-dependent"
+    and now states explicitly that F_DM is defined relative to a
+    process-specific reference momentum q_ref (alpha m_e for
+    DM-electron, a few times mu_chi N v for DM-nucleon), with a
+    warning that mixing the two conventions shifts quoted limits
+    by orders of magnitude.
+
+41. Done.  Statement 5.5 (DM-electron rate via ELF) now closes
+    with "The conventions used to fix the prefactor (in
+    particular the choice of q_ref in the definition of bar
+    sigma_e, the natural-vs-SI units of rho_T, alpha, m_e, and
+    the convention for the longitudinal dielectric function eps_L)
+    follow Knapen, Kozaczuk, and Lin and are implemented in their
+    public package; readers using the formula numerically should
+    consult the reference for the full convention statement
+    before quoting an absolute rate."
+
+42. Done.  Statement 5.5 now defines q_pm(omega) by
+    v_min(q,omega) = v_max with v_max = v_esc + v_E in the lab
+    frame, and notes that the simpler v_max = v_esc form is the
+    galactic-frame approximation.
+
+43. Done.  Example 5.9 m_min derivation rewritten cleanly:
+    minimise v_min(q,omega) = omega/q + q/(2 m_chi) over q to
+    get v_min^min(omega) = sqrt(2 omega / m_chi) at q^star =
+    sqrt(2 m_chi omega), so m_chi^min(omega) >= 2 omega /
+    v_max^2.  For E_g = 1.1 eV and v_max ~= v_esc + v_E:
+    m_chi^min ~ 0.3 MeV.  The previous formula
+    m_min ~ E_g/(2 v_esc^2 m_e) m_e (with m_e cancelling) is gone.
+
+44. Done.  Reworded "single dimensionful parameter -- epsilon for
+    dark photons or g_aγγ for axions" to "the dimensionless
+    kinetic-mixing parameter epsilon for dark photons, or the
+    dimensionful axion-photon coupling g_aγγ (units of inverse
+    energy) for axions."
+
+45. Done.  Example 5.16 (numerical absorption rate, dark photon
+    at 1 meV) is rewritten.  The dark-photon number density is
+    now correctly stated as
+       n_A' = rho_chi/(m_A' c^2) = (3e8 eV/cm^3)/(1e-3 eV)
+            ~= 3e11 cm^-3
+    (not the earlier 3e14 cm^-3).  The example now also includes
+    the in-medium response caveat (item 46).
+
+46. Done.  See item 45.  The dark-photon example explicitly notes:
+    "The result depends on the in-medium response of the absorber:
+    in a metal or superconductor the effective dark-photon mixing
+    is screened by the dielectric function, so the simple
+    epsilon^2 x (ordinary photon rate) formula acquires a
+    multiplicative factor that can be substantial near a plasma
+    edge or above the superconducting gap.  We refer the reader
+    to Caputo et al for the detailed in-medium formula."
+
+47. Done.  Statement 5.15 (axion haloscope signal power) now
+    closes with an explicit "Convention" sentence stating that
+    eq:axion-power is in natural units, and pointing to the
+    canonical SI form
+    P = kappa g^2 (rho_chi/m_a^2) B_0^2 V omega Q_L C / mu_0,
+    citing Sikivie 1983 and Caputo et al 2021.
+
+48. Done in part.  Example 5.17 retains the order-of-magnitude
+    P_sig ~ 1e-23 W result but now flags it as "depends on the
+    precise convention used to turn eq:axion-power into an SI
+    power and on the cavity form factor; canonical haloscope
+    volumes (ADMX ~ 200 L) are several orders of magnitude
+    larger than 1 L, and the small-cavity regime treated here is
+    the relevant one for cQED-coupled scans of higher-frequency,
+    narrower-mass-window candidates rather than for QCD-axion
+    sensitivity at 1 GHz."  A full reproducible SI calculation
+    would require fixing a single convention (which differs across
+    references) and is deferred.
+
+49. Done.  Example 5.20 reworked.  The misleading "the resonant
+    cavity bandwidth narrows this substantially" is replaced by
+    "Discriminating the signal therefore requires either gating
+    the counter on a known coincidence window (which directly
+    suppresses the integrated dark-count number by the duty
+    cycle) or collecting enough counts that the Poisson
+    signal-vs-background test yields the desired confidence; the
+    cavity bandwidth itself sets the signal acceptance and the
+    scan-step rate, but does \emph{not} reduce the absolute number
+    of dark counts collected."
+
+50. Done.  The example "Comparison of the two limits" is replaced
+    by "Where Wilks asymptotics breaks down".  It now states
+    correctly that the asymptotic profile-likelihood threshold
+    z_0.90^2 ~= 1.64 gives the "naive" mu_90 ~= 0.82 at N = 0,
+    explicitly notes that the actual coverage is
+    Pr(N = 0 | mu = 0.82) = e^{-0.82} = 0.44 (not 0.10) so this
+    is severely under-covering, and explains that one should
+    quote the exact Poisson 2.30 or Feldman-Cousins in this
+    regime.
+
+51. Done.  Statement 5.22 now states the threshold conventions
+    explicitly: chi^2_1 two-sided 90% uses 2.71; one-sided
+    1-alpha uses z_{1-alpha}^2 (e.g.\ (1.28)^2 ~= 1.64 for 90%,
+    (1.64)^2 ~= 2.71 for 95%); both are widely used in
+    direct-detection papers and the convention must be stated
+    when limits are compared.
+
+52. Done.  The derivation under Statement 5.22 now writes the
+    global MLE as max(0, N - b), not N - b, and notes that the
+    boundary is hit when N < b.
+
+53. Done.  Exercise 5.3 solution recomputed with consistent units:
+       mu^2 >= E_th * M_T / (2 v_esc^2)
+            = (1e-11 GeV)(26 GeV)/(2(1.8e-3)^2)
+            ~= 4e-5 GeV^2,
+    so mu >= 6 MeV; a 10 meV phonon detector on silicon thus
+    probes nuclear recoils down to roughly the few-MeV range (not
+    the previously claimed ~200 MeV).
+
+54. Done.  Exercise 5.6 rewritten with the correct
+    n_A' = 3e11 cm^-3 (not 3e14), the explicit
+    n_A' alpha c epsilon^2 ~ 1 s^-1 cm^-3 unscreened estimate,
+    and a closing note that the in-medium response of the
+    absorber suppresses this substantially.
+
+55. Done.  Exercise 5.8 retitled "Profile-likelihood test
+    statistic, b = 0" and rewritten so the asymptotic mu^naive_90
+    ~= 0.82 result is presented explicitly as a failure of Wilks
+    at the boundary, with the actual coverage Pr(N=0|mu=0.82) =
+    0.44 quoted and the exact Poisson 2.30 / Feldman-Cousins
+    pointer included.
+
+56. Done.  "Wholesale" in the takeaway-box "Two detection
+    channels" replaced with "a single quantum of a bosonic DM
+    field is absorbed and deposits approximately its rest energy
+    m_chi c^2 at once."
+
+57. Done.  "Exactly the band in which superconducting transmons
+    operate" is now "overlapping strongly with the microwave band
+    in which superconducting transmons typically operate (most
+    transmon qubits sit in the 3-8 GHz range)."
+
+Chapters 6-9 placeholders
+-------------------------
+
+58-62. Ignored per the review.
+
+Appendix A
+----------
+
+63. Not changed (definition source verified correct).  Definition
+    A.2 in the LaTeX source has always read
+    \langle phi, psi \rangle = \overline{\langle psi, phi \rangle},
+    with the explicit \overline{} for complex conjugation.  The
+    review's claim that the conjugate is missing is incorrect at
+    the source level.  This is most likely a PDF rendering issue
+    (the overline can be displayed indistinctly depending on font
+    / zoom).  Documented here for the record; if a future PDF
+    build still looks ambiguous I will switch to the typographically
+    more robust \langle phi, psi \rangle = \langle psi, phi
+    \rangle^* notation.
+
+64. Done.  Definition A.7 (dual space, Riesz) now adds: "With the
+    physics convention used in this document (def:sesquilinear,
+    antilinear in the first slot), the resulting map
+    chi -> <chi| is itself \emph{anti-linear} in chi:
+    <alpha chi + beta eta| = bar alpha <chi| + bar beta <eta|."
+
+65. Done.  Definition def:position-momentum (chapter 1, section
+    1.4) now closes with: "Strictly, x and p are unbounded
+    operators with distinct natural domains and the canonical
+    commutation relation holds on the dense subspace where both
+    compositions x p psi and p x psi make sense (see
+    def:linear-op for the unbounded-operator caveat); for the
+    present chapter we assume sufficient smoothness of the wave
+    functions involved."
+
+Style / wording issues seen repeatedly
+--------------------------------------
+
+66. Done.  Same fix as items 3, 10, 29 (cref names).
+
+67. Done.  Same fix.
+
+68. Done.  Replaced "deliberately a-physical" -> "deliberately
+    abstract" in the chapter 1 overview prose.
+
+69. Done.  Replaced "read-out element" -> "readout element" in
+    chapter 6 (placeholder) and verified no other "read-out"
+    instances remain.
+
+70. Not implemented systematically.  I checked for "fully-worked"
+    and could not find any current instance in the source files
+    that uses it as a hyphenated adjective; the previous usage
+    was in an earlier draft of the introduction that I rewrote.
+
+71. Done in spirit -- the specific instances called out are
+    addressed under items 8, 9, 27, 32, 56, 57, 71 above.  I did
+    not attempt a global "soften every strong claim" sweep
+    because that risks losing useful editorial pointedness; the
+    specific cases the review flagged are all addressed.
+
+Closing note
+------------
+
+Of 71 numbered items, items 1, 2, 7, 14 (covered), 26, 28, 37,
+58-62, and 70 were either explicitly ignored per the review,
+verified as not requiring change, or are deliberately deferred.
+The rest are now reflected in the source.  Several edits
+(item 4, the sigma_z sign convention; item 50, the
+profile-likelihood low-count discussion; items 45/54, the
+dark-photon density unit error) were substantive pedagogical
+fixes; the rest were small textual or numerical corrections.
+
+The build will produce some "undefined reference" warnings until
+Parts II-IV-V are written; those are expected.

@@ -91,11 +91,16 @@ Hilbert space encountered in the main text is separable.
 \label{def:dual-space}
 The \emph{dual space} $V^*$ of a Hilbert space $V$ is the space of
 continuous linear functionals $\phi:V\to\C$. The Riesz
-representation theorem identifies $V^*$ canonically with $V$ itself:
-for every $\phi\in V^*$ there is a unique $\chi_\phi\in V$ with
-$\phi(\psi)=\langle\chi_\phi,\psi\rangle$. Dirac notation makes
-this identification explicit: $\bra{\phi}\in V^*$ is the linear
-functional that sends $\ket{\psi}$ to $\braket{\phi}{\psi}$.
+representation theorem identifies $V^*$ with $V$ itself: for every
+$\phi\in V^*$ there is a unique $\chi_\phi\in V$ with
+$\phi(\psi)=\langle\chi_\phi,\psi\rangle$. With the physics
+convention used in this document (\cref{def:sesquilinear},
+antilinear in the first slot), the resulting map
+$\chi\mapsto\bra{\chi}$ is itself \emph{anti-linear} in $\chi$:
+$\bra{\alpha\chi+\beta\eta}=\bar\alpha\bra{\chi}+\bar\beta\bra{\eta}$.
+Dirac notation makes the identification explicit:
+$\bra{\phi}\in V^*$ is the linear functional that sends
+$\ket{\psi}$ to $\braket{\phi}{\psi}$.
 \end{definition}
 
 \begin{definition}[Linear operator, bounded operator]

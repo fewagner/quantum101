@@ -4,7 +4,7 @@
 Direct laboratory searches for dark matter (DM) can be organised around
 the type of particle one is looking for and the way it interacts in
 the detector. In this chapter we treat two channels separately:
-\emph{recoil}, in which a fermion-like DM particle scatters elastically
+\emph{recoil}, in which a particle-like DM particle scatters elastically
 off a nucleus or a bound electron and deposits a small fraction of
 its kinetic energy; and \emph{absorption}, in which a coherent
 bosonic DM field is absorbed by the detector and deposits its full
@@ -98,12 +98,12 @@ controlled by the detector threshold.
 
 \paragraph{Transition.}
 With local density and velocity in hand, we now treat the two
-channels in turn: fermion-like DM that scatters
+channels in turn: particle-like DM that scatters
 (\cref{sec:fermion-dm}) and bosonic DM that is absorbed
 (\cref{sec:boson-dm}).
 
 % --------------------------------------------------------------
-\section{Fermion-like dark matter: detection by elastic recoil}
+\section{Particle-like dark matter: detection by elastic recoil}
 \label{sec:fermion-dm}
 
 \begin{phenomenon}
@@ -151,11 +151,13 @@ $|\bm p_\chi'|^2/(2m_\chi)+|\bm p_T'|^2/(2 M_T)=\tfrac12 m_\chi v^2$.
 Eliminate $\bm p_\chi'$ between the two and use
 $E_R=|\bm p_T'|^2/(2M_T)$ to obtain a quadratic in
 $|\bm p_T'|$ whose physical root gives
-$E_R(\theta)=2\mu_{\chi T}^2 v^2(1-\cos\theta^*)/M_T$ in the
+$E_R(\theta^*)=\mu_{\chi T}^2 v^2(1-\cos\theta^*)/M_T$ in the
 centre-of-mass scattering angle $\theta^*$. The maximum
 \cref{eq:E_R-max} corresponds to backscatter
-($\cos\theta^*=-1$); the minimum velocity \cref{eq:v-min} is the
-inverse relation $v(E_R)$ at $\theta^*=\pi$.
+($\cos\theta^*=-1$, so $1-\cos\theta^*=2$ and
+$E_R^{\max}=2\mu_{\chi T}^2 v^2/M_T$); the minimum velocity
+\cref{eq:v-min} is the inverse relation $v(E_R)$ at the same
+$\theta^*=\pi$.
 \end{proof}
 
 \begin{example}[Light WIMP on a silicon nucleus]
@@ -196,16 +198,25 @@ use the standard Helm parametrisation~\cite{helm1956}, $F(0)=1$,
 $F(q)\to 0$ at $qR\sim 1$ for nuclear radius $R$).
 \end{statement}
 
-\begin{remark}[Light vs heavy mediator]
+\begin{remark}[Light vs heavy mediator; convention is process-dependent]
 \Cref{eq:dsigma-dE-SI} corresponds to a heavy-mediator (contact)
 interaction; for a mediator mass $m_M\lesssim q$, the cross-section
 acquires an extra propagator factor $\propto 1/(q^2+m_M^2)^2$, which
 softens the recoil spectrum by suppressing large momentum transfers
 and enhancing the small-$q$ region. We absorb this dependence into
-the dimensionless DM form factor $F_\text{DM}(q)$, defined so that
-$F_\text{DM}=1$ for a heavy mediator and
-$F_\text{DM}(q)=(\alpha m_e/q)^2$ for an ultralight (massless or
-sub-eV) mediator coupling to electrons through the photon.
+a dimensionless DM form factor $F_\text{DM}(q)$, defined relative
+to a process-specific reference momentum $q_\text{ref}$. For
+DM--electron scattering the standard
+choice~\cite{essig2012,knapen2021} is $q_\text{ref}=\alpha m_e$,
+giving $F_\text{DM}=1$ for a heavy mediator and
+$F_\text{DM}(q)=(\alpha m_e/q)^2$ for an ultralight one. For
+DM--nucleon scattering the conventional reference momentum is
+typically a few times $\mu_{\chi N}\bar v$ (with bar v the
+typical halo speed) or chosen so that the heavy-mediator
+$F_\text{DM}=1$, and the precise normalisation must be matched to
+the publication being compared with. The two reference choices
+differ by a known $q$-independent factor; mixing them up would
+shift quoted limits by orders of magnitude.
 \end{remark}
 
 \paragraph{Transition.}
@@ -254,7 +265,21 @@ mass, $\rho_T$ the target mass density, $\alpha\approx 1/137$ the
 fine-structure constant, $F_\text{DM}(q)$ the DM form factor of
 the previous remark, $\eta$ the mean-inverse-speed function
 \cref{eq:eta}, and $q_\pm(\omega)$ the kinematic limits at which
-$v_\text{min}(q,\omega)=v_\text{esc}$.
+$v_\text{min}(q,\omega)=v_\text{max}$, with $v_\text{max}$ the
+maximum DM speed accessible in the laboratory frame. In the
+galactic-frame approximation $v_\text{max}=v_\text{esc}$; the more
+accurate lab-frame value is $v_\text{max}=v_\text{esc}+v_E$,
+shifted by the Earth's motion through the halo, and the
+correction enters the kinematic limits of the integral. The
+conventions used to
+fix the prefactor (in particular the choice of $q_\text{ref}$ in
+the definition of $\bar\sigma_e$, the natural-vs-SI units of
+$\rho_T,\alpha,m_e$, and the convention for the longitudinal
+dielectric function $\hat\epsilon_L$) follow Knapen, Kozaczuk,
+and Lin~\cite{knapen2021} and are implemented in their public
+package; readers using the formula numerically should consult the
+reference for the full convention statement before quoting an
+absolute rate.
 \end{statement}
 
 \paragraph{Why the ELF.}
@@ -427,15 +452,25 @@ crystalline silicon yields a spectrum dominated by the
 bulk-plasmon resonance near $\omega\approx 17\,\text{eV}$, with a
 low-energy tail above the indirect band gap of
 $E_g\approx 1.1\,\text{eV}$. The characteristic kinematic threshold
-is set by demanding that
-$v_\text{min}(q,\omega)\leq v_\text{esc}$ in
-\cref{eq:vmin-electron}; with $\omega/q\sim 10^{-3}\,c$ around the
-gap, this places the lowest detectable DM mass at
-$m_\chi^\text{min}\sim E_g/(2 v_\text{esc}^2 m_e)\,m_e\approx
-0.5\,\text{MeV}$ for $\omega=E_g$. A detector with
-$E_\text{th}=E_g$ thus reaches roughly two orders of magnitude
-lower in DM mass than a comparable nuclear-recoil analysis on the
-same crystal.
+follows from minimising
+$v_\text{min}(q,\omega)=\omega/q+q/(2 m_\chi)$ over $q$, giving
+\begin{equation}
+v_\text{min}^\text{min}(\omega) = \sqrt{2\omega/m_\chi},
+\end{equation}
+attained at $q^\star=\sqrt{2 m_\chi\,\omega}$. Setting
+$v_\text{min}^\text{min}(\omega) \leq v_\text{max}$ with
+$v_\text{max}\approx v_\text{esc}+v_E\approx 770\,\text{km}/\text{s}$
+yields
+\begin{equation}
+m_\chi^\text{min}(\omega) \;\geq\; \frac{2\omega}{v_\text{max}^2}.
+\end{equation}
+For $\omega=E_g\approx 1.1\,\text{eV}$ and $v_\text{max}/c\approx
+2.6\times 10^{-3}$, $m_\chi^\text{min}\approx
+2(1.1\,\text{eV})/(2.6\times 10^{-3})^2 \approx 3.3\times 10^{5}\,\text{eV}
+\approx 0.3\,\text{MeV}$. (The bulk plasmon at $\omega\approx 17\,\text{eV}$
+moves this floor up to a few MeV.) A detector with $E_\text{th}=E_g$
+thus reaches roughly two orders of magnitude lower in DM mass than
+a comparable nuclear-recoil analysis on the same crystal.
 \end{example}
 
 \paragraph{Transition.}
@@ -484,8 +519,10 @@ $4\,\mu\text{eV}\leftrightarrow 1\,\text{GHz}$,
 $1\,\text{meV}\leftrightarrow 242\,\text{GHz}$,
 $1\,\text{eV}\leftrightarrow 242\,\text{THz}$. The QCD-axion
 window of $1\text{--}40\,\mu\text{eV}$ corresponds to
-$240\,\text{MHz}\text{--}10\,\text{GHz}$, exactly the band in
-which superconducting transmons operate.
+$240\,\text{MHz}\text{--}10\,\text{GHz}$, overlapping strongly
+with the microwave band in which superconducting transmons
+typically operate (most transmon qubits sit in the $3$--$8\,\text{GHz}$
+range).
 \end{example}
 
 % ----------- 6.4.2 Coupling Lagrangians
@@ -495,10 +532,11 @@ which superconducting transmons operate.
 The two photon-mediated bosonic candidates that dominate the
 literature, and the only ones we treat here, are the dark photon
 $A'_\mu$ and the QCD axion $a$. Each couples to ordinary matter
-through a single dimensionful parameter --- the kinetic-mixing
-parameter $\varepsilon$ for dark photons, or the photon coupling
-$g_{a\gamma\gamma}$ for axions --- and the detection rate is
-quadratic in that parameter.
+through a single coupling parameter: the dimensionless
+kinetic-mixing parameter $\varepsilon$ for dark photons, or the
+dimensionful axion-photon coupling $g_{a\gamma\gamma}$ (units of
+inverse energy) for axions. The detection rate is quadratic in
+that parameter in both cases.
 
 \begin{statement}[Dark photon kinetic mixing]
 \label{stmt:dark-photon}
@@ -588,20 +626,43 @@ P_\text{sig} \;=\; \kappa\,g_{a\gamma\gamma}^2\,\rho_\chi\,
 \end{equation}
 with $C_{nlm}\in[0,1]$ the form-factor of the cavity mode and
 $\kappa\in[0,1]$ the cavity-coupling factor (typically $\kappa=1/2$
-for critical coupling).
+for critical coupling). \emph{Convention:} \cref{eq:axion-power}
+is written in natural units ($\hbar=c=1$); to evaluate
+numerically in SI, factors of $c$ and $\epsilon_0$ must be
+inserted by dimensional analysis, with $g_{a\gamma\gamma}$ in
+$\text{GeV}^{-1}$, $\rho_\chi$ in $\text{GeV}/\text{cm}^3$,
+$B_0^2/(2\mu_0)$ in $\text{J}/\text{m}^3$, and so on. The
+canonical SI form most often quoted in haloscope analyses is
+$P_\text{sig}=\kappa\,g_{a\gamma\gamma}^2\,(\rho_\chi/m_a^2)\,
+B_0^2\,V\,\omega_a\,Q_L\,C_{nlm}/\mu_0$ with the corresponding
+unit conversion baked into $g_{a\gamma\gamma}$; we refer the
+reader to~\cite{sikivie1983,caputo2021review} for the full
+derivation in either system of units.
 \end{statement}
 
 \begin{example}[Numerical absorption rate, dark photon at 1 meV]
 \label{ex:dark-photon-rate}
 Take $m_{A'}=1\,\text{meV}/c^2$ ($\omega_{A'}/2\pi=242\,\text{GHz}$),
-$\rho_\chi=0.3\,\text{GeV}/\text{cm}^3$, and an aluminium absorber
-of volume $1\,\text{cm}^3$ with $\sigma_\text{abs}^\text{ord}\sim
-10^4\,\text{cm}^{-1}$ at $1\,\text{meV}$ (well above the
-$2\Delta\approx 0.34\,\text{meV}$ Cooper-pair threshold). For
-$\varepsilon=10^{-13}$, \cref{eq:dark-photon-rate} gives an
-absorption rate of order $10^{-3}\,\text{Hz}/\text{cm}^3$, or
-$\sim 10^2$ counts per kg per day --- comparable with the
-quasiparticle background of present-generation devices.
+$\rho_\chi=0.3\,\text{GeV}/\text{cm}^3$, and an aluminium
+absorber. The dark-photon number density is
+$n_{A'}=\rho_\chi/m_{A'}c^2=(0.3\,\text{GeV}/\text{cm}^3)/(10^{-3}\,\text{eV})
+\approx 3\times 10^{11}\,\text{cm}^{-3}$. The naive
+$\varepsilon^2$-suppressed absorption rate per unit volume is then
+$n_{A'}\,\sigma_\text{abs}^\text{ord}\,c\,\varepsilon^2$ with the
+ordinary photon absorption coefficient
+$\sigma_\text{abs}^\text{ord}$ in $\text{cm}^{-1}$ at $1\,\text{meV}$.
+For $\varepsilon=10^{-13}$ and a fiducial absorber response, the
+order-of-magnitude rate is on the kg$^{-1}$\,day$^{-1}$ scale ---
+comparable with the quasiparticle background of present-generation
+devices. The result depends on the in-medium response of the
+absorber: in a metal or superconductor the effective dark-photon
+mixing is screened by the dielectric function, so the simple
+$\varepsilon^2 \times (\text{ordinary photon rate})$ formula
+acquires a multiplicative factor that can be substantial near a
+plasma edge or above the superconducting gap. We refer the reader
+to~\cite{caputo2021review} for the detailed in-medium formula
+appropriate to the absorber being modelled and use the
+unscreened estimate above only as a rough first pass.
 \end{example}
 
 \begin{example}[Numerical signal power, 4 µeV axion haloscope]
@@ -609,11 +670,19 @@ quasiparticle background of present-generation devices.
 For $m_a=4\,\mu\text{eV}/c^2$ ($\omega_a/2\pi=1\,\text{GHz}$),
 $g_{a\gamma\gamma}=10^{-15}\,\text{GeV}^{-1}$,
 $B_0=8\,\text{T}$, $V=1\,\text{L}$, $Q_L=10^5$, $C_{010}\approx 0.7$,
-$\kappa=1/2$, \cref{eq:axion-power} gives
+$\kappa=1/2$, \cref{eq:axion-power} gives an order-of-magnitude
 $P_\text{sig}\sim 10^{-23}\,\text{W}\sim 10^{-2}\,\text{photons}/\text{s}$
-in a cavity bandwidth, marginally detectable with a
+in a cavity bandwidth, at the threshold of detectability with a
 single-microwave-photon counter (the resonant scan covers a
-relative-bandwidth $\sim 1/Q_L$ per integration time).
+relative bandwidth $\sim 1/Q_L$ per integration time). The
+numerical prefactor depends on the precise convention used to
+turn \cref{eq:axion-power} into an SI power and on the cavity
+form factor; canonical haloscope volumes
+(ADMX$\sim 200\,\text{L}$) are several orders of magnitude
+larger than 1\,L, and the small-cavity regime treated here is the
+relevant one for cQED-coupled scans of higher-frequency,
+narrower-mass-window candidates rather than for QCD-axion
+sensitivity at $1\,\text{GHz}$.
 \end{example}
 
 \paragraph{Transition.}
@@ -682,12 +751,18 @@ A transmon at $\omega_q/2\pi=5\,\text{GHz}$ tuned to $\omega_{A'}$
 acts as a single-microwave-photon detector with photon-counting
 efficiency $\eta\sim 0.5$ and dark-count rate
 $\Gamma_\text{dc}\sim 1\,\text{mHz}$~\cite{dixit2021}. For
-$\varepsilon=10^{-15}$ and an integration time of $1\,\text{day}$,
-\cref{eq:dark-photon-rate} integrated over the cavity bandwidth
-gives $\langle N_\text{exp}\rangle\sim 1$, comparable with the
-expected number of dark counts ($\Gamma_\text{dc}\,\tau\sim 100$
-in a day, but the resonant cavity bandwidth narrows this
-substantially).
+$\varepsilon=10^{-15}$ and an integration time
+$\tau=1\,\text{day}$, \cref{eq:dark-photon-rate} integrated over
+the cavity bandwidth gives $\langle N_\text{exp}\rangle\sim 1$,
+comparable with the dark-count budget
+$\Gamma_\text{dc}\,\tau\sim 10^2$ events for the same integration
+time. Discriminating the signal therefore requires either
+gating the counter on a known coincidence window (which directly
+suppresses the integrated dark-count number by the duty cycle) or
+collecting enough counts that the Poisson signal-vs-background
+test yields the desired confidence; the cavity bandwidth itself
+sets the signal acceptance and the scan-step rate, but does
+\emph{not} reduce the absolute number of dark counts collected.
 \end{example}
 
 % --------------------------------------------------------------
@@ -749,50 +824,74 @@ statistic.
 
 \begin{statement}[Profile likelihood ratio]
 \label{stmt:profile-likelihood}
-Let $\bm{\theta}=(\mu,\bm{\nu})$ where $\mu$ is the parameter of
-interest (signal strength) and $\bm{\nu}$ the nuisance parameters.
-For an observed dataset $\bm x$, the likelihood is
-$L(\mu,\bm\nu\,|\,\bm x)$ and the profile likelihood ratio is
+Let $\bm{\theta}=(\mu,\bm{\nu})$ where $\mu\geq 0$ is the
+parameter of interest (signal strength) and $\bm{\nu}$ the
+nuisance parameters. For an observed dataset $\bm x$, the
+likelihood is $L(\mu,\bm\nu\,|\,\bm x)$ and the profile
+likelihood ratio is
 \begin{equation}
 \label{eq:profile-ratio}
 \lambda(\mu) \;=\; \frac{L(\mu,\hat{\hat{\bm\nu}}(\mu)\,|\,\bm x)}
 {L(\hat\mu,\hat{\bm\nu}\,|\,\bm x)},
 \end{equation}
 where $\hat\mu,\hat{\bm\nu}$ are the global maximum-likelihood
-estimators and $\hat{\hat{\bm\nu}}(\mu)$ is the conditional maximum
-of $\bm\nu$ at fixed $\mu$. Under the regularity conditions of
-Wilks' theorem, the test statistic
+estimators (subject to $\hat\mu\geq 0$) and
+$\hat{\hat{\bm\nu}}(\mu)$ is the conditional maximum of $\bm\nu$
+at fixed $\mu$. Under the regularity conditions of Wilks'
+theorem (in particular, away from the boundary $\mu=0$ and with
+sufficiently large $N$), the test statistic
 \begin{equation}
 \label{eq:wilks}
 t_\mu \;\equiv\; -2\ln\lambda(\mu)
 \end{equation}
-follows a $\chi^2_1$ distribution asymptotically, and the
-$1-\alpha$ confidence interval is the set of $\mu$ for which
-$t_\mu\leq F^{-1}_{\chi^2_1}(1-\alpha)$ (e.g.\ $t_\mu\leq 2.71$ for
-$1-\alpha=0.90$).
+follows a $\chi^2_1$ distribution asymptotically. The standard
+threshold conventions are: a two-sided $1-\alpha$ confidence
+interval uses $t_\mu\leq F^{-1}_{\chi^2_1}(1-\alpha)$ (e.g.\
+$t_\mu\leq 2.71$ for $1-\alpha=0.90$); a one-sided
+$1-\alpha$ upper limit uses $t_\mu\leq z_{1-\alpha}^2$ with
+$z_{1-\alpha}$ the standard-normal one-sided quantile (e.g.\
+$z_{0.90}^2 \approx (1.28)^2 \approx 1.64$ for a one-sided $90\%$
+upper limit, $z_{0.95}^2 \approx (1.64)^2 \approx 2.71$ for a
+one-sided $95\%$ upper limit). \emph{Both} thresholds are quoted
+in the direct-detection literature; the convention is set by the
+collaboration and must be stated explicitly when limits are
+compared.
 \end{statement}
 
 \paragraph{Derivation.}
-For Poisson data with mean $\mu+b$, the log-likelihood is
-$\ln L=-\mu-b+N\ln(\mu+b)$, with the global maximum at
-$\hat\mu=N-b$. Substituting in \cref{eq:wilks},
-$t_\mu=2[(\mu-\hat\mu)+N\ln(\hat\mu/\mu)]$ at $b=0$, and the
-$\chi^2_1$ asymptotic distribution follows from the standard
-saddle-point expansion around the maximum (Cowan, Cranmer, Gross
-and Vitells \cite{cowan2011} give explicit closed-form expressions
-including the case of one or two-sided intervals).
+For Poisson data with mean $\mu+b$ and the physical constraint
+$\mu\geq 0$, the log-likelihood is
+$\ln L=-\mu-b+N\ln(\mu+b)$, with global maximum at
+$\hat\mu=\max(0,\,N-b)$ (the boundary is hit when $N<b$).
+Substituting in \cref{eq:wilks},
+$t_\mu=2[(\mu-\hat\mu)+N\ln(\hat\mu/\mu)]$ at $b=0$ and $N>0$,
+and the $\chi^2_1$ asymptotic distribution follows from the
+standard saddle-point expansion around $\hat\mu$ (Cowan,
+Cranmer, Gross and Vitells~\cite{cowan2011} give explicit
+closed-form expressions including modifications at the boundary
+and for one-sided intervals).
 
-\begin{example}[Comparison of the two limits, no nuisance parameters]
+\begin{example}[Where Wilks asymptotics breaks down]
 \label{ex:limits-compare}
-For a single-bin Poisson experiment with $N=0$ observed events and
-no background, the simple Poisson upper limit \cref{eq:poisson-UL}
-is $\mu_{90}=2.30$. The corresponding profile-likelihood limit
-\cref{eq:wilks} gives $t_\mu=2\mu$ (for $b=0$, $N=0$), so
-$\mu_{90}=1.35$ for one-sided $90\%$ CL. The two differ because
-the profile-likelihood interval uses a likelihood ratio rather
-than a tail-probability cut; both are widely quoted in
-direct-detection papers, and \cref{eq:poisson-UL} is the more
-conservative.
+For a single-bin Poisson experiment with $N=0$ observed events
+and no background, the exact Poisson 90\,\% CL upper limit
+\cref{eq:poisson-UL} is $\mu_{90}=2.30$ (defined by
+$\Pr(N=0\mid\mu_{90})=e^{-\mu_{90}}=0.10$). One might be tempted
+to apply \cref{eq:wilks}: with $\hat\mu=0$ and $N=0$,
+$t_\mu=2\mu$, and a naive one-sided 90\,\% Gaussian threshold
+$z_{0.90}^2\approx 1.64$ gives the apparent limit
+$\mu_{90}^{\text{naive}}\approx 0.82$. But the actual coverage
+of $\mu_{90}^{\text{naive}}$ is
+$\Pr(N=0\mid\mu=0.82)=e^{-0.82}\approx 0.44$, not $0.10$ ---
+i.e.\ the asymptotic profile-likelihood limit is severely
+under-covering at $N=0$. The reason is precisely that Wilks'
+theorem requires the MLE to be in the interior of the parameter
+space and the data to be in the asymptotic regime; both fail at
+the boundary $\hat\mu=0$ with $N=0$. In this regime one should
+quote the exact Poisson limit \cref{eq:poisson-UL} or the
+Feldman--Cousins~\cite{feldman1998} unified construction; the
+asymptotic profile-likelihood form is reliable only once the
+relevant counts are large.
 \end{example}
 
 \subsection{From the limit to an exclusion curve}
@@ -823,7 +922,7 @@ $E_R^\text{max}<E_\text{th}$.
 
 % --------------------------------------------------------------
 This chapter walked through two distinct dark-matter detection
-channels --- elastic recoil for fermion-like DM and absorption for
+channels --- elastic recoil for particle-like DM and absorption for
 bosonic DM --- and showed that the same four-stage pipeline (model
 parameters, predicted spectrum, detected counts, statistical limit)
 applies to both. The recoil channel produces a continuum spectrum
@@ -852,9 +951,10 @@ uniformly.
 
 \paragraph{Two detection channels.}
 Direct-detection searches split cleanly into two cases. A
-fermion-like DM particle scatters elastically off a target and
-deposits a recoil energy; a bosonic DM field is absorbed wholesale
-and deposits its rest energy $m_\chi c^2$ at once.
+particle-like DM particle scatters elastically off a target and
+deposits a recoil energy; a single quantum of a bosonic DM field
+is absorbed and deposits approximately its rest energy
+$m_\chi c^2$ at once.
 
 \paragraph{Halo inputs (\cref{sec:dm-halo}).}
 Local density $\rho_\chi\approx 0.3\,\text{GeV}/\text{cm}^3$;
@@ -947,16 +1047,19 @@ $v=v_\text{esc}\approx 544\,\text{km}/\text{s}$ can produce a
 detectable event?
 \begin{solution}
 Demand $E_R^\text{max}(v_\text{esc})\geq E_\text{th}$, i.e.\
-$2\mu_{\chi T}^2 v_\text{esc}^2/M_T\geq E_\text{th}$. Solving for
-$\mu_{\chi T}^2$ with $v_\text{esc}/c=1.8\times 10^{-3}$ and
-$M_T=26\,\text{GeV}$ gives
-$\mu_{\chi T}^2\geq E_\text{th}M_T/(2 v_\text{esc}^2)
-\approx 4\times 10^{-2}\,\text{GeV}^2$, i.e.\
-$\mu_{\chi T}\gtrsim 200\,\text{MeV}$. Since
-$\mu_{\chi T}\to m_\chi$ for $m_\chi\ll M_T$, this gives
-$m_\chi\gtrsim 200\,\text{MeV}$. A 10\,meV phonon detector on
-silicon thus probes nuclear recoils for $m_\chi$ above a few
-hundred MeV.
+$2\mu_{\chi T}^2 v_\text{esc}^2/M_T\geq E_\text{th}$. Convert
+$E_\text{th}=10\,\text{meV}=10^{-2}\,\text{eV}=10^{-11}\,\text{GeV}$,
+take $v_\text{esc}/c=1.8\times 10^{-3}$ and $M_T=26\,\text{GeV}$:
+\[
+\mu_{\chi T}^2 \;\geq\; \frac{E_\text{th}\,M_T}{2 v_\text{esc}^2}
+\;=\; \frac{(10^{-11}\,\text{GeV})(26\,\text{GeV})}{2(1.8\times 10^{-3})^2}
+\;\approx\; 4\times 10^{-5}\,\text{GeV}^2,
+\]
+i.e.\ $\mu_{\chi T}\gtrsim 6\times 10^{-3}\,\text{GeV}\approx 6\,\text{MeV}$.
+Since $\mu_{\chi T}\to m_\chi$ for $m_\chi\ll M_T$, this gives
+$m_\chi\gtrsim 6\,\text{MeV}$. A 10\,meV phonon detector on
+silicon thus probes nuclear recoils down to roughly the few-MeV
+range.
 \end{solution}
 \end{exercise}
 
@@ -991,21 +1094,33 @@ coherence factor.
 
 \begin{exercise}[Dark-photon absorption in aluminium]
 For the dark-photon parameters of \cref{ex:dark-photon-rate}
-($m_{A'}=1\,\text{meV}$, $\varepsilon=10^{-13}$, Al absorber), the
-absorption cross-section per unit volume is
-$\sigma_\text{abs}^\text{ord}\sim 10^4\,\text{cm}^{-1}$ at
-$\omega=242\,\text{GHz}$. Verify the rate quoted in the example,
-$\sim 10^{-3}\,\text{Hz}/\text{cm}^3$.
+($m_{A'}=1\,\text{meV}$, $\varepsilon=10^{-13}$), the
+absorption coefficient of aluminium at $\omega=242\,\text{GHz}$
+(well above $2\Delta$) is of order
+$\alpha_\text{abs}^\text{ord}\sim 10^4\,\text{cm}^{-1}$. Estimate
+the unscreened (vacuum-mixing) dark-photon absorption rate per
+unit absorber volume.
 \begin{solution}
-$\dd N/(\dd t\,\dd V)=\varepsilon^2\rho_\chi\sigma_\text{abs}^\text{ord}/m_{A'}$.
-With $\rho_\chi/m_{A'}=0.3\,\text{GeV}/\text{cm}^3 / 10^{-3}\,\text{eV}
-=3\times 10^{14}\,\text{cm}^{-3}$, $\varepsilon^2=10^{-26}$, and
-$\sigma_\text{abs}^\text{ord}\cdot c=10^4\,\text{cm}^{-1}\cdot 3\times 10^{10}\,\text{cm/s}
-=3\times 10^{14}\,\text{cm}^{-1}\,\text{s}^{-1}$ (taking the rate
-form $n\,\sigma\,c$ with $n$ the photon-equivalent density), we
-obtain $\sim 10^{-26}\cdot 3\times 10^{14}\cdot 3\times 10^{14}\cdot
-3\times 10^{-15}\,\text{s}^{-1}\,\text{cm}^{-3}\sim 10^{-3}$,
-matching the order-of-magnitude estimate.
+The naive rate per unit volume is
+$\dd N/(\dd t\,\dd V)=\varepsilon^2\,n_{A'}\,\alpha_\text{abs}^\text{ord}\,c$,
+with $n_{A'}=\rho_\chi/(m_{A'}c^2)$ the dark-photon number
+density. Convert
+$\rho_\chi=0.3\,\text{GeV}/\text{cm}^3 = 3\times 10^{8}\,\text{eV}/\text{cm}^3$
+and $m_{A'}c^2=10^{-3}\,\text{eV}$, giving
+$n_{A'}\approx 3\times 10^{11}\,\text{cm}^{-3}$. Take
+$\alpha_\text{abs}^\text{ord}\cdot c=10^4\,\text{cm}^{-1}\cdot 3\times 10^{10}\,\text{cm/s}
+=3\times 10^{14}\,\text{s}^{-1}$, and $\varepsilon^2=10^{-26}$:
+\[
+\frac{\dd N}{\dd t\,\dd V}
+\;\sim\; 10^{-26}\cdot 3\times 10^{11}\,\text{cm}^{-3}\cdot 3\times 10^{14}\,\text{s}^{-1}
+\;\sim\; 1\,\text{s}^{-1}\,\text{cm}^{-3}.
+\]
+This is the unscreened estimate; the actual in-medium absorption
+in a metal/superconductor is reduced by the dielectric response,
+which can suppress the rate by orders of magnitude near the
+plasma edge or above the gap. See~\cite{caputo2021review} for the
+in-medium formula. The unscreened number above brackets the
+order-of-magnitude reach.
 \end{solution}
 \end{exercise}
 
@@ -1021,22 +1136,31 @@ For $N=3$: $(1+\mu_{90}+\mu_{90}^2/2+\mu_{90}^3/6)e^{-\mu_{90}}=0.10
 \end{solution}
 \end{exercise}
 
-\begin{exercise}[Profile-likelihood limit, $b=0$]
+\begin{exercise}[Profile-likelihood test statistic, $b=0$]
 Show that for a one-bin Poisson experiment with $b=0$ and $N$
 observed, the profile-likelihood test statistic
 \cref{eq:wilks} is
 $t_\mu=2[\mu-N+N\ln(N/\mu)]$ for $N>0$ and $t_\mu=2\mu$ for $N=0$.
-Compute the one-sided 90 \% CL upper limit for $N=0$.
+Compute the asymptotic one-sided 90\,\% Gaussian threshold for
+the $N=0$ case, and explain why this is \emph{not} a valid
+exact upper limit.
 \begin{solution}
 The log-likelihood $\ln L=-\mu+N\ln\mu-\ln N!$ has global maximum
 at $\hat\mu=N$ for $N>0$ and the boundary maximum at $\hat\mu=0$
 for $N=0$. Substituting,
 $t_\mu=-2\ln L(\mu)+2\ln L(\hat\mu)=2[\mu-\hat\mu+N\ln(\hat\mu/\mu)]$,
-which gives the two cases above. For $N=0$, the one-sided 90\,\%
-CL upper limit comes from $t_\mu= 2\mu \leq z_{90}^2 = (1.28)^2$
-giving $\mu_{90}\approx 0.82$, smaller than the Poisson UL of
-$2.30$ because the test statistic uses the likelihood ratio rather
-than a tail-probability cut.
+which gives the two cases above. For $N=0$, the asymptotic
+Gaussian threshold $t_\mu= 2\mu \leq z_{0.90}^2 \approx (1.28)^2
+\approx 1.64$ would naively give $\mu^{\text{naive}}_{90}\approx 0.82$.
+This is \emph{not} a valid 90\,\% CL upper limit: the actual
+coverage is $\Pr(N=0\mid \mu=0.82)=e^{-0.82}\approx 0.44$, far
+from $0.10$, because Wilks' theorem requires the MLE to lie in
+the interior of the parameter space and the data to be in the
+asymptotic regime, both of which fail at the boundary
+$\hat\mu=0$. The correct exact limit at $N=0$ is the Poisson
+$\mu_{90}=2.30$ (\cref{stmt:poisson-UL}); for completeness one
+should use Feldman--Cousins~\cite{feldman1998} as soon as $b>0$
+or counts are low.
 \end{solution}
 \end{exercise}
 
