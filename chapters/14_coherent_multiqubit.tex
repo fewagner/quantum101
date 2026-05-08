@@ -1,0 +1,429 @@
+\chapter{Coherent multi-qubit sensing and the Heisenberg limit}
+\label{ch:coherent-multiqubit}
+
+The four mechanism chapters of Part~VI
+(\cref{ch:qp-detection,ch:qubit-antenna,ch:phonon-qubit-piezo,ch:microwave-absorption})
+all read out a \emph{single} qubit, or at most a small number of
+independent qubits, after a dark-matter--induced excitation
+event. They take the qubit as a binary energy meter --- did a
+quasiparticle break a Cooper pair? did an itinerant photon land
+in the cavity? --- and integrate the count rate against the
+dark-count rate. There is, however, a second mode of operation
+that is uniquely available to the qubit substrate: the
+dark-matter field $\phi(t)$ at the chip imprints a small but
+\emph{coherent} phase on every qubit it touches, and that phase
+can in principle be extracted with a precision that improves not
+as $1/\sqrt{N}$ in the number of probes (the Ramsey-like
+\emph{standard quantum limit}, SQL) but as $1/N$ (the
+\emph{Heisenberg limit}, HL). Realising the Heisenberg
+scaling requires entangled probes and is fragile against
+decoherence; the connection to quantum error correction
+(\cref{ch:quantum-information-processing}) is exactly that QEC
+is the tool that protects the Heisenberg-limited phase-sensing
+protocol from the same Markovian noise that, in qubit
+information processing, would corrupt logical states. This
+closing chapter of Part~VI explains the SQL and HL, derives the
+$1/N$ scaling for an entangled-qubit phase estimator, states the
+Zhou--Zhang--Preskill--Jiang theorem on when QEC restores
+the Heisenberg limit in the presence of noise, and points to
+the recent dark-matter experiments that put these ideas into
+hardware.
+
+% ============================================================
+\section{Phase imprinted by a dark-matter field}
+\label{sec:dm-phase}
+
+\begin{phenomenon}[\textbf{Dark matter as a coherent phase signal}]
+A bosonic dark-matter field at a single fixed point in the
+laboratory --- a dark photon $A'_\mu$, an axion field $a$, or
+any weakly coupled wave-like dark-matter candidate ---
+oscillates at angular frequency $\omega_\chi=m_\chi c^2/\hbar$
+with coherence time $\tau_\chi\sim 1/(m_\chi v^2/2)$ (set by the
+$10^{-3}c$ velocity dispersion of the local halo). Through its
+coupling to the qubit Hamiltonian (e.g.\ a kinetically mixed
+electric field on the antenna of \cref{ch:qubit-antenna}, a
+piezoelectrically driven strain in
+\cref{ch:phonon-qubit-piezo}, or a coherent intracavity photon
+field in \cref{ch:microwave-absorption}), the dark-matter
+field shifts the qubit transition frequency by a small,
+oscillating amount $\delta\omega_q(t)\propto\phi(t)$. Over a
+sensing time $T<\tau_\chi$, this accumulates a coherent
+phase $\varphi$ that can be read out by Ramsey
+interferometry. The question of \emph{how precisely
+$\varphi$ can be estimated} is the question of how well the
+underlying coupling $\varepsilon$ (or $g_{a\gamma\gamma}$) can
+be bounded.
+\end{phenomenon}
+
+\paragraph{From mechanism to phase.}
+The four mechanism chapters all gave the dark-matter field a
+seat at the qubit Hamiltonian: in
+\cref{ch:qubit-antenna,ch:microwave-absorption} via an
+electromagnetic coupling, in \cref{ch:phonon-qubit-piezo} via
+strain. Schematically, a single qubit feels
+\begin{equation}
+\label{eq:dm-phase-hamiltonian}
+\op H(t) \;=\; -\frac{\hbar\,\omega_q}{2}\,\hat\sigma_z
+\;+\; \hbar\,g\,\phi(t)\,\hat\sigma_z,
+\end{equation}
+where $g$ is the relevant coupling (units of frequency per unit
+field amplitude). In a frame rotating at $\omega_q$, the second
+term integrates over a sensing window $[0,T]$ to a coherent
+phase
+\begin{equation}
+\label{eq:dm-phase-integral}
+\varphi(T) \;=\; g \int_0^T\! \phi(t)\,dt \;\approx\;
+\frac{g\,\phi_0}{\omega_\chi}\,
+\bigl(\sin\omega_\chi T\bigr)
+\;\xrightarrow[\omega_\chi T\ll 1]{}\;
+g\,\phi_0\,T,
+\end{equation}
+i.e.\ in the long-coherence limit ($T\ll\tau_\chi$ and
+$\omega_\chi T\lesssim 1$) the phase grows linearly in $T$ and
+linearly in the dark-matter field amplitude $\phi_0$. Estimating
+$\varphi$ to precision $\sigma_\varphi$ thus translates directly
+into a bound on $\phi_0$, hence on the underlying coupling
+$\varepsilon$ or $g_{a\gamma\gamma}$.
+
+% ============================================================
+\section{Independent probes: the standard quantum limit}
+\label{sec:sql}
+
+\begin{statement}[\textbf{Standard quantum limit (SQL)}]
+\label{stmt:sql}
+For $N$ independent two-level probes, each prepared in the
+equal superposition $\ket{+}=(\ket{0}+\ket{1})/\sqrt 2$,
+exposed for time $T$ to the Hamiltonian
+\cref{eq:dm-phase-hamiltonian}, and read out projectively in
+the $\hat\sigma_x$ basis, the optimal estimator $\hat\varphi$
+of the accumulated phase $\varphi$ saturates the
+Cram\'{e}r--Rao bound
+\begin{equation}
+\label{eq:sql-bound}
+(\Delta\varphi)_{\rm SQL} \;=\; \frac{1}{\sqrt{N}},
+\qquad
+(\Delta\phi_0)_{\rm SQL} \;=\; \frac{1}{g\,T\,\sqrt{N}}\,.
+\end{equation}
+The same $1/\sqrt{N}$ scaling applies to a single probe queried
+$N$ times sequentially, provided each query is independent and
+the noise is Markovian.
+\end{statement}
+
+\paragraph{Sketch derivation.}
+Each independent qubit, after evolution under
+\cref{eq:dm-phase-hamiltonian} for time $T$, is in the state
+$\ket{\psi(T)}=(\ket{0}+e^{-i\varphi}\ket{1})/\sqrt 2$.
+Measurement in $\hat\sigma_x$ gives outcome $+1$ with
+probability $p(\varphi)=\cos^2(\varphi/2)$. The Fisher information
+per qubit is~\cite{degen2017}
+\begin{equation}
+F_1(\varphi) \;=\; \frac{[\partial_\varphi p]^2}{p\,(1-p)} \;=\; 1,
+\end{equation}
+and additivity of Fisher information across independent probes
+gives $F_N=N$, so the Cram\'{e}r--Rao bound reads
+$(\Delta\varphi)^2 \geq 1/N$. This is the same $1/\sqrt N$
+that appears in classical statistics: the central-limit
+inheritance of measurement scatter over uncorrelated
+samples~\cite{caves1981,wineland1992}.
+
+\paragraph{Why this matters for dark matter.}
+With a single transmon ($N=1$) coupled to a dark photon at
+$g\,\phi_0\sim 10^{-15}\,\omega_q$ for a $T=100\,\mu$s
+Ramsey window, the accumulated phase is $\varphi\sim 10^{-12}$,
+far below the per-shot $\Delta\varphi=1$. Repeating the
+experiment $N\sim 10^{18}$ times --- a year of integration
+at MHz repetition --- recovers the dark-matter phase only at
+SQL scaling. Any tool that improves the scaling exponent from
+$1/\sqrt N$ to $1/N$ saves a factor of $\sqrt{N}$ in
+integration time at fixed sensitivity, which can be
+many orders of magnitude.
+
+% ============================================================
+\section{Entangled probes: the Heisenberg limit}
+\label{sec:hl}
+
+\begin{phenomenon}[\textbf{The Heisenberg limit}]
+If the $N$ qubits are not independent but are prepared in a
+particular entangled state --- the Greenberger--Horne--Zeilinger
+(GHZ) state ---
+\begin{equation}
+\label{eq:ghz}
+\ket{\rm GHZ} \;=\; \frac{1}{\sqrt 2}\bigl(\ket{0\cdots 0}
++ \ket{1\cdots 1}\bigr),
+\end{equation}
+then the same single-particle phase $\varphi$ stamped on each
+qubit shifts the global state phase by $N\varphi$, not
+$\varphi$. The interferometer arms have effectively become
+$N$ times longer, the fringe is $N$ times finer, and the
+phase-estimation precision improves as $1/N$. This is the
+``Heisenberg-limited'' (HL) scaling first identified for
+photonic interferometers~\cite{caves1981,giovannetti2004,giovannetti2006}
+and for atomic-clock spectroscopy~\cite{wineland1992,huelga1997}.
+\end{phenomenon}
+
+\begin{statement}[\textbf{Heisenberg limit (HL)}]
+\label{stmt:hl}
+For $N$ qubits prepared in $\ket{\rm GHZ}$ and exposed to the
+Hamiltonian \cref{eq:dm-phase-hamiltonian}, the
+Cram\'{e}r--Rao bound on the phase estimate is
+\begin{equation}
+\label{eq:hl-bound}
+(\Delta\varphi)_{\rm HL} \;=\; \frac{1}{N},
+\qquad
+(\Delta\phi_0)_{\rm HL} \;=\; \frac{1}{g\,T\,N}\,.
+\end{equation}
+The improvement over the SQL is a factor of $\sqrt{N}$ in
+phase resolution, equivalently a factor of $N$ in integration
+time at fixed sensitivity. The bound is saturated by an optimal
+estimator of the form $\hat\varphi=\arg\langle X_{\rm GHZ}\rangle/N$,
+where $X_{\rm GHZ}=\bigotimes_i\hat\sigma_x^{(i)}$ is the
+parity operator that converts the global $N\varphi$ phase into
+a single fringe.
+\end{statement}
+
+\paragraph{Derivation.}
+Apply $\op U(T)=\exp[-i T \op H/\hbar]$ from
+\cref{eq:dm-phase-hamiltonian} (dropping the static
+$\omega_q$ term, which is removed by the rotating frame) to
+the GHZ state \cref{eq:ghz}. Each qubit picks up
+$e^{-i\varphi/2}$ on $\ket 1$ and $e^{+i\varphi/2}$ on
+$\ket 0$, so
+\begin{equation}
+\op U(T)\ket{\rm GHZ} \;=\; \frac{1}{\sqrt 2}
+\bigl(e^{+iN\varphi/2}\ket{0\cdots 0}
++ e^{-iN\varphi/2}\ket{1\cdots 1}\bigr),
+\end{equation}
+giving a relative phase $N\varphi$ between the two
+many-body branches. The expectation of the parity operator
+$X_{\rm GHZ}$ in this state is $\cos(N\varphi)$, with
+variance $\sin^2(N\varphi)$, and the Cram\'{e}r--Rao bound
+delivers \cref{eq:hl-bound}. The factor of $N$ in the phase
+\emph{is} the entanglement: $N$ qubits acting as a single
+$N$-fold-amplified phase pickup~\cite{giovannetti2011,pezze2018}.
+
+\paragraph{Squeezing as an alternative route to sub-SQL scaling.}
+GHZ states are not the only quantum-enhanced phase sensors.
+Spin-squeezed states of $N$ qubits (or $N$ spins of an atomic
+ensemble) reduce the noise on one quadrature of the collective
+spin at the cost of increased noise on the conjugate
+quadrature; the result is sub-SQL scaling, parameterised by
+the Wineland squeezing parameter $\xi^2<1$~\cite{wineland1992}.
+Quadrature-squeezed light injected into a haloscope plays the
+same role for an electromagnetic phase: HAYSTAC's two-mode
+squeezed-vacuum operation~\cite{malnou2019,haystac2021} uses
+this exact mechanism to accelerate axion searches.
+
+\begin{example}[\textbf{Heisenberg-limited dark-photon phase pickup}]
+\label{ex:hl-darkphoton}
+Consider $N=10$ transmon qubits, each with $T_2=100\,\mu$s,
+coupled to a dark photon with $g\phi_0/2\pi=1$\,Hz. In a single
+Ramsey shot, each qubit accumulates $\varphi=2\pi\,(g\phi_0\,T_2)
+\sim 6\times 10^{-4}$\,rad. With independent probes
+(\cref{stmt:sql}) the phase resolution per shot is
+$\Delta\varphi_{\rm SQL}=1/\sqrt{10}\approx 0.32$\,rad, so the
+signal sits $\sim 500$ shots below the noise floor. With the
+qubits in $\ket{\rm GHZ}_{10}$ and read out by parity
+(\cref{stmt:hl}) the phase resolution is
+$\Delta\varphi_{\rm HL}=1/10=0.1$\,rad, a factor of
+$\sqrt{10}\approx 3.2$ better. Maintained for the dark-matter
+coherence time $\tau_\chi\sim 1$\,ms (at $\omega_\chi/2\pi
+\sim 5$\,GHz), this saves a factor of 10 in integration time at
+fixed sensitivity --- modest at $N=10$, but the saving scales
+linearly in $N$.
+\end{example}
+
+\paragraph{Transition.}
+The arithmetic of \cref{ex:hl-darkphoton} is, however, an
+\emph{ideal-case} arithmetic: it neglects the very dephasing,
+relaxation, and readout noise that real superconducting qubits
+suffer from on the same $T_2\sim 100\,\mu$s timescale. The next
+section confronts this directly: GHZ states are exquisitely
+fragile, and Markovian noise demolishes the Heisenberg scaling
+back to SQL. The way out --- and the bridge to Part~V on quantum
+information processing --- is quantum error correction.
+
+% ============================================================
+\section{Decoherence, the no-go theorem, and the QEC restoration}
+\label{sec:qec-metrology}
+
+\begin{phenomenon}[\textbf{Decoherence reverts the HL to SQL}]
+A single qubit subject to Markovian dephasing at rate
+$\Gamma_\phi$ has a coherence time $T_2=1/\Gamma_\phi$ over
+which a phase can be accumulated before the off-diagonal
+density-matrix element decays. A GHZ state of $N$ qubits, by
+contrast, decoheres $N$ times faster: its off-diagonal element
+between $\ket{0\cdots 0}$ and $\ket{1\cdots 1}$ decays as
+$e^{-N\Gamma_\phi t}$, because every qubit contributes
+independently. The signal grows by $N$, the noise grows by
+$\sqrt{N}\cdot\sqrt{N}=N$, and the net advantage cancels:
+asymptotically the HL collapses back onto the
+SQL~\cite{huelga1997,escher2011,demkowicz2012}.
+\end{phenomenon}
+
+\begin{statement}[\textbf{Zhou--Zhang--Preskill--Jiang HNLS theorem}]
+\label{stmt:hnls}
+Let the noisy quantum probe evolve under a Markovian master
+equation with signal Hamiltonian $\op G$ (the generator whose
+parameter $\varphi=g\phi_0 T$ we wish to estimate) and noise
+described by a set of Lindblad operators $\{\op L_k\}$ acting
+on a logical sub-system supported by a quantum
+error-correcting code. Assume that fast,
+noiseless ancillas and noiseless quantum operations on the
+ancilla--probe joint system are available. Then the Heisenberg
+scaling $(\Delta\varphi)\sim 1/N$ is achievable by a QEC sensing
+protocol if and only if
+\begin{equation}
+\label{eq:hnls}
+\op G \;\notin\; \op{LS}\bigl(\{\op L_k,\op L_k^\dagger,
+\op L_k^\dagger\op L_k,\id\}\bigr),
+\end{equation}
+i.e.\ the signal generator $\op G$ does \emph{not} lie in
+the Lindblad span of the noise operators (the ``HNLS''
+condition: \emph{Hamiltonian-Not-in-Lindblad-Span}). When
+HNLS holds, an explicit QEC code exists that simultaneously
+preserves the signal Hamiltonian and projects out the noise;
+when HNLS fails, no protocol --- regardless of how clever ---
+beats the SQL asymptotically~\cite{zhou2018}.
+\end{statement}
+
+\paragraph{Reading the HNLS condition.}
+The condition \cref{eq:hnls} has a clean physical
+interpretation. The Lindblad span is the Hilbert-space subspace
+of operators that can be assembled out of the noise operators
+$\op L_k$ and the identity. Any signal generator that lives
+\emph{inside} that span looks, to the system, like a noise
+operator: the same QEC code that catches and reverses the
+$\op L_k$ errors will also catch and reverse the signal,
+erasing it. By contrast, a signal generator that is
+\emph{orthogonal} to the noise span carries information that
+the code cannot mistake for noise, and the QEC cycle preserves
+the signal Hamiltonian while sterilising the noise. For a
+qubit subject to pure dephasing along $\hat\sigma_z$
+($\op L_1=\sqrt{\Gamma_\phi/2}\,\hat\sigma_z$) and a signal that
+also commutes with $\hat\sigma_z$ (the dark-matter case of
+\cref{eq:dm-phase-hamiltonian}!), HNLS is \emph{not}
+satisfied: the signal lies in the Lindblad span and no QEC
+code can restore the HL --- the dephasing-imposed SQL is
+fundamental in this orientation. This is the noise/signal
+geometry that explains why the dark-matter phase coupling on a
+qubit \emph{should not, naively, expect} a Heisenberg
+advantage. HL is recovered if the signal generator is rotated
+relative to the noise --- e.g.\ by encoding the qubit in a
+non-trivial multi-mode code (the cat code, the GKP code, or a
+distance-2 stabiliser code) so that the dephasing axis no
+longer coincides with the signal axis~\cite{kessler2014,arrad2014,dur2014,zhou2018}.
+
+\begin{statement}[\textbf{HL restoration via QEC --- protocol sketch}]
+\label{stmt:qec-sensing}
+The construction of \cite{zhou2018} runs a QEC cycle on
+the $(N+\rm{ancilla})$-qubit system at rate $\gg \Gamma_\phi$.
+At each cycle:
+\begin{enumerate}
+  \item the syndrome of the noise operators $\op L_k$ is
+        measured (via stabiliser measurements);
+  \item the syndrome is flipped on the ancilla and used to
+        Pauli-correct the data qubits;
+  \item the residual evolution is dominated by the
+        signal Hamiltonian $\op G$, which the code preserves
+        because $\op G\notin\op{LS}$.
+\end{enumerate}
+After $T/T_{\rm QEC}\gg 1$ cycles, the encoded logical phase
+has accumulated $\varphi_L \sim N\,g\,\phi_0\,T$ with residual
+noise that does \emph{not} grow as $N$, recovering
+the HL scaling \cref{eq:hl-bound}.
+\end{statement}
+
+\paragraph{Connecting to Part~V (quantum information processing).}
+The conceptual bridge to QIP is direct: the QEC codes that
+protect logical qubits during a quantum computation are the
+\emph{same} codes that protect a logical phase sensor during a
+quantum-enhanced measurement, with the syndrome-extraction
+cycle playing the same role in both contexts. The
+\emph{distance} of the code (minimum weight of an undetectable
+error) controls how many simultaneous noise events can be
+tolerated before the encoded signal is lost; the
+\emph{transversality} structure of the code controls which
+generators $\op G$ are protected. In the language of Part~V,
+the chapter on quantum error correction states the threshold
+theorem: arbitrary fault tolerance is achievable for
+computation if and only if physical error rates are below a
+constant. The Zhou--Zhang--Preskill--Jiang theorem is the
+\emph{metrological} counterpart: arbitrary HL scaling is
+achievable for sensing if and only if the signal lies outside
+the noise's Lindblad span~\cite{zhou2018,layden2019}. Both are
+necessary-and-sufficient conditions on the geometry of noise
+relative to the operation one wants to perform.
+
+% ============================================================
+\section{Outlook: dark matter at the Heisenberg limit}
+\label{sec:dm-hl-outlook}
+
+\begin{application}[\textbf{Quantum-enhanced dark-matter searches}]
+\label{app:dm-hl}
+Several experimental directions translate the SQL/HL
+distinction into hardware:
+\begin{itemize}
+  \item \textbf{Squeezed-vacuum haloscopes.} HAYSTAC operates
+        a microwave Josephson parametric amplifier in
+        two-mode-squeezed-vacuum mode, demonstrating a factor of
+        $\sim 2$ scan-rate improvement over the SQL operating
+        point at $\sim 5$\,GHz~\cite{malnou2019,haystac2021}.
+        This is a single-mode realisation of the spin-squeezing
+        idea applied to the haloscope's signal mode rather than
+        to a multi-qubit register.
+  \item \textbf{Entangled sensor networks.} A network of
+        $N$ qubits, each at a different physical location and
+        each tuned to the same dark-matter Compton frequency,
+        can in principle be entangled across the network and
+        read out via a global parity measurement. The
+        Heisenberg-limited sensitivity of such a distributed
+        haloscope to ultralight bosonic dark matter has been
+        analysed in detail~\cite{brady2022},
+        with operational demonstrations beginning to appear in
+        2024~\cite{liu2024,connolly2024}.
+  \item \textbf{Single-mode error-corrected sensors.}
+        Bosonic codes (cat codes, binomial codes, GKP codes)
+        encode a logical phase in a high-photon-number cavity
+        mode and have been used for single-mode QEC of an
+        oscillator~\cite{ofek2016,sivak2023}. Adapting them to
+        run as a Heisenberg-limited dark-matter phase sensor
+        is an active programme of theoretical and experimental
+        work~\cite{layden2019}.
+\end{itemize}
+The unifying picture is that a dark-matter haloscope, whether
+microwave-cavity or qubit-based, is at heart a phase
+interferometer: the target field $\phi(t)$ paints a tiny
+oscillating phase onto the apparatus, and the sensitivity to
+$\varepsilon$ or $g_{a\gamma\gamma}$ is set by how
+precisely that phase can be estimated. Quantum-enhanced
+metrology --- squeezing, entanglement, error correction ---
+attacks that bottleneck directly, and so far only at the
+percent--$\sqrt N$ level. The conceptual ceiling is the
+Heisenberg limit; the engineering ceiling is the HNLS-protected
+QEC sensor; both remain open frontiers.
+\end{application}
+
+\paragraph{Concluding outlook.}
+Across Part~VI we have followed the dark-matter signal from
+its halo physics (\cref{ch:dm-search}), through the
+four cQED hardware mechanisms by which it can deposit energy
+or phase on a chip
+(\cref{ch:qp-detection,ch:qubit-antenna,ch:phonon-qubit-piezo,ch:microwave-absorption}),
+to the metrological architecture by which the deposited signal
+is converted into a coupling bound. The key conceptual
+takeaway of this closing chapter is that the qubit substrate
+buys two distinct kinds of dark-matter sensitivity: an
+\emph{event}-counting sensitivity, set by the qubit dark-count
+rate, and a \emph{phase}-sensing sensitivity, set in the
+quantum-enhanced limit by the Heisenberg-scaling theorems and
+the HNLS condition. The former drives the recoil and absorption
+chapters; the latter is the natural home for the squeezed
+haloscopes, entangled sensor networks, and error-corrected
+phase sensors that close the gap between the SQL and the
+fundamental quantum limit. A fault-tolerant
+dark-matter sensor --- one whose precision is limited only by
+the dark-matter coherence time itself, not by the qubit's
+$T_2$ --- is the natural endpoint of this programme, and
+it is the same fault-tolerance theorem that powers a
+fault-tolerant quantum computer
+(\cref{ch:quantum-information-processing}).
