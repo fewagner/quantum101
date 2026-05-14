@@ -276,6 +276,293 @@ for producing the gap profile reproducibly~\cite{pan2022}.
 \end{remark}
 
 % --------------------------------------------------------------
+\subsection{Parity-switching rates: photon-assisted versus number-conserving tunnelling}
+\label{sec:parity-switching}
+
+\begin{phenomenon}
+The charge on a superconducting qubit island is carried by Cooper
+pairs in units of $2e$; the \emph{charge parity} records whether
+the island additionally holds an even or odd number of unpaired
+electrons. A single electron tunnelling across the Josephson
+junction flips this parity, and --- in an offset-charge-sensitive
+transmon --- produces a discrete jump in the qubit transition
+frequency. Two microscopically distinct processes drive such a
+single-charge tunnelling event: a pre-existing quasiparticle can
+tunnel across the junction (\emph{number-conserving} parity
+switching, NUPS), or an absorbed high-frequency photon can break a
+Cooper pair into two quasiparticles, one on each side
+(\emph{photon-assisted} parity switching, PAPS). Because the two
+channels obey different energy-conservation constraints, tuning the
+qubit frequency with an external flux changes their rates
+differently --- which is precisely how an experiment can tell them
+apart.
+\end{phenomenon}
+
+This subsection works through the calculation of the two rates,
+following Diamond~et~al.~\cite{diamond2022}, who measured the flux
+dependence of the parity-switching rate in a SQUID transmon to
+separate the NUPS and PAPS contributions.
+
+\paragraph{Step 1: the single-charge-tunnelling Hamiltonian.}
+Single-electron tunnelling across the junction, coupled to the
+qubit phase degree of freedom $\hat\varphi$, is described by
+\begin{equation}
+\label{eq:ps-tunnelling-H}
+\op H_{{\rm QP},\hat\varphi}
+\;=\; t\sum_{r,l,s} e^{i\hat\varphi/2}\,
+\hat c_{r,s}^\dagger\,\hat c_{l,s} \;+\; \text{H.c.},
+\end{equation}
+where $t$ is the tunnelling amplitude, $\hat c_{l,s}$ annihilates an
+electron of spin $s=\,\uparrow,\downarrow$ in the lead on the left
+of the junction, $\hat c_{r,s}^\dagger$ creates one on the right,
+and the sum runs over both leads and both spins. The phase factor
+$e^{i\hat\varphi/2}$ carries \emph{half} the junction phase,
+because a single electron carries half the charge of the Cooper
+pair whose tunnelling defines $\hat\varphi$; it is the operator
+that entangles the tunnelling event with the qubit's phase, and
+hence with its plasmonic eigenstates.
+
+\paragraph{Step 2: the Bogoliubov transformation.}
+The electron operators in each superconducting lead are
+re-expressed in terms of the BCS quasiparticle operators
+$\hat\gamma$ that diagonalise the superconductor,
+\begin{equation}
+\label{eq:ps-bogoliubov}
+\hat c_{l\uparrow} \;=\; u_l\,\hat\gamma_{l\downarrow}
++ v_l\,\hat\gamma_{l\uparrow}^\dagger,
+\qquad
+\hat c_{l\downarrow}^\dagger \;=\; -\,v_l\,\hat\gamma_{l\downarrow}
++ u_l\,\hat\gamma_{l\uparrow}^\dagger,
+\end{equation}
+where $\hat\gamma_{l\downarrow}$ annihilates a spin-down
+quasiparticle in the left lead, and $u_l,v_l$ are the standard BCS
+coherence factors --- $u_l^2=\tfrac12(1+\xi_l/\varepsilon_l)$,
+$v_l^2=\tfrac12(1-\xi_l/\varepsilon_l)$, with $\xi_l$ the
+normal-state energy measured from the Fermi level and
+$\varepsilon_l=\sqrt{\xi_l^2+\Delta_l^2}$ the quasiparticle energy.
+
+\paragraph{Step 3: two tunnelling channels.}
+Substituting \cref{eq:ps-bogoliubov} into
+\cref{eq:ps-tunnelling-H} and collecting terms, the tunnelling
+Hamiltonian splits into two physically distinct pieces:
+\begin{equation}
+\label{eq:ps-two-channels}
+\begin{aligned}
+\op H_{{\rm QP},\hat\varphi} \;=\; t\sum_{r,l,s}
+&\left[
+(u_r u_l - v_r v_l)\cos\tfrac{\hat\varphi}{2}
++ i\,(u_r u_l + v_r v_l)\sin\tfrac{\hat\varphi}{2}
+\right]\hat\gamma_{rs}^\dagger\hat\gamma_{ls}\\
++\; t\sum_{r,l,s}
+&\left[
+(u_r u_l + v_r v_l)\cos\tfrac{\hat\varphi}{2}
++ i\,(u_r u_l - v_r v_l)\sin\tfrac{\hat\varphi}{2}
+\right]\hat\gamma_{rs}^\dagger\hat\gamma_{ls}^\dagger
+\;+\; \text{H.c.}
+\end{aligned}
+\end{equation}
+The first line, with $\hat\gamma_{rs}^\dagger\hat\gamma_{ls}$,
+\emph{moves} a quasiparticle from the left lead to the right: it
+empties one quasiparticle state and fills another, conserving the
+total quasiparticle number. This is NUPS. The second line, with
+$\hat\gamma_{rs}^\dagger\hat\gamma_{ls}^\dagger$, \emph{creates} a
+quasiparticle on each side of the junction, raising the
+quasiparticle number by two. Energy conservation then forbids this
+process unless it is accompanied by the absorption of a photon of
+energy at least $\Delta_{\rm low}+\Delta_{\rm high}$, the sum of the
+two films' superconducting gaps. This is PAPS. (The Hermitian
+conjugate of the second line annihilates two quasiparticles and
+emits a photon.)
+
+\paragraph{Step 4: the photon-induced phase modulation.}
+A photon incident on the junction at frequency $\omega_P$ imposes a
+small, oscillating increment on the junction phase,
+$\hat\varphi/2 \to \hat\varphi/2 + \varphi_P\sin\omega_P t$, with
+$\varphi_P\ll 1$ the field-induced phase amplitude. Linearising the
+trigonometric functions in $\varphi_P$,
+\begin{equation}
+\label{eq:ps-photon-modulation}
+\begin{aligned}
+\cos\tfrac{\hat\varphi}{2}
+&\;\to\; \cos\tfrac{\hat\varphi}{2}
+- \varphi_P\sin\omega_P t\,\sin\tfrac{\hat\varphi}{2},\\
+\sin\tfrac{\hat\varphi}{2}
+&\;\to\; \sin\tfrac{\hat\varphi}{2}
++ \varphi_P\sin\omega_P t\,\cos\tfrac{\hat\varphi}{2}.
+\end{aligned}
+\end{equation}
+The $\sin\omega_P t$ factor supplies the photon energy
+$\hbar\omega_P$ that the PAPS channel of
+\cref{eq:ps-two-channels} needs to satisfy energy conservation.
+
+\begin{statement}[Parity-switching rates from Fermi's golden rule~\cite{diamond2022}]
+\label{stmt:parity-rates}
+Applying Fermi's golden rule (\cref{thm:fermi}) to the two channels
+of \cref{eq:ps-two-channels} --- with the photon modulation
+\cref{eq:ps-photon-modulation} for the photon-assisted channel ---
+and using the Ambegaokar--Baratoff relation to trade the tunnelling
+amplitude $t$ for the junction's Josephson energy $E_J$, the rate
+of parity switching accompanied by a qubit transition between
+plasmonic eigenstates $i$ and $j$ is, for the number-conserving
+channel,
+\begin{equation}
+\label{eq:ps-rate-N}
+\Gamma_N^{i\to j}
+\;=\; \frac{16\,E_J}{\pi\hbar}
+\left[
+\bigl|\bra{i}\cos\tfrac{\hat\varphi}{2}\ket{j}\bigr|^2 S_{-N}
++ \bigl|\bra{i}\sin\tfrac{\hat\varphi}{2}\ket{j}\bigr|^2 S_{+N}
+\right],
+\end{equation}
+and, for the photon-assisted channel,
+\begin{equation}
+\label{eq:ps-rate-P}
+\Gamma_P^{i\to j}
+\;=\; \frac{\bar n\,g^2\,\omega_r}{\pi\,\omega_q\,\omega_P}
+\left[
+\bigl|\bra{i}\cos\tfrac{\hat\varphi}{2}\ket{j}\bigr|^2 S_{-P}
++ \bigl|\bra{i}\sin\tfrac{\hat\varphi}{2}\ket{j}\bigr|^2 S_{+P}
+\right].
+\end{equation}
+Here $\bar n$ is the average photon occupation of the mode at
+$\omega_P$, $g$ is the geometric qubit--resonator coupling rate,
+$\omega_r$ the readout-resonator frequency, and $\omega_q$ the
+qubit frequency; the prefactor of \cref{eq:ps-rate-P} is the
+per-photon coupling factor, set by the photon electric-field
+amplitude and the qubit's effective dipole length. The
+$S_{\pm N}$ and $S_{\pm P}$ are quasiparticle structure factors,
+specified next.
+\end{statement}
+
+\paragraph{Step 5: the quasiparticle structure factors.}
+The structure factors collect everything that depends on the
+quasiparticle populations: the BCS coherence factors, the
+quasiparticle energy distribution, and the superconducting density
+of states. For tunnelling from the left lead to the right,
+\begin{align}
+\label{eq:ps-structure-N}
+S_{\pm N}^{lr}(\omega_{ij})
+&\;=\; \frac{1}{\bar\Delta}\int_0^\infty\!\dd\varepsilon\;
+\frac{1}{2}\!\left(1 \pm
+\frac{\Delta_l\Delta_r}{\varepsilon(\varepsilon-\hbar\omega_{ij})}\right)
+f(\varepsilon,T_{\rm ph},\mu_l)\,\nu(\varepsilon,\Delta_l)\notag\\
+&\qquad\times
+\bigl[1-f(\varepsilon-\hbar\omega_{ij},T_{\rm ph},\mu_r)\bigr]\,
+\nu(\varepsilon-\hbar\omega_{ij},\Delta_r),\\[0.4em]
+\label{eq:ps-structure-P}
+S_{\pm P}^{lr}(\omega_{ij})
+&\;=\; \frac{1}{\bar\Delta}\int_0^\infty\!\dd\varepsilon\;
+\frac{1}{2}\!\left(1 \pm
+\frac{\Delta_l\Delta_r}{\varepsilon(\hbar\omega_P-\varepsilon-\hbar\omega_{ij})}\right)
+\bigl[1-f(\varepsilon,T_{\rm ph},\mu_l)\bigr]\,\nu(\varepsilon,\Delta_l)\notag\\
+&\qquad\times
+\bigl[1-f(\hbar\omega_P-\varepsilon-\hbar\omega_{ij},T_{\rm ph},\mu_r)\bigr]\,
+\nu(\hbar\omega_P-\varepsilon-\hbar\omega_{ij},\Delta_r).
+\end{align}
+Here $\nu(\varepsilon,\Delta)=\varepsilon/\sqrt{\varepsilon^2-\Delta^2}$
+is the normalised BCS density of states, $\bar\Delta$ a
+characteristic gap energy that normalises the integral, and
+$\omega_{ij}$ the qubit transition frequency between eigenstates
+$i$ and $j$. The distribution function
+\begin{equation}
+\label{eq:ps-distribution}
+f(\varepsilon,T_{\rm ph},\mu)
+\;=\; \frac{1}{e^{(\varepsilon-\mu)/k_B T_{\rm ph}}+1}
+\end{equation}
+is a Fermi--Dirac form at the phonon temperature $T_{\rm ph}$; a
+non-zero chemical potential $\mu$ describes a quasiparticle
+population that is thermalised in shape but carries an
+\emph{excess} number above equilibrium. The two structure-factor
+signs have a clean physical reading: the $S_{-}$ factors multiply
+the $\cos(\hat\varphi/2)$ matrix element and descend from the
+``minus'' coherence-factor combination $u_r u_l-v_r v_l$, while the
+$S_{+}$ factors multiply the $\sin(\hat\varphi/2)$ matrix element
+and descend from $u_r u_l+v_r v_l$. The NUPS structure factor
+\cref{eq:ps-structure-N} carries one factor of $f$ (a quasiparticle
+must already be present to tunnel) and one factor of $1-f$ (an
+empty final state); the PAPS structure factor
+\cref{eq:ps-structure-P} carries two factors of $1-f$, because the
+process creates two quasiparticles into empty states, sharing the
+photon energy $\hbar\omega_P$ between them. The total structure
+factor sums left-to-right and right-to-left tunnelling,
+$S_\pm = S_\pm^{lr}+S_\pm^{rl}$.
+
+\paragraph{Step 6: total rates and the SQUID sum.}
+The total single-junction rates follow by weighting the $i\to j$
+rates with the qubit-state occupation probabilities
+$\rho_0,\rho_1$,
+\begin{equation}
+\label{eq:ps-total-single}
+\Gamma_m \;=\; \rho_0\bigl(\Gamma_m^{0\to0}+\Gamma_m^{0\to1}\bigr)
++ \rho_1\bigl(\Gamma_m^{1\to1}+\Gamma_m^{1\to0}\bigr),
+\qquad m\in\{N,P\}.
+\end{equation}
+In the SQUID transmon used to separate the two mechanisms, a
+single-charge tunnelling event across \emph{either} of the two
+junctions flips the parity, so the rates add over the two
+junctions,
+\begin{equation}
+\label{eq:ps-squid-sum}
+\Gamma_m(\Phi) \;=\; \Gamma_{m1}(\Phi) + \Gamma_{m2}(\Phi),
+\end{equation}
+each evaluated with its own Josephson energy
+($E_{J1}\approx 2.5\,\text{GHz}$, $E_{J2}\approx 8\,\text{GHz}$ in
+\cite{diamond2022}) and with the externally tunable flux entering
+through $\varphi_{\rm ext}=2\pi\Phi/\Phi_0$ in the SQUID
+Hamiltonian
+$\op H = 4E_C(\hat n - n_g)^2 - E_{J1}\cos(\hat\varphi-\varphi_{\rm ext})
+- E_{J2}\cos\hat\varphi$, with $E_C$ the charging energy, $\hat n$
+the island-charge operator, and $n_g$ the offset charge. The flux
+enters the rates in two places: through the qubit transition
+frequency $\omega_{ij}(\Phi)$ that sets the energy arguments of the
+structure factors
+\cref{eq:ps-structure-N,eq:ps-structure-P}, and through the
+flux-dependent matrix elements
+$\bra{i}\cos(\hat\varphi/2)\ket{j}$ and
+$\bra{i}\sin(\hat\varphi/2)\ket{j}$. Because NUPS and PAPS weight
+these matrix elements through \emph{different} structure factors,
+their flux dependences differ --- the signature that makes the two
+mechanisms separable.
+
+\paragraph{Step 7: modelling PAPS with a single effective photon frequency.}
+The true spectrum of the radiation that drives PAPS is not known,
+and fortunately it is not needed. The relative flux dependence
+$\Gamma_P(\Phi)/\Gamma_P(0)$ produced by an arbitrary photon
+spectrum above the $\Delta_{\rm low}+\Delta_{\rm high}$ threshold
+can be reproduced by an effective single mode: a frequency $f_P$
+and an average occupation $\bar n$, with
+$\Gamma_P(\Phi)=\Gamma_P(\Phi,\bar n,f_P)$. Lower $f_P$ produces a
+\emph{stronger} relative increase of $\Gamma_P$ with flux, because
+a lower-energy photon generates quasiparticles closer to the gap
+edge, where the coherence-factor interference encoded in
+$S_{+P}/S_{-P}$ is largest and most sharply emphasises the
+flux-dependent matrix elements. The absolute scale of $\Gamma_P$
+absorbs the unknown attenuation and frequency-dependent coupling of
+the radiation into $\bar n$, so in practice the model is fully
+specified by the single pair $(\bar n,f_P)$.
+
+\begin{remark}[What the flux dependence buys]
+\label{rem:parity-flux}
+The pay-off of the calculation is diagnostic. NUPS depends on the
+\emph{number} of quasiparticles already present (one factor of $f$
+in \cref{eq:ps-structure-N}); PAPS depends on the \emph{photon}
+flux and creates new quasiparticles (two factors of $1-f$ and an
+explicit $\bar n$ in \cref{eq:ps-rate-P,eq:ps-structure-P}). The
+two therefore respond differently as the flux tunes the qubit
+frequency, and a measured $\Gamma(\Phi)$ curve can be decomposed
+into its NUPS and PAPS parts. Diamond~et~al.~\cite{diamond2022}
+found that photon-assisted parity switching contributes a
+significant fraction of the total rate --- and, because PAPS
+\emph{generates} excess quasiparticles, it feeds back into the
+quasiparticle population that drives the relaxation rate of
+\cref{stmt:qp-relaxation}. The threshold
+$\Delta_{\rm low}+\Delta_{\rm high}$ also ties the calculation
+directly to the gap engineering of \cref{rem:gap-engineering}: the
+same gap difference that blocks quasiparticle poisoning sets the
+photon energy above which PAPS turns on.
+\end{remark}
+
+% --------------------------------------------------------------
 \section{Quasiparticle detection as a dark-matter signal}
 \label{sec:qp-dm}
 
