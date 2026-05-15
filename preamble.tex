@@ -268,3 +268,9 @@
 \DeclareMathOperator{\Tr}{Tr}
 \let\op\undefined
 \newcommand{\op}[1]{\hat{#1}}
+
+% ---- Document version stamp ----
+% Makefile / CI inject `version.tex` via `git describe --tags --always --dirty`.
+% Falls back to "dev" for ad-hoc builds where version.tex is absent.
+\providecommand{\docversion}{dev}
+\InputIfFileExists{version.tex}{}{}

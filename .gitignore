@@ -19,6 +19,9 @@
 *.bcf
 *.run.xml
 
+# Auto-generated version stamp (Makefile / CI inject git describe here)
+version.tex
+
 # Editor / OS
 .DS_Store
 *.swp
