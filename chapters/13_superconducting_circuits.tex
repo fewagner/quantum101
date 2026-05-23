@@ -1,0 +1,727 @@
+\chapter{Superconductivity and circuit quantisation}
+\label{ch:circuit-quantisation}
+
+Everything in Parts~I--III was platform-independent: a qubit was an
+abstract two-level system, a cavity an abstract harmonic oscillator,
+and the Jaynes--Cummings coupling a number $g$ we never had to
+derive from hardware. Part~IV makes the platform concrete. The
+qubits and resonators of a superconducting quantum processor are
+\emph{electrical circuits} --- capacitors, inductors, and Josephson
+junctions --- cooled until a macroscopic number of electrons condense
+into a single coherent quantum state and the circuit's collective
+coordinate, the flux through an inductor or the charge on a
+capacitor, behaves quantum-mechanically. To build that picture we
+need two things this chapter supplies. First, \emph{why} a metal
+becomes a dissipationless quantum conductor at all: the
+Bardeen--Cooper--Schrieffer (BCS) theory of pairing, which produces
+the energy gap $2\Delta$ that Part~VI has been invoking inline ever
+since \cref{ch:qp-detection}. Second, \emph{how} to quantise a
+circuit: the canonical procedure that promotes node flux and charge
+to conjugate operators and turns an $LC$ resonator into the quantum
+harmonic oscillator of \cref{stmt:qho-spectrum}. The chapter closes
+by framing what a superconducting platform must still deliver --- the
+DiVincenzo criteria --- and identifying the one ingredient the linear
+$LC$ circuit lacks: anharmonicity, the Josephson junction of
+\cref{ch:josephson}.
+
+% --------------------------------------------------------------
+\section{Superconductivity as a macroscopic quantum phenomenon}
+\label{sec:superconductivity-phenom}
+
+\begin{phenomenon}
+Below a critical temperature $T_c$ many metals lose all DC
+electrical resistance: a current set up in a superconducting ring
+persists for years without measurable decay. They also expel
+magnetic flux from their interior (the Meissner effect), so a
+superconductor is not merely a perfect conductor but a distinct
+thermodynamic phase. Two further clues point to the microscopic
+mechanism. The critical temperature depends on the ionic mass
+($T_c\propto M^{-1/2}$, the \emph{isotope effect}), implicating the
+lattice vibrations; and magnetic flux trapped through a
+superconducting ring comes only in integer multiples of
+$\Phi_0=h/2e$, half the value $h/e$ one would expect for single
+electrons. The factor of two in the charge is the signature of
+\emph{pairing}.
+\end{phenomenon}
+
+\begin{statement}[\textbf{Flux quantisation and the macroscopic wavefunction}]
+\label{stmt:flux-quantisation}
+A superconductor is described by a single complex \emph{order
+parameter} (macroscopic wavefunction)
+\begin{equation}
+\label{eq:order-parameter}
+\psi(\mathbf r) \;=\; |\psi(\mathbf r)|\,e^{i\varphi(\mathbf r)},
+\end{equation}
+whose modulus sets the density of the condensed charge carriers and
+whose phase $\varphi$ is rigid across the sample --- a single quantum
+state occupied by a macroscopic number of carriers. Because the
+carriers have charge $2e$ (Cooper pairs), single-valuedness of
+$\psi$ around a closed loop forces the enclosed flux to be quantised,
+\begin{equation}
+\label{eq:flux-quantum}
+\oint \nabla\varphi\cdot\dd\mathbf l = 2\pi n
+\quad\Longrightarrow\quad
+\Phi = n\,\Phi_0,
+\qquad
+\Phi_0 \equiv \frac{h}{2e}\approx 2.07\times10^{-15}\,\text{Wb}.
+\end{equation}
+The phase $\varphi$ is the dynamical variable of the superconducting
+condensate; it is the same phase that will appear across a Josephson
+junction in \cref{ch:josephson} and that, together with the charge,
+becomes a quantum operator later in this chapter.
+\end{statement}
+
+\paragraph{Why the phase matters.}
+The rigidity of $\varphi$ is what makes a superconducting circuit a
+clean quantum system. In a normal metal the electronic degrees of
+freedom are a vast incoherent bath; in a superconductor they are
+locked into one coherent state, and the only low-energy dynamics left
+is that of the collective phase and the charge conjugate to it. A
+circuit built from superconducting elements therefore has just a
+handful of relevant quantum coordinates, not Avogadro's number of
+them --- which is precisely what allows an $LC$ loop to behave as a
+single harmonic oscillator and a Josephson circuit as a single qubit.
+
+\paragraph{Transition.}
+The phenomenology fixes \emph{what} a superconductor is --- a
+macroscopic quantum state of charge-$2e$ carriers with a rigid phase
+--- but not \emph{why} electrons, which repel one another, should
+pair at all. That is the content of BCS theory, to which we now turn.
+
+% --------------------------------------------------------------
+\section{The Cooper instability and the BCS ground state}
+\label{sec:cooper-bcs}
+
+\begin{phenomenon}
+Electrons repel through the Coulomb interaction, yet they pair. The
+resolution is that the relevant interaction near the Fermi surface is
+not the bare Coulomb force but an \emph{effective} one mediated by
+the lattice: one electron distorts the positive-ion lattice, and a
+second electron is attracted to the transient excess of positive
+charge left behind. The attraction is retarded and weak, but Cooper
+showed that \emph{any} attractive interaction, however weak,
+destabilises the normal Fermi sea: a single pair of electrons added
+just above a filled Fermi sea forms a bound state. The ground state
+must therefore reorganise into a coherent superposition of such
+pairs.
+\end{phenomenon}
+
+\begin{statement}[\textbf{Reduced BCS pairing Hamiltonian}~\cite{bcs1957}]
+\label{stmt:bcs-hamiltonian}
+Keeping only the interaction between electrons of opposite momentum
+and spin --- the channel Cooper found unstable --- the reduced BCS
+Hamiltonian is
+\begin{equation}
+\label{eq:bcs-hamiltonian}
+\op H_{\rm BCS}
+= \sum_{\mathbf k,\sigma}\xi_{\mathbf k}\,
+  \hat c^\dagger_{\mathbf k\sigma}\hat c_{\mathbf k\sigma}
+\;-\; V\!\!\sum_{\mathbf k,\mathbf k'}
+  \hat c^\dagger_{\mathbf k'\uparrow}\hat c^\dagger_{-\mathbf k'\downarrow}
+  \hat c_{-\mathbf k\downarrow}\hat c_{\mathbf k\uparrow},
+\end{equation}
+where $\hat c^\dagger_{\mathbf k\sigma}$ creates an electron of
+momentum $\mathbf k$ and spin $\sigma$, $\xi_{\mathbf k}=
+\varepsilon_{\mathbf k}-\mu$ is the single-particle energy measured
+from the chemical potential $\mu$, and $V>0$ is the strength of the
+attractive interaction, taken constant for
+$|\xi_{\mathbf k}|<\hbar\omega_D$ (a thin shell of width set by the
+Debye frequency $\omega_D$) and zero otherwise. The operators obey
+the fermionic anticommutation relations
+$\{\hat c_{\mathbf k\sigma},\hat c^\dagger_{\mathbf k'\sigma'}\}
+=\delta_{\mathbf k\mathbf k'}\delta_{\sigma\sigma'}$.
+\end{statement}
+
+\begin{statement}[\textbf{BCS variational ground state}]
+\label{stmt:bcs-ground-state}
+The ground state of \cref{eq:bcs-hamiltonian} is the coherent pair
+condensate
+\begin{equation}
+\label{eq:bcs-state}
+\ket{\rm BCS}
+= \prod_{\mathbf k}
+  \bigl(u_{\mathbf k}
+   + v_{\mathbf k}\,\hat c^\dagger_{\mathbf k\uparrow}
+     \hat c^\dagger_{-\mathbf k\downarrow}\bigr)\ket0,
+\qquad
+|u_{\mathbf k}|^2 + |v_{\mathbf k}|^2 = 1,
+\end{equation}
+in which each pair state $(\mathbf k\uparrow,-\mathbf k\downarrow)$ is
+empty with amplitude $u_{\mathbf k}$ and occupied with amplitude
+$v_{\mathbf k}$. Unlike a filled Fermi sea, $\ket{\rm BCS}$ is not an
+eigenstate of particle number: it is a superposition of states with
+different numbers of pairs, with a well-defined relative \emph{phase}
+between them --- the microscopic origin of the order parameter
+\cref{eq:order-parameter}.
+\end{statement}
+
+\paragraph{Derivation (mean-field decoupling).}
+The quartic interaction in \cref{eq:bcs-hamiltonian} is intractable
+exactly, but the coherence of $\ket{\rm BCS}$ makes the pair operator
+$\hat c_{-\mathbf k\downarrow}\hat c_{\mathbf k\uparrow}$ acquire a
+nonzero expectation value. Define the \emph{gap parameter}
+\begin{equation}
+\label{eq:gap-definition}
+\Delta \;\equiv\; V\sum_{\mathbf k}
+  \expval{\hat c_{-\mathbf k\downarrow}\hat c_{\mathbf k\uparrow}}.
+\end{equation}
+Writing each pair operator as its mean plus a fluctuation,
+$\hat c_{-\mathbf k\downarrow}\hat c_{\mathbf k\uparrow}
+=\expval{\cdots}+\delta$, and dropping the (small) product of two
+fluctuations, the interaction linearises into the mean-field
+Hamiltonian
+\begin{equation}
+\label{eq:bcs-meanfield}
+\op H_{\rm MF}
+= \sum_{\mathbf k,\sigma}\xi_{\mathbf k}\,
+  \hat c^\dagger_{\mathbf k\sigma}\hat c_{\mathbf k\sigma}
+  \;-\;\sum_{\mathbf k}\Bigl(
+  \Delta\,\hat c^\dagger_{\mathbf k\uparrow}
+    \hat c^\dagger_{-\mathbf k\downarrow} + \hc\Bigr)
+  \;+\;\frac{|\Delta|^2}{V}.
+\end{equation}
+This is quadratic and can be diagonalised exactly --- the subject of
+the next section --- and the diagonalisation feeds back through
+\cref{eq:gap-definition} to fix $\Delta$ self-consistently.
+
+\paragraph{Transition.}
+The mean-field Hamiltonian \cref{eq:bcs-meanfield} mixes creation and
+annihilation operators ($\hat c^\dagger\hat c^\dagger$ terms), so the
+electron is no longer the natural excitation. The Bogoliubov
+transformation finds the operators that \emph{do} diagonalise it, and
+in doing so produces both the quasiparticle spectrum and the
+self-consistent equation for the gap.
+
+% --------------------------------------------------------------
+\section{The gap equation and Bogoliubov quasiparticles}
+\label{sec:gap-bogoliubov}
+
+\begin{statement}[\textbf{Bogoliubov quasiparticles and the gap equation}]
+\label{stmt:bogoliubov}
+The mean-field Hamiltonian \cref{eq:bcs-meanfield} is diagonalised by
+the \emph{Bogoliubov transformation} to new fermionic operators
+\begin{equation}
+\label{eq:bogoliubov-transform}
+\hat\gamma_{\mathbf k0}
+  = u_{\mathbf k}\hat c_{\mathbf k\uparrow}
+  - v_{\mathbf k}\hat c^\dagger_{-\mathbf k\downarrow},
+\qquad
+\hat\gamma_{\mathbf k1}
+  = u_{\mathbf k}\hat c_{-\mathbf k\downarrow}
+  + v_{\mathbf k}\hat c^\dagger_{\mathbf k\uparrow},
+\end{equation}
+with the coherence factors
+\begin{equation}
+\label{eq:coherence-factors}
+u_{\mathbf k}^2 = \frac12\Bigl(1+\frac{\xi_{\mathbf k}}{E_{\mathbf k}}\Bigr),
+\qquad
+v_{\mathbf k}^2 = \frac12\Bigl(1-\frac{\xi_{\mathbf k}}{E_{\mathbf k}}\Bigr),
+\qquad
+E_{\mathbf k}=\sqrt{\xi_{\mathbf k}^2+\Delta^2}.
+\end{equation}
+In terms of these the Hamiltonian becomes a free gas of
+\emph{quasiparticles},
+\begin{equation}
+\label{eq:bcs-diagonal}
+\op H_{\rm MF}
+= E_0 + \sum_{\mathbf k}E_{\mathbf k}\bigl(
+  \hat\gamma^\dagger_{\mathbf k0}\hat\gamma_{\mathbf k0}
+  + \hat\gamma^\dagger_{\mathbf k1}\hat\gamma_{\mathbf k1}\bigr),
+\end{equation}
+whose excitation energy $E_{\mathbf k}=\sqrt{\xi_{\mathbf k}^2+\Delta^2}$
+never falls below $\Delta$. The minimum energy to create
+\emph{two} quasiparticles --- to break one Cooper pair --- is
+therefore $2\Delta$. Self-consistency \cref{eq:gap-definition} closes
+into the \emph{gap equation}
+\begin{equation}
+\label{eq:gap-equation}
+1 = V\sum_{\mathbf k}\frac{1}{2E_{\mathbf k}}
+  = N(0)V\!\int_0^{\hbar\omega_D}\!\frac{\dd\xi}{\sqrt{\xi^2+\Delta^2}}
+  = N(0)V\,\operatorname{arcsinh}\!\frac{\hbar\omega_D}{\Delta},
+\end{equation}
+with $N(0)$ the normal-state density of states at the Fermi level
+(per spin). In the weak-coupling limit $N(0)V\ll1$ this gives the
+celebrated BCS gap
+\begin{equation}
+\label{eq:bcs-gap}
+\Delta \;=\; \frac{\hbar\omega_D}{\sinh\!\bigl(1/N(0)V\bigr)}
+  \;\approx\; 2\hbar\omega_D\,e^{-1/N(0)V}.
+\end{equation}
+\end{statement}
+
+\paragraph{Derivation (diagonalisation).}
+The transformation \cref{eq:bogoliubov-transform} is canonical --- it
+preserves the fermionic anticommutators --- provided
+$u_{\mathbf k}^2+v_{\mathbf k}^2=1$, which is why the same constraint
+appeared in the variational state \cref{eq:bcs-state}. Substituting
+the inverse of \cref{eq:bogoliubov-transform} into
+\cref{eq:bcs-meanfield} produces, besides the diagonal
+$\hat\gamma^\dagger\hat\gamma$ terms, off-diagonal pieces
+$\propto\hat\gamma^\dagger_{\mathbf k0}\hat\gamma^\dagger_{\mathbf k1}$.
+Demanding that these vanish fixes the mixing angle: with
+$u_{\mathbf k}=\cos\theta_{\mathbf k}$, $v_{\mathbf k}=\sin\theta_{\mathbf k}$,
+the off-diagonal terms cancel when
+$\tan2\theta_{\mathbf k}=\Delta/\xi_{\mathbf k}$, equivalent to
+\cref{eq:coherence-factors} and to
+$2u_{\mathbf k}v_{\mathbf k}=\Delta/E_{\mathbf k}$. The surviving
+diagonal coefficient is exactly $E_{\mathbf k}$. Feeding
+$\expval{\hat c_{-\mathbf k\downarrow}\hat c_{\mathbf k\uparrow}}
+= u_{\mathbf k}v_{\mathbf k}=\Delta/2E_{\mathbf k}$ (at zero
+temperature, where the quasiparticle vacuum is empty) back into the
+definition \cref{eq:gap-definition} gives the gap equation
+\cref{eq:gap-equation}; the factor $\Delta$ cancels on both sides,
+leaving the condition on $V$ and $\omega_D$ alone.
+
+\begin{remark}
+The gap \cref{eq:bcs-gap} is non-analytic in the coupling $V$: the
+function $e^{-1/N(0)V}$ has an essential singularity at $V=0$, so no
+order of perturbation theory in $V$ could ever produce it. This is
+why the normal Fermi sea is unstable to \emph{any} attraction, and
+why BCS required a non-perturbative variational ansatz rather than a
+diagrammatic expansion around the free gas.
+\end{remark}
+
+\begin{application}[The gap as the energy scale of Part~VI]
+\label{app:gap-partvi}
+The quantity $2\Delta$ derived here is the same gap that governs the
+quasiparticle detectors of Part~VI. In aluminium $2\Delta\approx
+0.34\,\text{meV}$; an athermal phonon with energy above $2\Delta$ can
+break a Cooper pair and inject the quasiparticle excitations that a
+transition-edge sensor or kinetic-inductance detector reads out
+(\cref{ch:qp-detection}). The exponential smallness of $\Delta$
+relative to the Debye energy --- a few kelvin against a few hundred
+--- is what makes these detectors sensitive to milli-electronvolt
+energy depositions, far below any normal-metal calorimeter. The same
+gap also sets the ceiling on a superconducting qubit's operating
+frequency: drive photons must stay well below $2\Delta/\hbar$ or they
+break pairs and poison coherence, the quasiparticle-poisoning channel
+of \cref{ch:qp-detection}.
+\end{application}
+
+\paragraph{Transition.}
+BCS theory explains why a superconducting circuit is dissipationless
+at low frequency: there are no electronic excitations below $2\Delta$
+to carry loss, so currents flow without resistance and the only
+surviving low-energy dynamics is that of the collective phase and
+charge. We now treat those collective coordinates as the dynamical
+variables of an electrical circuit and quantise them.
+
+% --------------------------------------------------------------
+\section{Lumped-element circuit quantisation}
+\label{sec:circuit-quantisation}
+
+\begin{phenomenon}
+A capacitor and an inductor wired in a loop exchange energy back and
+forth --- charge sloshes onto the capacitor, discharges through the
+inductor, and recharges with opposite sign --- exactly as a mass on a
+spring exchanges kinetic and potential energy. Classically this $LC$
+circuit rings at $\omega=1/\sqrt{LC}$ and, in a normal metal, damps
+out through resistance. Built from superconductor and cooled below
+the point where $\hbar\omega\gg k_BT$, the circuit instead becomes a
+nearly lossless oscillator whose single collective coordinate must be
+described quantum-mechanically: its energy comes in discrete quanta,
+and its flux and charge cannot be sharp simultaneously.
+\end{phenomenon}
+
+\begin{statement}[\textbf{Canonical quantisation of an $LC$ circuit}~\cite{devoret1995,vool2017}]
+\label{stmt:circuit-quantisation}
+Take as coordinate the \emph{node flux}
+$\Phi(t)=\int_{-\infty}^{t}V(t')\dd t'$, the time integral of the
+voltage across the inductor. The capacitor stores energy
+$Q^2/2C$ and the inductor $\Phi^2/2L$, so the circuit Lagrangian is
+\begin{equation}
+\label{eq:lc-lagrangian}
+\mathcal L = \underbrace{\tfrac12 C\dot\Phi^2}_{\text{``kinetic''}}
+  - \underbrace{\frac{\Phi^2}{2L}}_{\text{``potential''}},
+\end{equation}
+with $\dot\Phi=V$. The momentum conjugate to $\Phi$ is the charge
+$Q=\partial\mathcal L/\partial\dot\Phi = C\dot\Phi$, and a Legendre
+transform gives the Hamiltonian
+\begin{equation}
+\label{eq:lc-hamiltonian}
+H = Q\dot\Phi - \mathcal L = \frac{Q^2}{2C} + \frac{\Phi^2}{2L}.
+\end{equation}
+Promoting the conjugate pair to operators with
+\begin{equation}
+\label{eq:flux-charge-commutator}
+\comm{\op\Phi}{\op Q} = i\hbar
+\end{equation}
+quantises the circuit. The mapping to a mechanical oscillator is
+exact: flux $\Phi\leftrightarrow$ position, charge
+$Q\leftrightarrow$ momentum, capacitance $C\leftrightarrow$ mass,
+inverse inductance $1/L\leftrightarrow$ spring constant.
+\end{statement}
+
+\paragraph{Derivation.}
+Kirchhoff's laws for the loop read $I_C=I_L$ (current conservation)
+and the same voltage $V$ across both elements. With $\Phi=\int V\dd t$
+the inductor current is $I_L=\Phi/L$ (from $V=L\dot I_L$) and the
+capacitor current is $I_C=C\dot V=C\ddot\Phi$. Equating them gives
+$C\ddot\Phi+\Phi/L=0$, the harmonic equation of motion with
+$\omega=1/\sqrt{LC}$. This same equation follows as the
+Euler--Lagrange equation of \cref{eq:lc-lagrangian},
+$\frac{\dd}{\dd t}\frac{\partial\mathcal L}{\partial\dot\Phi}
+-\frac{\partial\mathcal L}{\partial\Phi}=0$, confirming the
+Lagrangian is correct. The conjugate momentum
+$Q=\partial\mathcal L/\partial\dot\Phi=C\dot\Phi$ is just the charge
+$Q=CV$ on the capacitor, so the canonical pair $(\Phi,Q)$ is
+(flux, charge) --- physical, measurable quantities, not abstract
+coordinates.
+
+\begin{remark}
+The choice of node flux as ``position'' and charge as ``momentum'' is
+a convention, not a law: one may equally take charge as coordinate
+and flux as momentum (the \emph{charge representation}, natural for
+the Cooper-pair box of \cref{ch:transmon}). The two are related by
+the exchange $\Phi\leftrightarrow Q$, $L\leftrightarrow C$ ---
+electrical \emph{duality} --- and \cref{eq:flux-charge-commutator} is
+symmetric under it up to a sign. Which representation is convenient
+depends on whether the dominant nonlinearity is inductive (a
+Josephson junction, flux-like) or capacitive (a small island,
+charge-like).
+\end{remark}
+
+\paragraph{Transition.}
+With the circuit cast as a canonical Hamiltonian system, the same
+ladder-operator machinery that solved the mechanical oscillator in
+\cref{ch:model-systems} and quantised the electromagnetic field in
+\cref{ch:em-quantisation} applies verbatim. We introduce it and read
+off the quantum properties of the resonator.
+
+% --------------------------------------------------------------
+\section{The \texorpdfstring{$LC$}{LC} oscillator as a quantum harmonic oscillator}
+\label{sec:lc-oscillator}
+
+\begin{statement}[\textbf{Quantised $LC$ resonator}]
+\label{stmt:lc-oscillator}
+Define the characteristic impedance $Z=\sqrt{L/C}$ and the
+zero-point fluctuations of flux and charge,
+\begin{equation}
+\label{eq:zpf}
+\Phi_{\rm zpf}=\sqrt{\frac{\hbar Z}{2}},
+\qquad
+Q_{\rm zpf}=\sqrt{\frac{\hbar}{2Z}},
+\qquad
+\Phi_{\rm zpf}Q_{\rm zpf}=\frac{\hbar}{2}.
+\end{equation}
+Introducing ladder operators through
+\begin{equation}
+\label{eq:lc-ladder}
+\op\Phi=\Phi_{\rm zpf}(\hat a+\hat a^\dagger),
+\qquad
+\op Q=-iQ_{\rm zpf}(\hat a-\hat a^\dagger),
+\qquad
+\comm{\hat a}{\hat a^\dagger}=\id,
+\end{equation}
+the Hamiltonian \cref{eq:lc-hamiltonian} becomes
+\begin{equation}
+\label{eq:lc-qho}
+\op H = \hbar\omega\Bigl(\hat a^\dagger\hat a + \tfrac12\Bigr),
+\qquad
+\omega=\frac{1}{\sqrt{LC}},
+\end{equation}
+the quantum harmonic oscillator of \cref{stmt:qho-spectrum}. The
+resonator's energy is quantised in units of $\hbar\omega$; one quantum
+is a single microwave photon, and the vacuum carries irreducible
+flux and charge fluctuations $\Phi_{\rm zpf}$, $Q_{\rm zpf}$ obeying
+the uncertainty bound $\Delta\Phi\,\Delta Q\geq\hbar/2$.
+\end{statement}
+
+\paragraph{The same oscillator, three times over.}
+\Cref{eq:lc-qho} is identical in form to the mechanical oscillator of
+\cref{stmt:qho-spectrum} and to a single mode of the quantised
+electromagnetic field in \cref{stmt:field-oscillators}: the
+quadratures of \cref{stmt:quadratures} are here the flux and charge,
+and the vacuum noise of \cref{stmt:quadratures} is the zero-point
+current and voltage noise of the resonator. A superconducting $LC$
+circuit is therefore a piece of cavity QED on a chip --- the
+``cavity'' of \cref{ch:jaynes-cummings,ch:dispersive} realised as a
+lithographically patterned resonator rather than a pair of mirrors.
+This is what lets the abstract coupling $g$ of the Jaynes--Cummings
+model acquire a concrete value in \cref{ch:circuit-qed}, computed from
+circuit capacitances.
+
+\paragraph{Typical numbers.}
+For a resonator at $\omega/2\pi=5\,$GHz with a characteristic
+impedance $Z\approx50\,\Omega$ (the standard microwave value), the
+zero-point flux is $\Phi_{\rm zpf}=\sqrt{\hbar Z/2}\sim10^{-16}\,$Wb,
+a small fraction of the flux quantum $\Phi_0$, while
+$Q_{\rm zpf}=\sqrt{\hbar/2Z}$ is a fraction of a single electron
+charge. The quantum of energy $\hbar\omega\approx20\,\mu$eV
+corresponds to a temperature $\hbar\omega/k_B\approx240\,$mK, so a
+dilution refrigerator at $10$--$20\,$mK holds the resonator firmly in
+its ground state --- the precondition for the vacuum-state cavity
+QED of Part~III to apply.
+
+\paragraph{Why a linear resonator is not yet a qubit.}
+The spectrum \cref{eq:lc-qho} is a uniform ladder: every transition
+$\ket n\to\ket{n+1}$ has the identical energy $\hbar\omega$. A drive
+tuned to $\ket0\to\ket1$ is therefore equally resonant with
+$\ket1\to\ket2$, $\ket2\to\ket3$, and so on, so it cannot confine the
+dynamics to the lowest two levels: the linear $LC$ circuit is a
+perfect oscillator but a useless qubit. Isolating a two-level
+subspace requires \emph{anharmonicity} --- an unequal level spacing
+--- which a linear circuit element cannot provide. The unique
+nonlinear, non-dissipative circuit element is the Josephson junction,
+the subject of \cref{ch:josephson}; supplying the anharmonicity that
+turns the resonator of this chapter into the transmon qubit of
+\cref{ch:transmon} is its central role.
+
+\paragraph{The DiVincenzo criteria.}
+Stepping back, what must any platform provide to be a quantum
+computer? DiVincenzo's checklist is the standard framing:
+(i)~well-characterised qubits in a scalable architecture;
+(ii)~the ability to initialise to a known state;
+(iii)~long coherence times relative to gate times;
+(iv)~a universal set of gates; and
+(v)~qubit-specific measurement. Superconducting circuits address each
+in turn through the rest of Part~IV: the transmon supplies the qubit
+(\cref{ch:transmon}); thermalisation in a cold cavity supplies
+initialisation; the long $T_1,T_2$ of Part~II, engineered in hardware
+(\cref{ch:experimental-basics}), supply coherence; resonant drives and
+tunable couplers supply single- and two-qubit gates
+(\cref{ch:circuit-qed}); and the dispersive readout of
+\cref{ch:dispersive} supplies measurement. The logical layer built on
+top of these primitives --- gates, algorithms, and error correction
+--- is the subject of Part~V (\cref{ch:quantum-information-processing}).
+
+% --------------------------------------------------------------
+This chapter laid the two foundations of the superconducting
+platform. BCS theory showed that an arbitrarily weak phonon-mediated
+attraction condenses electrons into Cooper pairs, opening a gap
+$2\Delta$ in the excitation spectrum; the Bogoliubov transformation
+gave the quasiparticles and the self-consistent gap equation, and
+fixed the energy scale that Part~VI's detectors exploit and that
+limits qubit coherence. Canonical quantisation then turned a
+superconducting $LC$ loop into a quantum harmonic oscillator, with
+node flux and charge as conjugate operators and microwave photons as
+its quanta.
+
+What the linear resonator lacks is anharmonicity, and the next
+chapter supplies it. The Josephson junction --- a weak link between
+two superconductors across which the condensate phase of
+\cref{stmt:flux-quantisation} can tunnel --- is the nonlinear,
+dissipationless inductor that breaks the uniform $LC$ ladder and makes
+a circuit into a qubit.
+
+\clearpage
+\begin{chaptersummary}
+
+\paragraph{Superconductivity.}
+A superconductor is a macroscopic quantum state of charge-$2e$ Cooper
+pairs with a rigid phase $\varphi$; flux is quantised in units of
+$\Phi_0=h/2e$.
+
+\paragraph{BCS pairing.}
+The reduced Hamiltonian
+$\op H_{\rm BCS}=\sum_{\mathbf k\sigma}\xi_{\mathbf k}\hat c^\dagger\hat c
+-V\sum\hat c^\dagger_{\mathbf k'\uparrow}\hat c^\dagger_{-\mathbf k'\downarrow}
+\hat c_{-\mathbf k\downarrow}\hat c_{\mathbf k\uparrow}$
+has the coherent ground state
+$\ket{\rm BCS}=\prod_{\mathbf k}(u_{\mathbf k}+v_{\mathbf k}
+\hat c^\dagger_{\mathbf k\uparrow}\hat c^\dagger_{-\mathbf k\downarrow})\ket0$.
+
+\paragraph{Quasiparticles and the gap.}
+The Bogoliubov transformation gives quasiparticles of energy
+$E_{\mathbf k}=\sqrt{\xi_{\mathbf k}^2+\Delta^2}\geq\Delta$, with
+coherence factors
+$u_{\mathbf k}^2,v_{\mathbf k}^2=\tfrac12(1\pm\xi_{\mathbf k}/E_{\mathbf k})$.
+The gap equation $1=N(0)V\operatorname{arcsinh}(\hbar\omega_D/\Delta)$
+yields $\Delta\approx2\hbar\omega_D e^{-1/N(0)V}$; breaking a pair
+costs $2\Delta$ (e.g.\ $0.34\,$meV in Al).
+
+\paragraph{Circuit quantisation.}
+Node flux $\Phi=\int V\dd t$ and charge $Q=C\dot\Phi$ are conjugate,
+$\comm{\op\Phi}{\op Q}=i\hbar$; an $LC$ loop has
+$\op H=Q^2/2C+\Phi^2/2L$, with $C\leftrightarrow$ mass,
+$1/L\leftrightarrow$ spring.
+
+\paragraph{$LC$ as a quantum oscillator.}
+With $Z=\sqrt{L/C}$, $\Phi_{\rm zpf}=\sqrt{\hbar Z/2}$,
+$Q_{\rm zpf}=\sqrt{\hbar/2Z}$, the circuit is
+$\op H=\hbar\omega(\hat a^\dagger\hat a+\tfrac12)$,
+$\omega=1/\sqrt{LC}$ --- a microwave-photon oscillator. Its uniform
+ladder cannot host a qubit; anharmonicity from a Josephson junction
+(\cref{ch:josephson}) is required.
+
+\end{chaptersummary}
+
+% --------------------------------------------------------------
+\section*{Exercises}
+\addcontentsline{toc}{section}{Exercises}
+
+\begin{exercise}[The flux quantum]
+Evaluate $\Phi_0=h/2e$ numerically and explain why the charge in the
+denominator is $2e$ rather than $e$. What would change if the
+condensate carriers were single electrons?
+\begin{solution}
+$\Phi_0=h/2e=(6.626\times10^{-34})/(2\cdot1.602\times10^{-19})
+=2.07\times10^{-15}\,$Wb. The $2e$ comes from the Cooper-pair charge:
+the macroscopic wavefunction \cref{eq:order-parameter} describes
+\emph{pairs}, and single-valuedness of its phase around a loop
+quantises the flux in units of $h/(\text{carrier charge})$. Single
+electrons would give $h/e=2\Phi_0$; the experimentally observed value
+$h/2e$ was an early confirmation of pairing.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Coherence factors and normalisation]
+Verify that $u_{\mathbf k}^2+v_{\mathbf k}^2=1$ for the coherence
+factors \cref{eq:coherence-factors}, and compute the limits of
+$v_{\mathbf k}^2$ far below ($\xi_{\mathbf k}\to-\infty$) and far above
+($\xi_{\mathbf k}\to+\infty$) the Fermi surface. Interpret.
+\begin{solution}
+$u_{\mathbf k}^2+v_{\mathbf k}^2
+=\tfrac12(1+\xi/E)+\tfrac12(1-\xi/E)=1$. As
+$\xi\to-\infty$ (deep below $E_F$), $\xi/E\to-1$ so
+$v_{\mathbf k}^2\to1$: states far below the Fermi level are fully
+occupied, as in the normal metal. As $\xi\to+\infty$,
+$v_{\mathbf k}^2\to0$: states far above are empty. The pairing only
+reshuffles occupation within a shell of width $\sim\Delta$ around
+$E_F$, where $v_{\mathbf k}^2$ smoothly interpolates from $1$ to $0$
+(passing through $\tfrac12$ at $\xi=0$).
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[The pair amplitude is peaked at the Fermi surface]
+Show that the pair amplitude $u_{\mathbf k}v_{\mathbf k}$ equals
+$\Delta/2E_{\mathbf k}$ and is maximal at $\xi_{\mathbf k}=0$. Why does
+this mean pairing is a Fermi-surface phenomenon?
+\begin{solution}
+From \cref{eq:coherence-factors},
+$u_{\mathbf k}v_{\mathbf k}=\sqrt{u_{\mathbf k}^2 v_{\mathbf k}^2}
+=\sqrt{\tfrac14(1-\xi^2/E^2)}=\tfrac12\sqrt{(E^2-\xi^2)/E^2}
+=\tfrac12\sqrt{\Delta^2/E^2}=\Delta/2E_{\mathbf k}$. This is largest
+when $E_{\mathbf k}$ is smallest, i.e.\ at $\xi_{\mathbf k}=0$ where
+$E_{\mathbf k}=\Delta$. Since $u_{\mathbf k}v_{\mathbf k}$ is the
+amplitude for a pair to scatter in/out of $(\mathbf k,-\mathbf k)$, the
+condensate is built predominantly from states within $\sim\Delta$ of
+the Fermi surface --- consistent with the thin interaction shell
+$|\xi|<\hbar\omega_D$ in \cref{eq:bcs-hamiltonian}.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Solving the gap equation]
+Carry out the integral in \cref{eq:gap-equation} to obtain the
+$\operatorname{arcsinh}$ form, then take the weak-coupling limit to
+recover \cref{eq:bcs-gap}.
+\begin{solution}
+$\int_0^{\hbar\omega_D}\dd\xi/\sqrt{\xi^2+\Delta^2}
+=\operatorname{arcsinh}(\xi/\Delta)\big|_0^{\hbar\omega_D}
+=\operatorname{arcsinh}(\hbar\omega_D/\Delta)$, so
+$1=N(0)V\operatorname{arcsinh}(\hbar\omega_D/\Delta)$. Inverting,
+$\operatorname{arcsinh}(\hbar\omega_D/\Delta)=1/N(0)V$, i.e.\
+$\hbar\omega_D/\Delta=\sinh(1/N(0)V)$, giving
+$\Delta=\hbar\omega_D/\sinh(1/N(0)V)$. For $N(0)V\ll1$ the argument is
+large and $\sinh x\approx\tfrac12 e^{x}$, so
+$\Delta\approx2\hbar\omega_D e^{-1/N(0)V}$.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Non-analyticity of the gap]
+Show that $\Delta(V)=2\hbar\omega_D e^{-1/N(0)V}$ and all its
+derivatives vanish as $V\to0^+$. What does this imply about
+perturbation theory in $V$?
+\begin{solution}
+Let $x=N(0)V\to0^+$. Then $\Delta\propto e^{-1/x}$. Every derivative
+$\dd^n\Delta/\dd x^n$ is a polynomial in $1/x$ times $e^{-1/x}$, and
+$e^{-1/x}$ decays faster than any power of $x$, so all derivatives
+$\to0$ as $x\to0^+$. The Taylor series of $\Delta$ about $V=0$ is
+therefore identically zero, yet $\Delta\neq0$ for $V>0$: $\Delta$ is
+non-analytic at $V=0$. No finite order of perturbation theory in $V$
+can produce the gap --- the superconducting state is invisible to an
+expansion around the normal metal, which is why a non-perturbative
+ansatz was essential.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[The gap as a detector threshold]
+Aluminium has $2\Delta\approx0.34\,$meV. What is the longest-wavelength
+photon that can break a Cooper pair? Compare to the $5\,$GHz operating
+frequency of a typical transmon and comment on quasiparticle
+poisoning.
+\begin{solution}
+A photon breaks a pair if $\hbar\omega\geq2\Delta$, i.e.\
+$\omega\geq2\Delta/\hbar$. With $2\Delta=0.34\,$meV,
+$\nu=2\Delta/h=0.34\times10^{-3}\,\text{eV}/(4.14\times10^{-15}\,\text{eV·s})
+\approx82\,$GHz, or wavelength $c/\nu\approx3.6\,$mm
+(sub-THz/far-infrared). A $5\,$GHz transmon drive is a factor
+$\sim16$ below this threshold, so it cannot directly break pairs ---
+good. But stray high-frequency radiation, cosmic rays, or
+pair-breaking phonons above $82\,$GHz inject quasiparticles that
+tunnel across junctions and relax the qubit (\cref{ch:qp-detection}):
+the same gap that protects the qubit at its operating frequency sets
+the threshold above which the environment poisons it.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[$LC$ equation of motion from the Lagrangian]
+Derive the Euler--Lagrange equation of the $LC$ Lagrangian
+\cref{eq:lc-lagrangian} and confirm it gives $\omega=1/\sqrt{LC}$.
+Identify the mechanical analogue of each term.
+\begin{solution}
+$\partial\mathcal L/\partial\dot\Phi=C\dot\Phi$,
+$\partial\mathcal L/\partial\Phi=-\Phi/L$. Euler--Lagrange:
+$\frac{\dd}{\dd t}(C\dot\Phi)-(-\Phi/L)=C\ddot\Phi+\Phi/L=0$, i.e.\
+$\ddot\Phi+(1/LC)\Phi=0$, harmonic motion at
+$\omega=1/\sqrt{LC}$. The term $\tfrac12 C\dot\Phi^2$ is kinetic
+energy ($C\leftrightarrow$ mass, $\dot\Phi=V\leftrightarrow$ velocity)
+and $\Phi^2/2L$ is potential energy
+($1/L\leftrightarrow$ spring constant, $\Phi\leftrightarrow$
+displacement).
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Zero-point fluctuations and impedance]
+Starting from the oscillator analogy ($C\leftrightarrow m$,
+$\omega=1/\sqrt{LC}$), derive $\Phi_{\rm zpf}=\sqrt{\hbar Z/2}$ and
+$Q_{\rm zpf}=\sqrt{\hbar/2Z}$ with $Z=\sqrt{L/C}$, and verify
+$\Phi_{\rm zpf}Q_{\rm zpf}=\hbar/2$.
+\begin{solution}
+For a mechanical oscillator $x_{\rm zpf}=\sqrt{\hbar/2m\omega}$. With
+$m\to C$, $\omega\to1/\sqrt{LC}$:
+$\Phi_{\rm zpf}=\sqrt{\hbar/(2C\cdot1/\sqrt{LC})}
+=\sqrt{\hbar\sqrt{LC}/2C}=\sqrt{(\hbar/2)\sqrt{L/C}}=\sqrt{\hbar Z/2}$.
+Likewise $p_{\rm zpf}=\sqrt{\hbar m\omega/2}$ gives
+$Q_{\rm zpf}=\sqrt{\hbar C/(2\sqrt{LC})}=\sqrt{(\hbar/2)\sqrt{C/L}}
+=\sqrt{\hbar/2Z}$. Their product is
+$\sqrt{(\hbar Z/2)(\hbar/2Z)}=\sqrt{\hbar^2/4}=\hbar/2$, saturating the
+uncertainty bound as the vacuum of a harmonic oscillator must.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Photon energy versus temperature]
+For an $LC$ resonator at $\omega/2\pi=5\,$GHz, compute the
+single-photon energy in $\mu$eV and the equivalent temperature
+$\hbar\omega/k_B$. Why must the experiment run in a dilution
+refrigerator?
+\begin{solution}
+$\hbar\omega=h\nu=(4.14\times10^{-15}\,\text{eV·s})(5\times10^9\,\text{Hz})
+\approx2.07\times10^{-5}\,\text{eV}=20.7\,\mu$eV. The temperature is
+$\hbar\omega/k_B=h\nu/k_B=(5\times10^9)/(2.08\times10^{10}\,\text{Hz/K})
+\approx0.24\,$K$=240\,$mK. To keep the resonator in its ground state
+the thermal occupation $\bar n=1/(e^{\hbar\omega/k_BT}-1)$ must be
+$\ll1$, which needs $T\ll240\,$mK; a dilution refrigerator at
+$10$--$20\,$mK gives $\bar n\sim10^{-5}$, justifying the vacuum-state
+assumption of Part~III.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Why the harmonic ladder forbids a qubit]
+Explain quantitatively why a resonant drive on a linear $LC$ resonator
+cannot prepare an arbitrary superposition confined to $\{\ket0,\ket1\}$,
+and state what property of the spectrum must change to allow it.
+\begin{solution}
+The spectrum is $E_n=\hbar\omega(n+\tfrac12)$, so every neighbouring
+transition has the same frequency $\omega$: $E_1-E_0=E_2-E_1=\cdots
+=\hbar\omega$. A drive at $\omega$ resonantly couples $\ket0\!\leftrightarrow\!\ket1$
+but \emph{equally} couples $\ket1\!\leftrightarrow\!\ket2$ and higher, so
+population leaks out of the two-level subspace --- one cannot perform an
+independent rotation on $\{\ket0,\ket1\}$. To isolate the lowest
+transition the spectrum must be \emph{anharmonic}: the
+$\ket1\to\ket2$ frequency must differ from $\ket0\to\ket1$ by more than
+the drive bandwidth. The anharmonicity $\alpha=(E_2-E_1)-(E_1-E_0)$
+must be nonzero, which a linear element cannot supply --- hence the
+Josephson junction of \cref{ch:josephson}.
+\end{solution}
+\end{exercise}

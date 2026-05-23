@@ -16,9 +16,9 @@ Six parts plus an appendix:
 | I | Quantum mechanics foundations | drafted (chs. 1–4) |
 | II | Open quantum systems | drafted (chs. 5–8) |
 | III | Quantum optics | drafted (chs. 9–12) |
-| IV | Superconducting circuits | not started |
-| V | Quantum information processing | not started |
-| VI | Quantum sensing | drafted (chs. 15–20): dark-matter search, four mechanism chapters, plus a coherent multi-qubit / Heisenberg-limit chapter |
+| IV | Superconducting circuits | in progress (ch. 13 drafted; chs. 14–17 planned) |
+| V | Quantum information processing | not started (placeholder ch. 18) |
+| VI | Quantum sensing | drafted (chs. 19–24): dark-matter search, four mechanism chapters, plus a coherent multi-qubit / Heisenberg-limit chapter |
 | App. A | Auxiliary mathematical definitions | drafted |
 
 The full topic list lives in `README.md`. Treat it as the source of truth for
@@ -201,12 +201,25 @@ without checking — the document should keep reading as a quiet book.
 | Inner product, norm, Cauchy completeness, separability | `def:inner-product,…` | App. A |
 | Dual space, linear/bounded operator, adjoint | `def:dual-space,…` | App. A |
 | Tensor product (Hilbert spaces) | `def:tensor-product` | App. A |
+| Flux quantisation, order parameter `$\Phi_0=h/2e$` | `stmt:flux-quantisation` | ch. 13 §13.1 |
+| BCS pairing Hamiltonian, Cooper instability | `stmt:bcs-hamiltonian` | ch. 13 §13.2 |
+| BCS ground state (coherence factors `$u_k,v_k$`) | `stmt:bcs-ground-state` | ch. 13 §13.2 |
+| Bogoliubov quasiparticles, gap equation, gap `$\Delta$` / `$2\Delta$` | `stmt:bogoliubov` | ch. 13 §13.3 |
+| Canonical circuit quantisation (node flux/charge, `$[\hat\Phi,\hat Q]=i\hbar$`) | `stmt:circuit-quantisation` | ch. 13 §13.4 |
+| Quantised `$LC$` resonator, zero-point flux/charge, char. impedance | `stmt:lc-oscillator` | ch. 13 §13.5 |
 
 When introducing new terms in future chapters, **append to this table**.
 
 ## Open todos
 
-- Parts I, II, III, and VI drafted; Parts IV–V outlined in `README.md` only.
+- Parts I, II, III, and VI drafted. Part IV in progress: a five-chapter
+  arc — ch. 13 superconductivity + circuit quantisation (drafted),
+  ch. 14 Josephson junction & SQUIDs (`ch:josephson`), ch. 15 Cooper-pair
+  box → transmon (`ch:transmon`), ch. 16 circuit QED: coupling, gates,
+  parametric processes & quantum-limited amps (`ch:circuit-qed`,
+  `sec:two-qubit-gates`), ch. 17 qubit tune-up & experimental basics
+  (`ch:experimental-basics`, `sec:experimental-basics`). Part V is a
+  placeholder (ch. 18) outlined in `README.md` only.
 - Bibliography active (53 entries; foundations + decoherence +
   interpretations + superdeterminism + Part VI dark-matter
   references including Lewin-Smith / Helm form factor /

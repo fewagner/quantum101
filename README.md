@@ -105,10 +105,10 @@ needed. Each `[ ]` becomes a section or chapter.
 
 ### Part IV — Superconducting circuits
 
-- [ ] DiVincenzo criteria for a quantum computer
-- [ ] Superconductivity primer: BCS ground state, Bogoliubov quasiparticles
-- [ ] Lumped-element circuit quantization (node flux / charge)
-- [ ] LC oscillator as a quantum harmonic oscillator
+- [x] DiVincenzo criteria for a quantum computer
+- [x] Superconductivity primer: BCS ground state, Bogoliubov quasiparticles
+- [x] Lumped-element circuit quantization (node flux / charge)
+- [x] LC oscillator as a quantum harmonic oscillator
 - [ ] Josephson junctions: current–phase and voltage–phase relations, Josephson energy
 - [ ] Josephson effects: DC effect, AC effect, inverse AC effect (Shapiro steps)
 - [ ] Cooper pair box and charge qubit
