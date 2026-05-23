@@ -143,12 +143,12 @@ computing into quantum error correction. Topics in order:
 - [x] Magic states and stabiliser-vs-non-stabiliser dichotomy
 - [x] Notes on quantum cryptography (BB84, E91) and quantum
       communication (no-cloning, dense coding)
-- [ ] Why QEC: noise channels, no-cloning, the digitization theorem
-- [ ] Repetition codes: bit-flip and phase-flip
-- [ ] Shor and Steane codes (overview)
-- [ ] Stabiliser formalism
-- [ ] Surface code (overview)
-- [ ] Bosonic codes in cQED: cat / GKP (overview, optional)
+- [x] Why QEC: noise channels, no-cloning, the digitization theorem
+- [x] Repetition codes: bit-flip and phase-flip
+- [x] Stabiliser formalism
+- [x] Shor and Steane codes (explicit stabilisers)
+- [x] Surface code (worked stabiliser patch, threshold)
+- [x] Bosonic codes in cQED: cat / GKP
 
 ### Part VI — Quantum sensing
 

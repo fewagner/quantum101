@@ -1,0 +1,854 @@
+\chapter{Quantum error correction}
+\label{ch:qec}
+
+The previous chapter treated qubits and gates as perfect. They are not.
+Part~II showed that a real qubit relaxes on a timescale $T_1$
+(\cref{stmt:t1}), dephases on $T_\phi$ (\cref{stmt:tphi}), and that its
+evolution is the noisy, irreversible dynamics of a Lindblad master
+equation (\cref{stmt:lindblad}) rather than a clean unitary; Part~IV
+catalogued the hardware channels that cause it. A computation of any
+useful length applies thousands to billions of gates, and at realistic
+per-gate error rates the logical state is scrambled long before the
+answer appears. Classical computers face the same threat and defeat it
+with redundancy --- store each bit in triplicate and take a majority
+vote. This chapter asks whether the same can be done for quantum
+information, and the answer is the most surprising constructive result
+in the subject: yes, despite three obstacles that look fatal --- the
+no-cloning theorem (\cref{thm:no-cloning}) forbids copying, quantum
+errors form a continuum rather than a discrete set, and any measurement
+that checks for an error threatens to collapse the very superposition we
+are protecting. We will see all three dissolved at once. The vehicle is
+the stabiliser formalism of \cref{stmt:gottesman-knill} --- the same
+bookkeeping that made Clifford circuits classically simulable, here
+turned into a shield --- developed from the three-qubit repetition code
+up through the Shor and Steane codes, the surface code that leads
+present hardware, and finally the bosonic codes that protect a logical
+qubit inside a single superconducting cavity, closing the loop back to
+Part~IV.
+
+% --------------------------------------------------------------
+\section{Why error correction is hard --- and possible}
+\label{sec:why-qec}
+
+\begin{phenomenon}
+Take one qubit in the state $\alpha\ket{0}+\beta\ket{1}$ and leave it in
+a real device. Energy relaxation drives it towards $\ket{0}$; random
+frequency fluctuations scramble the relative phase of $\alpha$ and
+$\beta$. The classical fix --- copy the bit three times and majority
+vote --- fails on contact with quantum mechanics. We cannot copy
+$\alpha,\beta$ (no-cloning). The errors are not discrete flips but a
+continuum: an over-rotation by a tiny angle, a partial phase slip, a
+little entanglement with a stray mode. And to find out whether an error
+occurred we would ordinarily measure the qubit, which collapses the
+superposition we are trying to save. Every ingredient of the classical
+recipe is forbidden. Remarkably, a different recipe works.
+\end{phenomenon}
+
+The escape has three matching moves. We encode without copying, by
+spreading one logical qubit across several physical qubits in an
+\emph{entangled} state whose amplitudes are still $\alpha,\beta$; we
+measure without collapsing, by reading \emph{parity-check} operators
+that reveal whether an error happened but not what the logical state is;
+and we tame the continuum by the following theorem, which says that
+correcting a handful of discrete errors automatically corrects them all.
+
+\begin{statement}[\textbf{Error discretisation}]
+\label{stmt:digitisation}
+Model noise on a qubit as a quantum channel with Kraus operators
+$\{\op A_k\}$ (\cref{stmt:kraus}). Each $\op A_k$ expands in the Pauli
+basis $\op A_k=\sum_{P\in\{\id,\hat\sigma_x,\hat\sigma_y,\hat\sigma_z\}}
+c_{kP}\,P$. If a code can detect and correct each of the discrete errors
+$\hat\sigma_x,\hat\sigma_y,\hat\sigma_z$ on a given qubit --- and
+identify which occurred --- then measuring the error syndrome projects
+any continuous or coherent error on that qubit onto one definite Pauli
+branch, which the same recovery then undoes. Correcting the discrete set
+$\{\hat\sigma_x,\hat\sigma_y,\hat\sigma_z\}$ therefore corrects an
+arbitrary single-qubit error, including entanglement with the
+environment.
+\end{statement}
+
+\begin{proof}[Derivation]
+Consider a coherent over-rotation of qubit $j$ by a small angle $\theta$,
+\begin{equation}
+\op R=\exp\!\bigl(-i\theta\,\hat\sigma_x^{(j)}\bigr)
+=\cos\theta\,\id-i\sin\theta\,\hat\sigma_x^{(j)},
+\end{equation}
+acting on an encoded state $\ket{\psi_L}$ that lives in the $+1$
+eigenspace of the code's parity checks. The post-error state
+$\op R\ket{\psi_L}=\cos\theta\,\ket{\psi_L}-i\sin\theta\,
+\hat\sigma_x^{(j)}\ket{\psi_L}$
+is a superposition of the clean state and the state with a single
+$\hat\sigma_x^{(j)}$ error. The two branches carry \emph{different}
+syndromes: $\ket{\psi_L}$ gives the trivial syndrome,
+$\hat\sigma_x^{(j)}\ket{\psi_L}$ a nontrivial one. Measuring the
+syndrome therefore collapses the superposition --- with probability
+$\cos^2\theta$ to the clean branch (syndrome trivial, nothing to do) and
+with probability $\sin^2\theta$ to the error branch (syndrome flags
+qubit $j$, apply $\hat\sigma_x^{(j)}$ to recover). The continuous
+parameter $\theta$ has been digitised into a yes/no event. The same
+argument applied to a general $\op A_k=\sum_P c_{kP}P$ shows the
+syndrome measurement projects onto a definite Pauli error, so a code
+correcting $\{\hat\sigma_x,\hat\sigma_y,\hat\sigma_z\}$ on each qubit
+needs nothing more. Crucially the syndrome reveals only \emph{which
+Pauli} occurred, never the values of $\alpha,\beta$: the parity checks
+are built to commute with the logical operators, so the logical
+information survives the measurement untouched.
+\end{proof}
+
+\begin{example}[A parity check that learns nothing about the logical bit]
+\label{ex:parity-check}
+Take two physical qubits and the operator
+$\hat\sigma_z^{(1)}\hat\sigma_z^{(2)}$. Its eigenvalue is $+1$ on
+$\ket{00}$ and $\ket{11}$, and $-1$ on $\ket{01}$ and $\ket{10}$: it
+measures the \emph{parity} of the two bits, not their values. Applied to
+a logical state $\alpha\ket{00}+\beta\ket{11}$, it returns $+1$ with
+certainty and leaves the state unchanged --- it has confirmed ``no
+disagreement'' while learning nothing about $\alpha$ or $\beta$. If
+instead a bit flip has produced $\alpha\ket{10}+\beta\ket{01}$, the same
+measurement returns $-1$, flagging the error, again without exposing the
+logical amplitudes. This single observation is the seed of every code in
+the chapter.
+\end{example}
+
+\paragraph{Transition.}
+The two-qubit parity check already does something no classical bit
+inspection can. Wiring three of them together gives the smallest genuine
+error-correcting code, where the mechanism --- encode, extract syndrome,
+recover --- can be seen in full.
+
+% --------------------------------------------------------------
+\section{Repetition codes}
+\label{sec:repetition}
+
+\begin{phenomenon}
+Suppose for a moment that the only error is the bit flip
+$\hat\sigma_x$. Classically we would store $0\to000$, $1\to111$ and
+majority vote. The quantum version keeps the spirit --- threefold
+redundancy --- but replaces both the copying and the voting with
+entanglement and parity checks, so that no measurement ever reads the
+protected amplitudes.
+\end{phenomenon}
+
+\begin{statement}[\textbf{The three-qubit repetition code}]
+\label{stmt:repetition}
+Encode $\alpha\ket{0}+\beta\ket{1}\;\mapsto\;
+\alpha\ket{000}+\beta\ket{111}$, so that
+$\ket{0_L}=\ket{000}$ and $\ket{1_L}=\ket{111}$. The code space is the
+$+1$ eigenspace of the two stabiliser generators
+\begin{equation}
+g_1=\hat\sigma_z^{(1)}\hat\sigma_z^{(2)},
+\qquad
+g_2=\hat\sigma_z^{(2)}\hat\sigma_z^{(3)}.
+\end{equation}
+Measuring $(g_1,g_2)$ returns a two-bit \emph{syndrome} that uniquely
+identifies a single bit-flip error and the qubit it struck, without
+disturbing $\alpha,\beta$; applying $\hat\sigma_x$ to that qubit
+restores the state. The logical operators are
+$\op{Z}_L=\hat\sigma_z^{(1)}$ and
+$\op{X}_L=\hat\sigma_x^{(1)}\hat\sigma_x^{(2)}\hat\sigma_x^{(3)}$.
+\end{statement}
+
+\begin{proof}[Derivation]
+The encoding is two CNOTs from the data qubit onto two blank qubits,
+\begin{equation}
+(\alpha\ket{0}+\beta\ket{1})\ket{0}\ket{0}
+\;\xrightarrow{\;\mathrm{CNOT}_{1\to2}\,\mathrm{CNOT}_{1\to3}\;}\;
+\alpha\ket{000}+\beta\ket{111},
+\end{equation}
+which entangles rather than clones (\cref{thm:no-cloning}): the
+amplitudes $\alpha,\beta$ are never duplicated, only spread. Now suppose
+$\hat\sigma_x^{(2)}$ strikes, giving $\alpha\ket{010}+\beta\ket{101}$.
+The check $g_1=\hat\sigma_z^{(1)}\hat\sigma_z^{(2)}$ compares qubits $1$
+and $2$, which now disagree, returning $-1$; $g_2$ compares qubits $2$
+and $3$, also disagreeing, returning $-1$. The full syndrome table is
+\begin{equation}
+\begin{aligned}
+\text{no error}&:(+1,+1), &\quad
+\hat\sigma_x^{(1)}&:(-1,+1),\\
+\hat\sigma_x^{(2)}&:(-1,-1), &\quad
+\hat\sigma_x^{(3)}&:(+1,-1),
+\end{aligned}
+\end{equation}
+so the four outcomes of $(g_1,g_2)$ point at the four possibilities ---
+no error, or a flip on qubit $1$, $2$, or $3$ --- and recovery applies
+$\hat\sigma_x$ to the indicated qubit. The checks never collapse the
+logical state because each commutes with both logical operators:
+$g_1$ shares qubit $1$ with $\op{Z}_L=\hat\sigma_z^{(1)}$ (they are both
+$\hat\sigma_z$, so commute) and shares qubits $1,2$ with
+$\op{X}_L=\hat\sigma_x^{(1)}\hat\sigma_x^{(2)}\hat\sigma_x^{(3)}$ (two
+anticommuting pairs, an even number, so commute). The syndrome thus
+lives in a separate degree of freedom from the encoded qubit, exactly as
+in \cref{ex:parity-check}.
+\end{proof}
+
+\begin{statement}[\textbf{The phase-flip code by Hadamard duality}]
+\label{stmt:phase-flip}
+The bit-flip code is blind to $\hat\sigma_z$ errors: a phase flip on any
+qubit commutes with $g_1,g_2$ and goes undetected. Conjugating the whole
+construction by Hadamards on every qubit exchanges
+$\hat\sigma_x\leftrightarrow\hat\sigma_z$
+(\cref{eq:clifford-conjugation}) and produces the \emph{phase-flip}
+code: $\ket{0_L}=\ket{+\!+\!+}$, $\ket{1_L}=\ket{-\!-\!-}$, with
+stabilisers $\hat\sigma_x^{(1)}\hat\sigma_x^{(2)}$ and
+$\hat\sigma_x^{(2)}\hat\sigma_x^{(3)}$, correcting one $\hat\sigma_z$
+error.
+\end{statement}
+
+\begin{example}[Why one repetition code is not enough]
+\label{ex:rep-insufficient}
+Each repetition code corrects bit flips \emph{or} phase flips, never
+both: the bit-flip code's distance against $\hat\sigma_z$ is $1$ (a
+single $\hat\sigma_z^{(1)}$ is an undetected logical operation). Real
+noise contains both, and a $\hat\sigma_y=i\hat\sigma_x\hat\sigma_z$ event
+is simultaneously a bit and phase flip. The way forward is to nest a
+phase-flip code outside a bit-flip code so that each kind of error is
+caught by its own layer --- precisely Shor's nine-qubit construction
+(\cref{sec:css}). Before building it, we abstract the pattern ---
+``define the code by the operators that stabilise it'' --- into a
+formalism that handles all codes at once.
+\end{example}
+
+\paragraph{Transition.}
+Every feature of the repetition code --- a code space fixed by commuting
+parity operators, a syndrome from their eigenvalues, logical operators
+that commute with the checks, and a distance counting undetectable
+errors --- generalises verbatim. That generalisation is the stabiliser
+formalism.
+
+% --------------------------------------------------------------
+\section{The stabiliser formalism}
+\label{sec:stabiliser}
+
+\begin{phenomenon}
+The repetition code was specified not by writing out its two code words
+but, more economically, by the two operators that fix them. This is the
+general lesson: a code space of dimension $2^k$ inside $2^n$ physical
+qubits is pinned down by $n-k$ commuting Pauli operators, and everything
+about error detection follows from how candidate errors commute or
+anticommute with them. The same algebra that made Clifford circuits
+simulable (\cref{stmt:gottesman-knill}) now classifies codes.
+\end{phenomenon}
+
+\begin{statement}[\textbf{Stabiliser codes}~\cite{gottesman1997}]
+\label{stmt:stabiliser-code}
+An $[[n,k,d]]$ stabiliser code encodes $k$ logical qubits in $n$
+physical qubits. Its code space is the simultaneous $+1$ eigenspace of
+an abelian subgroup $\mathcal S$ of the $n$-qubit Pauli group with
+$-\id\notin\mathcal S$, generated by $n-k$ independent commuting Pauli
+operators $g_1,\dots,g_{n-k}$ (the \emph{stabilisers}). A Pauli error
+$E$ produces the syndrome $s_i\in\{0,1\}$ with $s_i=0$ if $[E,g_i]=0$
+and $s_i=1$ if $\{E,g_i\}=0$. The \emph{logical operators} are the
+Paulis that commute with all $g_i$ but lie outside $\mathcal S$ (the
+normaliser quotient $N(\mathcal S)/\mathcal S$); the code \emph{distance}
+$d$ is the minimum weight of such a logical operator. The code corrects
+any error of weight up to $\lfloor(d-1)/2\rfloor$.
+\end{statement}
+
+\begin{proof}[Derivation]
+Let $\ket{\psi}$ be in the code space, so $g_i\ket{\psi}=\ket{\psi}$ for
+all $i$. If an error $E$ anticommutes with $g_i$, then
+\begin{equation}
+g_i\,E\ket{\psi}=-E\,g_i\ket{\psi}=-E\ket{\psi},
+\end{equation}
+so $E\ket{\psi}$ sits in the $-1$ eigenspace of $g_i$: measuring $g_i$
+returns $-1$ and flags the error. The collection of these signs is the
+syndrome, and because every $g_i$ commutes with every logical operator,
+the measurement reveals the error without touching the encoded state.
+Two errors $E,E'$ are confused only if they share a syndrome, i.e.\
+$E'E^\dagger$ commutes with all $g_i$ and so lies in $N(\mathcal S)$. If
+$E'E^\dagger\in\mathcal S$ the two act identically on the code space (a
+harmless \emph{degeneracy}); if $E'E^\dagger\in N(\mathcal
+S)\setminus\mathcal S$ they differ by a nontrivial logical operation and
+are genuinely dangerous. Hence the dangerous errors are exactly the
+low-weight logical operators, and a code of distance $d$ --- the minimum
+such weight --- distinguishes (and so corrects) all errors of weight up
+to $\lfloor(d-1)/2\rfloor$, since two correctable errors then differ by
+weight $<d$ and cannot both be logical. With $n-k$ generators there are
+$2^{n-k}$ syndromes available to label the correctable errors.
+\end{proof}
+
+\begin{statement}[\textbf{Knill--Laflamme conditions}]
+\label{stmt:knill-laflamme}
+Equivalently, a code with orthonormal logical basis $\{\ket{i_L}\}$
+corrects an error set $\{E_a\}$ if and only if
+$\bra{i_L}E_a^\dagger E_b\ket{j_L}=C_{ab}\,\delta_{ij}$ for a Hermitian
+matrix $C_{ab}$ independent of the logical indices. The diagonal form in
+$i,j$ says errors never leak information about the logical state; the
+single matrix $C_{ab}$ says different errors map the code space to
+distinguishable (or identical) subspaces.
+\end{statement}
+
+\begin{example}[The repetition code in the formalism]
+\label{ex:rep-stabiliser}
+The bit-flip code is the $[[3,1,1]]$ stabiliser code with
+$\mathcal S=\langle\hat\sigma_z^{(1)}\hat\sigma_z^{(2)},
+\hat\sigma_z^{(2)}\hat\sigma_z^{(3)}\rangle$, logical operators
+$\op{Z}_L=\hat\sigma_z^{(1)}$ and
+$\op{X}_L=\hat\sigma_x^{(1)}\hat\sigma_x^{(2)}\hat\sigma_x^{(3)}$. Its
+distance is $d=1$ because the weight-one $\hat\sigma_z^{(1)}$ is a
+logical operator --- the precise statement that phase errors go
+uncorrected. As a code against bit flips \emph{only}, however, its
+$\hat\sigma_x$-distance is $3$ and it corrects one flip, recovering the
+$\lfloor(3-1)/2\rfloor=1$ count. Reaching a true distance-$3$ quantum
+code, correcting \emph{any} single-qubit error, requires more qubits.
+\end{example}
+
+\paragraph{Transition.}
+The formalism makes the goal concrete: find commuting Pauli generators
+whose smallest nontrivial logical operator has weight $3$, so that every
+single-qubit $\hat\sigma_x$, $\hat\sigma_y$, $\hat\sigma_z$ is detected
+and located. Two classic solutions --- one by nesting repetition codes,
+one from a classical Hamming code --- are the CSS codes.
+
+% --------------------------------------------------------------
+\section{CSS codes: the Shor and Steane codes}
+\label{sec:css}
+
+\begin{phenomenon}
+A code that corrects both bit and phase flips can be assembled from
+two classical codes acting in the two conjugate bases: one set of checks
+($\hat\sigma_z$-type) catches bit flips, an independent set
+($\hat\sigma_x$-type) catches phase flips. When the two classical codes
+fit together compatibly --- so that the $\hat\sigma_x$- and
+$\hat\sigma_z$-checks all commute --- the result is a
+Calderbank--Shor--Steane (CSS) code. Shor's nine-qubit code builds it by
+brute-force nesting; Steane's seven-qubit code builds it elegantly from
+a single Hamming code.
+\end{phenomenon}
+
+\begin{statement}[\textbf{CSS codes, Shor, and Steane}~\cite{shor1995,steane1996,calderbank1996}]
+\label{stmt:css}
+The \emph{Shor code} $[[9,1,3]]$ encodes
+\begin{equation}
+\ket{0_L}=\tfrac{1}{2\sqrt2}(\ket{000}+\ket{111})^{\otimes3},
+\qquad
+\ket{1_L}=\tfrac{1}{2\sqrt2}(\ket{000}-\ket{111})^{\otimes3},
+\end{equation}
+with eight stabiliser generators: six $\hat\sigma_z$-type checks within
+the three blocks and two $\hat\sigma_x$-type checks across them,
+\begin{equation}
+\begin{aligned}
+&\hat\sigma_z^{(1)}\hat\sigma_z^{(2)},\;
+\hat\sigma_z^{(2)}\hat\sigma_z^{(3)},\;
+\hat\sigma_z^{(4)}\hat\sigma_z^{(5)},\;
+\hat\sigma_z^{(5)}\hat\sigma_z^{(6)},\;
+\hat\sigma_z^{(7)}\hat\sigma_z^{(8)},\;
+\hat\sigma_z^{(8)}\hat\sigma_z^{(9)},\\
+&\hat\sigma_x^{(1)}\hat\sigma_x^{(2)}\hat\sigma_x^{(3)}
+\hat\sigma_x^{(4)}\hat\sigma_x^{(5)}\hat\sigma_x^{(6)},\quad
+\hat\sigma_x^{(4)}\hat\sigma_x^{(5)}\hat\sigma_x^{(6)}
+\hat\sigma_x^{(7)}\hat\sigma_x^{(8)}\hat\sigma_x^{(9)}.
+\end{aligned}
+\end{equation}
+The \emph{Steane code} $[[7,1,3]]$ is the CSS code built from the
+$[7,4,3]$ Hamming code with parity-check matrix
+\begin{equation}
+\label{eq:hamming}
+H=\begin{pmatrix}
+0&0&0&1&1&1&1\\
+0&1&1&0&0&1&1\\
+1&0&1&0&1&0&1
+\end{pmatrix},
+\end{equation}
+whose three rows give three $\hat\sigma_z$-type and three
+$\hat\sigma_x$-type generators (a $\hat\sigma_z$ or $\hat\sigma_x$ on
+each qubit where the row is $1$). Both codes have distance $3$ and
+correct any single-qubit error.
+\end{statement}
+
+\begin{proof}[Derivation]
+\emph{Shor.} Read the code as a phase-flip code of three blocks, each
+block itself a bit-flip code. The six intra-block
+$\hat\sigma_z\hat\sigma_z$ checks locate a bit flip inside whichever
+block it hits, exactly as in \cref{stmt:repetition}: an
+$\hat\sigma_x^{(5)}$ error makes qubits $4,5$ and $5,6$ disagree, firing
+$\hat\sigma_z^{(4)}\hat\sigma_z^{(5)}$ and
+$\hat\sigma_z^{(5)}\hat\sigma_z^{(6)}$ and pinpointing qubit $5$. The two
+inter-block $\hat\sigma_x^{\cdots}$ checks compare the \emph{signs} of
+adjacent blocks: a phase flip $\hat\sigma_z^{(j)}$ anywhere in a block
+flips that block's sign $(\ket{000}+\ket{111})\to(\ket{000}-\ket{111})$,
+which the weight-six $\hat\sigma_x$ checks detect by comparing block~1
+with block~2 and block~2 with block~3. A single $\hat\sigma_z$ in block
+$2$ fires both $\hat\sigma_x$-checks; recovery applies $\hat\sigma_z$ to
+any qubit of that block, the choice being a stabiliser degeneracy. A
+$\hat\sigma_y$ error trips both a $\hat\sigma_z$- and an
+$\hat\sigma_x$-check and is corrected as the product. \emph{Steane.}
+Because the Hamming code contains its dual, the $\hat\sigma_x$- and
+$\hat\sigma_z$-generators built from the same rows of $H$ overlap in an
+even number of qubits and hence commute, so $\mathcal S$ is abelian. For
+an $\hat\sigma_x^{(j)}$ error the $\hat\sigma_z$-syndrome is the $j$th
+column of $H$ --- the binary address of $j$ --- so the syndrome
+\emph{is} the error location. For instance an error on qubit $6$ gives
+column $(1,1,0)^{\!\top}$, the binary $6$. Phase errors are located
+identically by the $\hat\sigma_x$-checks. The minimum-weight logical
+operators are the transversal
+$\op{X}_L=\hat\sigma_x^{\otimes7}$ and
+$\op{Z}_L=\hat\sigma_z^{\otimes7}$, giving distance $3$.
+\end{proof}
+
+\begin{remark}
+\textbf{Syndrome extraction in practice.} Each generator is measured
+with one ancilla. For a $\hat\sigma_z$-type check
+$\hat\sigma_z^{(a)}\hat\sigma_z^{(b)}$, prepare an ancilla in $\ket{0}$,
+apply $\mathrm{CNOT}$ from qubits $a$ and $b$ onto it, and measure it:
+the ancilla reads the parity $\hat\sigma_z^{(a)}\hat\sigma_z^{(b)}$
+without revealing either bit. An $\hat\sigma_x$-type check is the same
+circuit conjugated by Hadamards on the ancilla (so it measures
+$\hat\sigma_x$ parity). The full code runs all $n-k$ such gadgets each
+cycle; fault-tolerant designs repeat and cross-check them so that an
+error in the syndrome circuit itself does not masquerade as a data
+error.
+\end{remark}
+
+\begin{application}[Transversal Cliffords and the return of magic states]
+\label{app:transversal}
+The Steane code's CSS structure makes the Clifford gates
+$\{\mathrm{H},\mathrm{S},\mathrm{CNOT}\}$ \emph{transversal}: applying
+the physical gate to all seven qubits of a block (or qubit-wise between
+two blocks for CNOT) enacts the logical gate, so no single physical
+fault spreads within a block. This is the cleanest possible fault
+tolerance --- but by the Eastin--Knill theorem (\cref{app:magic-cost})
+it cannot extend to a universal set. The non-Clifford $\mathrm{T}$ is not
+transversal in the Steane code and must be supplied through
+magic-state distillation (\cref{stmt:magic-distillation}), confirming
+from the coding side the dichotomy isolated in the previous chapter:
+Cliffords are cheap and protected, the $\mathrm{T}$ gate is expensive and
+imported.
+\end{application}
+
+\paragraph{Transition.}
+Shor and Steane prove fault tolerance is possible, but their stabilisers
+are geometrically awkward --- weight-six operators spanning distant
+qubits. Hardware wants checks that are local on a two-dimensional chip.
+The surface code delivers exactly that, and with it the highest known
+error threshold.
+
+% --------------------------------------------------------------
+\section{The surface code}
+\label{sec:surface-code}
+
+\begin{phenomenon}
+A superconducting processor (\cref{ch:experimental-basics}) couples each
+qubit only to its nearest neighbours on a planar chip. A practical code
+must therefore use checks that are geometrically local and low weight.
+The surface code does this with a single repeating pattern of weight-four
+parity checks on a two-dimensional lattice, tolerates an error rate near
+$1\%$, and is the architecture behind the recent below-threshold
+demonstrations in cQED. Its price is overhead --- hundreds to thousands
+of physical qubits per logical qubit --- but its locality is what makes
+it buildable.
+\end{phenomenon}
+
+\begin{statement}[\textbf{The surface code}~\cite{kitaev2003,fowler2012}]
+\label{stmt:surface-code}
+Place data qubits on the edges of a two-dimensional square lattice.
+Define two families of stabilisers: a \emph{star} (vertex) operator at
+each vertex $v$,
+\begin{equation}
+\op A_v=\prod_{e\,\ni\,v}\hat\sigma_x^{(e)},
+\qquad
+\op B_p=\prod_{e\,\in\,\partial p}\hat\sigma_z^{(e)},
+\end{equation}
+the product of $\hat\sigma_x$ over the four edges meeting at $v$, and a
+\emph{plaquette} operator $\op B_p$, the product of $\hat\sigma_z$ over
+the four edges bounding each face $p$. All stars and plaquettes commute,
+so the code space is their joint $+1$ eigenspace. Logical operators are
+$\hat\sigma_x$- and $\hat\sigma_z$-strings running across the patch from
+one boundary to the opposite one; on a distance-$d$ patch (linear size
+$d$) they have weight $d$, encoding one logical qubit that corrects
+$\lfloor(d-1)/2\rfloor$ errors. Below a threshold physical error rate
+$p_{\rm th}\!\sim\!1\%$, the logical error rate falls as
+\begin{equation}
+\label{eq:threshold}
+p_L\sim\Bigl(\frac{p}{p_{\rm th}}\Bigr)^{\!\lfloor d/2\rfloor},
+\end{equation}
+the threshold theorem of fault-tolerant computation.
+\end{statement}
+
+\begin{proof}[Derivation]
+\emph{Commutation.} A star $\op A_v$ and a plaquette $\op B_p$ share
+either no edges or exactly two (when $v$ sits on the boundary of $p$).
+Where they share an edge, $\hat\sigma_x$ and $\hat\sigma_z$ anticommute;
+with an even number of shared edges the anticommutations cancel and
+$[\op A_v,\op B_p]=0$. Stars commute with stars and plaquettes with
+plaquettes trivially (same Pauli type). The stabiliser group is
+therefore abelian. \emph{Errors as strings.} A single $\hat\sigma_x$
+error on an edge anticommutes with the two plaquettes that border that
+edge, lighting up a pair of $\hat\sigma_z$-syndrome defects; a connected
+chain of $\hat\sigma_x$ errors creates defects only at its two endpoints,
+because interior plaquettes see two errors and stay $+1$. The decoder
+sees the endpoint defects and pairs them with the shortest connecting
+chain (minimum-weight perfect matching); it fails only if it closes the
+chain the wrong way around the lattice. \emph{Distance.} A logical
+$\op{X}_L$ is an unbroken $\hat\sigma_x$-string from boundary to
+boundary: it commutes with every check (each interior vertex it crosses
+shares two edges with it) yet is not a product of stars, so it is a
+genuine logical operation. The shortest such string has weight $d$, the
+patch size, giving the distance and hence \cref{eq:threshold}: a logical
+fault needs an error chain spanning the lattice, of length $\sim d/2$
+after matching, whose probability is exponentially small in $d$ once
+$p<p_{\rm th}$.
+\end{proof}
+
+\begin{example}[A single error and its syndrome]
+\label{ex:surface-syndrome}
+Consider one $\hat\sigma_z$ error on an interior edge. It anticommutes
+with the two \emph{star} operators at the edge's endpoints, so exactly
+two adjacent $\hat\sigma_x$-syndrome bits flip while every plaquette
+stays quiet --- an unmistakable signature pointing at the edge between
+them. A neighbouring $\hat\sigma_z$ error sharing one of those vertices
+would extend the chain, moving the defect outward rather than creating a
+third one. This is why the decoder reasons about \emph{pairs} of defects
+and the strings joining them, and why a distance-$3$ patch (correcting
+any single error) is the smallest useful unit --- the building block of
+the lattice-surgery and magic-state machinery that a full
+fault-tolerant processor assembles.
+\end{example}
+
+\begin{application}[The surface code in cQED]
+\label{app:surface-cqed}
+The surface code maps directly onto a transmon lattice
+(\cref{ch:experimental-basics}): data and ancilla qubits alternate on a
+grid, each weight-four check is four CNOTs to a measurement ancilla read
+out dispersively (\cref{stmt:dispersive-readout}), and the cycle repeats
+every microsecond. Google's distance-$3$ and distance-$5$ logical
+qubits~\cite{acharya2023} showed the logical error rate \emph{decreasing}
+with code size --- the first experimental crossing of the threshold of
+\cref{eq:threshold}, and the result the
+sensing chapter (\cref{ch:coherent-multiqubit}) invokes when it argues
+that error correction can in principle protect a Heisenberg-limited
+probe.
+\end{application}
+
+\paragraph{Transition.}
+The surface code spends many physical qubits to manufacture one good
+logical qubit. A complementary philosophy asks whether the redundancy
+can instead live in the infinite ladder of a single oscillator ---
+trading qubit count for the rich state space of a superconducting cavity.
+
+% --------------------------------------------------------------
+\section{Bosonic codes in circuit QED}
+\label{sec:bosonic-codes}
+
+\begin{phenomenon}
+A high-$Q$ superconducting cavity (\cref{ch:em-quantisation,ch:circuit-qed})
+is a single mode with infinitely many levels and one dominant error:
+single-photon loss at rate set by its $T_1$ (\cref{stmt:t1}). Rather than
+stitch a logical qubit out of many two-level systems, a bosonic code
+hides one logical qubit in the cavity's Fock ladder and corrects that
+single dominant error using a transmon only to read a parity syndrome.
+This \emph{hardware-efficient} approach has reached the milestone where a
+logical qubit outlives its best physical component.
+\end{phenomenon}
+
+\begin{statement}[\textbf{Cat and GKP codes}~\cite{mirrahimi2014,gkp2001,michael2016}]
+\label{stmt:bosonic-codes}
+A \emph{cat code} encodes the logical qubit in superpositions of coherent
+states (\cref{stmt:coherent}) of opposite phase,
+\begin{equation}
+\ket{\mathcal C^+_\alpha}\propto\ket{\alpha}+\ket{-\alpha}
+\;(\text{even photon number}),
+\qquad
+\ket{\mathcal C^-_\alpha}\propto\ket{\alpha}-\ket{-\alpha}
+\;(\text{odd}),
+\end{equation}
+so that photon loss $\op a$ toggles the photon-number parity
+$\op P=e^{i\pi\op a^\dagger\op a}$: parity is the error syndrome, read
+out without demolition through a dispersively coupled transmon
+(\cref{stmt:dispersive-readout}). A \emph{GKP code} instead encodes the
+qubit in grid states of a single mode, stabilised by the two commuting
+displacements
+\begin{equation}
+\label{eq:gkp}
+\op S_q=e^{\,i2\sqrt{\pi}\,\op q},
+\qquad
+\op S_p=e^{\,i2\sqrt{\pi}\,\op p},
+\end{equation}
+in dimensionless quadratures $[\op q,\op p]=i$ (\cref{stmt:quadratures}),
+and corrects small displacements in both quadratures. Both codes have
+demonstrated error-corrected logical qubits beyond the break-even point.
+\end{statement}
+
+\begin{proof}[Derivation]
+\emph{Cat parity.} Expanding a coherent state in Fock states
+(\cref{stmt:coherent}), $\ket{\pm\alpha}=e^{-|\alpha|^2/2}\sum_n
+(\pm\alpha)^n/\sqrt{n!}\,\ket{n}$, the even combination
+$\ket{\alpha}+\ket{-\alpha}$ keeps only even $n$ and the odd combination
+only odd $n$; hence $\op P\ket{\mathcal C^\pm_\alpha}
+=\pm\ket{\mathcal C^\pm_\alpha}$. A single photon loss acts as the
+annihilation operator, $\op a\ket{\alpha}=\alpha\ket{\alpha}$, so
+$\op a(\ket{\alpha}\pm\ket{-\alpha})=\alpha(\ket{\alpha}\mp\ket{-\alpha})$
+--- it maps an even cat to an odd one and vice versa, flipping the
+parity. Crucially it does \emph{not} mix the two logical states beyond
+this known flip: monitoring $\op P$ between jumps tells us how many
+photons have leaked, and the logical information (which superposition)
+is preserved up to a tracked, correctable parity frame. The transmon
+measures $\op P$ as a QND parity check because the dispersive coupling
+$\propto\hat\sigma_z\,\op a^\dagger\op a$ rotates the transmon by an
+angle proportional to photon number, distinguishing even from odd
+without revealing $n$ itself. \emph{GKP stabilisers.} Using the Weyl
+relation $e^{ia\op q}e^{ib\op p}=e^{-iab}e^{ib\op p}e^{ia\op q}$, the two
+displacements in \cref{eq:gkp} satisfy
+$\op S_q\op S_p=e^{-i(2\sqrt\pi)^2}\op S_p\op S_q=e^{-i4\pi}\op S_p\op S_q
+=\op S_p\op S_q$ and so commute, defining a valid code space: the
+grid of points spaced by $2\sqrt\pi$ in each quadrature. The logical
+operators are the half-period translations
+$\op{Z}_L=e^{i\sqrt\pi\,\op q}$ and $\op{X}_L=e^{i\sqrt\pi\,\op p}$, which
+commute with the stabilisers (their phase is $e^{-i2\pi}=1$) but
+anticommute with each other ($e^{-i\pi}=-1$), as a logical pair must. A
+small displacement error shifts the grid by less than half a cell;
+measuring the stabilisers modulo $2\sqrt\pi$ reveals the shift, and a
+counter-displacement undoes it.
+\end{proof}
+
+\begin{application}[Beyond break-even]
+\label{app:break-even}
+Bosonic codes turn the cavity's single dominant loss channel into a
+measurable, correctable event, and they have crossed the threshold that
+defines useful QEC: an error-corrected logical qubit living longer than
+the best uncorrected element of the same hardware. Photon-number-parity
+tracking of a cat state in a 3D cavity reached the break-even point for
+memory~\cite{ofek2016}, and real-time GKP correction has now surpassed
+it, extending the logical lifetime beyond that of the bare
+mode~\cite{sivak2023}. Because the encoding lives in one cavity read out
+by one transmon, the hardware overhead is far smaller than a surface-code
+patch --- at the cost of correcting a narrower class of errors. The two
+philosophies, many-qubit surface codes and few-mode bosonic codes, are
+the live alternatives for the logical qubits that a fault-tolerant
+machine, and the long-lived sensing probes of \cref{ch:coherent-multiqubit},
+will be built from.
+\end{application}
+
+% --------------------------------------------------------------
+This chapter built quantum error correction from the ground up. The
+obstacles that seemed to forbid it --- no-cloning, the continuum of
+errors, measurement collapse --- were each turned aside: we encode by
+entanglement rather than copying, digitise continuous errors by
+measuring a syndrome, and design the parity checks to commute with the
+logical operators so the encoded state is never read. The stabiliser
+formalism organised every code as a set of commuting Pauli checks whose
+low-weight logical operators set the distance, from the three-qubit
+repetition code through the Shor and Steane CSS codes to the locally
+checkable surface code with its $\sim\!1\%$ threshold, and finally the
+cat and GKP codes that protect a logical qubit inside a single cavity.
+Along the way the Clifford/magic dichotomy of the previous chapter
+reappeared as the transversality of CSS Cliffords and the irreducible
+cost of the $\mathrm{T}$ gate.
+
+This completes Part~V. We now possess the full quantum-information
+toolkit --- gates, protocols, and the means to protect logical states
+against the decoherence of Part~II. Part~VI turns the same hardware and
+the same coherence-engineering to a different end: instead of computing
+with the qubit, it uses the qubit's exquisite sensitivity as a detector.
+The dispersive readout, the long coherence times, and --- in the closing
+chapter --- the entanglement and error-correction ideas of this part all
+return, now in the service of sensing dark matter and single quanta.
+
+\clearpage
+\begin{chaptersummary}
+
+\paragraph{Why QEC works.}
+Encode without cloning (entangle one logical qubit across many physical
+ones), measure without collapse (parity checks commuting with logical
+operators), and digitise the continuum: correcting
+$\{\hat\sigma_x,\hat\sigma_y,\hat\sigma_z\}$ on each qubit corrects any
+error, because the syndrome measurement projects a continuous error onto
+a definite Pauli branch.
+
+\paragraph{Repetition and stabilisers.}
+Bit-flip code $\ket{0_L}=\ket{000}$, $\ket{1_L}=\ket{111}$, stabilisers
+$\hat\sigma_z^{(1)}\hat\sigma_z^{(2)},\hat\sigma_z^{(2)}\hat\sigma_z^{(3)}$;
+the two-bit syndrome locates one flip. Generally an $[[n,k,d]]$ code is
+the $+1$ eigenspace of $n-k$ commuting Paulis; an error is flagged when
+it anticommutes with a generator, logical operators are the nontrivial
+Paulis commuting with all of them, and distance $d$ (their minimum
+weight) corrects $\lfloor(d-1)/2\rfloor$ errors.
+
+\paragraph{CSS codes.}
+Separate $\hat\sigma_x$- and $\hat\sigma_z$-checks correct phase and bit
+flips. Shor $[[9,1,3]]$ nests a bit-flip code inside a phase-flip code;
+Steane $[[7,1,3]]$ is built from the $[7,4,3]$ Hamming code, with the
+$\hat\sigma_x$-syndrome equal to the binary address of the flipped
+qubit and transversal Clifford gates --- but no transversal $\mathrm{T}$
+(Eastin--Knill), so magic states return.
+
+\paragraph{Surface code.}
+Local weight-four checks $\op A_v=\prod\hat\sigma_x$ (stars),
+$\op B_p=\prod\hat\sigma_z$ (plaquettes) on a 2D lattice; they commute
+(share $0$ or $2$ edges). Errors are strings flagged at their endpoints;
+logical operators span the patch with weight $d$. Below
+$p_{\rm th}\!\sim\!1\%$, $p_L\sim(p/p_{\rm th})^{\lfloor d/2\rfloor}$.
+
+\paragraph{Bosonic codes.}
+Cat code: $\ket{\alpha}\pm\ket{-\alpha}$ with photon-number parity
+$\op P=e^{i\pi\op a^\dagger\op a}$ as the loss syndrome, read QND by a
+dispersively coupled transmon. GKP code: grid states stabilised by
+displacements $e^{i2\sqrt\pi\op q},e^{i2\sqrt\pi\op p}$, correcting small
+shifts. Both have surpassed break-even in cQED.
+
+\end{chaptersummary}
+
+% --------------------------------------------------------------
+\section*{Exercises}
+\addcontentsline{toc}{section}{Exercises}
+
+\begin{exercise}[Reading the repetition-code syndrome]
+The bit-flip code is measured and returns the syndrome
+$(g_1,g_2)=(-1,-1)$. Which qubit was flipped, what recovery is applied,
+and why does the measurement not reveal $\alpha,\beta$?
+\begin{solution}
+From the syndrome table in \cref{stmt:repetition}, $(-1,-1)$ means qubits
+$1,2$ disagree and qubits $2,3$ disagree, so qubit $2$ is the odd one
+out: a $\hat\sigma_x^{(2)}$ error. Recovery applies $\hat\sigma_x^{(2)}$.
+The checks $g_1,g_2$ are products of $\hat\sigma_z$ and commute with both
+logical operators, so they measure only \emph{relative} parities of the
+three qubits, never the logical amplitudes --- the encoded state emerges
+untouched.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Parity checks commute with the logicals]
+Verify explicitly that $g_1=\hat\sigma_z^{(1)}\hat\sigma_z^{(2)}$
+commutes with the logical operator
+$\op{X}_L=\hat\sigma_x^{(1)}\hat\sigma_x^{(2)}\hat\sigma_x^{(3)}$.
+\begin{solution}
+$g_1$ and $\op{X}_L$ overlap on qubits $1$ and $2$. On qubit $1$,
+$\hat\sigma_z^{(1)}$ and $\hat\sigma_x^{(1)}$ anticommute; on qubit $2$,
+$\hat\sigma_z^{(2)}$ and $\hat\sigma_x^{(2)}$ anticommute; on qubit $3$,
+$g_1$ acts as identity and there is no anticommutation. Two
+anticommuting pairs give an overall factor $(-1)^2=+1$, so
+$g_1\op{X}_L=\op{X}_L g_1$. The check therefore cannot disturb the
+logical bit.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Digitising a coherent error]
+A qubit of the bit-flip code suffers the coherent rotation
+$\op R=\cos\theta\,\id-i\sin\theta\,\hat\sigma_x^{(1)}$. After syndrome
+measurement, what are the possible outcomes and their probabilities, and
+is the code word recovered in each case?
+\begin{solution}
+$\op R\ket{\psi_L}=\cos\theta\,\ket{\psi_L}
+-i\sin\theta\,\hat\sigma_x^{(1)}\ket{\psi_L}$. Measuring $(g_1,g_2)$
+projects onto the trivial syndrome with probability $\cos^2\theta$,
+leaving $\ket{\psi_L}$ (nothing to do), or onto the
+$\hat\sigma_x^{(1)}$ syndrome $(-1,+1)$ with probability $\sin^2\theta$,
+leaving $\hat\sigma_x^{(1)}\ket{\psi_L}$, which is corrected by applying
+$\hat\sigma_x^{(1)}$. In both branches the exact code word is restored:
+the continuous parameter $\theta$ has been digitised
+(\cref{stmt:digitisation}).
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[The phase-flip code]
+Write the code words, stabilisers, and logical operators of the
+three-qubit phase-flip code, and explain its relation to the bit-flip
+code in one sentence.
+\begin{solution}
+Code words $\ket{0_L}=\ket{+\!+\!+}$, $\ket{1_L}=\ket{-\!-\!-}$;
+stabilisers $\hat\sigma_x^{(1)}\hat\sigma_x^{(2)}$ and
+$\hat\sigma_x^{(2)}\hat\sigma_x^{(3)}$; logical operators
+$\op{X}_L=\hat\sigma_x^{(1)}$ and
+$\op{Z}_L=\hat\sigma_z^{(1)}\hat\sigma_z^{(2)}\hat\sigma_z^{(3)}$. It is
+the bit-flip code conjugated by a Hadamard on every qubit, which swaps
+$\hat\sigma_x\leftrightarrow\hat\sigma_z$ (\cref{eq:clifford-conjugation})
+and hence swaps the roles of bit and phase flips.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Shor-code syndromes]
+In the Shor code, which stabilisers fire for (a) a bit flip
+$\hat\sigma_x^{(5)}$ and (b) a phase flip $\hat\sigma_z^{(5)}$?
+\begin{solution}
+(a) $\hat\sigma_x^{(5)}$ anticommutes with the intra-block
+$\hat\sigma_z$-checks that contain qubit $5$, namely
+$\hat\sigma_z^{(4)}\hat\sigma_z^{(5)}$ and
+$\hat\sigma_z^{(5)}\hat\sigma_z^{(6)}$; both fire and locate qubit $5$.
+The $\hat\sigma_x$-checks commute with it and stay quiet. (b)
+$\hat\sigma_z^{(5)}$ anticommutes with the two weight-six
+$\hat\sigma_x$-checks, since qubit $5$ lies in both
+$\hat\sigma_x^{(1)}\!\cdots\hat\sigma_x^{(6)}$ and
+$\hat\sigma_x^{(4)}\!\cdots\hat\sigma_x^{(9)}$; both fire, flagging a
+phase flip in block~2. The recovery $\hat\sigma_z$ on any block-2 qubit
+works, as the choice differs only by a stabiliser.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[The Steane syndrome is an address]
+Using the Hamming matrix \cref{eq:hamming}, find the
+$\hat\sigma_z$-syndrome of a bit-flip error on qubit $3$, and confirm it
+equals the binary representation of $3$.
+\begin{solution}
+The syndrome of an $\hat\sigma_x^{(j)}$ error is column $j$ of $H$. Column
+$3$ is $(0,1,1)^{\!\top}$: the top row has $0$ in position $3$, the
+middle and bottom rows have $1$. Reading top-to-bottom as bits of value
+$(4,2,1)$ gives $0\cdot4+1\cdot2+1\cdot1=3$, the binary address of the
+flipped qubit. The three $\hat\sigma_z$-checks
+$\hat\sigma_z^{(2)}\hat\sigma_z^{(3)}\hat\sigma_z^{(6)}\hat\sigma_z^{(7)}$
+and $\hat\sigma_z^{(1)}\hat\sigma_z^{(3)}\hat\sigma_z^{(5)}\hat\sigma_z^{(7)}$
+fire while the first stays quiet, directly pinpointing qubit $3$.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Counting syndromes]
+The Steane code is $[[7,1,3]]$. How many stabiliser generators does it
+have, how many distinct syndromes, and is that enough to label every
+correctable single-qubit Pauli error?
+\begin{solution}
+There are $n-k=7-1=6$ generators, giving $2^6=64$ syndromes. The
+correctable weight-one errors are $\hat\sigma_x,\hat\sigma_y,\hat\sigma_z$
+on each of $7$ qubits, $3\times7=21$ nontrivial errors, plus the trivial
+(no-error) syndrome. Since $21+1=22\le64$ and the code's distance $3$
+guarantees these have distinct syndromes, the syndrome space is more than
+sufficient --- a single-qubit error is always uniquely diagnosed.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Surface-code commutation]
+Show that a star $\op A_v$ and a plaquette $\op B_p$ that share exactly
+two edges commute.
+\begin{solution}
+On each shared edge, $\op A_v$ contributes $\hat\sigma_x$ and $\op B_p$
+contributes $\hat\sigma_z$; these anticommute. On all other edges at
+most one of the operators acts, contributing commuting factors. With two
+shared edges there are two anticommuting pairs, so swapping the operators
+incurs $(-1)^2=+1$ and $[\op A_v,\op B_p]=0$. (An odd overlap is
+forbidden by the lattice geometry --- a vertex always meets a plaquette
+boundary in $0$ or $2$ edges --- which is exactly why the surface-code
+stabilisers form an abelian group.)
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Distance and correctable errors on a patch]
+A surface-code patch has linear size $d=5$. What is the minimum weight of
+a logical operator, and how many arbitrary errors is the patch guaranteed
+to correct?
+\begin{solution}
+A logical operator is a Pauli string crossing the patch from boundary to
+boundary; the shortest such string has weight equal to the patch size,
+$d=5$. The code therefore has distance $5$ and corrects any error of
+weight up to $\lfloor(d-1)/2\rfloor=\lfloor4/2\rfloor=2$. Equivalently,
+three well-placed errors can in principle form half of a logical string
+and cause a logical fault, but any one or two are always corrected.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Loss flips a cat's parity]
+Show that single-photon loss maps an even cat state to an odd one, and
+explain why a dispersively coupled transmon can read this parity without
+collapsing the logical superposition.
+\begin{solution}
+With $\ket{\mathcal C^\pm_\alpha}\propto\ket{\alpha}\pm\ket{-\alpha}$ and
+$\op a\ket{\pm\alpha}=\pm\alpha\ket{\pm\alpha}$,
+$\op a(\ket{\alpha}+\ket{-\alpha})=\alpha(\ket{\alpha}-\ket{-\alpha})$ ---
+an even cat becomes an odd cat, i.e.\ the photon-number parity
+$\op P=e^{i\pi\op a^\dagger\op a}$ flips from $+1$ to $-1$. The dispersive
+interaction $\propto\hat\sigma_z\,\op a^\dagger\op a$
+(\cref{stmt:dispersive-readout}) rotates the transmon by an angle
+proportional to the photon number, so measuring the transmon distinguishes
+even from odd $n$ \emph{without} resolving $n$ itself. Because the
+measured observable is the parity, which commutes with the logical
+operators of the cat code, the logical superposition (which cat) is
+preserved while the loss event is detected.
+\end{solution}
+\end{exercise}

@@ -17,8 +17,8 @@ Six parts plus an appendix:
 | II | Open quantum systems | drafted (chs. 5–8) |
 | III | Quantum optics | drafted (chs. 9–12) |
 | IV | Superconducting circuits | drafted (chs. 13–17): superconductivity + circuit quantisation, Josephson junction & SQUIDs, Cooper-pair box → transmon, circuit QED (coupling/gates/parametric amps), qubit tune-up & experimental basics |
-| V | Quantum information processing | ch. 18 drafted (computation: circuit model & universal gates, no-cloning, teleportation/superdense coding, QKD, Clifford/magic dichotomy); ch. 19 QEC next |
-| VI | Quantum sensing | drafted (chs. 19–24): dark-matter search, four mechanism chapters, plus a coherent multi-qubit / Heisenberg-limit chapter |
+| V | Quantum information processing | drafted (chs. 18–19): ch. 18 computation (circuit model & universal gates, no-cloning, teleportation/superdense coding, QKD, Clifford/magic dichotomy); ch. 19 quantum error correction (digitisation, repetition, stabiliser formalism, Shor/Steane CSS, surface code, cat/GKP) |
+| VI | Quantum sensing | drafted (chs. 20–25): dark-matter search, four mechanism chapters, plus a coherent multi-qubit / Heisenberg-limit chapter |
 | App. A | Auxiliary mathematical definitions | drafted |
 
 The full topic list lives in `README.md`. Treat it as the source of truth for
@@ -235,25 +235,34 @@ without checking — the document should keep reading as a quiet book.
 | Quantum key distribution (BB84, E91) | `stmt:bb84` | ch. 18 §18.4 |
 | Pauli / Clifford group, stabiliser state, Gottesman–Knill | `stmt:gottesman-knill` | ch. 18 §18.5 |
 | Magic states, magic-state distillation, transversality / Eastin–Knill | `stmt:magic-distillation` | ch. 18 §18.5 |
+| Error discretisation / digitisation theorem | `stmt:digitisation` | ch. 19 §19.1 |
+| Three-qubit repetition code (bit-flip), phase-flip code | `stmt:repetition`, `stmt:phase-flip` | ch. 19 §19.2 |
+| Stabiliser code `[[n,k,d]]`, stabiliser group, syndrome, logical ops, distance | `stmt:stabiliser-code` | ch. 19 §19.3 |
+| Knill–Laflamme conditions | `stmt:knill-laflamme` | ch. 19 §19.3 |
+| CSS codes; Shor `[[9,1,3]]` / Steane `[[7,1,3]]` (explicit stabilisers) | `stmt:css` | ch. 19 §19.4 |
+| Transversal gates (CSS Cliffords) | `app:transversal` | ch. 19 §19.4 |
+| Surface code (stars/plaquettes, strings, threshold theorem) | `stmt:surface-code` | ch. 19 §19.5 |
+| Bosonic codes: cat (parity syndrome) & GKP (grid states) | `stmt:bosonic-codes` | ch. 19 §19.6 |
 
 When introducing new terms in future chapters, **append to this table**.
 
 ## Open todos
 
-- Parts I, II, III, IV, and VI drafted. Part V now in progress:
-  ch. 18 quantum computation (`ch:quantum-information-processing`) is
-  drafted — circuit model & universal gates, no-cloning, teleportation
-  & superdense coding, QKD (BB84/E91), and the Clifford / magic-state
-  dichotomy (Gottesman–Knill). ch. 19 quantum error correction
-  (`ch:qec`) is next, with worked stabiliser detail (repetition →
-  Shor/Steane → surface code → bosonic cat/GKP). **Renumber pending:**
-  when ch. 19 lands, the existing Part VI chapter files `19_…`–`24_…`
-  shift to `20_…`–`25_…` (rendered chs. 20–25) and `main.tex` updates
-  to suit; until then Part VI renders as chs. 19–24 and the build stays
-  consistent. The only remaining expected forward-ref warning is
-  `ch:qec` (resolves once ch. 19 is written);
-  `ch:quantum-information-processing` now resolves.
-- Bibliography active (58 entries; foundations + decoherence +
+- **All six parts are now drafted (chs. 1–25) plus Appendix A.** Part V
+  is complete: ch. 18 quantum computation
+  (`ch:quantum-information-processing`) — circuit model & universal
+  gates, no-cloning, teleportation & superdense coding, QKD (BB84/E91),
+  Clifford / magic-state dichotomy (Gottesman–Knill); and ch. 19 quantum
+  error correction (`ch:qec`) — error discretisation, repetition codes,
+  the stabiliser formalism, Shor/Steane CSS codes with explicit
+  stabilisers, the surface code, and bosonic cat/GKP codes. The Part VI
+  renumber is **done**: the former `19_…`–`24_…` files are now
+  `20_…`–`25_…` (rendered chs. 20–25) and `main.tex` reflects it. **All
+  `\cref`s now resolve** — there are no remaining expected forward-ref
+  warnings. Next natural steps: a `quantikz`/TikZ figures pass
+  (circuits, Bloch sphere, level/lattice diagrams), and any
+  scope/polish the user wants.
+- Bibliography active (62 entries; foundations + decoherence +
   interpretations + superdeterminism + Part VI dark-matter
   references including Lewin-Smith / Helm form factor /
   Essig-Mardon-Volansky / Knapen-Kozaczuk-Lin (DarkELF) /
@@ -261,12 +270,16 @@ When introducing new terms in future chapters, **append to this table**.
   + cQED textbooks/reviews and historical-milestone papers cited
   in the introduction; a Part V cluster for quantum information
   processing — no-cloning (Wootters–Zurek), BB84 (Bennett–Brassard),
-  E91 (Ekert), superdense coding (Bennett–Wiesner), Eastin–Knill, plus
-  the pre-existing Shor / Steane / Gottesman / Bravyi–Kitaev
-  magic-state and surface-code references). Add new entries thematically
-  grouped in `bibliography.bib` as future chapters acquire citations.
+  E91 (Ekert), superdense coding (Bennett–Wiesner), Eastin–Knill, and
+  for QEC the CSS (Calderbank–Shor), surface/toric (Kitaev), GKP
+  (Gottesman–Kitaev–Preskill) and cat-qubit (Mirrahimi et al.) papers
+  alongside the pre-existing Shor / Steane / Gottesman / Bravyi–Kitaev /
+  Fowler / Michael / Ofek / Sivak references). Add new entries
+  thematically grouped in `bibliography.bib` as future chapters acquire
+  citations.
 - No figures yet. `figures/` is empty; consider TikZ for diagrams when
-  needed (Bloch sphere, circuit diagrams, level diagrams, …). Ch. 18
-  presents circuit diagrams as explicit gate-sequence algebra rather
-  than rendered diagrams, deferring a `quantikz`/TikZ figures pass (the
-  preamble pre-stages a commented `quantikz` line for that).
+  needed (Bloch sphere, circuit diagrams, level diagrams, …). Chs. 18–19
+  present circuits (gate sequences, syndrome extraction) as explicit
+  algebra rather than rendered diagrams, and the surface-code lattice in
+  prose, deferring a `quantikz`/TikZ figures pass (the preamble
+  pre-stages a commented `quantikz` line for that).
