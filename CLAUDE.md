@@ -212,6 +212,10 @@ without checking — the document should keep reading as a quiet book.
 | Josephson circuit Hamiltonian, charging energy `$E_C$`, ratio `$E_J/E_C$` | `stmt:josephson-hamiltonian` | ch. 14 §14.2 |
 | DC / AC / inverse-AC (Shapiro) Josephson effects | `stmt:josephson-effects` | ch. 14 §14.3 |
 | SQUID (flux-tunable `$E_J$`), sweet spots | `stmt:squid` | ch. 14 §14.4 |
+| Anharmonicity `$\alpha$`, gate-speed limit | `stmt:anharmonicity` | ch. 15 §15.1 |
+| Cooper-pair box (charge basis, charge dispersion, sweet spot) | `stmt:cpb` | ch. 15 §15.2 |
+| Transmon (`$\hbar\omega_{01}=\sqrt{8E_JE_C}-E_C$`, `$\alpha\approx-E_C$`, Kerr oscillator) | `stmt:transmon` | ch. 15 §15.3 |
+| Flux qubit, fluxonium (overview) | `stmt:flux-fluxonium` | ch. 15 §15.4 |
 
 When introducing new terms in future chapters, **append to this table**.
 

@@ -111,9 +111,9 @@ needed. Each `[ ]` becomes a section or chapter.
 - [x] LC oscillator as a quantum harmonic oscillator
 - [x] Josephson junctions: current–phase and voltage–phase relations, Josephson energy
 - [x] Josephson effects: DC effect, AC effect, inverse AC effect (Shapiro steps)
-- [ ] Cooper pair box and charge qubit
-- [ ] Transmon qubit: anharmonicity, charge-noise insensitivity
-- [ ] Flux qubit and fluxonium (overview)
+- [x] Cooper pair box and charge qubit
+- [x] Transmon qubit: anharmonicity, charge-noise insensitivity
+- [x] Flux qubit and fluxonium (overview)
 - [ ] Capacitive and inductive coupling between elements
 - [ ] Qubit–resonator coupling and dispersive readout
 - [ ] Drive Hamiltonians and single-qubit gates

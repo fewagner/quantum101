@@ -1,0 +1,482 @@
+\chapter{From Cooper-pair box to transmon}
+\label{ch:transmon}
+
+The Josephson Hamiltonian
+$\op H=4E_C(\op n-n_g)^2-E_J\cos\op\varphi$ of
+\cref{stmt:josephson-hamiltonian} contains a whole family of qubits;
+which one it describes is decided entirely by the ratio $E_J/E_C$. At
+small $E_J/E_C$ the charging term dominates: charge is nearly a good
+quantum number, the eigenstates are Cooper-pair-number states weakly
+mixed by tunnelling, and the device is the \emph{Cooper-pair box} ---
+the first superconducting qubit, exquisitely anharmonic but ruined by
+charge noise. At large $E_J/E_C$ the Josephson term dominates: the
+phase is pinned near the bottom of a cosine well, the circuit is a
+weakly anharmonic oscillator, and the device is the \emph{transmon},
+which trades most of the box's anharmonicity for an exponential
+immunity to charge noise. This chapter diagonalises the Hamiltonian in
+both limits, extracts the transmon's transition frequency
+$\hbar\omega_{01}=\sqrt{8E_JE_C}-E_C$ and its negative anharmonicity
+$\alpha\approx-E_C$, explains why charge dispersion vanishes
+exponentially in $\sqrt{E_J/E_C}$, and closes with a brief tour of the
+other corners of the design landscape --- the flux qubit and
+fluxonium. The output is the concrete qubit whose abstract
+two-level version animated Parts~I--III, ready to be coupled to a
+resonator in \cref{ch:circuit-qed}.
+
+% --------------------------------------------------------------
+\section{Why anharmonicity makes a qubit}
+\label{sec:anharmonicity}
+
+\begin{phenomenon}
+A qubit is a \emph{two}-level system, but a Josephson circuit has
+infinitely many levels. What lets us use only the lowest two is that
+the level spacing is unequal: the energy to go from $\ket0$ to $\ket1$
+differs from the energy to go from $\ket1$ to $\ket2$. A drive resonant
+with the first transition is then off-resonant with the second, so it
+shuffles population only within $\{\ket0,\ket1\}$ and leaves the higher
+levels alone. The larger this mismatch, the faster one may drive
+without leaking out of the computational subspace. Anharmonicity is the
+resource that turns an oscillator into a qubit, and its size sets the
+speed limit on gates.
+\end{phenomenon}
+
+\begin{statement}[\textbf{Anharmonicity and the gate-speed limit}]
+\label{stmt:anharmonicity}
+Let $\hbar\omega_{ij}=E_j-E_i$ be the transition energies of a circuit.
+The \emph{anharmonicity} is
+\begin{equation}
+\label{eq:anharmonicity}
+\alpha \;\equiv\; \hbar\omega_{12}-\hbar\omega_{01}
+= (E_2-E_1)-(E_1-E_0),
+\end{equation}
+the deviation of the spectrum from the uniform ladder of the linear
+resonator (\cref{stmt:lc-oscillator}), for which $\alpha=0$. To address
+$\ket0\!\leftrightarrow\!\ket1$ without exciting
+$\ket1\!\leftrightarrow\!\ket2$, a control pulse of duration $\tau$ ---
+hence spectral width $\sim2\pi/\tau$ --- must satisfy
+$|\alpha|/\hbar\gg2\pi/\tau$, so the fastest leakage-free gate scales
+as $\tau\gtrsim2\pi\hbar/|\alpha|$. A finite, sufficiently large
+$|\alpha|$ is therefore the single requirement that the bare cosine of
+\cref{ch:josephson} must meet.
+\end{statement}
+
+\paragraph{Transition.}
+Everything now hinges on how the spectrum of
+\cref{eq:josephson-hamiltonian} deviates from uniform. We compute it in
+the two opposite limits of $E_J/E_C$, beginning with the
+charge-dominated Cooper-pair box.
+
+% --------------------------------------------------------------
+\section{The Cooper-pair box}
+\label{sec:cpb}
+
+\begin{phenomenon}
+Isolate a small superconducting island connected to a reservoir by a
+single junction and a gate capacitor. So few Cooper pairs sit on the
+island that the energy to add one more, the charging energy $E_C$,
+dominates. The natural states are then definite charge states
+$\ket n$ --- $n$ excess Cooper pairs --- and the Josephson coupling
+acts only as a weak amplitude to move one pair on or off, mixing
+neighbouring charge states. A gate voltage tunes the electrostatic
+energy of each $\ket n$, and at the special bias where two charge
+states cost the same energy the junction lifts their degeneracy: there
+sits a clean, highly anharmonic two-level system.
+\end{phenomenon}
+
+\begin{statement}[\textbf{Cooper-pair box in the charge basis}~\cite{nakamura1999}]
+\label{stmt:cpb}
+In the charge basis $\{\ket n\}$ (eigenstates of $\op n$), the
+Josephson term is a nearest-neighbour hopping, since
+$\cos\op\varphi=\tfrac12\sum_n(\ket{n}\!\bra{n+1}+\ket{n+1}\!\bra{n})$,
+so the Hamiltonian \cref{eq:josephson-hamiltonian} reads
+\begin{equation}
+\label{eq:cpb-hamiltonian}
+\op H = \sum_n\Bigl[4E_C(n-n_g)^2\,\ket n\!\bra n
+  - \frac{E_J}{2}\bigl(\ket{n}\!\bra{n+1}+\ket{n+1}\!\bra{n}\bigr)\Bigr].
+\end{equation}
+In the charge regime $E_J\ll E_C$, near the degeneracy point
+$n_g=\tfrac12$ only $\ket0$ and $\ket1$ matter; projected onto them,
+\begin{equation}
+\label{eq:cpb-twolevel}
+\op H_{\rm 2L} = 2E_C(1-2n_g)\,\hat\sigma_z - \frac{E_J}{2}\hat\sigma_x,
+\end{equation}
+a spin in a field. At the \emph{sweet spot} $n_g=\tfrac12$ the
+longitudinal field vanishes and the gap is $E_J$, set purely by the
+Josephson energy; the two eigenstates are the symmetric/antisymmetric
+combinations $(\ket0\pm\ket1)/\sqrt2$.
+\end{statement}
+
+\paragraph{Charge dispersion and its curse.}
+Away from the sweet spot the levels disperse with the offset charge
+$n_g$ --- the \emph{charge dispersion}, a set of $n_g$-periodic energy
+bands of width $\sim E_J$. Because real devices suffer slow,
+uncontrolled drifts of $n_g$ (charges hopping in the substrate and
+oxide), the qubit frequency wanders, and the qubit dephases through the
+longitudinal noise mechanism of \cref{stmt:noise-rates}. Operating
+exactly at the sweet spot $n_g=\tfrac12$ makes the frequency
+first-order insensitive to $n_g$ --- the same protection idea as the
+SQUID flux sweet spot (\cref{stmt:squid}) --- and Nakamura's first
+charge qubit~\cite{nakamura1999} demonstrated coherent control there.
+But the protection is only first order: charge noise still dephases the
+box on nanosecond-to-microsecond timescales, and one cannot stay
+pinned at the sweet spot during arbitrary gates. This was the wall the
+field hit, and the transmon is how it was climbed.
+
+\paragraph{Transition.}
+The cure is counter-intuitive: rather than fight charge noise at fixed
+$E_J/E_C$, simply increase $E_J/E_C$ until the entire charge dispersion
+--- the whole $n_g$-dependence --- shrinks below the noise. We now show
+it shrinks \emph{exponentially}.
+
+% --------------------------------------------------------------
+\section{The transmon limit}
+\label{sec:transmon-limit}
+
+\begin{phenomenon}
+Shunt the junction with a large capacitor, lowering $E_C$ until
+$E_J/E_C$ reaches several tens. The phase $\varphi$ is now heavy and
+sits deep in a single cosine well, oscillating with small amplitude
+about the minimum. The circuit becomes a slightly anharmonic
+oscillator: its lowest levels are nearly those of a harmonic oscillator
+at the plasma frequency, with a small negative correction from the
+quartic curvature of the cosine. Crucially, the wavefunctions are now
+broad in phase and therefore narrow in charge --- so spread over many
+charge states that they no longer resolve the offset $n_g$, and charge
+noise becomes invisible. The modest price is that the anharmonicity,
+once the full $E_J$ of the box, drops to about $E_C$.
+\end{phenomenon}
+
+\begin{statement}[\textbf{Transmon spectrum}~\cite{koch2007}]
+\label{stmt:transmon}
+For $E_J/E_C\gg1$, expanding $-E_J\cos\op\varphi$ about $\varphi=0$ and
+treating the quartic term in first-order perturbation theory gives the
+levels
+\begin{equation}
+\label{eq:transmon-levels}
+E_m \approx -E_J + \sqrt{8E_JE_C}\,\Bigl(m+\tfrac12\Bigr)
+  - \frac{E_C}{12}\bigl(6m^2+6m+3\bigr),
+\end{equation}
+so that the transition frequency, anharmonicity, and their ratio are
+\begin{equation}
+\label{eq:transmon-freq}
+\hbar\omega_{01}=\sqrt{8E_JE_C}-E_C,
+\qquad
+\alpha=\hbar\omega_{12}-\hbar\omega_{01}=-E_C,
+\qquad
+\frac{\alpha}{\hbar\omega_{01}}\approx-\sqrt{\frac{E_C}{8E_J}}.
+\end{equation}
+The charge dispersion --- the peak-to-peak variation of $E_m$ with the
+offset $n_g$ --- is suppressed exponentially,
+\begin{equation}
+\label{eq:charge-dispersion}
+\epsilon_m \;\sim\; E_C\,e^{-\sqrt{8E_J/E_C}},
+\end{equation}
+(times an $m$-dependent algebraic prefactor that grows with the level),
+so charge noise is rendered negligible for the lowest levels once
+$E_J/E_C\gtrsim50$.
+\end{statement}
+
+\paragraph{Derivation (Duffing oscillator).}
+Expand $-E_J\cos\op\varphi=-E_J+\tfrac12 E_J\op\varphi^2
+-\tfrac1{24}E_J\op\varphi^4+\cdots$. The quadratic piece together with
+$4E_C\op n^2$ is a harmonic oscillator: with $\comm{\op\varphi}{\op n}=i$,
+identifying $\op\varphi$ as ``position'' and $\op n$ as ``momentum''
+with effective mass $1/8E_C$ and spring constant $E_J$ gives plasma
+frequency $\hbar\omega_p=\sqrt{8E_JE_C}$ and zero-point phase spread
+$\varphi_{\rm zpf}=(2E_C/E_J)^{1/4}$, so
+$\op\varphi=\varphi_{\rm zpf}(\hat a+\hat a^\dagger)$. The quartic term
+becomes $-\tfrac{1}{24}E_J\varphi_{\rm zpf}^4(\hat a+\hat a^\dagger)^4$;
+its first-order (normal-ordered, RWA) contribution is a \emph{Kerr}
+nonlinearity
+\begin{equation}
+\label{eq:transmon-kerr}
+\op H_{\rm tr}\approx \hbar\tilde\omega\,\hat a^\dagger\hat a
+  - \frac{E_C}{2}\,\hat a^\dagger\hat a^\dagger\hat a\hat a,
+\end{equation}
+with $\hbar\tilde\omega=\sqrt{8E_JE_C}-E_C$. The anharmonic shift of
+level $m$ is $-\tfrac{E_C}{2}m(m-1)$, reproducing
+\cref{eq:transmon-levels} and giving the spacing
+$\hbar\omega_{m,m+1}=\hbar\tilde\omega-mE_C$, hence $\alpha=-E_C$. The
+charge dispersion \cref{eq:charge-dispersion} follows from a WKB
+estimate of the tunnelling amplitude between adjacent cosine wells: it
+is the bandwidth of a particle of mass $1/8E_C$ in a periodic
+potential of depth $E_J$, exponentially small in
+$\sqrt{E_J/E_C}$.
+
+\begin{remark}
+The transmon is thus a \emph{Kerr oscillator}: a harmonic oscillator
+with a weak photon-photon interaction $-\tfrac{E_C}{2}\hat a^\dagger\hat a^\dagger\hat a\hat a$.
+The negative sign means each added excitation lowers the next
+transition frequency by $E_C$ --- the same negative anharmonicity that
+entered the transmon correction to the dispersive shift in
+\cref{stmt:dispersive-H} (the factor $\alpha/(\Delta+\alpha)$). The
+Kerr form is also why a transmon, driven hard, behaves like the
+anharmonic oscillators that generate the parametric and mixing
+processes of \cref{ch:circuit-qed}.
+\end{remark}
+
+\paragraph{The exponential trade-off.}
+\Cref{eq:transmon-freq,eq:charge-dispersion} encode the central
+compromise. Charge dispersion falls as $e^{-\sqrt{8E_J/E_C}}$ ---
+\emph{exponentially} fast --- while the anharmonicity falls only as
+$\alpha/\omega_{01}\sim-\sqrt{E_C/8E_J}$ --- a gentle \emph{power law}.
+Increasing $E_J/E_C$ therefore buys exponential charge-noise immunity
+at merely polynomial cost in anharmonicity. The standard operating
+point $E_J/E_C\approx50$--$100$ leaves $\epsilon_m$ utterly negligible
+(qubit frequency stable to $\ll1\,$Hz from charge noise) while keeping
+$|\alpha|/h\approx E_C/h\approx200$--$300\,$MHz --- enough for
+$\sim20$--$50\,$ns gates. That asymmetry is the whole reason the
+transmon won.
+
+\paragraph{Transition.}
+The transmon is the dominant qubit, but not the only one. Two further
+designs occupy different corners of the $E_J/E_C$ (and inductive-energy)
+landscape, trading the transmon's balance for larger anharmonicity.
+
+% --------------------------------------------------------------
+\section{Flux qubit and fluxonium}
+\label{sec:flux-fluxonium}
+
+\begin{statement}[\textbf{Two other corners of the design space}]
+\label{stmt:flux-fluxonium}
+\textbf{Flux qubit.} A superconducting loop interrupted by (typically
+three) junctions and biased near half a flux quantum has two low-lying
+states corresponding to persistent currents circulating clockwise and
+anticlockwise. Near $\Phi_{\rm ext}=\Phi_0/2$ these states are
+degenerate and the junctions tunnel-couple them, giving a two-level
+system with \emph{large} anharmonicity but strong sensitivity to flux
+noise away from the half-flux sweet spot.
+
+\textbf{Fluxonium.} A single small junction shunted by a very large
+inductance --- a ``superinductance'' built from an array of larger
+junctions --- and a small capacitance~\cite{manucharyan2009}. With
+inductive energy $E_L\ll E_J$, the cosine potential is corrugated by a
+shallow parabola, producing a dense set of nearly flux-independent
+levels with very large anharmonicity and, in the heavy-fluxonium
+regime, exceptionally long coherence times. Like the transmon, it is
+free of charge offsets.
+\end{statement}
+
+\paragraph{Why the transmon still dominates.}
+Each alternative buys anharmonicity at a cost: the flux qubit is
+flux-noise-limited; the fluxonium needs a superinductance and operates
+at low frequency, complicating control and readout. The transmon's
+moderate $|\alpha|\approx E_C$ is ``good enough'' for fast gates, while
+its exponential charge-noise immunity, simple single-junction (or
+SQUID) construction, and convenient $4$--$8\,$GHz frequencies make it
+the default. The rest of Part~IV therefore takes the transmon as the
+qubit, and reads its coupling, control, and calibration off the cQED
+machinery of \cref{ch:circuit-qed,ch:experimental-basics}.
+
+% --------------------------------------------------------------
+This chapter diagonalised the Josephson Hamiltonian and met the
+superconducting qubit in two guises. The Cooper-pair box, in the
+charge regime $E_J\ll E_C$, is a clean two-level system at its charge
+sweet spot but is dephased by ubiquitous charge noise. The transmon,
+in the regime $E_J/E_C\gg1$, suppresses charge dispersion
+exponentially in $\sqrt{E_J/E_C}$ at only a power-law cost in
+anharmonicity, leaving a weakly anharmonic Kerr oscillator with
+$\hbar\omega_{01}=\sqrt{8E_JE_C}-E_C$ and $\alpha\approx-E_C$. Flux
+qubit and fluxonium occupy other corners of the landscape, trading the
+transmon's balance for larger anharmonicity.
+
+With a concrete qubit in hand we can finally give the abstract objects
+of Parts~I--III their hardware. The next chapter places a transmon in a
+microwave resonator, derives the Jaynes--Cummings coupling $g$ from
+circuit capacitances, builds single- and two-qubit gates from drives
+and tunable couplings, and shows how the same Josephson nonlinearity
+generates the parametric processes behind quantum-limited
+amplification.
+
+\clearpage
+\begin{chaptersummary}
+
+\paragraph{Anharmonicity.}
+$\alpha=\hbar\omega_{12}-\hbar\omega_{01}$ measures departure from the
+uniform ladder; leakage-free gates need $|\alpha|/\hbar\gg2\pi/\tau$,
+so $\tau\gtrsim2\pi\hbar/|\alpha|$.
+
+\paragraph{Cooper-pair box ($E_J\ll E_C$).}
+Charge-basis Hamiltonian
+$\op H=\sum_n[4E_C(n-n_g)^2\ket n\!\bra n-\tfrac{E_J}{2}(\ket n\!\bra{n+1}+\hc)]$;
+near $n_g=\tfrac12$ a spin
+$\op H_{\rm 2L}=2E_C(1-2n_g)\hat\sigma_z-\tfrac{E_J}{2}\hat\sigma_x$,
+gap $E_J$ at the sweet spot. Large anharmonicity, but charge-noise
+limited.
+
+\paragraph{Transmon ($E_J/E_C\gg1$).}
+$\hbar\omega_{01}=\sqrt{8E_JE_C}-E_C$, $\alpha=-E_C$,
+$\alpha/\hbar\omega_{01}\approx-\sqrt{E_C/8E_J}$. Charge dispersion
+$\epsilon_m\sim E_Ce^{-\sqrt{8E_J/E_C}}$ is exponentially suppressed; a
+Kerr oscillator
+$\op H\approx\hbar\tilde\omega\hat a^\dagger\hat a-\tfrac{E_C}{2}\hat a^\dagger\hat a^\dagger\hat a\hat a$.
+Operate at $E_J/E_C\approx50$--$100$.
+
+\paragraph{Other designs.}
+Flux qubit (persistent-current states near $\Phi_0/2$, large $\alpha$,
+flux-noise-limited) and fluxonium (superinductance shunt, very large
+$\alpha$, long coherence) trade the transmon's balance for
+anharmonicity.
+
+\end{chaptersummary}
+
+% --------------------------------------------------------------
+\section*{Exercises}
+\addcontentsline{toc}{section}{Exercises}
+
+\begin{exercise}[The Josephson term as charge hopping]
+Show that $\cos\op\varphi$ moves one Cooper pair on or off the island,
+i.e.\ that
+$e^{\pm i\op\varphi}\ket n=\ket{n\pm1}$, and hence justify the
+nearest-neighbour form in \cref{eq:cpb-hamiltonian}.
+\begin{solution}
+Since $\comm{\op\varphi}{\op n}=i$, the operator $e^{i\op\varphi}$ is
+the translation operator in the charge variable conjugate to
+$\varphi$: $e^{i\op\varphi}\ket n=\ket{n+1}$ (and $e^{-i\op\varphi}\ket n=\ket{n-1}$),
+exactly as $e^{ipa/\hbar}$ shifts position. Then
+$\cos\op\varphi=\tfrac12(e^{i\op\varphi}+e^{-i\op\varphi})$ maps
+$\ket n\to\tfrac12(\ket{n+1}+\ket{n-1})$, i.e.\ in matrix form
+$\cos\op\varphi=\tfrac12\sum_n(\ket n\!\bra{n+1}+\ket{n+1}\!\bra n)$,
+the nearest-neighbour hopping of \cref{eq:cpb-hamiltonian}.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[The box at its sweet spot]
+Diagonalise \cref{eq:cpb-twolevel} at $n_g=\tfrac12$ and find the gap
+and eigenstates. What is the gap a few percent away from the sweet
+spot?
+\begin{solution}
+At $n_g=\tfrac12$ the $\hat\sigma_z$ term vanishes and
+$\op H_{\rm 2L}=-\tfrac{E_J}{2}\hat\sigma_x$, with eigenvalues
+$\mp E_J/2$ and eigenstates $(\ket0\pm\ket1)/\sqrt2$; the gap is $E_J$.
+Away from the sweet spot, $n_g=\tfrac12+\delta$, the field is
+$\sqrt{(4E_C\cdot2\delta)^2+E_J^2}=\sqrt{(8E_C\delta)^2+E_J^2}$, so to
+leading order the gap grows quadratically in $\delta$ --- the
+first-order insensitivity that defines the sweet spot.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Transmon frequency and the $\sqrt{8E_JE_C}$ scale]
+A transmon has $E_J/h=15\,$GHz and $E_C/h=0.25\,$GHz. Compute
+$\omega_{01}/2\pi$ and the anharmonicity $\alpha/h$.
+\begin{solution}
+$\sqrt{8E_JE_C}=\sqrt{8\cdot15\cdot0.25}\,$GHz$\cdot h
+=\sqrt{30}\,$GHz$\approx5.48\,$GHz (working in frequency units, since
+the $h$'s cancel). Then
+$\omega_{01}/2\pi=\sqrt{8E_JE_C}/h-E_C/h\approx5.48-0.25=5.23\,$GHz, and
+$\alpha/h=-E_C/h=-0.25\,$GHz$=-250\,$MHz. Relative anharmonicity
+$\alpha/\hbar\omega_{01}\approx-250/5230\approx-4.8\%$.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Choosing $E_J/E_C$]
+Using \cref{eq:charge-dispersion}, estimate by what factor the charge
+dispersion changes when $E_J/E_C$ goes from $20$ to $80$. Comment on
+the corresponding change in anharmonicity.
+\begin{solution}
+$\epsilon\propto e^{-\sqrt{8E_J/E_C}}$. At $E_J/E_C=20$,
+$\sqrt{8\cdot20}=\sqrt{160}\approx12.6$; at $80$,
+$\sqrt{640}\approx25.3$. The ratio of dispersions is
+$e^{-(25.3-12.6)}=e^{-12.7}\approx3\times10^{-6}$ --- six orders of
+magnitude smaller. The relative anharmonicity
+$\sqrt{E_C/8E_J}$ changes only by $\sqrt{80/20}=2$ (halved). Charge
+noise is crushed exponentially; anharmonicity is sacrificed only by a
+factor of two --- the bargain that defines the transmon.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Zero-point phase spread]
+Compute $\varphi_{\rm zpf}=(2E_C/E_J)^{1/4}$ for $E_J/E_C=60$ and
+confirm it is small ($\ll1$), justifying the expansion of the cosine.
+\begin{solution}
+$\varphi_{\rm zpf}=(2/60)^{1/4}=(0.0333)^{1/4}$. Since
+$0.0333^{1/2}=0.183$ and $0.183^{1/2}=0.427$, $\varphi_{\rm zpf}\approx0.43\,$rad.
+This is well below $1$, so the phase explores only the bottom of the
+cosine well and the quartic-truncated (Duffing) treatment is justified;
+the next, sextic term is suppressed by a further
+$\varphi_{\rm zpf}^2\approx0.18$.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Anharmonicity sets the gate speed]
+With $|\alpha|/h=250\,$MHz, estimate the shortest gate time before
+leakage to $\ket2$ becomes significant. Compare to typical $T_1\sim
+50\,\mu$s.
+\begin{solution}
+Leakage-free operation needs the pulse bandwidth
+$\sim1/\tau$ below $|\alpha|/h$, so
+$\tau\gtrsim1/(|\alpha|/h)=1/(250\times10^6\,\text{Hz})=4\,$ns as an
+absolute floor; in practice a safety factor of $\sim5$--$10$ (and pulse
+shaping, e.g.\ DRAG) gives $\sim20$--$40\,$ns gates. Against
+$T_1\sim50\,\mu$s this allows $\sim10^3$ gates within a coherence time,
+the rough budget that sets near-term circuit depths.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[The Kerr picture]
+From \cref{eq:transmon-kerr}, find the energy of level $m$ relative to
+the harmonic ladder and confirm the spacing
+$\hbar\omega_{m,m+1}=\hbar\tilde\omega-mE_C$.
+\begin{solution}
+The Kerr term $-\tfrac{E_C}{2}\hat a^\dagger\hat a^\dagger\hat a\hat a$
+has eigenvalue $-\tfrac{E_C}{2}m(m-1)$ on $\ket m$ (since
+$\hat a^\dagger\hat a^\dagger\hat a\hat a\ket m=m(m-1)\ket m$). So
+$E_m=\hbar\tilde\omega\,m-\tfrac{E_C}{2}m(m-1)$, and
+$\hbar\omega_{m,m+1}=E_{m+1}-E_m
+=\hbar\tilde\omega-\tfrac{E_C}{2}[(m+1)m-m(m-1)]
+=\hbar\tilde\omega-\tfrac{E_C}{2}(2m)=\hbar\tilde\omega-mE_C$. For $m=0$
+this is $\hbar\tilde\omega=\hbar\omega_{01}$, and the $0\to1$ vs $1\to2$
+difference is $-E_C=\alpha$.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Why broad in phase means narrow in charge]
+Explain, using $\comm{\op\varphi}{\op n}=i$, why the transmon's
+charge-noise immunity is the conjugate face of its phase being pinned
+in one cosine well.
+\begin{solution}
+Phase and number are conjugate, so a state localised in $\varphi$
+(small $\varphi_{\rm zpf}$, pinned in one well) is correspondingly
+\emph{delocalised} in $n$: it is a broad superposition of many charge
+states. Charge dispersion arises from the wavefunction's ability to
+resolve the offset $n_g$ via tunnelling between wells; a state spread
+over many charge states (or equivalently, with negligible inter-well
+tunnelling) cannot resolve a shift of $n_g$ by a fraction of a pair, so
+its energy is insensitive to $n_g$. Large $E_J/E_C$ deepens the well,
+narrows $\varphi_{\rm zpf}$, broadens the charge distribution, and
+suppresses the dispersion --- all the same statement.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Reading the regime from the numbers]
+Given a device with $E_J/h=12\,$GHz and (a) $E_C/h=4\,$GHz or
+(b) $E_C/h=0.2\,$GHz, classify each as box-like or transmon-like and
+justify.
+\begin{solution}
+(a) $E_J/E_C=3$: comparable energies, charge regime / intermediate ---
+box-like, with substantial charge dispersion (and large
+anharmonicity). (b) $E_J/E_C=60$: deep transmon regime, charge
+dispersion $\propto e^{-\sqrt{480}}\approx e^{-22}$ utterly negligible,
+anharmonicity $\alpha/h=-0.2\,$GHz. Device (b) is the usable qubit;
+(a) would need sweet-spot operation and still dephase quickly.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Anharmonicity of the alternatives]
+The transmon's anharmonicity is only $\sim5\%$. Explain qualitatively
+why a flux qubit or fluxonium can achieve much larger relative
+anharmonicity, and what they give up to get it.
+\begin{solution}
+Both place the qubit in a strongly \emph{non}-parabolic part of the
+potential: the flux qubit near $\Phi_0/2$ sits in a double-well whose
+two minima give well-separated, very unequal levels; the fluxonium's
+shallow inductive parabola over a corrugated cosine yields levels with
+large spacing differences. The transmon, by contrast, lives at the
+bottom of a single deep well where the potential is nearly parabolic,
+so its anharmonicity is small. The price for large anharmonicity is
+sensitivity (the flux qubit to flux noise away from its sweet spot) or
+complexity and low frequency (the fluxonium's superinductance and
+control overhead) --- which is why the gentler transmon remains the
+workhorse.
+\end{solution}
+\end{exercise}
