@@ -1,0 +1,449 @@
+\chapter{Dispersive regime, readout, and the Purcell effect}
+\label{ch:dispersive}
+
+The Jaynes--Cummings model of \cref{ch:jaynes-cummings} is most
+useful, paradoxically, in the limit where the qubit and cavity
+\emph{cannot} exchange energy: the \emph{dispersive} regime, where
+the detuning $\Delta=\omega_q-\omega_c$ greatly exceeds the coupling
+$g$. There the qubit and cavity are still coupled --- strongly
+enough that each shifts the other's frequency --- but a real photon
+cannot be swapped, because energy conservation forbids it. This
+state-dependent frequency shift is the single most important effect
+in superconducting-qubit measurement: it lets a probe tone read the
+qubit state without destroying it (quantum non-demolition readout),
+it makes the qubit frequency depend on the photon number (the AC
+Stark shift, and its back-action, measurement-induced dephasing),
+and --- because the cavity is lossy --- it opens a decay channel for
+the qubit (the Purcell effect). This chapter derives the dispersive
+Hamiltonian by a Schrieffer--Wolff transformation, reads off the AC
+Stark shift and measurement-induced dephasing, works out the Purcell
+rate and its mitigation, and assembles the dispersive-readout chain
+that connects to the input--output theory of \cref{ch:input-output}
+and the continuous measurement of \cref{ch:continuous-measurement}.
+
+% --------------------------------------------------------------
+\section{The dispersive Hamiltonian}
+\label{sec:dispersive}
+
+\begin{phenomenon}
+When the qubit is far detuned from the cavity, $|\Delta|\gg g$, a
+photon offered to the qubit is off-resonant and cannot be absorbed:
+no energy is exchanged. What remains is a second-order effect ---
+the qubit and cavity each spend a virtual fraction of their time as
+the other --- which shifts the cavity frequency by an amount that
+depends on the qubit state, and shifts the qubit frequency by an
+amount that depends on the photon number. The coupled system
+behaves as two oscillators with a cross-Kerr interaction rather than
+an energy-exchanging one.
+\end{phenomenon}
+
+\begin{statement}[\textbf{Dispersive Hamiltonian}~\cite{blais2004,blais2021}]
+\label{stmt:dispersive-H}
+In the dispersive limit $\lambda\equiv g/\Delta\ll1$, a
+Schrieffer--Wolff transformation that eliminates the
+Jaynes--Cummings coupling \cref{eq:jc-hamiltonian} to second order
+in $\lambda$ gives the effective Hamiltonian
+\begin{equation}
+\label{eq:dispersive-H}
+\op H_{\rm disp} \;=\; \hbar\omega_c\,\hat a^\dagger\hat a
+\;-\; \frac{\hbar}{2}\bigl(\omega_q + \chi\bigr)\hat\sigma_z
+\;+\; \hbar\chi\,\hat a^\dagger\hat a\,\hat\sigma_z,
+\qquad
+\chi \;=\; \frac{g^2}{\Delta}.
+\end{equation}
+The cross term $\hbar\chi\,\hat a^\dagger\hat a\,\hat\sigma_z$ is the
+\emph{dispersive shift}: it can be read two ways. Grouping it with
+the cavity term, the cavity frequency is \emph{pulled} to
+$\omega_c\pm\chi$ depending on the qubit state $\ket0/\ket1$;
+grouping it with the qubit term, the qubit frequency is
+\emph{Stark-shifted} by $2\chi$ per photon. The $-\tfrac{\hbar\chi}{2}\hat\sigma_z$
+piece is the Lamb shift, the dispersive renormalisation of the
+qubit frequency by vacuum fluctuations.
+\end{statement}
+
+\paragraph{Derivation sketch (Schrieffer--Wolff).}
+The coupling $\hbar g(\hat a\hat\sigma_+ + \hat a^\dagger\hat\sigma_-)$
+is off-diagonal between the bare states; when $|\Delta|\gg g$ it can
+be removed by a unitary $\op U=e^{\op S}$ with anti-Hermitian
+generator $\op S=\lambda(\hat a\hat\sigma_+-\hat a^\dagger\hat\sigma_-)$,
+chosen so that the first-order coupling cancels. Expanding
+$\op U^\dagger\op H_{\rm JC}\op U=\op H_{\rm JC}+\comm{\op H_{\rm JC}}{\op S}+\tfrac12\comm{\comm{\op H_{\rm JC}}{\op S}}{\op S}+\cdots$
+and keeping terms to $O(\lambda^2)$, the linear coupling cancels by
+construction and the surviving second-order term is the cross-Kerr
+$\hbar\chi\,\hat a^\dagger\hat a\,\hat\sigma_z$ of
+\cref{eq:dispersive-H}. This is the same Schrieffer--Wolff machinery
+used to derive the four-wave-mixing photon counter of
+\cref{ch:microwave-absorption}; here it produces the readout
+interaction instead.
+
+\paragraph{The transmon correction.}
+For a real transmon --- a weakly anharmonic oscillator, not a true
+two-level system --- the higher levels contribute, and the
+two-level result $\chi=g^2/\Delta$ is replaced by
+$\chi=\dfrac{g^2}{\Delta}\dfrac{\alpha}{\Delta+\alpha}$ with
+$\alpha$ the anharmonicity. The qualitative picture --- a
+state-dependent cavity pull --- is unchanged; only the magnitude is
+renormalised. We use the two-level $\chi$ throughout and note the
+transmon factor where numbers matter.
+
+\paragraph{Transition.}
+The two readings of the dispersive shift correspond to the two great
+uses of the regime. Reading it as a cavity pull gives quantum
+non-demolition \emph{readout} (\cref{sec:readout}); reading it as a
+qubit Stark shift gives the photon-number-dependent frequency shift
+and its measurement back-action, to which we turn first.
+
+% --------------------------------------------------------------
+\section{AC Stark shift and measurement-induced dephasing}
+\label{sec:ac-stark}
+
+\begin{phenomenon}
+Because the qubit frequency depends on the cavity photon number
+(the $2\chi\,\hat a^\dagger\hat a$ Stark term), populating the
+cavity shifts the qubit transition --- a useful calibration knob.
+But the photon number in a driven cavity is not sharp: it
+fluctuates, and those fluctuations make the qubit frequency jitter,
+randomising its phase. The very interaction that enables readout
+therefore also dephases the qubit. This is not a flaw but a
+manifestation of measurement back-action: gaining
+which-state information through the cavity necessarily disturbs the
+qubit's phase.
+\end{phenomenon}
+
+\begin{statement}[\textbf{AC Stark shift and measurement-induced dephasing}]
+\label{stmt:ac-stark}
+From \cref{eq:dispersive-H}, a cavity populated with mean photon
+number $\bar n=\langle\hat a^\dagger\hat a\rangle$ shifts the qubit
+frequency by the \emph{AC Stark shift}
+\begin{equation}
+\label{eq:ac-stark}
+\delta\omega_q \;=\; 2\chi\,\bar n,
+\end{equation}
+linear in the photon number. The shot-to-shot photon-number
+fluctuations $(\Delta n)^2$ then dephase the qubit at the
+\emph{measurement-induced dephasing} rate
+\begin{equation}
+\label{eq:meas-dephasing}
+\Gamma_\phi^{\rm meas} \;=\; \frac{8\chi^2}{\kappa}\,\bar n
+\qquad(\text{in the limit }\chi\ll\kappa),
+\end{equation}
+with $\kappa$ the cavity linewidth. This is exactly the pure
+dephasing of \cref{stmt:tphi} with a longitudinal noise set by the
+cavity photon shot noise, and it adds to the qubit's intrinsic
+$1/T_\phi$ in the budget \cref{eq:t2-relation}.
+\end{statement}
+
+\paragraph{Number splitting.}
+When the regime is reversed, $\chi\gg\kappa$ (strong dispersive
+coupling), the qubit spectrum splits into resolved peaks, one per
+photon number, separated by $2\chi$ --- the qubit can \emph{count}
+the photons in the cavity. This photon-number-resolved spectrum,
+first observed by Schuster~et~al.~\cite{schuster2007}, is the basis
+of the photon-counting detectors of \cref{ch:microwave-absorption}:
+a qubit conditioned on a definite photon number is a
+single-microwave-photon meter.
+
+\paragraph{The AC Stark shift in calibration.}
+The linear shift \cref{eq:ac-stark} is routinely used to calibrate
+the intracavity photon number and to map $\chi$: driving the cavity
+and tracking the qubit-frequency shift gives $\bar n$ in absolute
+units. This is the AC Stark shift referred to in the two-tone Rabi
+calculation of \cref{ch:perturbations}; its systematic experimental
+treatment, alongside the other qubit-calibration measurements
+(spectroscopy, Rabi, Ramsey), belongs to Part~IV.
+
+% --------------------------------------------------------------
+\section{The Purcell effect}
+\label{sec:purcell}
+
+\begin{phenomenon}
+The cavity is not lossless: it leaks photons to its environment at
+rate $\kappa$. In the dispersive regime the qubit is partly
+``cavity-like'' --- it inherits a small admixture of the cavity
+mode --- so it also inherits a fraction of the cavity's loss and
+decays through it. This \emph{Purcell decay} is an enhancement of
+the qubit's relaxation by the cavity's photonic density of states,
+and it can dominate the $T_1$ budget unless engineered away.
+\end{phenomenon}
+
+\begin{statement}[\textbf{Purcell decay rate}]
+\label{stmt:purcell}
+In the dispersive limit, the qubit acquires a photonic admixture
+$\sim(g/\Delta)^2$ of the lossy cavity mode and therefore decays
+through the cavity at the \emph{Purcell rate}
+\begin{equation}
+\label{eq:purcell-rate}
+\Gamma_{\rm P} \;=\; \kappa\,\Bigl(\frac{g}{\Delta}\Bigr)^2,
+\end{equation}
+which adds to the qubit's intrinsic relaxation in the $T_1$ budget
+of \cref{stmt:t1}. Unlike the bad-cavity rate $\sim g^2/\kappa$ of
+\cref{stmt:cqed-regimes} (valid on resonance), the dispersive
+Purcell rate \emph{decreases} with detuning as $\Delta^{-2}$, so
+moving the qubit further from the cavity protects it --- at the cost
+of a smaller dispersive shift $\chi=g^2/\Delta$.
+\end{statement}
+
+\paragraph{The readout dilemma and the Purcell filter.}
+\Cref{eq:purcell-rate} and $\chi=g^2/\Delta$ pull in opposite
+directions: large $\chi$ (good readout contrast) wants small
+$\Delta$, but small $\Delta$ means large $\Gamma_{\rm P}$ (short
+$T_1$). The resolution is a \emph{Purcell filter}: a band-stop
+element placed between the cavity and its output line that presents
+a low environmental density of states at the qubit frequency while
+passing the readout frequency. The qubit no longer sees a decay
+channel at $\omega_q$ --- exactly the noise-spectral-density
+engineering of \cref{stmt:noise-rates} --- so $\Gamma_{\rm P}$ is
+suppressed by orders of magnitude while $\chi$ is preserved.
+
+% --------------------------------------------------------------
+\section{Dispersive readout}
+\label{sec:readout}
+
+\begin{statement}[\textbf{Quantum non-demolition dispersive readout}]
+\label{stmt:dispersive-readout}
+Reading the dispersive shift as a cavity pull $\omega_c\to\omega_c+\chi\hat\sigma_z$,
+a probe tone at $\omega_c$ acquires a qubit-state-dependent phase
+through the reflection coefficient \cref{eq:reflection} of
+\cref{ch:input-output}: the two qubit states return the probe with
+phases differing by
+\begin{equation}
+\label{eq:readout-contrast}
+\Delta\phi \;=\; 2\arctan\frac{2\chi}{\kappa},
+\end{equation}
+maximised at $\Delta\phi=\pi$ when $2\chi=\kappa$ (the matching
+condition). Because the readout interaction
+$\hbar\chi\,\hat a^\dagger\hat a\,\hat\sigma_z$ commutes with the
+qubit observable $\hat\sigma_z$, the measurement is \emph{quantum
+non-demolition}: it projects the qubit onto $\ket0$ or $\ket1$ and
+leaves it there, so it can be repeated and gives a faithful
+single-shot readout.
+\end{statement}
+
+\paragraph{The measurement chain.}
+The reflected probe carries the qubit information into the output
+field $\hat a_{\rm out}$ of \cref{stmt:input-output}, where it is
+amplified (ideally by a quantum-limited amplifier,
+\cref{ch:input-output}) and homodyne-detected. Conditioning the
+qubit state on that continuous record is the
+quantum-state-diffusion unravelling of
+\cref{stmt:qsd}: the dispersive readout is the physical realisation
+of continuous $\hat\sigma_z$ monitoring, with the
+measurement-induced dephasing of \cref{stmt:ac-stark} the
+back-action that the unravelling's stochastic term encodes. The
+signal-to-noise ratio improves with integration until the qubit is
+projected, after which further integration only accumulates the
+(now-classical) outcome.
+
+% --------------------------------------------------------------
+This chapter took the strongly coupled Jaynes--Cummings system into
+the dispersive limit, where qubit and cavity shift each other's
+frequencies without exchanging energy. The Schrieffer--Wolff
+transformation gave the dispersive Hamiltonian with cross-Kerr shift
+$\chi=g^2/\Delta$; reading it as a qubit Stark shift produced the
+photon-number-dependent frequency shift and measurement-induced
+dephasing, and reading it as a cavity pull produced quantum
+non-demolition readout. The cavity's loss, inherited by the qubit,
+is the Purcell decay $\Gamma_{\rm P}=\kappa(g/\Delta)^2$, tamed by a
+Purcell filter.
+
+This completes Part~III. The quantised field, its coherent and
+squeezed states, the Jaynes--Cummings coupling, and the dispersive
+readout developed here are the optical and microwave toolkit on
+which Part~IV builds the superconducting circuits themselves --- the
+LC resonator, the Josephson junction, the transmon --- and the
+qubit-calibration measurements (spectroscopy, Rabi, Ramsey) that put
+the whole apparatus to work.
+
+\clearpage
+\begin{chaptersummary}
+
+\paragraph{Dispersive Hamiltonian.}
+For $|\Delta|\gg g$, Schrieffer--Wolff gives
+$\op H_{\rm disp}=\hbar\omega_c\hat a^\dagger\hat a-\tfrac\hbar2(\omega_q+\chi)\hat\sigma_z+\hbar\chi\hat a^\dagger\hat a\hat\sigma_z$
+with $\chi=g^2/\Delta$ (transmon: $\times\,\alpha/(\Delta+\alpha)$).
+The cross term is a state-dependent cavity pull $\omega_c\pm\chi$,
+equivalently a photon-number-dependent qubit shift $2\chi$ per
+photon.
+
+\paragraph{AC Stark and measurement-induced dephasing.}
+Qubit shift $\delta\omega_q=2\chi\bar n$; photon-shot-noise
+dephasing $\Gamma_\phi^{\rm meas}=8\chi^2\bar n/\kappa$ ($\chi\ll\kappa$).
+For $\chi\gg\kappa$, number splitting resolves individual photon
+peaks ($2\chi$ apart) --- the basis of microwave photon counting.
+
+\paragraph{Purcell effect.}
+The qubit inherits cavity loss and decays at
+$\Gamma_{\rm P}=\kappa(g/\Delta)^2$, falling as $\Delta^{-2}$. Large
+$\chi$ wants small $\Delta$, but so does large $\Gamma_{\rm P}$; a
+Purcell filter suppresses the environmental density of states at
+$\omega_q$ to break the trade-off.
+
+\paragraph{Dispersive readout.}
+A probe at $\omega_c$ returns a qubit-state-dependent phase
+$\Delta\phi=2\arctan(2\chi/\kappa)$, maximal at $2\chi=\kappa$.
+Because $\hbar\chi\hat a^\dagger\hat a\hat\sigma_z$ commutes with
+$\hat\sigma_z$, the readout is QND; the measurement chain realises
+the continuous $\hat\sigma_z$ monitoring of
+\cref{ch:continuous-measurement}.
+
+\end{chaptersummary}
+
+% --------------------------------------------------------------
+\section*{Exercises}
+\addcontentsline{toc}{section}{Exercises}
+
+\begin{exercise}[Two readings of the dispersive shift]
+Rewrite the cross term $\hbar\chi\hat a^\dagger\hat a\hat\sigma_z$
+once grouped with the cavity term and once with the qubit term, and
+state the cavity pull and the per-photon qubit shift.
+\begin{solution}
+Grouping with the cavity:
+$\hbar(\omega_c+\chi\hat\sigma_z)\hat a^\dagger\hat a$, so the cavity
+frequency is $\omega_c+\chi$ for $\hat\sigma_z=+1$ ($\ket0$) and
+$\omega_c-\chi$ for $\ket1$ --- a pull of $\pm\chi$. Grouping with
+the qubit: $-\tfrac\hbar2(\omega_q+\chi+2\chi\hat a^\dagger\hat a)\hat\sigma_z$
+... i.e.\ the qubit frequency is shifted by $2\chi$ per photon
+(plus the $\chi$ Lamb shift). Same term, two pictures.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Schrieffer--Wolff first-order cancellation]
+Show that the generator $\op S=\lambda(\hat a\hat\sigma_+-\hat a^\dagger\hat\sigma_-)$
+with $\lambda=g/\Delta$ cancels the Jaynes--Cummings coupling at
+first order, i.e.\ $\comm{\op H_0}{\op S}=-\op V$ with
+$\op V=\hbar g(\hat a\hat\sigma_++\hat a^\dagger\hat\sigma_-)$ and
+$\op H_0$ the uncoupled part.
+\begin{solution}
+$\op H_0=\hbar\omega_c\hat a^\dagger\hat a-\tfrac{\hbar\omega_q}2\hat\sigma_z$.
+Using $\comm{\hat a^\dagger\hat a}{\hat a}=-\hat a$ and
+$\comm{\hat\sigma_z}{\hat\sigma_+}=2\hat\sigma_+$,
+$\comm{\op H_0}{\hat a\hat\sigma_+}=\hbar(-\omega_c-\omega_q)\hat a\hat\sigma_+$...
+more carefully $\comm{\op H_0}{\hat a\hat\sigma_+}=\hbar(\omega_q-\omega_c)\hat a\hat\sigma_+=\hbar\Delta\,\hat a\hat\sigma_+$.
+Then $\comm{\op H_0}{\op S}=\lambda\hbar\Delta(\hat a\hat\sigma_++\hat a^\dagger\hat\sigma_-)$;
+choosing $\lambda=-g/\Delta$ gives $\comm{\op H_0}{\op S}=-\hbar g(\hat a\hat\sigma_++\hat a^\dagger\hat\sigma_-)=-\op V$,
+cancelling the coupling at first order. The leading remainder is the
+$O(\lambda^2)$ cross-Kerr.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Dispersive shift for typical parameters]
+Compute $\chi/2\pi$ (two-level) for $g/2\pi=100\,$MHz and
+$\Delta/2\pi=1\,$GHz, and the per-photon Stark shift.
+\begin{solution}
+$\chi=g^2/\Delta$, so $\chi/2\pi=(100\,\text{MHz})^2/(1\,\text{GHz})
+=10^4\,\text{MHz}^2/10^3\,\text{MHz}=10\,$MHz. The per-photon qubit
+shift is $2\chi/2\pi=20\,$MHz. (A transmon factor
+$\alpha/(\Delta+\alpha)$ with $\alpha/2\pi\sim-300\,$MHz reduces
+this somewhat.)
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Readout contrast and matching]
+From \cref{eq:readout-contrast}, find the phase contrast for
+$2\chi/\kappa=0.2$, $1$, and $5$, and identify the optimum.
+\begin{solution}
+$\Delta\phi=2\arctan(2\chi/\kappa)$: for $0.2$,
+$\Delta\phi=2\arctan0.2\approx0.39\,$rad ($23^\circ$); for $1$,
+$2\arctan1=\pi/2$ ($90^\circ$); for $5$,
+$2\arctan5\approx2.75\,$rad ($157^\circ$). The contrast increases
+monotonically toward $\pi$ as $2\chi/\kappa\to\infty$, but the
+\emph{rate} of phase accumulation per photon and the readout speed
+are jointly optimised near $2\chi\approx\kappa$, the standard
+operating point.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Measurement-induced dephasing and the $T_2$ budget]
+A readout populates the cavity with $\bar n=5$ photons,
+$\chi/2\pi=1\,$MHz, $\kappa/2\pi=5\,$MHz. Compute
+$\Gamma_\phi^{\rm meas}$ and the corresponding $T_2$ contribution.
+\begin{solution}
+$\Gamma_\phi^{\rm meas}=8\chi^2\bar n/\kappa$. In ordinary
+frequencies, $\Gamma_\phi^{\rm meas}/2\pi=8\chi^2\bar n/\kappa/(2\pi)$
+... using $\chi/2\pi=10^6$, $\kappa/2\pi=5\times10^6$:
+$\Gamma_\phi^{\rm meas}=8(2\pi\cdot10^6)^2\cdot5/(2\pi\cdot5\times10^6)
+=8\cdot2\pi\cdot10^{12}\cdot5/(5\times10^6)=8\cdot2\pi\cdot10^6\,\text{s}^{-1}\approx5\times10^7\,$s$^{-1}$.
+This gives a dephasing-limited $T_2\sim1/\Gamma_\phi^{\rm meas}\sim20\,$ns
+\emph{during} readout --- which is why the qubit is not
+phase-coherent while being measured, consistent with QND readout of
+$\hat\sigma_z$ (populations) but not of coherences.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Number splitting condition]
+State the condition for resolving individual photon-number peaks in
+the qubit spectrum, and explain why it is the same regime that makes
+a qubit a photon counter.
+\begin{solution}
+The peaks are separated by $2\chi$ and have width $\sim\kappa$ (set
+by the cavity photon lifetime) plus the qubit linewidth; they are
+resolved when $2\chi\gg\kappa,1/T_2$ --- the strong-dispersive
+regime. There each photon number gives a distinct qubit frequency,
+so a frequency-selective qubit drive (or measurement) is conditioned
+on a definite photon number: the qubit reads out $n$. This is the
+mechanism behind the microwave photon counters of
+\cref{ch:microwave-absorption}.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Purcell rate and detuning]
+For $g/2\pi=100\,$MHz, $\kappa/2\pi=1\,$MHz, compute
+$\Gamma_{\rm P}$ and the Purcell-limited $T_1$ at $\Delta/2\pi=500\,$MHz
+and at $\Delta/2\pi=2\,$GHz.
+\begin{solution}
+$\Gamma_{\rm P}=\kappa(g/\Delta)^2$. At $\Delta/2\pi=500\,$MHz,
+$(g/\Delta)^2=(100/500)^2=0.04$, so
+$\Gamma_{\rm P}/2\pi=1\,\text{MHz}\times0.04=40\,$kHz,
+$T_1^{\rm P}=1/(2\pi\cdot40\times10^3)\approx4\,\mu$s. At
+$\Delta/2\pi=2\,$GHz, $(100/2000)^2=0.0025$,
+$\Gamma_{\rm P}/2\pi=2.5\,$kHz, $T_1^{\rm P}\approx64\,\mu$s. Larger
+detuning protects $T_1$ (as $\Delta^{-2}$) but shrinks $\chi\propto\Delta^{-1}$.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[The readout trade-off]
+Express both $\chi$ and $\Gamma_{\rm P}$ in terms of $g$ and
+$\Delta$ and show that their ratio $\chi/\Gamma_{\rm P}$ depends only
+on $\Delta/\kappa$. What does a Purcell filter change?
+\begin{solution}
+$\chi=g^2/\Delta$ and $\Gamma_{\rm P}=\kappa g^2/\Delta^2$, so
+$\chi/\Gamma_{\rm P}=\Delta/\kappa$, independent of $g$. Increasing
+$\Delta$ improves the readout-quality-to-decay ratio but weakens the
+absolute $\chi$. A Purcell filter reduces the \emph{effective}
+$\kappa$ seen by the qubit at $\omega_q$ (the environmental density
+of states there) without reducing it at $\omega_c$, so it raises
+$\chi/\Gamma_{\rm P}$ beyond the bare $\Delta/\kappa$ --- decoupling
+the trade-off.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Why dispersive readout is QND]
+Show that $\comm{\op H_{\rm disp}}{\hat\sigma_z}=0$ and explain why
+this makes the measurement quantum non-demolition.
+\begin{solution}
+Every term of \cref{eq:dispersive-H} contains either no qubit
+operator or $\hat\sigma_z$ itself, and $\comm{\hat\sigma_z}{\hat\sigma_z}=0$,
+so $\comm{\op H_{\rm disp}}{\hat\sigma_z}=0$. The measured observable
+$\hat\sigma_z$ is therefore a constant of the motion: measuring it
+does not change its value, the post-measurement state is an
+eigenstate of $\hat\sigma_z$, and repeated measurements agree. That
+is the definition of QND. (The coherences are destroyed --- by the
+measurement-induced dephasing --- but the populations, which is what
+$\hat\sigma_z$ reads, are preserved.)
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Dispersive validity]
+The dispersive approximation requires $\lambda=g/\Delta\ll1$ and
+also breaks down at high photon number. Estimate the critical
+photon number $n_{\rm crit}=\Delta^2/4g^2$ for the parameters of the
+dispersive-shift exercise and interpret.
+\begin{solution}
+$n_{\rm crit}=\Delta^2/(4g^2)=1/(4\lambda^2)$ with
+$\lambda=g/\Delta=100/1000=0.1$, so $n_{\rm crit}=1/(4\cdot0.01)=25$.
+Above $\sim25$ photons the dispersive expansion fails (the
+qubit-dependent dressing becomes non-perturbative and the readout
+loses its QND character). Readout therefore uses $\bar n\ll n_{\rm crit}$;
+this ceiling limits the signal power and hence the readout speed.
+\end{solution}
+\end{exercise}
