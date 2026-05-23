@@ -18,7 +18,7 @@ Six parts plus an appendix:
 | III | Quantum optics | drafted (chs. 9–12) |
 | IV | Superconducting circuits | not started |
 | V | Quantum information processing | not started |
-| VI | Quantum sensing | drafted (chs. 12–17): dark-matter search, four mechanism chapters, plus a coherent multi-qubit / Heisenberg-limit chapter |
+| VI | Quantum sensing | drafted (chs. 15–20): dark-matter search, four mechanism chapters, plus a coherent multi-qubit / Heisenberg-limit chapter |
 | App. A | Auxiliary mathematical definitions | drafted |
 
 The full topic list lives in `README.md`. Treat it as the source of truth for
@@ -89,8 +89,10 @@ README.md               # public-facing scope, TODO list of topics
 - CI: every push runs `xu-cheng/latex-action@v3` (TeX Live container) and
   deploys `_site/{main.pdf,index.html}` via `actions/deploy-pages@v4`.
 - Preview URL: <https://fewagner.github.io/quantum101/>.
-- **Forward `\cref`s into Parts II–V are expected to produce *warnings***
-  (undefined reference). They are not errors and do not break the build.
+- **Forward `\cref`s into Parts IV–V are expected to produce *warnings***
+  (undefined reference: `ch:circuit-qed`, `ch:quantum-information-processing`,
+  `sec:experimental-basics`, `sec:two-qubit-gates`, `ch:qec`). They are
+  not errors and do not break the build.
 
 ### Build gotchas to avoid (each has cost us a CI run)
 
@@ -204,7 +206,7 @@ When introducing new terms in future chapters, **append to this table**.
 
 ## Open todos
 
-- Part I done; Parts II–V outlined in `README.md` only.
+- Parts I, II, III, and VI drafted; Parts IV–V outlined in `README.md` only.
 - Bibliography active (53 entries; foundations + decoherence +
   interpretations + superdeterminism + Part VI dark-matter
   references including Lewin-Smith / Helm form factor /

@@ -152,29 +152,34 @@ computing into quantum error correction. Topics in order:
 
 ### Part VI — Quantum sensing
 
-Five chapters total:
+Six chapters total (all drafted):
 
-- **Experimental search for dark matter** (`chapters/09_dark_matter_search.tex`,
-  drafted). Detector-agnostic walk-through of both detection
-  channels: fermion-like DM via elastic recoil and bosonic DM via
-  absorption. Pipeline: model parameters → predicted in-detector
-  spectrum → measured spectrum → statistical limit on the model
-  parameter (Poisson + profile likelihood). Cross-references to the
-  four mechanism chapters below.
-- **Phonon-to-quasiparticle conversion**
-  (`chapters/10_phonon_quasiparticle.tex`, placeholder). Cooper-pair
+- **Experimental search for dark matter** (`chapters/15_dark_matter_search.tex`).
+  Detector-agnostic walk-through of both detection channels:
+  fermion-like DM via elastic recoil and bosonic DM via absorption.
+  Pipeline: model parameters → predicted in-detector spectrum →
+  measured spectrum → statistical limit on the model parameter
+  (Poisson + profile likelihood). Cross-references the four
+  mechanism chapters below.
+- **Superconducting sensors and quasiparticle-based detection**
+  (`chapters/16_superconducting_qp_detection.tex`). Cooper-pair
   breaking by an athermal phonon above $2\Delta$, read out by a TES
   or KID. Recoil channel.
-- **Infrared absorption in the Josephson junction**
-  (`chapters/11_ir_absorption_junction.tex`, placeholder). Direct
-  IR/THz photon absorption in a junction; sensitive to dark photons
-  with $m_{A'}\geq 2\Delta/c^2$. Absorption channel.
+- **Qubit antenna modes and infrared absorption**
+  (`chapters/17_qubit_antenna.tex`). Direct IR/THz photon absorption
+  via the qubit's antenna modes; sensitive to dark photons with
+  $m_{A'}\geq 2\Delta/c^2$. Absorption channel.
 - **Phonon-qubit coupling via piezoelectricity**
-  (`chapters/12_phonon_qubit_piezoelectric.tex`, placeholder).
-  Single-phonon detection on AlN/GaAs substrates. Recoil channel.
-- **Microwave absorption in the transmon**
-  (`chapters/13_microwave_absorption.tex`, placeholder).
-  Single-microwave-photon haloscope front end. Absorption channel.
+  (`chapters/18_phonon_qubit_piezoelectric.tex`). Single-phonon
+  detection on AlN/GaAs substrates. Recoil channel.
+- **Cavity microwave-photon counting**
+  (`chapters/19_microwave_absorption.tex`). Single-microwave-photon
+  haloscope front end via dispersive photon counting. Absorption
+  channel.
+- **Coherent multi-qubit sensing and the Heisenberg limit**
+  (`chapters/20_coherent_multiqubit.tex`). Entanglement-enhanced
+  sensing: from the standard quantum limit of $N$ independent probes
+  to the Heisenberg limit of GHZ-correlated qubits.
 
 ### Appendices (optional)
 
