@@ -1,0 +1,431 @@
+\chapter{Input--output theory}
+\label{ch:input-output}
+
+The master equation of \cref{ch:open-systems} discards the bath
+entirely, keeping only its effect on the system through a few rates.
+That is exactly what we want when the environment is a featureless
+sink. But often the ``bath'' is a transmission line that we
+actively drive and measure: a microwave cable carrying a readout
+tone into a cavity and the reflected or transmitted signal back out.
+We then need to keep the propagating field, not trace it away ---
+we need to relate the field \emph{going in} to the field
+\emph{coming out}, with the system in between. Input--output theory
+provides exactly this relation. We model the bath as a continuum of
+travelling modes, derive the quantum Langevin equation for the
+system operator, and obtain the boundary condition
+$\hat a_{\rm out}=\hat a_{\rm in}+\sqrt{\kappa}\,\hat a$ that ties
+the outgoing field to the incoming field and the intracavity
+amplitude. From it we read off cavity reflection and transmission
+coefficients --- the $S$-parameters measured in every cQED
+experiment --- and the formalism that underlies dispersive readout
+(Part~III) and the single-photon-counter efficiency of Part~VI.
+
+% --------------------------------------------------------------
+\section{The bath as a continuum of modes}
+\label{sec:continuum-bath}
+
+\begin{phenomenon}
+A semi-infinite transmission line attached to a cavity is not a
+structureless reservoir: it carries fields that propagate toward
+the cavity (the \emph{input}) and away from it (the \emph{output}).
+Treating the line as a continuum of harmonic modes, with the cavity
+coupled to all of them over a band around its resonance, lets us
+follow those propagating fields explicitly. The same coupling that,
+after tracing out the line, produced the decay term $\kappa\,
+\mathcal D[\hat a]$ in the master equation now appears as a
+\emph{boundary condition} relating the fields at the cavity port.
+\end{phenomenon}
+
+\paragraph{The model Hamiltonian.}
+Let the system have annihilation operator $\hat a$ and Hamiltonian
+$\op H_{\rm sys}$. Couple it to a continuum of bath modes
+$\hat b(\omega)$ with $\comm{\hat b(\omega)}{\hat b^\dagger(\omega')}=\delta(\omega-\omega')$,
+\begin{equation}
+\label{eq:io-hamiltonian}
+\op H \;=\; \op H_{\rm sys}
+\;+\; \hbar\!\int_0^\infty\!\!\dd\omega\;\omega\,\hat b^\dagger(\omega)\hat b(\omega)
+\;+\; i\hbar\!\int_0^\infty\!\!\dd\omega\;\sqrt{\frac{\kappa}{2\pi}}
+\Bigl[\hat b^\dagger(\omega)\hat a - \hat a^\dagger\hat b(\omega)\Bigr],
+\end{equation}
+where the \emph{first Markov approximation} has been used to take
+the coupling $\sqrt{\kappa/2\pi}$ independent of frequency over the
+relevant band (a flat, white reservoir). The constant $\kappa$ will
+turn out to be the cavity energy-decay rate.
+
+\paragraph{Input and output fields.}
+Solving the Heisenberg equation for $\hat b(\omega)$ formally and
+substituting back defines two fields built from the bath operators
+evaluated at the initial time $t_0<t$ and the final time $t_1>t$:
+\begin{equation}
+\label{eq:io-fields}
+\hat a_{\rm in}(t) = \frac{-1}{\sqrt{2\pi}}\!\int\!\dd\omega\,e^{-i\omega(t-t_0)}\hat b_0(\omega),
+\qquad
+\hat a_{\rm out}(t) = \frac{1}{\sqrt{2\pi}}\!\int\!\dd\omega\,e^{-i\omega(t-t_1)}\hat b_1(\omega).
+\end{equation}
+The input field is the freely propagating field incident on the
+system (set by the source before it interacts); the output field is
+the freely propagating field that leaves (what a detector
+downstream measures). Both obey the free-field commutator
+$\comm{\hat a_{\rm in}(t)}{\hat a_{\rm in}^\dagger(t')}=\delta(t-t')$,
+i.e.\ they are white-noise quantum fields.
+
+% --------------------------------------------------------------
+\section{The quantum Langevin equation and the boundary relation}
+\label{sec:langevin}
+
+\begin{statement}[\textbf{Quantum Langevin equation and input--output relation}~\cite{gardiner1985,gardiner2004}]
+\label{stmt:input-output}
+Eliminating the bath from \cref{eq:io-hamiltonian} yields a
+Heisenberg--Langevin equation for any system operator $\hat a$,
+\begin{equation}
+\label{eq:qle}
+\dot{\hat a} \;=\; -\frac{i}{\hbar}\comm{\hat a}{\op H_{\rm sys}}
+\;-\; \frac{\kappa}{2}\,\hat a \;+\; \sqrt{\kappa}\,\hat a_{\rm in}(t),
+\end{equation}
+in which the bath enters only through the damping $-\tfrac{\kappa}{2}\hat a$
+and the driving quantum noise $\sqrt{\kappa}\,\hat a_{\rm in}$. The
+input, system, and output fields at the port are tied by the
+boundary relation
+\begin{equation}
+\label{eq:input-output-relation}
+\boxed{\;\hat a_{\rm out}(t) \;=\; \hat a_{\rm in}(t) + \sqrt{\kappa}\,\hat a(t)\;}
+\end{equation}
+expressing energy conservation at the interface: what comes out is
+what went in, plus what the system radiates.
+\end{statement}
+
+\paragraph{Consistency with the master equation.}
+Taking the expectation of \cref{eq:qle} for a vacuum input
+($\langle\hat a_{\rm in}\rangle=0$) gives
+$\langle\dot{\hat a}\rangle=-\tfrac{i}{\hbar}\langle\comm{\hat a}{\op H_{\rm sys}}\rangle-\tfrac{\kappa}{2}\langle\hat a\rangle$,
+which is exactly the equation of motion produced by the Lindblad
+dissipator $\kappa\,\mathcal D[\hat a]$ of \cref{eq:dissipator}
+(use $\langle\dot{\hat a}\rangle=\Tr[\hat a\,\dot{\op\rho}]$ with
+the adjoint dissipator). Input--output theory and the master
+equation describe the same open dynamics: the master equation
+follows from tracing out $\hat a_{\rm in}$, while input--output
+keeps it so we can drive and measure through the port.
+
+\paragraph{Why the half.}
+The amplitude decays at $\kappa/2$ in \cref{eq:qle} while the energy
+$\langle\hat a^\dagger\hat a\rangle$ decays at $\kappa$ --- the same
+factor-of-two between amplitude and population that appeared for the
+qubit coherence in \cref{ch:relaxation-dephasing}. It is the generic
+relation between a field amplitude decay rate and the corresponding
+intensity (photon-number) decay rate.
+
+% --------------------------------------------------------------
+\section{Cavity response: reflection and transmission}
+\label{sec:cavity-response}
+
+\begin{phenomenon}
+Drive a cavity through a port and the steady-state field it builds
+up, and the field it returns, depend on how close the drive is to
+resonance and on how strongly the cavity is coupled to the line.
+The reflected (or transmitted) amplitude as a function of drive
+frequency is the cavity's $S$-parameter --- the directly measured
+quantity in a microwave reflection or transmission experiment, and
+the carrier of the qubit-state information in dispersive readout.
+\end{phenomenon}
+
+\begin{statement}[\textbf{Single-port reflection coefficient}]
+\label{stmt:reflection}
+For an empty linear cavity, $\op H_{\rm sys}=\hbar\omega_c\hat a^\dagger\hat a$,
+driven by a coherent input at frequency $\omega_d$, the steady-state
+of \cref{eq:qle} gives the intracavity amplitude
+\begin{equation}
+\label{eq:intracavity}
+\langle\hat a\rangle \;=\; \frac{\sqrt{\kappa}\,\langle\hat a_{\rm in}\rangle}{i(\omega_c-\omega_d) + \kappa/2},
+\end{equation}
+and, through the boundary relation \cref{eq:input-output-relation},
+the reflection coefficient
+\begin{equation}
+\label{eq:reflection}
+r(\omega_d) \;=\; \frac{\langle\hat a_{\rm out}\rangle}{\langle\hat a_{\rm in}\rangle}
+\;=\; \frac{i(\omega_c-\omega_d) - \kappa/2}{i(\omega_c-\omega_d) + \kappa/2}.
+\end{equation}
+For a single lossless port $|r|=1$ at all frequencies: the cavity
+returns all the power, but imprints a frequency-dependent
+\emph{phase} that swings by $2\pi$ across the resonance, with the
+steepest slope at $\omega_d=\omega_c$.
+\end{statement}
+
+\paragraph{Two ports: transmission and linewidth.}
+With an input port (rate $\kappa_1$) and an output port (rate
+$\kappa_2$), the total linewidth is $\kappa=\kappa_1+\kappa_2+\kappa_{\rm int}$
+(including internal loss $\kappa_{\rm int}$), and the transmission
+\begin{equation}
+\label{eq:transmission}
+t(\omega_d) \;=\; \frac{\sqrt{\kappa_1\kappa_2}}{i(\omega_c-\omega_d)+\kappa/2}
+\end{equation}
+is a Lorentzian of full width $\kappa$ centred at $\omega_c$, peak
+height $2\sqrt{\kappa_1\kappa_2}/\kappa$. This is the $S_{21}$ trace
+of resonator spectroscopy; fitting its centre and width yields
+$\omega_c$ and the loaded quality factor $Q=\omega_c/\kappa$.
+
+\paragraph{Application: dispersive readout.}
+In the dispersive regime (Part~III), the qubit shifts the cavity
+frequency by $\pm\chi$ depending on its state, $\omega_c\to\omega_c\pm\chi$.
+Through \cref{eq:reflection}, the two qubit states produce two
+different reflected phases; measuring that phase with a
+near-resonant tone is a quantum non-demolition readout of the qubit.
+The phase contrast is largest when $2\chi\sim\kappa$, the matching
+condition behind the photon-resolution requirement quoted in
+Part~VI. The same input--output bookkeeping fixes the detection
+efficiency $\eta$ of the single-microwave-photon counter
+(\cref{ch:microwave-absorption}): the matched condition there,
+$\kappa_b=\kappa_{\rm nl}$, is precisely the impedance match that
+maximises power transfer through the port.
+
+\paragraph{Transition.}
+The boundary relation \cref{eq:input-output-relation} treats one
+system and one port. Chaining the output of one system into the
+input of the next describes a measurement chain --- a cavity feeding
+an amplifier feeding a detector --- and provides the launch point
+for the continuous-measurement description of the next chapter.
+
+% --------------------------------------------------------------
+\section{Cascaded systems and the route to continuous measurement}
+\label{sec:cascaded}
+
+\begin{statement}[\textbf{Cascaded input--output}]
+\label{stmt:cascaded}
+When the output of system $1$ is fed unidirectionally into the
+input of system $2$ (e.g.\ through a circulator), the input of the
+second is the output of the first, delayed by the propagation time
+$\tau$:
+\begin{equation}
+\label{eq:cascade}
+\hat a_{\rm in}^{(2)}(t) \;=\; \hat a_{\rm out}^{(1)}(t-\tau).
+\end{equation}
+In the coarse-grained (Markovian) limit $\tau\to0$, this chains the
+Langevin equations into a single cascaded master equation for the
+joint system, with a one-way (chiral) coupling that has no
+back-action from $2$ onto $1$.
+\end{statement}
+
+\paragraph{From the output field to a measurement record.}
+A homodyne or photon-counting detector placed in the output field
+$\hat a_{\rm out}$ converts the propagating quantum field into a
+classical record. Because $\hat a_{\rm out}$ carries, through
+\cref{eq:input-output-relation}, information about the system
+operator $\hat a$, monitoring it continuously back-acts on the
+system state. Conditioning the system state on the measured record
+turns the deterministic master equation into a \emph{stochastic}
+one --- the quantum-trajectory description that
+\cref{ch:continuous-measurement} develops. Input--output theory is
+thus the bridge between the system and the measuring apparatus:
+the master equation is what remains after averaging over all
+possible output records.
+
+% --------------------------------------------------------------
+This chapter kept the bath that \cref{ch:open-systems} discarded,
+modelling it as a continuum of propagating modes. The quantum
+Langevin equation \cref{eq:qle} and the boundary relation
+$\hat a_{\rm out}=\hat a_{\rm in}+\sqrt{\kappa}\,\hat a$ relate the
+incoming and outgoing fields through the system, reproduce the
+master-equation damping on average, and yield the cavity reflection
+and transmission coefficients measured in the laboratory. The same
+relations underlie dispersive readout and set the efficiency of the
+photon counters in Part~VI.
+
+The output field carries the system's information to the detector;
+conditioning the state on a continuous measurement of that field is
+the final topic of Part~II. \Cref{ch:continuous-measurement} takes
+up the quantum Zeno effect and the unravelling of the master
+equation into individual quantum trajectories.
+
+\clearpage
+\begin{chaptersummary}
+
+\paragraph{Continuum bath.}
+A transmission line is modelled as a continuum of travelling modes
+coupled to the system with a flat rate $\sqrt{\kappa/2\pi}$ (first
+Markov approximation). The freely propagating incident and emitted
+fields are the input and output fields, white-noise operators with
+$\comm{\hat a_{\rm in}(t)}{\hat a_{\rm in}^\dagger(t')}=\delta(t-t')$.
+
+\paragraph{Quantum Langevin and input--output.}
+\begin{equation}
+\dot{\hat a} = -\frac{i}{\hbar}\comm{\hat a}{\op H_{\rm sys}}
+- \frac{\kappa}{2}\hat a + \sqrt{\kappa}\,\hat a_{\rm in},
+\qquad
+\hat a_{\rm out} = \hat a_{\rm in} + \sqrt{\kappa}\,\hat a.
+\end{equation}
+On average this reproduces the master-equation damping
+$\kappa\mathcal D[\hat a]$; the amplitude decays at $\kappa/2$, the
+energy at $\kappa$.
+
+\paragraph{Cavity response.}
+Single-port reflection
+$r=\dfrac{i(\omega_c-\omega_d)-\kappa/2}{i(\omega_c-\omega_d)+\kappa/2}$,
+$|r|=1$ for a lossless port with a $2\pi$ phase swing across
+resonance; two-port transmission is a Lorentzian of width
+$\kappa=\kappa_1+\kappa_2+\kappa_{\rm int}$ ($S_{21}$, loaded
+$Q=\omega_c/\kappa$). A state-dependent cavity pull $\pm\chi$ is the
+basis of dispersive readout.
+
+\paragraph{Cascade and measurement.}
+Feeding one output into the next input (delayed) chains systems
+into a cascaded, one-way master equation. Detecting the output
+field continuously back-acts on the system and yields the quantum
+trajectories of \cref{ch:continuous-measurement}; the master
+equation is the average over all records.
+
+\end{chaptersummary}
+
+% --------------------------------------------------------------
+\section*{Exercises}
+\addcontentsline{toc}{section}{Exercises}
+
+\begin{exercise}[Free-field commutator of the input]
+Using $\comm{\hat b(\omega)}{\hat b^\dagger(\omega')}=\delta(\omega-\omega')$
+and the definition \cref{eq:io-fields}, show that
+$\comm{\hat a_{\rm in}(t)}{\hat a_{\rm in}^\dagger(t')}=\delta(t-t')$.
+\begin{solution}
+$\comm{\hat a_{\rm in}(t)}{\hat a_{\rm in}^\dagger(t')}
+=\tfrac1{2\pi}\!\int\!\dd\omega\dd\omega'\,e^{-i\omega(t-t_0)}e^{i\omega'(t'-t_0)}
+\comm{\hat b_0(\omega)}{\hat b_0^\dagger(\omega')}
+=\tfrac1{2\pi}\!\int\!\dd\omega\,e^{-i\omega(t-t')}=\delta(t-t')$.
+The input field is delta-correlated white noise --- the time-domain
+signature of the flat (Markovian) reservoir.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Energy versus amplitude decay]
+From the vacuum-input Langevin equation, show that
+$\langle\hat a\rangle$ decays at $\kappa/2$ while
+$\langle\hat a^\dagger\hat a\rangle$ decays at $\kappa$ for an empty
+cavity. Reconcile with the master-equation result.
+\begin{solution}
+With $\op H_{\rm sys}=\hbar\omega_c\hat a^\dagger\hat a$ and vacuum
+input, $\langle\dot{\hat a}\rangle=(-i\omega_c-\kappa/2)\langle\hat a\rangle$,
+so $|\langle\hat a\rangle|\propto e^{-\kappa t/2}$. For the
+population, $\tfrac{\dd}{\dd t}\langle\hat a^\dagger\hat a\rangle
+=-\kappa\langle\hat a^\dagger\hat a\rangle$ from $\kappa\mathcal D[\hat a]$,
+so the energy decays at $\kappa$. Amplitude rate is half the energy
+rate, exactly as for qubit coherence vs population in
+\cref{ch:relaxation-dephasing}.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Steady-state intracavity field]
+Derive \cref{eq:intracavity} by setting $\langle\dot{\hat a}\rangle=0$
+in the driven Langevin equation for a coherent input at $\omega_d$
+(work in the frame rotating at $\omega_d$).
+\begin{solution}
+In the rotating frame $\op H_{\rm sys}\to\hbar(\omega_c-\omega_d)\hat a^\dagger\hat a$,
+so $\langle\dot{\hat a}\rangle=[-i(\omega_c-\omega_d)-\kappa/2]\langle\hat a\rangle+\sqrt\kappa\langle\hat a_{\rm in}\rangle$.
+Setting this to zero gives
+$\langle\hat a\rangle=\sqrt\kappa\langle\hat a_{\rm in}\rangle/[i(\omega_c-\omega_d)+\kappa/2]$,
+which is \cref{eq:intracavity}.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Reflection phase and its slope]
+For the single-port reflection \cref{eq:reflection}, confirm $|r|=1$
+and compute the phase $\arg r$ as a function of detuning. Find the
+slope $\dd(\arg r)/\dd\omega_d$ at resonance.
+\begin{solution}
+Numerator and denominator are complex conjugates up to sign:
+$|i\delta-\kappa/2|=|i\delta+\kappa/2|=\sqrt{\delta^2+\kappa^2/4}$
+with $\delta=\omega_c-\omega_d$, so $|r|=1$. The phase is
+$\arg r=\pi-2\arctan(2\delta/\kappa)$ (mod $2\pi$), swinging by
+$2\pi$ across resonance. At $\delta=0$,
+$\dd(\arg r)/\dd\delta=-4/\kappa$, so
+$\dd(\arg r)/\dd\omega_d=+4/\kappa$ --- the steepest phase response,
+hence the best frequency discrimination, at resonance and for small
+$\kappa$.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Lorentzian transmission and $Q$]
+From \cref{eq:transmission} show that $|t(\omega_d)|^2$ is a
+Lorentzian of full width at half maximum $\kappa$, and relate the
+loaded quality factor to $\kappa$.
+\begin{solution}
+$|t|^2=\kappa_1\kappa_2/[(\omega_c-\omega_d)^2+\kappa^2/4]$, a
+Lorentzian peaked at $\omega_d=\omega_c$ with half-maximum where
+$(\omega_c-\omega_d)^2=\kappa^2/4$, i.e.\ FWHM $=\kappa$. The loaded
+quality factor is $Q=\omega_c/\kappa$, the ratio of resonance
+frequency to linewidth.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Critical coupling]
+For a cavity with one external port (rate $\kappa_1$) and internal
+loss $\kappa_{\rm int}$, the reflection is
+$r=\dfrac{i\delta-(\kappa_1-\kappa_{\rm int})/2}{i\delta+(\kappa_1+\kappa_{\rm int})/2}$.
+Show that on resonance the reflected power vanishes when
+$\kappa_1=\kappa_{\rm int}$ (critical coupling) and interpret.
+\begin{solution}
+At $\delta=0$, $r=-(\kappa_1-\kappa_{\rm int})/(\kappa_1+\kappa_{\rm int})$,
+which is zero iff $\kappa_1=\kappa_{\rm int}$. At critical coupling
+all incident power is absorbed by the internal loss --- the external
+coupling is impedance-matched to the internal dissipation, leaving
+no reflection. Over- ($\kappa_1>\kappa_{\rm int}$) and under-coupled
+cases give non-zero reflection of opposite sign.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Dispersive cavity pull]
+With a state-dependent cavity frequency $\omega_c\pm\chi$, compute
+the difference in reflected phase at $\omega_d=\omega_c$ between the
+two qubit states for $2\chi\ll\kappa$ and for $2\chi=\kappa$. Which
+gives better state discrimination?
+\begin{solution}
+Using $\arg r=\pi-2\arctan(2\delta/\kappa)$ with $\delta=\pm\chi$:
+the two phases are $\pi\mp2\arctan(2\chi/\kappa)$, separated by
+$\Delta\phi=4\arctan(2\chi/\kappa)$. For $2\chi\ll\kappa$,
+$\Delta\phi\approx8\chi/\kappa$ (small, poor contrast); for
+$2\chi=\kappa$, $\Delta\phi=4\arctan1=\pi$ (maximal contrast). So
+$2\chi\sim\kappa$ is the matched condition for readout, as quoted in
+Part~VI.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Master equation from the Langevin equation]
+Show that averaging \cref{eq:qle} over a vacuum input reproduces the
+equation of motion $\langle\dot{\hat a}\rangle=\Tr[\hat a\,\dot{\op\rho}]$
+with $\dot{\op\rho}$ given by the Lindblad dissipator
+$\kappa\mathcal D[\hat a]$.
+\begin{solution}
+The adjoint dissipator acting on $\hat a$ is
+$\kappa(\hat a^\dagger\hat a\hat a-\tfrac12\{\hat a^\dagger\hat a,\hat a\})
+=\kappa(\hat a^\dagger\hat a\hat a-\tfrac12\hat a^\dagger\hat a\hat a-\tfrac12\hat a\hat a^\dagger\hat a)
+=\tfrac{\kappa}2(\hat a^\dagger\hat a\hat a-\hat a\hat a^\dagger\hat a)
+=\tfrac\kappa2\comm{\hat a^\dagger}{\hat a}\hat a=-\tfrac\kappa2\hat a$.
+Adding the unitary part gives
+$\langle\dot{\hat a}\rangle=-\tfrac i\hbar\langle\comm{\hat a}{\op H_{\rm sys}}\rangle-\tfrac\kappa2\langle\hat a\rangle$,
+the vacuum-average of \cref{eq:qle}.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[One-way cascade has no back-action]
+Argue from \cref{eq:cascade} why, in a cascaded chain with a
+circulator, system $2$ exerts no back-action on system $1$, and why
+this requires the non-reciprocal element.
+\begin{solution}
+The relation $\hat a_{\rm in}^{(2)}=\hat a_{\rm out}^{(1)}$ feeds
+$1$'s output into $2$ but provides no path for $2$'s output to reach
+$1$'s input. The dynamics of $1$ depend only on its own input, so
+$2$ cannot back-act. This unidirectionality is enforced physically
+by the circulator/isolator (a non-reciprocal element); without it
+the line is bidirectional and $2$'s emission would re-enter $1$.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Output field of an empty driven cavity]
+Find $\langle\hat a_{\rm out}\rangle$ for the driven empty cavity in
+steady state and verify $|\langle\hat a_{\rm out}\rangle|=|\langle\hat a_{\rm in}\rangle|$
+for a lossless single port.
+\begin{solution}
+$\langle\hat a_{\rm out}\rangle=\langle\hat a_{\rm in}\rangle+\sqrt\kappa\langle\hat a\rangle
+=\langle\hat a_{\rm in}\rangle[1+\kappa/(i\delta+\kappa/2)]
+=\langle\hat a_{\rm in}\rangle\,(i\delta-\kappa/2)/(i\delta+\kappa/2)=r\langle\hat a_{\rm in}\rangle$
+with $|r|=1$ (Exercise on reflection phase). Hence
+$|\langle\hat a_{\rm out}\rangle|=|\langle\hat a_{\rm in}\rangle|$:
+a lossless port returns all the power, consistent with energy
+conservation in \cref{eq:input-output-relation}.
+\end{solution}
+\end{exercise}
