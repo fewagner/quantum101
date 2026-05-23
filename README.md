@@ -91,17 +91,17 @@ needed. Each `[ ]` becomes a section or chapter.
 
 ### Part III — Quantum optics
 
-- [ ] Quantization of the electromagnetic field
-- [ ] Fock states and photon-number statistics
-- [ ] Coherent states and their (over)completeness
-- [ ] Squeezed states, displacement and squeeze operators
-- [ ] Beam splitters and interferometry
-- [ ] Atom–field interaction, dipole approximation
-- [ ] Jaynes–Cummings model: dressed states, vacuum Rabi splitting
-- [ ] Dispersive regime and dispersive shift $\chi$
-- [ ] AC Stark shift (photon-number-dependent qubit frequency shift) and measurement-induced dephasing
-- [ ] Cavity QED basics (strong, weak, bad-cavity limits)
-- [ ] Purcell effect
+- [x] Quantization of the electromagnetic field
+- [x] Fock states and photon-number statistics
+- [x] Coherent states and their (over)completeness
+- [x] Squeezed states, displacement and squeeze operators
+- [x] Beam splitters and interferometry
+- [x] Atom–field interaction, dipole approximation
+- [x] Jaynes–Cummings model: dressed states, vacuum Rabi splitting
+- [x] Dispersive regime and dispersive shift $\chi$
+- [x] AC Stark shift (photon-number-dependent qubit frequency shift) and measurement-induced dephasing
+- [x] Cavity QED basics (strong, weak, bad-cavity limits)
+- [x] Purcell effect
 
 ### Part IV — Superconducting circuits
 

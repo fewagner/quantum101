@@ -15,7 +15,7 @@ Six parts plus an appendix:
 |---|---|---|
 | I | Quantum mechanics foundations | drafted (chs. 1–4) |
 | II | Open quantum systems | drafted (chs. 5–8) |
-| III | Quantum optics | not started |
+| III | Quantum optics | drafted (chs. 9–12) |
 | IV | Superconducting circuits | not started |
 | V | Quantum information processing | not started |
 | VI | Quantum sensing | drafted (chs. 12–17): dark-matter search, four mechanism chapters, plus a coherent multi-qubit / Heisenberg-limit chapter |
@@ -181,6 +181,20 @@ without checking — the document should keep reading as a quiet book.
 | Cavity reflection/transmission (`$S$`-params) | `stmt:reflection` | ch. 7 §7.3 |
 | Quantum Zeno effect | `stmt:zeno` | ch. 8 §8.1 |
 | Quantum-jump / quantum-state-diffusion unravellings | `stmt:quantum-jumps`, `stmt:qsd` | ch. 8 §8.2 |
+| Field quantisation, Fock states, field operator | `stmt:field-oscillators`, `stmt:fock` | ch. 9 §9.1–9.2 |
+| Quadratures, vacuum noise | `stmt:quadratures` | ch. 9 §9.3 |
+| Photon-number statistics, Mandel `$Q$` | `stmt:mandel` | ch. 9 §9.4 |
+| Coherent states, displacement operator, over-completeness | `stmt:coherent`, `stmt:overcomplete` | ch. 10 §10.1 |
+| Squeezed states, squeeze operator | `stmt:squeezing` | ch. 10 §10.2 |
+| Beam splitter, interferometry, Hong–Ou–Mandel | `stmt:beam-splitter` | ch. 10 §10.3 |
+| Second-order coherence `$g^{(2)}$` (bunching/antibunching) | `stmt:g2` | ch. 10 §10.4 |
+| Rabi / Jaynes–Cummings Hamiltonian | `stmt:rabi-hamiltonian`, `stmt:jaynes-cummings` | ch. 11 §11.1–11.2 |
+| Dressed states, vacuum Rabi splitting | `stmt:dressed-states`, `stmt:vacuum-rabi` | ch. 11 §11.3 |
+| Cavity-QED regimes, cooperativity | `stmt:cqed-regimes` | ch. 11 §11.4 |
+| Dispersive Hamiltonian, dispersive shift `$\chi$` | `stmt:dispersive-H` | ch. 12 §12.1 |
+| AC Stark shift, measurement-induced dephasing | `stmt:ac-stark` | ch. 12 §12.2 |
+| Purcell effect / Purcell filter | `stmt:purcell` | ch. 12 §12.3 |
+| Dispersive (QND) readout | `stmt:dispersive-readout` | ch. 12 §12.4 |
 | Sesquilinear, conjugate-symmetric, positive definite | `def:sesquilinear,…` | App. A |
 | Inner product, norm, Cauchy completeness, separability | `def:inner-product,…` | App. A |
 | Dual space, linear/bounded operator, adjoint | `def:dual-space,…` | App. A |
