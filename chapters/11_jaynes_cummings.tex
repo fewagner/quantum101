@@ -1,0 +1,418 @@
+\chapter{Atom--field interaction and the Jaynes--Cummings model}
+\label{ch:jaynes-cummings}
+
+We now bring together the two-level system of \cref{ch:model-systems}
+and the quantised field mode of \cref{ch:em-quantisation} and let
+them talk. A single qubit coupled to a single cavity mode is the
+fundamental building block of cavity and circuit QED, and its
+dynamics --- under the rotating-wave approximation of
+\cref{ch:perturbations} --- are captured by the Jaynes--Cummings
+model, one of the few exactly solvable models of light--matter
+interaction. From it follow the dressed states, the vacuum Rabi
+splitting that signals coherent exchange of a single quantum, the
+classification of cavity-QED regimes, and --- in the dispersive
+limit of \cref{ch:dispersive} --- the qubit readout and the
+photon-number-dependent frequency shifts that the whole edifice of
+superconducting-qubit measurement rests on. This chapter writes
+down the atom--field coupling in the dipole approximation, applies
+the RWA to obtain the Jaynes--Cummings Hamiltonian, diagonalises it,
+and lays out the strong/weak/bad-cavity regimes.
+
+% --------------------------------------------------------------
+\section{The atom--field coupling}
+\label{sec:atom-field}
+
+\begin{phenomenon}
+A two-level atom (or qubit) placed in a cavity feels the cavity's
+electric field, and the field feels the atom's oscillating dipole.
+If the atom's transition frequency is close to a cavity mode
+frequency, the two exchange energy coherently: the atom emits a
+photon into the mode, the mode re-excites the atom, and so on. The
+strength of this exchange is set by the dipole moment and the
+field-per-photon $\mathcal E_0$ of \cref{eq:efield-operator} ---
+which is why a small mode volume, concentrating the vacuum field,
+produces strong coupling.
+\end{phenomenon}
+
+\begin{statement}[\textbf{Dipole coupling and the Rabi Hamiltonian}]
+\label{stmt:rabi-hamiltonian}
+A two-level system (\cref{def:qubit}) of frequency $\omega_q$
+coupled to a single field mode (\cref{stmt:fock}) of frequency
+$\omega_c$ in the dipole approximation is described by the
+\emph{Rabi Hamiltonian}
+\begin{equation}
+\label{eq:rabi-hamiltonian}
+\op H_{\rm Rabi} \;=\; \hbar\omega_c\,\hat a^\dagger\hat a
+\;-\; \frac{\hbar\omega_q}{2}\,\hat\sigma_z
+\;+\; \hbar g\,(\hat a+\hat a^\dagger)(\hat\sigma_+ + \hat\sigma_-),
+\end{equation}
+where $\hat\sigma_\pm$ raise/lower the qubit and the coupling rate
+\begin{equation}
+\label{eq:coupling-g}
+\hbar g \;=\; -\,\bm d\cdot\bm{\mathcal E}_0
+\end{equation}
+is the dipole matrix element $\bm d=\bra{1}\hat{\bm d}\ket{0}$
+times the field per photon. The interaction contains four terms:
+the co-rotating $\hat a\hat\sigma_+$ (absorb a photon, excite the
+qubit) and $\hat a^\dagger\hat\sigma_-$ (emit, de-excite), and the
+counter-rotating $\hat a\hat\sigma_-$ and $\hat a^\dagger\hat\sigma_+$.
+\end{statement}
+
+\paragraph{The dipole approximation.}
+The coupling \cref{eq:coupling-g} assumes the atom is much smaller
+than the wavelength, so the field is uniform across it and the
+interaction is $-\hat{\bm d}\cdot\hat{\bm E}(\bm r_{\rm atom})$
+evaluated at the atom's position. For a real atom in an optical
+cavity this is excellent (Ångström atom, micron wavelength); for a
+superconducting qubit it is replaced by the circuit coupling
+(capacitive or inductive) of \cref{ch:circuit-qed}, but the
+resulting Hamiltonian has exactly the form \cref{eq:rabi-hamiltonian},
+which is why the same model describes both platforms.
+
+\paragraph{Transition.}
+The Rabi Hamiltonian is not exactly solvable in closed form because
+the counter-rotating terms do not conserve excitation number. But
+near resonance those terms are fast-oscillating and small --- the
+exact situation the rotating-wave approximation was built for in
+\cref{ch:perturbations}.
+
+% --------------------------------------------------------------
+\section{The Jaynes--Cummings Hamiltonian}
+\label{sec:jc-hamiltonian}
+
+\begin{statement}[\textbf{Jaynes--Cummings model}~\cite{jaynescummings1963}]
+\label{stmt:jaynes-cummings}
+Applying the rotating-wave approximation (\cref{stmt:rwa}) to
+\cref{eq:rabi-hamiltonian} --- dropping the counter-rotating
+$\hat a\hat\sigma_-$ and $\hat a^\dagger\hat\sigma_+$, which
+oscillate at $\omega_c+\omega_q$ --- gives the
+\emph{Jaynes--Cummings} Hamiltonian
+\begin{equation}
+\label{eq:jc-hamiltonian}
+\op H_{\rm JC} \;=\; \hbar\omega_c\,\hat a^\dagger\hat a
+\;-\; \frac{\hbar\omega_q}{2}\,\hat\sigma_z
+\;+\; \hbar g\,\bigl(\hat a\,\hat\sigma_+ + \hat a^\dagger\,\hat\sigma_-\bigr).
+\end{equation}
+The interaction now conserves the total excitation number
+$\op N_{\rm exc}=\hat a^\dagger\hat a + \hat\sigma_+\hat\sigma_-$,
+which commutes with $\op H_{\rm JC}$. The Hilbert space therefore
+splits into decoupled two-dimensional blocks, one per excitation
+number, and the model is exactly solvable.
+\end{statement}
+
+\paragraph{Validity of the RWA here.}
+The dropped terms are suppressed by $g/(\omega_c+\omega_q)$, the
+small parameter $\epsilon_{\rm RWA}$ of \cref{ch:perturbations}. In
+cavity and circuit QED $g/\omega\sim10^{-2}$ or smaller, so the RWA
+is excellent; the leading correction is the Bloch--Siegert shift,
+$O(\epsilon_{\rm RWA}^2)$, exactly as for a classically driven qubit.
+(In the ultra-strong-coupling regime $g\sim\omega$, reached by some
+specially engineered circuits, the RWA fails and the full Rabi model
+must be kept.)
+
+% --------------------------------------------------------------
+\section{Dressed states and vacuum Rabi splitting}
+\label{sec:dressed-states}
+
+\begin{statement}[\textbf{Dressed states}]
+\label{stmt:dressed-states}
+Within the $n$-excitation block spanned by
+$\{\ket{0,n+1},\ket{1,n}\}$ (qubit ground with $n{+}1$ photons,
+qubit excited with $n$ photons), the Jaynes--Cummings Hamiltonian
+\cref{eq:jc-hamiltonian} is a $2\times2$ matrix with detuning
+$\Delta=\omega_q-\omega_c$ and coupling $g\sqrt{n+1}$. Its
+eigenstates, the \emph{dressed states}, are
+\begin{equation}
+\label{eq:dressed-states}
+\ket{+,n}=\cos\theta_n\ket{1,n}+\sin\theta_n\ket{0,n+1},\quad
+\ket{-,n}=-\sin\theta_n\ket{1,n}+\cos\theta_n\ket{0,n+1},
+\end{equation}
+with mixing angle $\tan2\theta_n=2g\sqrt{n+1}/\Delta$, and energies
+\begin{equation}
+\label{eq:dressed-energies}
+E_{\pm,n}=\hbar\omega_c\Bigl(n+\tfrac12\Bigr)
+\pm\frac{\hbar}{2}\sqrt{\Delta^2+4g^2(n+1)}.
+\end{equation}
+On resonance ($\Delta=0$) the dressed states are the equal
+superpositions $(\ket{1,n}\pm\ket{0,n+1})/\sqrt2$, split by
+$\hbar\,\Omega_n=2\hbar g\sqrt{n+1}$ --- the $n$-photon Rabi
+splitting.
+\end{statement}
+
+\begin{statement}[\textbf{Vacuum Rabi splitting}]
+\label{stmt:vacuum-rabi}
+The lowest block ($n=0$) involves the single-excitation states
+$\ket{1,0}$ (excited qubit, no photon) and $\ket{0,1}$ (ground
+qubit, one photon). At resonance these hybridise into
+$(\ket{1,0}\pm\ket{0,1})/\sqrt2$ split by
+\begin{equation}
+\label{eq:vacuum-rabi}
+\Omega_0 \;=\; 2g,
+\end{equation}
+the \emph{vacuum Rabi splitting}. Its observation --- a single
+absorption line splitting into a doublet as the qubit is tuned
+through resonance --- is the defining signature of coherent
+single-quantum exchange and the entry ticket to the strong-coupling
+regime.
+\end{statement}
+
+\paragraph{Vacuum Rabi oscillations.}
+Prepared in $\ket{1,0}$ on resonance, the system oscillates
+coherently between excited-qubit/no-photon and ground-qubit/one-photon
+at the vacuum Rabi frequency $2g$:
+$P_{\rm e}(t)=\cos^2(gt)$. A single quantum is exchanged back and
+forth between the qubit and the cavity --- the cleanest possible
+demonstration that the field is quantised, since a classical field
+would produce ordinary Rabi flopping at an amplitude-dependent rate,
+not at the field-per-photon rate $g$. These oscillations were the
+first benchmark of strong coupling in both cavity QED and circuit
+QED~\cite{haroche2006,blais2021}.
+
+% --------------------------------------------------------------
+\section{Cavity-QED regimes}
+\label{sec:cqed-regimes}
+
+\begin{phenomenon}
+Whether the coherent exchange of \cref{stmt:vacuum-rabi} is
+observable depends on a race between coupling and loss. The qubit
+decays at rate $\gamma$ (into channels other than the cavity) and
+the cavity leaks at rate $\kappa$. If the coupling $g$ wins the
+race, a photon is exchanged many times before it is lost --- the
+strong-coupling regime. If loss wins, the coupling acts only as a
+perturbation, modifying decay rates (the Purcell effect) rather than
+producing oscillations.
+\end{phenomenon}
+
+\begin{statement}[\textbf{Strong, weak, and bad-cavity regimes}]
+\label{stmt:cqed-regimes}
+With qubit linewidth $\gamma$ and cavity linewidth $\kappa$, the
+coupled system is classified by the \emph{cooperativity}
+\begin{equation}
+\label{eq:cooperativity}
+C \;=\; \frac{g^2}{\kappa\gamma},
+\end{equation}
+and the relative size of $g,\kappa,\gamma$:
+\begin{itemize}
+  \item \emph{Strong coupling}, $g\gg\kappa,\gamma$: the vacuum Rabi
+        doublet is resolved and coherent oscillations occur; $C\gg1$.
+  \item \emph{Weak coupling}, $g\ll\kappa,\gamma$ but possibly
+        $C\gtrsim1$: no resolved splitting, but the cavity still
+        modifies the qubit's decay.
+  \item \emph{Bad-cavity (Purcell) limit}, $\gamma\ll g\ll\kappa$:
+        the cavity decays so fast that it acts as a lossy
+        environment for the qubit, enhancing its decay at the
+        Purcell rate $\Gamma_{\rm P}=g^2/\kappa$ (more precisely,
+        $4g^2/\kappa$ on resonance), treated in \cref{sec:purcell}.
+\end{itemize}
+\end{statement}
+
+\paragraph{Where the platforms sit.}
+Optical cavity QED reaches strong coupling with $g/2\pi\sim$ MHz and
+high-finesse mirrors; circuit QED reaches it far more easily because
+the small mode volume of a transmission-line resonator makes
+$g/2\pi\sim 100\,$MHz while $\kappa,\gamma/2\pi$ can be kept at kHz,
+giving cooperativities $C\sim10^4$--$10^6$. This is why
+superconducting qubits are read out and controlled through cavities:
+the strong-coupling regime is the default, not a heroic achievement.
+The \emph{dispersive} regime, in which the qubit and cavity are
+strongly coupled but far detuned, is the workhorse for readout and
+is the subject of the next chapter.
+
+% --------------------------------------------------------------
+This chapter coupled a single qubit to a single field mode. The
+dipole interaction gives the Rabi Hamiltonian; the rotating-wave
+approximation reduces it to the exactly solvable Jaynes--Cummings
+model, whose excitation-number conservation splits the dynamics into
+$2\times2$ blocks. Diagonalising them gives the dressed states and
+the $n$-photon Rabi splitting $2g\sqrt{n+1}$, with the vacuum case
+$2g$ the hallmark of coherent single-quantum exchange. The
+cooperativity $C=g^2/\kappa\gamma$ and the hierarchy of $g,\kappa,\gamma$
+sort the dynamics into strong, weak, and bad-cavity regimes.
+
+\Cref{ch:dispersive} takes the strong-coupling Jaynes--Cummings
+model into the dispersive limit $|\Delta|\gg g$, where the qubit and
+cavity no longer exchange energy but shift each other's frequencies
+--- the regime that yields quantum non-demolition readout, the AC
+Stark shift, and the Purcell effect.
+
+\clearpage
+\begin{chaptersummary}
+
+\paragraph{Rabi Hamiltonian.}
+A dipole-coupled qubit and mode give
+$\op H_{\rm Rabi}=\hbar\omega_c\hat a^\dagger\hat a-\tfrac{\hbar\omega_q}2\hat\sigma_z+\hbar g(\hat a+\hat a^\dagger)(\hat\sigma_++\hat\sigma_-)$
+with $\hbar g=-\bm d\cdot\bm{\mathcal E}_0$. Strong coupling needs
+small mode volume (large $\mathcal E_0$).
+
+\paragraph{Jaynes--Cummings.}
+The RWA drops the counter-rotating terms, giving
+$\op H_{\rm JC}=\hbar\omega_c\hat a^\dagger\hat a-\tfrac{\hbar\omega_q}2\hat\sigma_z+\hbar g(\hat a\hat\sigma_++\hat a^\dagger\hat\sigma_-)$,
+which conserves $\op N_{\rm exc}=\hat a^\dagger\hat a+\hat\sigma_+\hat\sigma_-$
+and is exactly solvable in $2\times2$ blocks.
+
+\paragraph{Dressed states.}
+Block $\{\ket{0,n+1},\ket{1,n}\}$ diagonalises to dressed states
+with energies
+$E_{\pm,n}=\hbar\omega_c(n+\tfrac12)\pm\tfrac\hbar2\sqrt{\Delta^2+4g^2(n+1)}$;
+on resonance the splitting is $2g\sqrt{n+1}$. The $n=0$ vacuum Rabi
+splitting $2g$, and oscillations $P_e=\cos^2(gt)$, are the signature
+of single-quantum exchange.
+
+\paragraph{Regimes.}
+Cooperativity $C=g^2/\kappa\gamma$. Strong coupling $g\gg\kappa,\gamma$
+(resolved doublet); bad-cavity/Purcell $\gamma\ll g\ll\kappa$
+(enhanced decay $\sim g^2/\kappa$). Circuit QED sits deep in strong
+coupling, $C\sim10^4$--$10^6$.
+
+\end{chaptersummary}
+
+% --------------------------------------------------------------
+\section*{Exercises}
+\addcontentsline{toc}{section}{Exercises}
+
+\begin{exercise}[Excitation-number conservation]
+Show that $\op N_{\rm exc}=\hat a^\dagger\hat a+\hat\sigma_+\hat\sigma_-$
+commutes with $\op H_{\rm JC}$ but not with the counter-rotating
+terms of the Rabi Hamiltonian.
+\begin{solution}
+$\comm{\op N_{\rm exc}}{\hat a\hat\sigma_+}=\comm{\hat a^\dagger\hat a}{\hat a}\hat\sigma_++\hat a\comm{\hat\sigma_+\hat\sigma_-}{\hat\sigma_+}
+=(-\hat a)\hat\sigma_++\hat a\hat\sigma_+=0$ (the photon lost is
+balanced by the qubit excitation gained); similarly for
+$\hat a^\dagger\hat\sigma_-$. For the counter-rotating
+$\hat a\hat\sigma_-$, $\comm{\op N_{\rm exc}}{\hat a\hat\sigma_-}=-\hat a\hat\sigma_--\hat a\hat\sigma_-=-2\hat a\hat\sigma_-\neq0$:
+it destroys two excitations at once, so it does not conserve
+$\op N_{\rm exc}$ --- which is why the RWA, valid near resonance,
+removes it.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Diagonalising the one-excitation block]
+On resonance ($\Delta=0$), diagonalise $\op H_{\rm JC}$ in the
+$\{\ket{1,0},\ket{0,1}\}$ block and confirm the splitting $2\hbar g$.
+\begin{solution}
+In this basis the interaction $\hbar g(\hat a\hat\sigma_++\hat a^\dagger\hat\sigma_-)$
+connects $\ket{1,0}\leftrightarrow\ket{0,1}$ with matrix element
+$\hbar g\sqrt{1}=\hbar g$, and on resonance the diagonal energies are
+equal. The $2\times2$ matrix
+$\hbar g\begin{psmallmatrix}0&1\\1&0\end{psmallmatrix}$ has
+eigenvalues $\pm\hbar g$, eigenstates
+$(\ket{1,0}\pm\ket{0,1})/\sqrt2$, split by $2\hbar g$.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[$n$-photon Rabi frequency]
+Show that the resonant splitting of the $n$-excitation block is
+$2g\sqrt{n+1}$ and explain the $\sqrt{n+1}$ enhancement.
+\begin{solution}
+The interaction matrix element between $\ket{1,n}$ and $\ket{0,n+1}$
+is $\hbar g\bra{0,n+1}\hat a^\dagger\hat\sigma_-\ket{1,n}=\hbar g\sqrt{n+1}$
+(from $\hat a^\dagger\ket n=\sqrt{n+1}\ket{n+1}$). On resonance the
+splitting is twice this, $2\hbar g\sqrt{n+1}$. The $\sqrt{n+1}$ is
+the bosonic enhancement of stimulated emission/absorption: a mode
+already holding $n$ photons couples more strongly, even at $n=0$
+where the $\sqrt1$ vacuum term drives spontaneous exchange.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Vacuum Rabi oscillations]
+For initial state $\ket{1,0}$ on resonance, show
+$P_e(t)=\cos^2(gt)$ and contrast with classical Rabi flopping.
+\begin{solution}
+$\ket{1,0}=\tfrac1{\sqrt2}(\ket{+,0}+\ket{-,0})$ with energies
+$\pm\hbar g$. Time evolution gives
+$\ket{\psi(t)}=\tfrac1{\sqrt2}(e^{-igt}\ket{+,0}+e^{+igt}\ket{-,0})$,
+and projecting back, $\langle1,0|\psi(t)\rangle=\cos(gt)$, so
+$P_e=\cos^2(gt)$. Classically a field of fixed amplitude drives Rabi
+flopping at $\Omega\propto$ field amplitude; here the oscillation
+occurs with \emph{no} photon initially present, at the rate $g$ set
+by vacuum fluctuations --- impossible for a classical field.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Mixing angle and dressed-state character]
+For detuning $\Delta$ and coupling $g\sqrt{n+1}$, find the limits of
+the mixing angle $\theta_n$ as $\Delta\to0$ and $|\Delta|\gg g$, and
+interpret.
+\begin{solution}
+$\tan2\theta_n=2g\sqrt{n+1}/\Delta$. As $\Delta\to0$,
+$2\theta_n\to\pi/2$, $\theta_n\to\pi/4$: maximal mixing, the dressed
+states are equal superpositions (fully hybridised light--matter
+states). As $|\Delta|\gg g$, $\theta_n\to0$: the dressed states
+revert to the bare $\ket{1,n}$ and $\ket{0,n+1}$ --- qubit and
+photon barely mix. The latter is the dispersive limit of
+\cref{ch:dispersive}.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Cooperativity estimate]
+A transmon has $g/2\pi=100\,$MHz, $\kappa/2\pi=1\,$MHz,
+$\gamma/2\pi=10\,$kHz. Compute the cooperativity and classify the
+regime.
+\begin{solution}
+$C=g^2/(\kappa\gamma)=(100\times10^6)^2/(1\times10^6\cdot10^4)
+=10^{16}/10^{10}=10^6$. Since $g\gg\kappa\gg\gamma$, the system is
+deep in strong coupling (vacuum Rabi doublet resolvable), with a
+very large cooperativity $C\sim10^6$ --- typical of circuit QED.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Counter-rotating correction]
+Estimate the fractional Bloch--Siegert shift of the qubit frequency
+from the counter-rotating terms for $g/2\pi=100\,$MHz,
+$\omega_q/2\pi=5\,$GHz.
+\begin{solution}
+The Bloch--Siegert shift is $O(\epsilon_{\rm RWA}^2)$ with
+$\epsilon_{\rm RWA}\sim g/(\omega_c+\omega_q)\approx g/(2\omega_q)$.
+Numerically $\epsilon_{\rm RWA}\sim0.1/10=10^{-2}$, so the
+fractional shift is $\sim\epsilon_{\rm RWA}^2\sim10^{-4}$, i.e.\ a
+sub-MHz correction to a 5-GHz qubit --- small but measurable, and
+the leading failure of the RWA in standard cQED.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Bad-cavity Purcell rate]
+In the bad-cavity limit $\gamma\ll g\ll\kappa$, the qubit decays
+through the cavity at $\Gamma_{\rm P}\sim g^2/\kappa$. Estimate
+$\Gamma_{\rm P}$ for $g/2\pi=50\,$MHz, $\kappa/2\pi=10\,$MHz, and
+compare to a bare $\gamma/2\pi=10\,$kHz.
+\begin{solution}
+$\Gamma_{\rm P}/2\pi\sim g^2/\kappa/2\pi=(50\times10^6)^2/(10\times10^6)/(2\pi)$...
+working in ordinary frequencies, $\Gamma_{\rm P}=(2\pi g)^2/(2\pi\kappa)$
+gives $\Gamma_{\rm P}/2\pi=g^2/\kappa=(50)^2/10=250\,$MHz. This vastly
+exceeds the bare $\gamma=10\,$kHz, so the qubit's decay is dominated
+by the cavity (Purcell) channel --- the hazard that Purcell filters
+(\cref{sec:purcell}) are designed to suppress.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Dressed-state energies off resonance]
+Verify \cref{eq:dressed-energies} by diagonalising the
+$2\times2$ block with diagonal entries for $\ket{1,n}$ and
+$\ket{0,n+1}$ and off-diagonal $\hbar g\sqrt{n+1}$.
+\begin{solution}
+The bare energies are $E_{1,n}=\hbar\omega_c n+\tfrac{\hbar\omega_q}2$
+and $E_{0,n+1}=\hbar\omega_c(n+1)-\tfrac{\hbar\omega_q}2$, whose
+mean is $\hbar\omega_c(n+\tfrac12)$ and difference is
+$\hbar(\omega_q-\omega_c)=\hbar\Delta$. A $2\times2$ matrix with
+mean energy $\bar E$, splitting $\hbar\Delta$, and coupling
+$\hbar g\sqrt{n+1}$ has eigenvalues
+$\bar E\pm\tfrac12\sqrt{(\hbar\Delta)^2+(2\hbar g\sqrt{n+1})^2}
+=\hbar\omega_c(n+\tfrac12)\pm\tfrac\hbar2\sqrt{\Delta^2+4g^2(n+1)}$,
+which is \cref{eq:dressed-energies}.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Why strong coupling needs small mode volume]
+Using $\hbar g=-\bm d\cdot\bm{\mathcal E}_0$ and
+$\mathcal E_0=\sqrt{\hbar\omega/2\varepsilon_0 V}$, show
+$g\propto1/\sqrt V$ and explain the circuit-QED advantage.
+\begin{solution}
+$g=|\bm d\cdot\bm{\mathcal E}_0|/\hbar\propto\mathcal E_0\propto\sqrt{\omega/V}$,
+so $g\propto V^{-1/2}$ at fixed frequency and dipole. Circuit QED
+confines the microwave mode to a quasi-1D resonator with effective
+$V\ll\lambda^3$, and the transmon's dipole (set by large capacitor
+pads) is enormous compared to an atomic dipole; both factors push
+$g$ up by orders of magnitude, placing circuit QED deep in strong
+coupling.
+\end{solution}
+\end{exercise}
