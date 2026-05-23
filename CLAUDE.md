@@ -14,11 +14,11 @@ Six parts plus an appendix:
 | Part | Title | Status |
 |---|---|---|
 | I | Quantum mechanics foundations | drafted (chs. 1–4) |
-| II | Open quantum systems | not started |
+| II | Open quantum systems | drafted (chs. 5–8) |
 | III | Quantum optics | not started |
 | IV | Superconducting circuits | not started |
 | V | Quantum information processing | not started |
-| VI | Quantum sensing | first chapter (dark-matter search) drafted; four mechanism chapters are placeholders |
+| VI | Quantum sensing | drafted (chs. 12–17): dark-matter search, four mechanism chapters, plus a coherent multi-qubit / Heisenberg-limit chapter |
 | App. A | Auxiliary mathematical definitions | drafted |
 
 The full topic list lives in `README.md`. Treat it as the source of truth for
@@ -169,6 +169,18 @@ without checking — the document should keep reading as a quiet book.
 | CNOT gate (qualitative) | (within ebit example) | ch. 3 §3.4 |
 | Two-qubit gate (qualitative) | (within ebit example) | ch. 3 §3.4 |
 | Rotating-wave approximation | `stmt:rwa` | ch. 4 §4.3 |
+| Reduced state / system–bath model | `sec:reduced-state` | ch. 5 §5.1 |
+| Born–Markov approximation | `stmt:born-markov` | ch. 5 §5.2 |
+| Lindblad / GKLS master equation, dissipator | `stmt:lindblad` | ch. 5 §5.3 |
+| Complete positivity, Kraus / dynamical map | `stmt:kraus` | ch. 5 §5.4 |
+| Relaxation time `$T_1$` (amplitude damping) | `stmt:t1` | ch. 6 §6.1 |
+| Pure dephasing time `$T_\phi$` | `stmt:tphi` | ch. 6 §6.2 |
+| Optical Bloch equations, `$T_2$`, `$T_2^*$` | `stmt:bloch-equations`, `stmt:t2star` | ch. 6 §6.3 |
+| Noise spectral density (rates from `$S(\omega)$`) | `stmt:noise-rates` | ch. 6 §6.4 |
+| Quantum Langevin / input–output relation | `stmt:input-output` | ch. 7 §7.2 |
+| Cavity reflection/transmission (`$S$`-params) | `stmt:reflection` | ch. 7 §7.3 |
+| Quantum Zeno effect | `stmt:zeno` | ch. 8 §8.1 |
+| Quantum-jump / quantum-state-diffusion unravellings | `stmt:quantum-jumps`, `stmt:qsd` | ch. 8 §8.2 |
 | Sesquilinear, conjugate-symmetric, positive definite | `def:sesquilinear,…` | App. A |
 | Inner product, norm, Cauchy completeness, separability | `def:inner-product,…` | App. A |
 | Dual space, linear/bounded operator, adjoint | `def:dual-space,…` | App. A |

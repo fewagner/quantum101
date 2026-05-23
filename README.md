@@ -82,12 +82,12 @@ needed. Each `[ ]` becomes a section or chapter.
 
 ### Part II — Open quantum systems
 
-- [ ] System–bath models, Born–Markov approximation
-- [ ] Lindblad master equation
-- [ ] Relaxation and dephasing: $T_1$, $T_2$, $T_2^*$
-- [ ] Input–output theory
-- [ ] Quantum Zeno effect (measurement-induced freezing of dynamics)
-- [ ] Stochastic master equation / quantum trajectories (optional)
+- [x] System–bath models, Born–Markov approximation
+- [x] Lindblad master equation
+- [x] Relaxation and dephasing: $T_1$, $T_2$, $T_2^*$
+- [x] Input–output theory
+- [x] Quantum Zeno effect (measurement-induced freezing of dynamics)
+- [x] Stochastic master equation / quantum trajectories
 
 ### Part III — Quantum optics
 
