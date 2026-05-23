@@ -1,0 +1,518 @@
+\chapter{Circuit QED: coupling, control, and gates}
+\label{ch:circuit-qed}
+
+Parts~I--III built a complete toolkit --- two-level systems, harmonic
+oscillators, the Jaynes--Cummings coupling, the dispersive shift, drives
+and the RWA --- but left one number, the coupling $g$, as a free
+parameter handed down from somewhere. This chapter is that somewhere.
+With a concrete qubit (the transmon of \cref{ch:transmon}) and a
+concrete resonator (the quantised $LC$ circuit of
+\cref{ch:circuit-quantisation}), we can compute $g$ from circuit
+capacitances, recover the Jaynes--Cummings model of
+\cref{ch:jaynes-cummings} and the dispersive readout of
+\cref{ch:dispersive} as hardware facts rather than postulates, and
+turn the abstract single- and two-qubit gates of \cref{ch:composite}
+into microwave pulses and tunings. The chapter then exploits the one
+feature that distinguishes a superconducting circuit from a natural
+atom --- its Josephson nonlinearity is \emph{engineerable and
+pumpable} --- to generate the parametric and mixing processes behind
+quantum-limited amplification, the last link in the readout chain that
+\cref{ch:dispersive} left as ``ideally a quantum-limited amplifier''.
+The experimental procedures that calibrate all of this follow in
+\cref{ch:experimental-basics}.
+
+% --------------------------------------------------------------
+\section{Coupling a transmon to a resonator}
+\label{sec:cqed-coupling}
+
+\begin{phenomenon}
+Place a transmon next to a superconducting resonator and join them with
+a small coupling capacitor. The resonator's zero-point voltage
+fluctuations push charge onto the transmon island, and the transmon's
+charge oscillations drive the resonator: the two share energy. Because
+both are, to lowest order, harmonic oscillators
+(\cref{stmt:lc-oscillator,stmt:transmon}), their capacitive coupling is
+a bilinear exchange interaction --- exactly the atom--field coupling of
+cavity QED, now built from lithography rather than a vacuum chamber and
+a beam of atoms.
+\end{phenomenon}
+
+\begin{statement}[\textbf{Capacitive coupling and the Jaynes--Cummings model}~\cite{blais2004,koch2007}]
+\label{stmt:cqed-coupling}
+A transmon coupled to a resonator mode through a capacitor $C_g$ has
+the interaction
+\begin{equation}
+\label{eq:cqed-interaction}
+\op H_{\rm int} = 2\beta e\,V_{\rm zpf}\,\op n\,(\hat a+\hat a^\dagger),
+\qquad
+\beta=\frac{C_g}{C_\Sigma},
+\qquad
+V_{\rm zpf}=\sqrt{\frac{\hbar\omega_r}{2C_r}},
+\end{equation}
+where $\op n$ is the transmon charge operator, $V_{\rm zpf}$ the
+resonator's zero-point voltage, and $\beta$ the fraction of the
+resonator voltage that falls across the junction. Writing the transmon
+in its eigenbasis, $\op n\approx in_{\rm zpf}(\hat b^\dagger-\hat b)$
+with $n_{\rm zpf}\approx(E_J/32E_C)^{1/4}$, and applying the RWA
+(\cref{stmt:rwa}) gives the Jaynes--Cummings Hamiltonian
+\cref{eq:jc-hamiltonian} of \cref{ch:jaynes-cummings},
+\begin{equation}
+\label{eq:cqed-jc}
+\op H \approx \hbar\omega_r\hat a^\dagger\hat a
++ \frac{\hbar\omega_q}{2}\hat\sigma_z
++ \hbar g\,(\hat a^\dagger\hat\sigma_- + \hat a\hat\sigma_+),
+\qquad
+\boxed{\,g \propto \frac{C_g}{\sqrt{C_rC_\Sigma}}\sqrt{\omega_r\omega_q}\,}.
+\end{equation}
+The coupling is fully determined by the circuit: it grows with the
+coupling capacitor $C_g$ and with the geometric mean of the two
+frequencies, and is set at design time.
+\end{statement}
+
+\paragraph{Derivation sketch.}
+The two nodes (resonator and qubit island) have charges $Q_r,Q_q$ and
+a mutual capacitance $C_g$. The electrostatic energy
+$\tfrac12\mathbf Q^\top \mathbf C^{-1}\mathbf Q$ with the capacitance
+matrix $\mathbf C$ has an off-diagonal entry $\propto C_g$ that couples
+$Q_r$ to $Q_q$. Expressing $Q_r$ through the resonator ladder operators
+($Q_r\propto V_{\rm zpf}(\hat a+\hat a^\dagger)$) and $Q_q=2e\op n$
+through the transmon ladder operators gives
+\cref{eq:cqed-interaction}; keeping only excitation-conserving terms in
+the RWA yields \cref{eq:cqed-jc}. Everything beyond this point ---
+vacuum Rabi splitting $2g$ (\cref{stmt:vacuum-rabi}), the cQED regimes
+and cooperativity (\cref{stmt:cqed-regimes}), and the dispersive shift
+$\chi=g^2/\Delta$ (\cref{stmt:dispersive-H}) --- now follows with $g$ a
+known number.
+
+\paragraph{The transmon is a multilevel atom.}
+One feature has no atomic analogue made this simple: the transmon's
+weak anharmonicity $\alpha=-E_C$ (\cref{stmt:transmon}) means its third
+level $\ket2$ is only $|\alpha|$ away from harmonic, so it participates
+in the dynamics. This is a nuisance for single-qubit gates (leakage)
+but a \emph{resource} for two-qubit gates and for parametric processes,
+both of which exploit the higher levels directly. We keep the
+two-level $\hat\sigma$ notation where it suffices and restore $\ket2$
+where it matters.
+
+\paragraph{Transition.}
+With $g$ in hand, control is the next ingredient: we drive the qubit
+to rotate it, and the resonator to read it. Single-qubit rotations come
+first.
+
+% --------------------------------------------------------------
+\section{Driving the qubit: single-qubit gates}
+\label{sec:single-qubit-gates}
+
+\begin{statement}[\textbf{Drive Hamiltonian and single-qubit rotations}]
+\label{stmt:single-qubit-gates}
+A microwave tone of envelope $\Omega(t)$, frequency $\omega_d$, and
+phase $\phi$, applied to the qubit through a drive capacitor, adds
+\begin{equation}
+\label{eq:drive-hamiltonian}
+\op H_d(t) = \hbar\Omega(t)\cos(\omega_d t+\phi)\,(\hat b+\hat b^\dagger).
+\end{equation}
+In the frame rotating at $\omega_d$ and on resonance
+($\omega_d=\omega_q$), the RWA (\cref{stmt:rwa}) reduces this to
+\begin{equation}
+\label{eq:rotating-frame-drive}
+\op H_d^{\rm rot} = \frac{\hbar\Omega(t)}{2}\bigl(\cos\phi\,\hat\sigma_x + \sin\phi\,\hat\sigma_y\bigr),
+\end{equation}
+a rotation about an axis in the equatorial plane set by the drive phase
+$\phi$, through an angle $\theta=\int\Omega(t)\,\dd t$ set by the pulse
+area. Amplitude controls the angle (a $\pi$-pulse inverts the qubit, a
+$\pi/2$-pulse creates an equal superposition); phase controls the axis
+($\phi=0$ gives $\op R_x$, $\phi=\pi/2$ gives $\op R_y$); and $\op R_z$
+is implemented ``virtually'', by advancing the phase of all subsequent
+drives. These generate any single-qubit unitary.
+\end{statement}
+
+\paragraph{Leakage and DRAG.}
+Because the transmon's $\ket1\to\ket2$ transition is detuned by only
+$\alpha=-E_C$, a fast, spectrally broad pulse partially excites
+$\ket2$ --- leakage out of the computational subspace, the very effect
+\cref{stmt:anharmonicity} warned of. The standard fix, \emph{DRAG}
+(derivative removal by adiabatic gate), adds a quadrature component
+proportional to $\dot\Omega(t)/\alpha$ that destructively cancels the
+off-resonant $\ket2$ amplitude, allowing $\sim20\,$ns gates at the few
+hundred MHz anharmonicity of a typical transmon. This is the hardware
+realisation of the RWA Rabi problem of \cref{ch:perturbations}, with
+the transmon's finite anharmonicity as the leading correction.
+
+\paragraph{Transition.}
+Single-qubit rotations plus one entangling gate make a universal set.
+The entangling gate is where the qubit--qubit interaction --- and the
+transmon's higher levels --- enter.
+
+% --------------------------------------------------------------
+\section{Two-qubit gates}
+\label{sec:two-qubit-gates}
+
+\begin{phenomenon}
+A universal quantum computer needs an entangling two-qubit gate
+(\cref{ch:composite}): no amount of single-qubit rotation can entangle.
+In circuit QED the entanglement comes from a qubit--qubit interaction
+--- either direct capacitive coupling or a virtual exchange through a
+shared bus resonator --- which by itself is always on. The art of a
+two-qubit gate is to \emph{activate} this interaction for a controlled
+duration, either by tuning two qubits into a special resonance with a
+flux pulse or by driving them with microwaves, so that an entangling
+operation accumulates and then switches off.
+\end{phenomenon}
+
+\begin{statement}[\textbf{Three families of two-qubit gate}]
+\label{stmt:two-qubit-gates}
+Superconducting two-qubit gates fall into three families:
+\begin{itemize}
+\item \textbf{iSWAP (resonant exchange).} Two qubits coupled by an
+  exchange interaction $\hbar J(\hat\sigma_+^{(1)}\hat\sigma_-^{(2)}+\hc)$,
+  with $J=g_1g_2/\Delta$ a virtual-photon exchange through a bus, are
+  tuned into resonance by a flux pulse. They then swap excitations:
+  $\ket{01}\leftrightarrow\ket{10}$ with an $i$ phase. Holding for
+  $Jt=\pi/2$ gives the iSWAP; for $Jt=\pi/4$ the entangling
+  $\sqrt{\text{iSWAP}}$.
+\item \textbf{CZ (controlled phase) via $\ket{11}$--$\ket{02}$.} Tuning
+  the two-excitation state $\ket{11}$ near the non-computational
+  $\ket{02}$ (a doubly excited transmon, reachable \emph{because} of
+  the finite anharmonicity) produces an avoided crossing of size
+  $\sqrt2\,g$. Moving adiabatically in and back out makes $\ket{11}$
+  acquire a phase the other states do not; when that conditional phase
+  reaches $\pi$, the operation is a controlled-$Z$.
+\item \textbf{Cross-resonance (all-microwave).} For two fixed-frequency
+  qubits with static coupling, driving the \emph{control} qubit at the
+  \emph{target} qubit's frequency generates, to leading order, an
+  effective $\hat\sigma_z^{(1)}\hat\sigma_x^{(2)}$ ($ZX$) interaction:
+  the target rotates in a direction conditioned on the control state,
+  which is locally equivalent to a CNOT.
+\end{itemize}
+Each, combined with single-qubit rotations, is universal.
+\end{statement}
+
+\paragraph{From the abstract CNOT to hardware.}
+These gates are the concrete realisations of the abstract CNOT that
+produced an ebit in \cref{ch:composite}: the controlled-phase and
+cross-resonance gates are locally equivalent to CNOT, and entangle an
+initially product state into a Bell state exactly as that example
+required. The choice among families is architectural: tunable-frequency
+processors favour flux-activated iSWAP/CZ (fast, but flux noise adds a
+dephasing channel, \cref{stmt:noise-rates}), while fixed-frequency
+processors favour the all-microwave cross-resonance gate (quieter, but
+slower and more sensitive to frequency crowding). The CZ family is
+notable for turning the transmon's ``defect'' --- its low-lying third
+level --- into the very mechanism of the gate.
+
+\paragraph{Transition.}
+Control delivered, we close the measurement loop: the same dispersive
+coupling, now with $g$ and $\chi$ known, performs readout, and a
+parametric amplifier built from a second Josephson element makes that
+readout quantum-limited.
+
+% --------------------------------------------------------------
+\section{Dispersive readout in hardware}
+\label{sec:cqed-readout}
+
+\begin{statement}[\textbf{Hardware dispersive readout}]
+\label{stmt:cqed-readout}
+In the dispersive regime $|\Delta|\gg g$ the transmon--resonator system
+realises the dispersive Hamiltonian \cref{eq:dispersive-H} of
+\cref{ch:dispersive}, with cavity pull
+$\chi=\dfrac{g^2}{\Delta}\dfrac{\alpha}{\Delta+\alpha}$ now built from
+the circuit $g$ of \cref{eq:cqed-jc} and the transmon anharmonicity
+$\alpha=-E_C$ of \cref{stmt:transmon}. A probe tone at the resonator
+frequency acquires a qubit-state-dependent phase
+(\cref{stmt:dispersive-readout}); it leaves through the output line as
+the field $\hat a_{\rm out}$ of the input--output theory
+(\cref{stmt:input-output}), where it must be amplified before it can be
+digitised.
+\end{statement}
+
+\paragraph{Why the first amplifier matters.}
+The readout signal is a handful of microwave photons. The first
+amplifier in the chain dominates the noise of the whole measurement, so
+its added noise sets the readout fidelity. A conventional
+(transistor) amplifier adds tens of quanta; to reach high-fidelity
+\emph{single-shot} readout one needs an amplifier that adds at most the
+half-quantum the laws of quantum mechanics permit. That amplifier is
+itself a Josephson circuit, which we now build.
+
+% --------------------------------------------------------------
+\section{Parametric processes and quantum-limited amplifiers}
+\label{sec:parametric}
+
+\begin{phenomenon}
+The Josephson cosine is a nonlinear circuit element, and a nonlinearity
+driven by a strong \emph{pump} mixes frequencies: energy from the pump
+can be converted into pairs of photons in other modes. Expanding the
+cosine to cubic order (in a flux-pumped, inversion-asymmetric circuit)
+gives three-wave mixing, $\hat a^\dagger\hat a^\dagger\hat a_p$; to
+quartic order (the symmetric transmon Kerr term) gives four-wave
+mixing. Pumped near twice a mode's frequency, these processes amplify a
+weak signal --- and, as the time-reverse of the squeezing interaction
+of \cref{stmt:squeezing}, they do so while squeezing the conjugate
+quadrature.
+\end{phenomenon}
+
+\begin{statement}[\textbf{Parametric amplification and the quantum limit}~\cite{clerk2010}]
+\label{stmt:parametric-amp}
+A Josephson nonlinearity pumped at frequency $\omega_p$ realises, in
+the frame rotating at $\omega_p/2$, the degenerate-parametric
+(squeezing) Hamiltonian
+\begin{equation}
+\label{eq:parametric-hamiltonian}
+\op H_{\rm par} = \hbar\xi\,\hat a^\dagger\hat a^\dagger + \hc,
+\end{equation}
+the squeeze generator of \cref{stmt:squeezing} with pump-set strength
+$\xi$. This produces two modes of amplification:
+\begin{itemize}
+\item \textbf{Phase-sensitive (degenerate):} one signal quadrature is
+  amplified with gain $G$ while its conjugate is de-amplified
+  (squeezed) by $1/G$. Because no second mode is added, this amplifier
+  can be \emph{noiseless} on the amplified quadrature --- it adds no
+  quanta.
+\item \textbf{Phase-preserving (non-degenerate):} both quadratures (or
+  a signal and a separate idler) are amplified equally. Such an
+  amplifier \emph{must} add at least half a quantum of noise,
+  $n_{\rm add}\ge\tfrac12$, the \emph{standard quantum limit} on linear
+  amplification.
+\end{itemize}
+A Josephson parametric amplifier (JPA) operated near this limit is the
+front end of the dispersive-readout chain, making single-shot qubit
+measurement possible.
+\end{statement}
+
+\paragraph{The same squeezing, run forward.}
+\Cref{eq:parametric-hamiltonian} is identical to the squeeze
+Hamiltonian that generated squeezed light in \cref{stmt:squeezing}: a
+parametric amplifier and a squeezer are the same device, distinguished
+only by whether one cares about the amplified quadrature or the
+squeezed one. The half-quantum floor on phase-preserving gain is the
+amplifier face of the vacuum-noise bound of \cref{stmt:quadratures}, and
+the squeezed output of a JPA can in turn be injected into a sensor to
+beat the standard quantum limit --- the entanglement- and
+squeezing-enhanced metrology developed in \cref{ch:coherent-multiqubit}.
+
+\paragraph{Mixing as a unifying language.}
+Three- and four-wave mixing in Josephson elements underlie not only
+amplifiers but also frequency converters, parametric couplers (an
+alternative, tunable route to the two-qubit gates above), and the
+microwave single-photon detectors of \cref{ch:microwave-absorption},
+where a four-wave-mixing process converts an incoming signal photon
+into a detectable qubit excitation. The Josephson nonlinearity is the
+single resource behind all of them.
+
+% --------------------------------------------------------------
+This chapter gave the abstract cavity-QED toolkit its hardware. A
+coupling capacitor produces the Jaynes--Cummings interaction with a
+computable $g\propto C_g\sqrt{\omega_r\omega_q}/\sqrt{C_rC_\Sigma}$;
+microwave drives implement arbitrary single-qubit rotations (with DRAG
+taming the transmon's leakage); and entangling gates come in three
+families --- resonant iSWAP, $\ket{11}$--$\ket{02}$ controlled-phase,
+and all-microwave cross-resonance --- realising the abstract CNOT of
+\cref{ch:composite}. The dispersive coupling performs readout with
+$\chi$ now built from circuit parameters, and a Josephson parametric
+amplifier, the squeezer of \cref{ch:states-of-light} run forward,
+supplies the quantum-limited gain that makes single-shot measurement
+possible.
+
+What remains is to put the apparatus to work: to take a freshly
+fabricated chip and find its parameters --- the resonator and qubit
+frequencies, the coupling, the $\pi$-pulse amplitude, the coherence
+times. That bring-up procedure, the daily reality of operating a
+superconducting qubit, is the subject of the final chapter of
+Part~IV.
+
+\clearpage
+\begin{chaptersummary}
+
+\paragraph{Coupling.}
+A coupling capacitor gives
+$\op H_{\rm int}=2\beta eV_{\rm zpf}\op n(\hat a+\hat a^\dagger)$,
+$\beta=C_g/C_\Sigma$, which in the RWA is Jaynes--Cummings with
+$g\propto C_g\sqrt{\omega_r\omega_q}/\sqrt{C_rC_\Sigma}$ --- $g$ from
+circuit parameters. Vacuum Rabi, cooperativity, and $\chi=g^2/\Delta$
+follow.
+
+\paragraph{Single-qubit gates.}
+$\op H_d=\hbar\Omega(t)\cos(\omega_dt+\phi)(\hat b+\hat b^\dagger)$;
+on resonance,
+$\op H_d^{\rm rot}=\tfrac{\hbar\Omega}{2}(\cos\phi\,\hat\sigma_x+\sin\phi\,\hat\sigma_y)$.
+Amplitude sets the angle, phase sets the axis, $\op R_z$ is virtual;
+DRAG suppresses $\ket2$ leakage.
+
+\paragraph{Two-qubit gates.}
+iSWAP (resonant exchange $J=g_1g_2/\Delta$), CZ (via the
+$\ket{11}$--$\ket{02}$ avoided crossing, using the third level), and
+cross-resonance ($ZX$, all-microwave, fixed frequency). Each + 1-qubit
+rotations is universal; all realise CNOT.
+
+\paragraph{Readout and amplification.}
+Dispersive readout with $\chi=(g^2/\Delta)\,\alpha/(\Delta+\alpha)$
+from circuit parameters. A Josephson parametric amplifier
+($\op H_{\rm par}=\hbar\xi\hat a^{\dagger2}+\hc$, the squeezer run
+forward) gives phase-sensitive (noiseless) or phase-preserving
+($n_{\rm add}\ge\tfrac12$) gain --- the quantum-limited front end of
+single-shot readout.
+
+\end{chaptersummary}
+
+% --------------------------------------------------------------
+\section*{Exercises}
+\addcontentsline{toc}{section}{Exercises}
+
+\begin{exercise}[Scaling of the coupling]
+From $g\propto C_g\sqrt{\omega_r\omega_q}/\sqrt{C_rC_\Sigma}$, by what
+factor does $g$ change if the coupling capacitor $C_g$ is doubled, and
+separately if both frequencies are halved? Why is $g$ set at design
+time?
+\begin{solution}
+$g\propto C_g$, so doubling $C_g$ doubles $g$. Halving both
+frequencies multiplies $\sqrt{\omega_r\omega_q}$ by $\sqrt{(1/2)(1/2)}=1/2$,
+halving $g$. Since $C_g,C_r,C_\Sigma$ are fixed by the chip geometry
+and $\omega_r,\omega_q$ by the elements, $g$ is frozen at fabrication
+(though $\omega_q$, hence $\Delta$ and $\chi$, can still be tuned with a
+SQUID). One designs $g$ for the desired dispersive shift and gate
+speeds before the chip is made.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Drive phase sets the rotation axis]
+Using \cref{eq:rotating-frame-drive}, write the unitary for a
+$\pi/2$-pulse with $\phi=0$ and with $\phi=\pi/2$, and identify the
+gates.
+\begin{solution}
+A pulse of area $\theta=\int\Omega\dd t=\pi/2$ gives
+$\op U=\exp[-i(\pi/4)(\cos\phi\,\hat\sigma_x+\sin\phi\,\hat\sigma_y)]$.
+For $\phi=0$: $\op U=\exp[-i(\pi/4)\hat\sigma_x]=\op R_x(\pi/2)$, a
+$90^\circ$ rotation about $x$. For $\phi=\pi/2$:
+$\op U=\op R_y(\pi/2)$. The two differ only by the drive phase --- the
+same pulse envelope, shifted by $90^\circ$, rotates about a
+perpendicular axis.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Why $\op R_z$ can be virtual]
+Explain why a $Z$ rotation need not be a physical pulse, and what it
+costs.
+\begin{solution}
+A $Z$ rotation commutes with the qubit's free evolution and only
+changes the \emph{phase reference} of subsequent drives. Advancing the
+phase $\phi$ of all later pulses by $\lambda$ is equivalent to having
+applied $\op R_z(\lambda)$ before them. So $\op R_z$ is implemented in
+software by bookkeeping the drive phase --- it is instantaneous,
+exact, and costs no gate time or fidelity. This is why single-qubit
+control needs only two physical (equatorial) rotations plus virtual
+$Z$.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Leakage and the need for DRAG]
+A square $\pi$-pulse of duration $\tau=5\,$ns drives a transmon with
+$\alpha/h=-250\,$MHz. Estimate the spectral overlap with the
+$\ket1\to\ket2$ transition and argue why DRAG is needed.
+\begin{solution}
+A $\tau=5\,$ns pulse has spectral width $\sim1/\tau=200\,$MHz, which is
+comparable to $|\alpha|/h=250\,$MHz. The drive therefore has
+substantial spectral weight at the $\ket1\to\ket2$ frequency (offset by
+$|\alpha|$), so it excites $\ket2$ --- leakage of order
+$(1/\tau)/|\alpha|\sim200/250\sim O(1)$, unacceptable. DRAG adds a
+derivative quadrature $\propto\dot\Omega/\alpha$ engineered to cancel
+this off-resonant amplitude, restoring a clean two-level rotation at
+$5\,$ns. Without it one must slow the pulse to $\tau\gg1/|\alpha|$.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[iSWAP timing]
+Two qubits are tuned into resonance with exchange coupling
+$J/2\pi=10\,$MHz. How long is a full iSWAP, and a $\sqrt{\text{iSWAP}}$?
+\begin{solution}
+The exchange swaps $\ket{01}\leftrightarrow\ket{10}$ at rate $J$; a full
+iSWAP is $Jt=\pi/2$, i.e.\ $t=\pi/(2J)=1/(4\cdot10\,\text{MHz})=25\,$ns
+(using $J=2\pi\cdot10\,$MHz, $t=\pi/(2\cdot2\pi\cdot10^7)=25\,$ns). The
+entangling $\sqrt{\text{iSWAP}}$ is half the duration, $t=\pi/(4J)\approx12.5\,$ns.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Why CZ uses the third level]
+Explain why a controlled-phase gate exploits the $\ket{02}$ state, and
+why a perfect two-level system could not host this particular gate
+mechanism.
+\begin{solution}
+The CZ gate needs a state-dependent phase: only $\ket{11}$ should
+acquire an extra phase. Tuning $\ket{11}$ near the avoided crossing with
+$\ket{02}$ repels it in energy, so $\ket{11}$ accumulates phase at a
+different rate than $\ket{00},\ket{01},\ket{10}$, none of which couple
+to a doubly excited state. The $\ket{02}$ level exists only because the
+transmon is a multilevel anharmonic oscillator; a strict two-level
+system has no second excitation to provide the avoided crossing, so
+this mechanism is unavailable. The transmon's weak anharmonicity is
+thus essential to the gate, not merely tolerated.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Cross-resonance interaction]
+The cross-resonance drive yields an effective
+$\op H_{\rm CR}=\hbar\,\Omega_{ZX}\,\hat\sigma_z^{(1)}\hat\sigma_x^{(2)}/2$.
+Show that evolving for $\Omega_{ZX}t=\pi/2$ is locally equivalent to a
+CNOT.
+\begin{solution}
+$\exp[-i(\pi/4)\hat\sigma_z^{(1)}\hat\sigma_x^{(2)}]$ rotates qubit~2
+about $x$ by $+\pi/2$ when qubit~1 is in $\ket0$ ($\sigma_z=+1$) and by
+$-\pi/2$ when qubit~1 is in $\ket1$ --- a control-conditioned $\pi/2$
+rotation. Combined with single-qubit $\op R_x(\mp\pi/2)$ on the target
+and an $\op R_z$ on the control, this composes to a controlled-$X$
+(CNOT): the target flips iff the control is $\ket1$. The two-qubit
+content is entirely in the $ZX$ evolution; the rest is local.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[The half-photon limit]
+Explain physically why a phase-\emph{preserving} linear amplifier must
+add $\ge\tfrac12$ quantum of noise while a phase-\emph{sensitive} one
+need not.
+\begin{solution}
+A phase-preserving amplifier reproduces \emph{both} quadratures of the
+input with gain. But the two quadratures are conjugate
+($\comm{\hat X}{\hat P}\neq0$, \cref{stmt:quadratures}); amplifying both
+without adding noise would let one measure both below the vacuum bound,
+violating the uncertainty principle. The minimum noise that restores
+consistency is half a quantum referred to the input
+($n_{\rm add}\ge\tfrac12$). A phase-sensitive amplifier reproduces only
+\emph{one} quadrature (squeezing the other), measuring nothing about
+the conjugate, so no uncertainty bound is threatened and it can in
+principle be noiseless on the amplified quadrature.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Amplifier and squeezer are one device]
+Identify the parametric Hamiltonian \cref{eq:parametric-hamiltonian}
+with the squeeze generator of \cref{stmt:squeezing}, and state what
+physical quantity distinguishes ``amplifier'' from ``squeezer''.
+\begin{solution}
+The squeeze operator is
+$\op S(\zeta)=\exp[\tfrac12(\zeta^*\hat a\hat a-\zeta\hat a^\dagger\hat a^\dagger)]$,
+generated by exactly $\hat a^{\dagger2}$ and $\hat a^2$ terms --- the
+same as $\op H_{\rm par}=\hbar\xi\hat a^{\dagger2}+\hc$. The unitary
+evolution it produces stretches one quadrature and squeezes the
+conjugate. Called an ``amplifier'' when one reads out the stretched
+(amplified) quadrature of an injected signal; called a ``squeezer''
+when one uses the squeezed quadrature of the output vacuum. Same
+device, same Hamiltonian; the distinction is which quadrature one cares
+about.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[The Josephson nonlinearity as the common resource]
+List the circuit-QED functions in this chapter that ultimately rely on
+the Josephson nonlinearity, and explain in one sentence each how.
+\begin{solution}
+(i) \emph{Qubit:} the cosine's anharmonicity isolates two levels
+(\cref{ch:transmon}). (ii) \emph{CZ gate:} the third level it provides
+supplies the $\ket{11}$--$\ket{02}$ avoided crossing. (iii)
+\emph{Parametric amplifier:} its three-/four-wave mixing converts pump
+power into signal gain. (iv) \emph{Parametric couplers and frequency
+converters:} the same mixing activates tunable interactions. (v)
+\emph{Microwave photon detectors} (\cref{ch:microwave-absorption}):
+four-wave mixing converts a signal photon into a qubit excitation. A
+single nonlinear, dissipationless element underlies the qubit, its
+gates, and its readout amplifier alike.
+\end{solution}
+\end{exercise}

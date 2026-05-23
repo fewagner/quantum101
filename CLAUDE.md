@@ -216,6 +216,11 @@ without checking — the document should keep reading as a quiet book.
 | Cooper-pair box (charge basis, charge dispersion, sweet spot) | `stmt:cpb` | ch. 15 §15.2 |
 | Transmon (`$\hbar\omega_{01}=\sqrt{8E_JE_C}-E_C$`, `$\alpha\approx-E_C$`, Kerr oscillator) | `stmt:transmon` | ch. 15 §15.3 |
 | Flux qubit, fluxonium (overview) | `stmt:flux-fluxonium` | ch. 15 §15.4 |
+| Capacitive coupling, `$g$` from circuit parameters | `stmt:cqed-coupling` | ch. 16 §16.1 |
+| Drive Hamiltonian, single-qubit gates, DRAG | `stmt:single-qubit-gates` | ch. 16 §16.2 |
+| Two-qubit gates: iSWAP / CZ / cross-resonance | `stmt:two-qubit-gates` (provides `sec:two-qubit-gates`) | ch. 16 §16.3 |
+| Hardware dispersive readout (`$\chi$` from circuit) | `stmt:cqed-readout` | ch. 16 §16.4 |
+| Parametric amplification, JPA, quantum limit `$n_{\rm add}\ge\tfrac12$` | `stmt:parametric-amp` | ch. 16 §16.5 |
 
 When introducing new terms in future chapters, **append to this table**.
 

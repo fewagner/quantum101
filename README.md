@@ -114,14 +114,14 @@ needed. Each `[ ]` becomes a section or chapter.
 - [x] Cooper pair box and charge qubit
 - [x] Transmon qubit: anharmonicity, charge-noise insensitivity
 - [x] Flux qubit and fluxonium (overview)
-- [ ] Capacitive and inductive coupling between elements
-- [ ] Qubit–resonator coupling and dispersive readout
-- [ ] Drive Hamiltonians and single-qubit gates
-- [ ] Parametric / mixing processes: three- and four-wave mixing in Josephson nonlinearities
+- [x] Capacitive and inductive coupling between elements
+- [x] Qubit–resonator coupling and dispersive readout
+- [x] Drive Hamiltonians and single-qubit gates
+- [x] Parametric / mixing processes: three- and four-wave mixing in Josephson nonlinearities
       (e.g., two resonator modes + drive + qubit as a four-wave-mixing example)
-- [ ] Two-qubit gates: cross-resonance, iSWAP, CZ (overview)
+- [x] Two-qubit gates: cross-resonance, iSWAP, CZ (overview)
 - [ ] Decoherence channels in cQED hardware (incl. quasiparticle poisoning)
-- [ ] Parametric amplifiers and quantum-limited readout (optional)
+- [x] Parametric amplifiers and quantum-limited readout (optional)
 
 #### Experimental basics (qubit calibration)
 
