@@ -1,0 +1,453 @@
+\chapter{Continuous measurement: the Zeno effect and quantum trajectories}
+\label{ch:continuous-measurement}
+
+The master equation of \cref{ch:open-systems} describes the average
+state of an open system: average over the environment, average over
+all the things the bath might have recorded. But the input--output
+theory of \cref{ch:input-output} showed that the bath's output
+field can be \emph{measured} --- a detector downstream turns it into
+a record. What happens to the system state when we actually look?
+Two phenomena emerge that the averaged master equation hides. First,
+measurement that is frequent enough freezes the dynamics: the
+\emph{quantum Zeno effect}. Second, a single experimental run does
+not show the smooth exponential decay of the master equation; it
+shows abrupt \emph{quantum jumps} at random times, and the master
+equation is only what one recovers after averaging many such runs.
+This closing chapter of Part~II treats both. We derive the Zeno
+freezing from the short-time behaviour of the survival probability,
+then unravel the Lindblad equation into individual
+\emph{quantum trajectories} --- the stochastic conditioned
+evolution of a continuously monitored system --- and show that
+averaging the trajectories returns the master equation.
+
+% --------------------------------------------------------------
+\section{The quantum Zeno effect}
+\label{sec:zeno}
+
+\begin{phenomenon}
+A watched quantum system does not evolve. If a system that would
+otherwise leave its initial state is measured repeatedly --- each
+measurement asking ``are you still in the initial state?'' --- then
+in the limit of infinitely frequent measurement the system is
+frozen in place, never decaying. The effect is not mystical: it
+follows from the fact that the survival probability of a quantum
+state decays \emph{quadratically}, not linearly, at short times, so
+that resetting the clock often enough never lets the quadratic
+decay accumulate.
+\end{phenomenon}
+
+\begin{statement}[\textbf{Quantum Zeno effect}~\cite{misra1977}]
+\label{stmt:zeno}
+Let a system start in $\ket{\psi_0}$ and evolve under $\op H$. The
+short-time survival probability is
+\begin{equation}
+\label{eq:survival-short}
+P(\tau) \;=\; \bigl|\bra{\psi_0}e^{-i\op H\tau/\hbar}\ket{\psi_0}\bigr|^2
+\;=\; 1 - \Bigl(\frac{\tau}{\tau_Z}\Bigr)^2 + \mathcal O(\tau^4),
+\qquad
+\frac{1}{\tau_Z^2} \;=\; \frac{(\Delta H)^2}{\hbar^2},
+\end{equation}
+where $(\Delta H)^2=\bra{\psi_0}\op H^2\ket{\psi_0}-\bra{\psi_0}\op H\ket{\psi_0}^2$
+is the energy variance in the initial state. If the state is
+projectively measured $N$ times during a total interval $t$, at
+spacing $\tau=t/N$, the probability of surviving all $N$
+measurements is
+\begin{equation}
+\label{eq:zeno-survival}
+P_N(t) \;=\; \Bigl[1 - \Bigl(\frac{t}{N\tau_Z}\Bigr)^2\Bigr]^N
+\;\xrightarrow[N\to\infty]{}\; 1.
+\end{equation}
+Infinitely frequent measurement freezes the system in
+$\ket{\psi_0}$.
+\end{statement}
+
+\paragraph{Derivation.}
+Expand the propagator to second order,
+$e^{-i\op H\tau/\hbar}\ket{\psi_0}=\ket{\psi_0}-\tfrac{i\tau}{\hbar}\op H\ket{\psi_0}-\tfrac{\tau^2}{2\hbar^2}\op H^2\ket{\psi_0}+\cdots$.
+The amplitude is
+$\bra{\psi_0}e^{-i\op H\tau/\hbar}\ket{\psi_0}=1-\tfrac{i\tau}{\hbar}\langle\op H\rangle-\tfrac{\tau^2}{2\hbar^2}\langle\op H^2\rangle+\cdots$,
+and its modulus squared is
+$P(\tau)=1-\tfrac{\tau^2}{\hbar^2}(\langle\op H^2\rangle-\langle\op H\rangle^2)+\mathcal O(\tau^4)$,
+the linear term cancelling --- this is the crucial point. With
+$N$ measurements each of duration $\tau=t/N$, the survival
+probability multiplies, $P_N(t)=P(t/N)^N=[1-(t/N\tau_Z)^2]^N$.
+Taking the logarithm, $\ln P_N = N\ln[1-(t/N\tau_Z)^2]\approx -t^2/(N\tau_Z^2)\to0$
+as $N\to\infty$, so $P_N\to1$. The quadratic short-time decay is
+what makes the product go to one; a genuinely linear (exponential)
+decay would give $P_N=(1-t/N\tau)^N\to e^{-t/\tau}$, no freezing.
+
+\paragraph{Continuous measurement and the anti-Zeno effect.}
+Replacing discrete projective measurements by continuous monitoring
+(strong coupling to a meter or to a fast-decaying readout mode)
+produces the same freezing: a continuously watched transition is
+suppressed. The first clean demonstration was the trapped-ion
+experiment of Itano~et~al.~\cite{itano1990}, in which frequent
+measurement pulses inhibited a driven hyperfine transition. The
+effect has a partner --- the \emph{anti-Zeno} effect --- in which
+measurement at an intermediate rate \emph{accelerates} decay,
+because the measurement bandwidth then overlaps the part of the
+environment spectrum that drives the transition. Which one occurs
+depends on the bath spectral density of \cref{sec:noise-psd}
+sampled by the measurement.
+
+\paragraph{Transition.}
+The Zeno effect is the strong-measurement limit. To describe
+measurement of \emph{any} strength --- and to see what a single
+experimental run actually looks like --- we unravel the master
+equation into trajectories conditioned on the measurement record.
+
+% --------------------------------------------------------------
+\section{Unravelling the master equation}
+\label{sec:unravelling}
+
+\begin{phenomenon}
+A fluorescing atom monitored by a perfect photodetector is either
+emitting or not: the record is a train of discrete clicks at random
+times, and between clicks the atom's state evolves smoothly. The
+excited-state population of a \emph{single} atom does not decay
+smoothly --- it sits, then jumps to the ground state at the instant
+a photon is detected. The smooth exponential decay of the master
+equation is the \emph{average} over many such jump records. An
+\emph{unravelling} is a stochastic equation for the conditioned
+state of one run, constructed so that its ensemble average
+reproduces the Lindblad equation.
+\end{phenomenon}
+
+\begin{statement}[\textbf{Quantum-jump (Monte Carlo wavefunction) unravelling}~\cite{dalibard1992,carmichael1993}]
+\label{stmt:quantum-jumps}
+Consider a system with master equation
+$\dot{\op\rho}=-\tfrac{i}{\hbar}\comm{\op H}{\op\rho}+\sum_k\gamma_k\mathcal D[\op L_k]\op\rho$
+whose output channels are perfectly photon-counted. In a time step
+$\dd t$, the conditioned pure state $\ket{\psi}$ either jumps or
+does not. A jump in channel $k$ occurs with probability
+\begin{equation}
+\label{eq:jump-prob}
+p_k \;=\; \gamma_k\,\dd t\,\bra{\psi}\op L_k^\dagger\op L_k\ket{\psi},
+\end{equation}
+upon which the state is reset,
+$\ket{\psi}\to\op L_k\ket{\psi}/\lVert\op L_k\ket{\psi}\rVert$ (a
+detector click). With probability $1-\sum_k p_k$ no jump occurs and
+the state evolves under the non-Hermitian effective Hamiltonian
+\begin{equation}
+\label{eq:effective-H}
+\op H_{\rm eff} \;=\; \op H - \frac{i\hbar}{2}\sum_k\gamma_k\,\op L_k^\dagger\op L_k,
+\end{equation}
+followed by renormalisation. Averaging the conditioned state
+$\ket{\psi}\!\bra{\psi}$ over the jump/no-jump branches reproduces
+the Lindblad master equation exactly.
+\end{statement}
+
+\paragraph{Derivation from the Kraus operators.}
+The unravelling is read directly off the infinitesimal Kraus
+operators of \cref{stmt:kraus}. The jump operators
+$\op K_k=\sqrt{\gamma_k\dd t}\,\op L_k$ implement the
+detector-click update with probability
+$\lVert\op K_k\ket\psi\rVert^2=\gamma_k\dd t\bra\psi\op L_k^\dagger\op L_k\ket\psi=p_k$,
+exactly \cref{eq:jump-prob}; the no-jump operator
+$\op K_0=\id-(\tfrac{i}{\hbar}\op H+\tfrac12\sum_k\gamma_k\op L_k^\dagger\op L_k)\dd t
+=\id-\tfrac{i}{\hbar}\op H_{\rm eff}\dd t$ implements the smooth
+non-Hermitian evolution with probability $1-\sum_k p_k$. The
+ensemble average over the two branches is, to first order in
+$\dd t$,
+\begin{equation}
+\label{eq:trajectory-average}
+\overline{\op\rho(t+\dd t)}
+= \op K_0\op\rho\op K_0^\dagger + \sum_k\op K_k\op\rho\op K_k^\dagger
+= \op\rho + \dd t\Bigl[-\tfrac{i}{\hbar}\comm{\op H}{\op\rho}+\sum_k\gamma_k\mathcal D[\op L_k]\op\rho\Bigr],
+\end{equation}
+which is the Lindblad equation. The master equation is precisely
+the average over all measurement records; the trajectory is one
+sample of that average.
+
+\paragraph{The non-Hermitian no-jump evolution is informative.}
+The decay term in $\op H_{\rm eff}$ is not merely bookkeeping: even
+when no photon is detected, the state changes, because the
+\emph{absence} of a click is itself information. For a qubit
+monitored on $\op L=\hat\sigma_-$, the longer one waits without
+seeing a photon, the more probable it is that the qubit was already
+in the ground state, and the no-jump evolution steadily increases
+the ground-state weight. This measurement back-action with no
+detector event is a genuinely quantum feature with no classical
+analogue.
+
+\begin{statement}[\textbf{Quantum-state-diffusion (homodyne) unravelling}~\cite{wiseman2009}]
+\label{stmt:qsd}
+If the output field is instead measured by homodyne detection ---
+mixing it with a strong local oscillator and recording a
+quadrature --- the conditioned state evolves not by discrete jumps
+but by a continuous diffusion. For a single channel $\op L$ the
+stochastic master equation is
+\begin{equation}
+\label{eq:sme}
+\dd\op\rho_c
+= -\frac{i}{\hbar}\comm{\op H}{\op\rho_c}\dd t
++ \gamma\,\mathcal D[\op L]\op\rho_c\,\dd t
++ \sqrt{\gamma\,\eta}\,\mathcal H[\op L]\op\rho_c\,\dd W,
+\end{equation}
+where $\dd W$ is a Wiener increment (Gaussian white noise with
+$\overline{\dd W}=0$, $\dd W^2=\dd t$), $\eta$ is the detector
+efficiency, and the measurement superoperator is
+$\mathcal H[\op L]\op\rho = \op L\op\rho+\op\rho\op L^\dagger
+-\langle\op L+\op L^\dagger\rangle\op\rho$. Averaging over the noise
+($\overline{\dd W}=0$) again returns the Lindblad equation.
+\end{statement}
+
+\paragraph{Two unravellings, one master equation.}
+Quantum jumps and quantum state diffusion are two different
+\emph{measurement schemes} applied to the \emph{same} open system:
+photon counting gives a jumpy record, homodyne gives a diffusive
+one. They produce genuinely different conditioned trajectories ---
+the qubit's path through state space depends on how you look --- yet
+both average to the same Lindblad equation. The unravelling is not
+unique; it is fixed by the choice of detector, exactly as the Kraus
+decomposition of \cref{stmt:kraus} is non-unique.
+
+% --------------------------------------------------------------
+\section{Quantum jumps in the laboratory}
+\label{sec:jumps-lab}
+
+\begin{example}[\textbf{Telegraph record of a monitored qubit}]
+\label{ex:telegraph}
+A qubit dispersively coupled to a continuously monitored readout
+cavity (\cref{ch:input-output}) realises a continuous measurement
+of $\hat\sigma_z$. The homodyne record then tracks the qubit state
+in real time, and quantum jumps between $\ket0$ and $\ket1$ appear
+as a random telegraph signal. The same machinery, applied to the
+$\ket{e}\to\ket{f}$ monitoring of a three-level transmon, underlies
+the ``catch and reverse'' experiments that detect a quantum jump
+\emph{as it begins} and reverse it mid-flight --- a direct
+laboratory use of the no-jump back-action of
+\cref{eq:effective-H}. The photon-counting unravelling
+(\cref{stmt:quantum-jumps}) is also the natural language for the
+single-microwave-photon detectors of \cref{ch:microwave-absorption}:
+each engineered Lindblad jump $\op L=\sqrt{\kappa_{\rm nl}}\,\hat b\,\hat\sigma^\dagger$
+is precisely a detector click registering the arrival of a signal
+photon.
+\end{example}
+
+\paragraph{Why trajectories matter for sensing.}
+For the dark-matter sensing of Part~VI, the distinction between the
+averaged master equation and the conditioned trajectory is the
+distinction between the \emph{ensemble-averaged} dark-count rate and
+the \emph{single-shot} click record actually used to set a limit.
+The detector is read out one trajectory at a time; the master
+equation supplies the average rates that calibrate it, while the
+trajectory picture supplies the statistics of individual clicks.
+The continuous-measurement formalism is therefore not a
+mathematical luxury --- it is the language in which a
+single-quantum detector is actually operated.
+
+% --------------------------------------------------------------
+This chapter completed Part~II by asking what happens when the
+environment is not discarded but measured. Frequent measurement
+freezes the dynamics --- the quantum Zeno effect --- because the
+survival probability decays quadratically at short times.
+Measurement of arbitrary strength is described by unravelling the
+master equation into quantum trajectories: photon counting gives
+the quantum-jump unravelling, with discrete clicks and informative
+no-jump evolution, while homodyne detection gives the diffusive
+stochastic master equation. Both average back to the Lindblad
+equation of \cref{ch:open-systems}.
+
+This closes the open-systems toolkit. Part~III builds on it to treat
+quantum optics proper --- the quantisation of the electromagnetic
+field, the Jaynes--Cummings model, and the dispersive regime ---
+where the cavity, the input--output relations, and the
+continuous-measurement picture assembled here become the working
+description of light--matter interaction and qubit readout.
+
+\clearpage
+\begin{chaptersummary}
+
+\paragraph{Quantum Zeno effect.}
+The survival probability decays quadratically at short times,
+$P(\tau)=1-(\tau/\tau_Z)^2$ with $1/\tau_Z^2=(\Delta H)^2/\hbar^2$.
+With $N$ measurements in time $t$,
+$P_N(t)=[1-(t/N\tau_Z)^2]^N\to1$ as $N\to\infty$: frequent
+measurement freezes the system. Intermediate measurement rates can
+instead accelerate decay (anti-Zeno), depending on the bath
+spectrum.
+
+\paragraph{Quantum-jump unravelling.}
+A photon-counted system jumps with probability
+$p_k=\gamma_k\dd t\langle\op L_k^\dagger\op L_k\rangle$ (state reset
+$\ket\psi\to\op L_k\ket\psi/\lVert\cdot\rVert$); otherwise it evolves
+under $\op H_{\rm eff}=\op H-\tfrac{i\hbar}{2}\sum_k\gamma_k\op L_k^\dagger\op L_k$.
+The no-jump evolution is informative (absence of a click updates the
+state). Averaging the branches gives the Lindblad equation.
+
+\paragraph{Quantum-state diffusion.}
+Homodyne detection gives the stochastic master equation
+$\dd\op\rho_c=-\tfrac{i}{\hbar}\comm{\op H}{\op\rho_c}\dd t+\gamma\mathcal D[\op L]\op\rho_c\dd t+\sqrt{\gamma\eta}\,\mathcal H[\op L]\op\rho_c\,\dd W$
+with Wiener noise $\dd W$. Different detectors give different
+unravellings of the same master equation; the choice is fixed by
+how the output field is measured.
+
+\paragraph{Laboratory picture.}
+A continuously monitored qubit shows a random-telegraph jump record;
+catch-and-reverse exploits the no-jump back-action; each engineered
+Lindblad jump in a single-photon detector is a detector click. The
+master equation supplies average rates; the trajectory supplies the
+single-shot statistics.
+
+\end{chaptersummary}
+
+% --------------------------------------------------------------
+\section*{Exercises}
+\addcontentsline{toc}{section}{Exercises}
+
+\begin{exercise}[Quadratic short-time decay]
+Derive $P(\tau)=1-(\Delta H)^2\tau^2/\hbar^2+\mathcal O(\tau^4)$ from
+the second-order expansion of the propagator, and show explicitly
+that the linear-in-$\tau$ term cancels.
+\begin{solution}
+$\bra{\psi_0}e^{-i\op H\tau/\hbar}\ket{\psi_0}
+=1-\tfrac{i\tau}{\hbar}\langle\op H\rangle-\tfrac{\tau^2}{2\hbar^2}\langle\op H^2\rangle+\cdots$.
+Its modulus squared:
+$P=|1-\tfrac{i\tau}\hbar\langle\op H\rangle-\tfrac{\tau^2}{2\hbar^2}\langle\op H^2\rangle|^2
+=1-\tfrac{\tau^2}{\hbar^2}\langle\op H^2\rangle+\tfrac{\tau^2}{\hbar^2}\langle\op H\rangle^2+\mathcal O(\tau^4)$
+(the $\mathcal O(\tau)$ pieces are imaginary and cancel in the
+modulus). Hence $P=1-\tfrac{\tau^2}{\hbar^2}(\langle\op H^2\rangle-\langle\op H\rangle^2)$,
+quadratic with no linear term.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Survival in the Zeno limit]
+Show that $P_N(t)=[1-(t/N\tau_Z)^2]^N\to1$ as $N\to\infty$, and
+contrast with the result for genuinely exponential decay.
+\begin{solution}
+$\ln P_N=N\ln[1-(t/N\tau_Z)^2]\approx -N\cdot(t/N\tau_Z)^2=-t^2/(N\tau_Z^2)\to0$,
+so $P_N\to1$. For linear decay $P(\tau)=1-\tau/\tau$:
+$P_N=(1-t/N\tau)^N\to e^{-t/\tau}$, a finite survival probability,
+no freezing. The quadratic short-time law is essential to the Zeno
+effect.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Zeno time of a driven qubit]
+A qubit driven on resonance has $\op H=\tfrac{\hbar\Omega}{2}\hat\sigma_x$
+and starts in $\ket0$. Compute $\tau_Z$ and the measurement spacing
+needed to suppress the Rabi transition.
+\begin{solution}
+$(\Delta H)^2=\langle\op H^2\rangle-\langle\op H\rangle^2$ in
+$\ket0$: $\op H^2=(\hbar\Omega/2)^2\id$ so $\langle\op H^2\rangle=(\hbar\Omega/2)^2$,
+and $\langle\op H\rangle=\tfrac{\hbar\Omega}{2}\bra0\hat\sigma_x\ket0=0$.
+Hence $(\Delta H)^2=(\hbar\Omega/2)^2$ and $\tau_Z=2/\Omega$.
+Measurement spacing $\tau\ll\tau_Z=2/\Omega$, i.e.\ much faster than
+the Rabi period, freezes the qubit in $\ket0$.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Jump probability and normalisation]
+Show that the total jump probability $\sum_k p_k$ plus the no-jump
+weight $\lVert\op K_0\ket\psi\rVert^2$ equals $1$ to first order in
+$\dd t$, so the unravelling conserves probability.
+\begin{solution}
+$\lVert\op K_0\ket\psi\rVert^2=\bra\psi\op K_0^\dagger\op K_0\ket\psi
+=\bra\psi(\id-\sum_k\gamma_k\op L_k^\dagger\op L_k\dd t)\ket\psi
+=1-\sum_k\gamma_k\dd t\langle\op L_k^\dagger\op L_k\rangle=1-\sum_k p_k$
+to first order (the $\op H$ part is anti-Hermitian in $\op K_0$ and
+drops from $\op K_0^\dagger\op K_0$ at $\mathcal O(\dd t)$). Adding
+$\sum_k p_k$ gives $1$.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Averaging reproduces Lindblad]
+Verify \cref{eq:trajectory-average}: that
+$\op K_0\op\rho\op K_0^\dagger+\sum_k\op K_k\op\rho\op K_k^\dagger$
+equals $\op\rho+\dd t\,\mathcal L\op\rho$ to first order in $\dd t$.
+\begin{solution}
+$\op K_k\op\rho\op K_k^\dagger=\gamma_k\dd t\,\op L_k\op\rho\op L_k^\dagger$.
+$\op K_0\op\rho\op K_0^\dagger
+=(\id-\tfrac{i}{\hbar}\op H_{\rm eff}\dd t)\op\rho(\id+\tfrac{i}{\hbar}\op H_{\rm eff}^\dagger\dd t)
+=\op\rho-\tfrac{i}{\hbar}\dd t(\op H_{\rm eff}\op\rho-\op\rho\op H_{\rm eff}^\dagger)$.
+With $\op H_{\rm eff}=\op H-\tfrac{i\hbar}2\sum_k\gamma_k\op L_k^\dagger\op L_k$,
+$\op H_{\rm eff}\op\rho-\op\rho\op H_{\rm eff}^\dagger
+=\comm{\op H}{\op\rho}-\tfrac{i\hbar}2\sum_k\gamma_k\{\op L_k^\dagger\op L_k,\op\rho\}$.
+Substituting and adding the jump terms gives
+$\op\rho+\dd t[-\tfrac{i}{\hbar}\comm{\op H}{\op\rho}+\sum_k\gamma_k(\op L_k\op\rho\op L_k^\dagger-\tfrac12\{\op L_k^\dagger\op L_k,\op\rho\})]$,
+the Lindblad equation.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[No-jump evolution of a decaying qubit]
+For $\op L=\hat\sigma_-$ at rate $\gamma$ and no detected photon up
+to time $t$, find the conditioned state given
+$\ket{\psi(0)}=\alpha\ket0+\beta\ket1$. Show the ground-state weight
+grows.
+\begin{solution}
+$\op H_{\rm eff}=-\tfrac{i\hbar\gamma}2\hat\sigma_+\hat\sigma_-
+=-\tfrac{i\hbar\gamma}2\ket1\!\bra1$ (taking $\op H=0$). Then
+$e^{-i\op H_{\rm eff}t/\hbar}\ket{\psi(0)}=\alpha\ket0+\beta e^{-\gamma t/2}\ket1$.
+After renormalising,
+$\ket{\psi(t)}=(\alpha\ket0+\beta e^{-\gamma t/2}\ket1)/\sqrt{|\alpha|^2+|\beta|^2e^{-\gamma t}}$.
+The ground-state weight $|\alpha|^2/(|\alpha|^2+|\beta|^2e^{-\gamma t})\to1$:
+seeing no photon makes it ever more likely the qubit was already in
+$\ket0$ --- back-action with no detector event.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Jump resets the qubit]
+For $\op L=\hat\sigma_-$, show that a detected photon resets any
+state to $\ket0$, and explain why the post-jump state is
+independent of the pre-jump amplitudes.
+\begin{solution}
+$\op L\ket\psi=\hat\sigma_-(\alpha\ket0+\beta\ket1)=\beta\ket0$;
+normalised, $\op L\ket\psi/\lVert\op L\ket\psi\rVert=\ket0$. The
+photon carries away the excitation, so detecting it projects the
+qubit to the ground state regardless of $\alpha,\beta$ (only the
+\emph{probability} of the jump, $\propto|\beta|^2$, depends on the
+amplitudes).
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Wiener increment algebra]
+Using $\dd W^2=\dd t$ and $\overline{\dd W}=0$, show that averaging
+the stochastic master equation \cref{eq:sme} over the noise yields
+the Lindblad equation, and explain the role of $\eta$.
+\begin{solution}
+Taking the ensemble average, the stochastic term
+$\sqrt{\gamma\eta}\,\mathcal H[\op L]\op\rho_c\,\dd W$ averages to
+zero since $\overline{\dd W}=0$ and $\op\rho_c$ is independent of
+the future increment. The deterministic terms are exactly the
+Lindblad generator, so $\overline{\dd\op\rho_c}=\mathcal L\overline{\op\rho_c}\,\dd t$.
+The efficiency $\eta\in[0,1]$ scales only the measurement
+(stochastic) term: at $\eta=0$ (no detection) the conditioned state
+equals the unconditioned master-equation state; at $\eta=1$ (ideal
+detection) the measurement back-action is maximal. The averaged
+equation is independent of $\eta$.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Jumps versus diffusion]
+Explain why photon counting and homodyne detection of the same
+emission channel produce qualitatively different single-run records,
+even though both average to the same master equation.
+\begin{solution}
+Photon counting measures the number operator-like channel
+$\op L^\dagger\op L$: the record is a discrete click train, and the
+state makes abrupt jumps. Homodyne measures a field quadrature
+$\op L+\op L^\dagger$: the record is a continuous noisy current, and
+the state diffuses smoothly. The two correspond to different
+positive-operator-valued measures on the output field, i.e.\
+different unravellings; only the noise-averaged dynamics, which
+discards the record, is common to both --- the Lindblad equation.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Anti-Zeno qualitatively]
+Explain, using the noise-spectral-density picture of
+\cref{sec:noise-psd}, why measurement at an intermediate rate can
+\emph{accelerate} decay rather than freeze it.
+\begin{solution}
+A measurement of rate $1/\tau$ broadens the effective level into a
+band of width $\sim1/\tau$. Decay proceeds at a rate set by the
+overlap of this measurement band with the environment spectral
+density $S(\omega)$ at the transition. Very fast measurement
+($1/\tau$ huge) broadens the band far beyond where $S$ has weight,
+suppressing decay (Zeno). At an intermediate rate the band can be
+tuned to \emph{maximise} overlap with a peak of $S(\omega)$ away
+from the bare transition, enhancing the decay rate --- the anti-Zeno
+effect. Which dominates depends on the shape of $S(\omega)$.
+\end{solution}
+\end{exercise}
