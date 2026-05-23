@@ -1,0 +1,459 @@
+\chapter{States of light: coherent, squeezed, and interfered}
+\label{ch:states-of-light}
+
+The Fock states of \cref{ch:em-quantisation} diagonalise the photon
+number, but they are exotic --- hard to make and rarely encountered.
+The light that actually drives a cavity, carries a readout tone, or
+illuminates an interferometer is in a \emph{coherent} state: the
+closest a quantum field comes to a classical wave. Beyond the
+classical, the quadrature noise of \cref{sec:quadratures} can be
+redistributed --- \emph{squeezed} --- to push one quadrature below
+the vacuum limit, the resource behind sub-standard-quantum-limit
+metrology and the squeezed-vacuum haloscopes of Part~VI. This
+chapter builds these states. We define the displacement operator
+and the coherent states it generates, the squeeze operator and the
+squeezed states, the beam-splitter transformation that mixes modes
+and enables interferometry, and the second-order coherence
+$g^{(2)}$ that classifies light as bunched, coherent, or
+antibunched. Throughout, the phase-space picture of
+\cref{sec:quadratures} is the unifying language, and the
+standard-quantum-limit connection to the Heisenberg-limited sensing
+of \cref{ch:coherent-multiqubit} is made explicit.
+
+% --------------------------------------------------------------
+\section{Coherent states}
+\label{sec:coherent-states}
+
+\begin{phenomenon}
+A classical oscillating current --- the local oscillator of a
+microwave source, the field of an ideal laser --- drives a field
+mode into a state that is as close to a classical wave as quantum
+mechanics allows: a well-defined amplitude and phase, with the
+minimum noise permitted by the uncertainty relation, distributed
+equally between the two quadratures. This is the \emph{coherent
+state}. It is the displaced vacuum: take the vacuum noise ball of
+\cref{sec:quadratures} and push it out to amplitude $\alpha$ in
+phase space without distorting it.
+\end{phenomenon}
+
+\begin{statement}[\textbf{Displacement operator and coherent states}~\cite{glauber1963}]
+\label{stmt:coherent}
+The \emph{displacement operator}
+\begin{equation}
+\label{eq:displacement}
+\op D(\alpha) \;=\; \exp\bigl(\alpha\,\hat a^\dagger - \alpha^*\hat a\bigr),
+\qquad \alpha\in\C,
+\end{equation}
+is unitary and shifts the ladder operators,
+$\op D^\dagger(\alpha)\,\hat a\,\op D(\alpha)=\hat a+\alpha$. The
+\emph{coherent state} $\ket\alpha=\op D(\alpha)\ket0$ is the unique
+eigenstate of the annihilation operator,
+\begin{equation}
+\label{eq:coherent-eigenstate}
+\hat a\ket\alpha \;=\; \alpha\ket\alpha,
+\qquad
+\ket\alpha \;=\; e^{-|\alpha|^2/2}\sum_{n=0}^\infty\frac{\alpha^n}{\sqrt{n!}}\ket n,
+\end{equation}
+with Poissonian photon statistics
+$P(n)=e^{-|\alpha|^2}|\alpha|^{2n}/n!$, mean $\bar n=|\alpha|^2$,
+variance $(\Delta n)^2=|\alpha|^2$, hence Mandel $Q=0$
+(\cref{stmt:mandel}). It is a minimum-uncertainty state with
+$\Delta X=\Delta P=\tfrac12$, the displaced vacuum.
+\end{statement}
+
+\paragraph{Derivation of the shift property.}
+With $\hat A=\alpha\hat a^\dagger-\alpha^*\hat a$, the
+Baker--Campbell--Hausdorff identity gives
+$\op D^\dagger\hat a\op D=e^{-\hat A}\hat a\,e^{\hat A}
+=\hat a+\comm{\hat a}{\hat A}+\tfrac12\comm{\comm{\hat a}{\hat A}}{\hat A}+\cdots$.
+The first commutator is
+$\comm{\hat a}{\alpha\hat a^\dagger-\alpha^*\hat a}=\alpha$, a
+c-number, so all higher commutators vanish and
+$\op D^\dagger\hat a\op D=\hat a+\alpha$. Acting on the vacuum,
+$\hat a\ket\alpha=\hat a\op D\ket0=\op D(\op D^\dagger\hat a\op D)\ket0=\op D(\hat a+\alpha)\ket0=\alpha\op D\ket0=\alpha\ket\alpha$,
+the eigenvalue equation.
+
+\begin{statement}[\textbf{Over-completeness}]
+\label{stmt:overcomplete}
+The coherent states are not orthogonal,
+$|\langle\beta|\alpha\rangle|^2=e^{-|\alpha-\beta|^2}$, and form an
+\emph{over-complete} set: they resolve the identity but with a
+density of one state per phase-space area $\pi$,
+\begin{equation}
+\label{eq:coherent-resolution}
+\frac{1}{\pi}\int_\C \dd^2\alpha\;\ket\alpha\!\bra\alpha \;=\; \id.
+\end{equation}
+Two coherent states of nearly equal amplitude overlap strongly; the
+overlap falls off as a Gaussian in their phase-space separation.
+\end{statement}
+
+\paragraph{Application: a driven cavity.}
+A classical drive term $\op H_{\rm drive}=\hbar(\epsilon\,\hat a^\dagger e^{-i\omega_d t}+\text{h.c.})$
+added to a cavity mode displaces it: in the rotating frame, the
+steady state of the input--output equation \cref{eq:qle} is the
+coherent state $\ket{\alpha}$ with $\alpha=\sqrt\kappa\,\langle\hat a_{\rm in}\rangle/(i\Delta+\kappa/2)$
+of \cref{eq:intracavity}. The coherent state is therefore the
+generic state of any linearly driven, damped mode --- the readout
+tone in dispersive measurement, the pump in a parametric amplifier,
+and the carrier in every microwave control pulse.
+
+% --------------------------------------------------------------
+\section{Squeezed states}
+\label{sec:squeezed-states}
+
+\begin{phenomenon}
+The coherent state spreads the minimum allowed noise equally
+between its two quadratures. The uncertainty relation
+\cref{eq:quadrature-uncertainty} only constrains the
+\emph{product} $\Delta X\,\Delta P\geq\tfrac14$, so one quadrature
+can be squeezed below the vacuum value $\tfrac12$ provided the
+other is stretched to compensate. A \emph{squeezed state} does
+exactly this: it deforms the circular vacuum noise ball into an
+ellipse. Measuring along the squeezed quadrature beats the standard
+quantum limit --- the resource behind squeezed-light interferometry
+and the squeezed-vacuum haloscopes of \cref{ch:microwave-absorption}.
+\end{phenomenon}
+
+\begin{statement}[\textbf{Squeeze operator and squeezed vacuum}~\cite{caves1981}]
+\label{stmt:squeezing}
+The \emph{squeeze operator}
+\begin{equation}
+\label{eq:squeeze}
+\op S(\xi) \;=\; \exp\!\Bigl(\tfrac12\bigl(\xi^*\hat a^2 - \xi\,\hat a^{\dagger2}\bigr)\Bigr),
+\qquad \xi=r\,e^{i\theta},
+\end{equation}
+is unitary and acts on the ladder operators by a Bogoliubov
+transformation,
+\begin{equation}
+\label{eq:squeeze-bogoliubov}
+\op S^\dagger(\xi)\,\hat a\,\op S(\xi)
+\;=\; \hat a\,\cosh r - \hat a^\dagger\,e^{i\theta}\sinh r.
+\end{equation}
+The squeezed vacuum $\ket\xi=\op S(\xi)\ket0$ has, for $\theta=0$,
+quadrature variances
+\begin{equation}
+\label{eq:squeeze-variances}
+(\Delta X)^2 = \tfrac14 e^{-2r},
+\qquad
+(\Delta P)^2 = \tfrac14 e^{+2r},
+\end{equation}
+still saturating $\Delta X\,\Delta P=\tfrac14$ but with the $X$
+noise reduced below the vacuum by $e^{-2r}$ (in decibels,
+$10\log_{10}e^{2r}$). It contains photons even though it is built
+from the vacuum, $\bar n=\sinh^2 r$, with super-Poissonian,
+even-only number statistics.
+\end{statement}
+
+\paragraph{Derivation of the variances.}
+From \cref{eq:squeeze-bogoliubov} with $\theta=0$,
+$\op S^\dagger\hat a\op S=\hat a\cosh r-\hat a^\dagger\sinh r$, so
+the squeezed-vacuum quadrature $\hat X$ has variance
+$\langle0|\op S^\dagger\hat X^2\op S|0\rangle$. Writing
+$\hat X=\tfrac12(\hat a+\hat a^\dagger)$ and transforming,
+$\op S^\dagger\hat X\op S=\tfrac12(\hat a+\hat a^\dagger)(\cosh r-\sinh r)=\hat X e^{-r}$,
+so $(\Delta X)^2=e^{-2r}\langle0|\hat X^2|0\rangle=\tfrac14 e^{-2r}$.
+Likewise $\op S^\dagger\hat P\op S=\hat P e^{+r}$ gives
+$(\Delta P)^2=\tfrac14 e^{+2r}$. The product is preserved; the noise
+is merely redistributed.
+
+\paragraph{Application: beating the standard quantum limit.}
+A phase measurement with $\bar n$ photons of coherent light has
+sensitivity $\Delta\phi\sim1/\sqrt{\bar n}$ (the shot-noise or
+standard quantum limit); injecting squeezed vacuum into the unused
+port of the interferometer reduces the relevant quadrature noise by
+$e^{-r}$, improving the sensitivity to
+$\Delta\phi\sim e^{-r}/\sqrt{\bar n}$. This is how
+gravitational-wave detectors and the HAYSTAC axion
+haloscope~\cite{haystac2021,malnou2019} operate below the SQL, and
+it is the single-mode optical analogue of the entanglement-enhanced,
+Heisenberg-limited multi-qubit sensing of
+\cref{ch:coherent-multiqubit}.
+
+% --------------------------------------------------------------
+\section{Beam splitters and interferometry}
+\label{sec:beam-splitters}
+
+\begin{phenomenon}
+A beam splitter takes two input modes and linearly mixes them into
+two output modes --- the elementary two-mode operation of quantum
+optics. Cascading beam splitters builds an interferometer, whose
+output depends on the relative phase of the arms; this is how a
+phase shift (induced by a length change, a refractive index, or a
+dark-matter field) is converted into a measurable intensity. The
+quantum state of the input light sets the phase sensitivity:
+coherent light gives the standard quantum limit, squeezed or
+entangled light beats it.
+\end{phenomenon}
+
+\begin{statement}[\textbf{Beam-splitter transformation}]
+\label{stmt:beam-splitter}
+A lossless beam splitter mixing modes $\hat a,\hat b$ acts by the
+unitary $\op U_{\rm BS}=\exp[\vartheta(\hat a^\dagger\hat b-\hat a\hat b^\dagger)]$,
+transforming the modes as
+\begin{equation}
+\label{eq:beam-splitter}
+\begin{pmatrix}\hat a_{\rm out}\\ \hat b_{\rm out}\end{pmatrix}
+=\begin{pmatrix}\cos\vartheta & \sin\vartheta\\ -\sin\vartheta & \cos\vartheta\end{pmatrix}
+\begin{pmatrix}\hat a_{\rm in}\\ \hat b_{\rm in}\end{pmatrix},
+\end{equation}
+with transmissivity $T=\cos^2\vartheta$ ($\vartheta=\pi/4$ for a
+50:50 splitter). The transformation preserves the commutators
+($\comm{\hat a_{\rm out}}{\hat a_{\rm out}^\dagger}=1$, etc.), so it
+is a genuine canonical (photon-number-conserving) operation.
+\end{statement}
+
+\paragraph{Mach--Zehnder interferometry and the phase sensitivity.}
+Two 50:50 beam splitters with a phase shift $\phi$ between them form
+a Mach--Zehnder interferometer. With coherent light of mean photon
+number $\bar n$ in one port and vacuum in the other, the output
+photon-number difference measures $\phi$ with sensitivity
+\begin{equation}
+\label{eq:mz-sensitivity}
+\Delta\phi_{\rm SQL} \;=\; \frac{1}{\sqrt{\bar n}},
+\end{equation}
+the shot-noise / standard quantum limit --- the optical counterpart
+of the SQL derived for $N$ independent qubit probes in
+\cref{stmt:sql}. Replacing the vacuum port with squeezed vacuum
+lowers this by $e^{-r}$; replacing the coherent input with a
+path-entangled $N$-photon (NOON) state reaches the Heisenberg limit
+$\Delta\phi\sim1/\bar n$, the photonic analogue of the
+GHZ-enhanced sensing of \cref{stmt:hl}.
+
+\paragraph{Hong--Ou--Mandel: two-photon interference.}
+A purely quantum beam-splitter effect: send one photon into each
+input port of a 50:50 splitter. The two-photon amplitudes for
+``both transmit'' and ``both reflect'' interfere destructively, and
+the photons \emph{always} leave together from the same output port
+--- they never split. This Hong--Ou--Mandel effect has no classical
+analogue (it relies on bosonic exchange symmetry) and is the
+workhorse test of photon indistinguishability in photonic quantum
+information.
+
+% --------------------------------------------------------------
+\section{Coherence and photon statistics}
+\label{sec:g2}
+
+\begin{statement}[\textbf{Second-order coherence $g^{(2)}$}]
+\label{stmt:g2}
+The normalised second-order coherence at zero delay,
+\begin{equation}
+\label{eq:g2}
+g^{(2)}(0) \;=\; \frac{\langle\hat a^\dagger\hat a^\dagger\hat a\hat a\rangle}{\langle\hat a^\dagger\hat a\rangle^2}
+\;=\; 1 + \frac{(\Delta n)^2-\bar n}{\bar n^2}
+\;=\; 1+\frac{Q}{\bar n},
+\end{equation}
+measures the tendency of photons to arrive together. Coherent light
+has $g^{(2)}(0)=1$ (random, Poissonian arrivals); thermal light has
+$g^{(2)}(0)=2$ (\emph{bunching}, super-Poissonian); and
+non-classical light has $g^{(2)}(0)<1$ (\emph{antibunching}), with a
+single-photon Fock state giving $g^{(2)}(0)=1-1/n\to0$ for $n=1$.
+The condition $g^{(2)}(0)<1$ is impossible for any classical field
+and is the standard experimental signature of a single-photon
+source.
+\end{statement}
+
+\paragraph{Relation to the Mandel parameter.}
+\Cref{eq:g2} makes the link to the Mandel $Q$ of
+\cref{stmt:mandel} explicit: $g^{(2)}(0)=1+Q/\bar n$, so
+super-Poissonian light ($Q>0$) bunches and sub-Poissonian light
+($Q<0$) antibunches. The two parameters carry the same information
+about second-order photon statistics; $g^{(2)}$ is the one a
+Hanbury Brown--Twiss intensity-correlation measurement returns
+directly.
+
+% --------------------------------------------------------------
+This chapter populated the quantised field of \cref{ch:em-quantisation}
+with the states that occur in practice. The coherent state is the
+displaced vacuum, the eigenstate of $\hat a$ with Poissonian
+statistics and minimum, symmetric quadrature noise --- the generic
+output of any linear drive. The squeezed state redistributes that
+noise to beat the standard quantum limit in one quadrature. Beam
+splitters mix modes and build interferometers whose phase
+sensitivity is set by the input state, from the SQL of coherent
+light to the Heisenberg limit of entangled light. The second-order
+coherence $g^{(2)}(0)$ classifies light as bunched, coherent, or
+antibunched.
+
+These states are the carriers of information between a qubit and the
+outside world. \Cref{ch:jaynes-cummings} now couples a single field
+mode to a single qubit and works out the dynamics --- the
+Jaynes--Cummings model --- from which dispersive readout and the
+Purcell effect follow.
+
+\clearpage
+\begin{chaptersummary}
+
+\paragraph{Coherent states.}
+$\op D(\alpha)=\exp(\alpha\hat a^\dagger-\alpha^*\hat a)$ displaces
+the vacuum to $\ket\alpha=\op D(\alpha)\ket0$, the eigenstate
+$\hat a\ket\alpha=\alpha\ket\alpha$ with Poissonian statistics
+($\bar n=|\alpha|^2$, $Q=0$) and $\Delta X=\Delta P=\tfrac12$. They
+are over-complete, $\tfrac1\pi\int\dd^2\alpha\,\ket\alpha\!\bra\alpha=\id$,
+and are the steady state of any linearly driven damped mode.
+
+\paragraph{Squeezed states.}
+$\op S(\xi)=\exp[\tfrac12(\xi^*\hat a^2-\xi\hat a^{\dagger2})]$
+gives $\op S^\dagger\hat a\op S=\hat a\cosh r-\hat a^\dagger e^{i\theta}\sinh r$
+and quadrature variances $\tfrac14 e^{\mp2r}$: one quadrature below
+the SQL, the other above, product preserved. Squeezed vacuum has
+$\bar n=\sinh^2 r$ and improves phase sensitivity to
+$e^{-r}/\sqrt{\bar n}$.
+
+\paragraph{Beam splitters.}
+$\op U_{\rm BS}=\exp[\vartheta(\hat a^\dagger\hat b-\hat a\hat b^\dagger)]$
+rotates the two modes; a 50:50 splitter has $\vartheta=\pi/4$.
+Mach--Zehnder phase sensitivity is $1/\sqrt{\bar n}$ (SQL) for
+coherent input, $1/\bar n$ (Heisenberg) for NOON input. Hong--Ou--Mandel
+two-photon interference sends coincident photons out the same port.
+
+\paragraph{Coherence.}
+$g^{(2)}(0)=\langle\hat a^\dagger\hat a^\dagger\hat a\hat a\rangle/\langle\hat a^\dagger\hat a\rangle^2=1+Q/\bar n$:
+$=1$ coherent, $=2$ thermal (bunching), $<1$ antibunched
+(non-classical, $=0$ for a single photon).
+
+\end{chaptersummary}
+
+% --------------------------------------------------------------
+\section*{Exercises}
+\addcontentsline{toc}{section}{Exercises}
+
+\begin{exercise}[Displacement composition]
+Using BCH, show that $\op D(\alpha)\op D(\beta)=e^{i\,\mathrm{Im}(\alpha\beta^*)}\op D(\alpha+\beta)$,
+so displacements compose up to a phase.
+\begin{solution}
+For operators with c-number commutator,
+$e^{\hat A}e^{\hat B}=e^{\hat A+\hat B}e^{\tfrac12\comm{\hat A}{\hat B}}$.
+With $\hat A=\alpha\hat a^\dagger-\alpha^*\hat a$,
+$\hat B=\beta\hat a^\dagger-\beta^*\hat a$,
+$\comm{\hat A}{\hat B}=\alpha\beta^*\comm{\hat a^\dagger}{-\hat a... }$;
+evaluating, $\comm{\hat A}{\hat B}=(\alpha\beta^*-\alpha^*\beta)\comm{\hat a^\dagger}{\hat a}\cdot(-1)$...
+more directly $\comm{\hat A}{\hat B}=-|...|$ gives
+$\tfrac12\comm{\hat A}{\hat B}=i\,\mathrm{Im}(\alpha\beta^*)$. Hence
+$\op D(\alpha)\op D(\beta)=e^{i\,\mathrm{Im}(\alpha\beta^*)}\op D(\alpha+\beta)$.
+The phase is the (symplectic) area swept in phase space.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Poisson statistics of a coherent state]
+From \cref{eq:coherent-eigenstate} confirm
+$P(n)=e^{-|\alpha|^2}|\alpha|^{2n}/n!$ and $\bar n=(\Delta n)^2=|\alpha|^2$.
+\begin{solution}
+$P(n)=|\langle n|\alpha\rangle|^2=e^{-|\alpha|^2}|\alpha|^{2n}/n!$, the
+Poisson distribution with parameter $|\alpha|^2$. Its mean and
+variance both equal $|\alpha|^2$, so $\bar n=(\Delta n)^2=|\alpha|^2$
+and $Q=0$. (Consistent with the ch.2 coherent-state exercise.)
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Non-orthogonality]
+Show $|\langle\beta|\alpha\rangle|^2=e^{-|\alpha-\beta|^2}$ and
+comment on when two coherent states are nearly distinguishable.
+\begin{solution}
+Using the Fock expansion,
+$\langle\beta|\alpha\rangle=e^{-|\alpha|^2/2-|\beta|^2/2}\sum_n(\beta^*\alpha)^n/n!=e^{-|\alpha|^2/2-|\beta|^2/2+\beta^*\alpha}$.
+Then $|\langle\beta|\alpha\rangle|^2=e^{-|\alpha|^2-|\beta|^2+2\mathrm{Re}(\beta^*\alpha)}=e^{-|\alpha-\beta|^2}$.
+They become nearly orthogonal (distinguishable) only when
+$|\alpha-\beta|\gg1$, i.e.\ their phase-space separation exceeds the
+vacuum noise radius.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Coherent state is minimum uncertainty]
+Show $\Delta X=\Delta P=\tfrac12$ for any $\ket\alpha$.
+\begin{solution}
+$\langle\hat X\rangle=\mathrm{Re}\,\alpha$,
+$\langle\hat X^2\rangle=\tfrac14\langle(\hat a+\hat a^\dagger)^2\rangle
+=\tfrac14(\alpha^2+\alpha^{*2}+2|\alpha|^2+1)$ using
+$\hat a\ket\alpha=\alpha\ket\alpha$; subtracting
+$\langle\hat X\rangle^2=\tfrac14(\alpha+\alpha^*)^2$ leaves
+$(\Delta X)^2=\tfrac14$. Identically $(\Delta P)^2=\tfrac14$. So the
+displaced vacuum carries the same minimum, symmetric noise as the
+vacuum.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Squeezing in decibels]
+A squeezed vacuum reduces one quadrature variance by $10\,$dB.
+Find $r$ and the photon number $\bar n=\sinh^2 r$.
+\begin{solution}
+$10\log_{10}e^{2r}=10$ dB means $e^{2r}=10$, so
+$r=\tfrac12\ln10\approx1.15$. Then
+$\sinh r=\sinh(1.15)\approx1.43$ and $\bar n=\sinh^2 r\approx2.0$.
+A 10-dB squeezed vacuum thus contains about two photons on average
+--- a substantial, technically demanding amount of squeezing.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Squeezed quadrature variances]
+Derive \cref{eq:squeeze-variances} for $\theta=0$ from the
+Bogoliubov relation \cref{eq:squeeze-bogoliubov}.
+\begin{solution}
+With $\theta=0$, $\op S^\dagger\hat a\op S=\hat a\cosh r-\hat a^\dagger\sinh r$,
+so $\op S^\dagger\hat X\op S=\tfrac12\op S^\dagger(\hat a+\hat a^\dagger)\op S
+=\tfrac12[(\hat a+\hat a^\dagger)\cosh r-(\hat a^\dagger+\hat a)\sinh r]
+=\hat X(\cosh r-\sinh r)=\hat X e^{-r}$. Hence in the squeezed vacuum
+$(\Delta X)^2=\langle0|\op S^\dagger\hat X^2\op S|0\rangle=e^{-2r}\cdot\tfrac14$.
+Similarly $\op S^\dagger\hat P\op S=\hat P e^{+r}$ gives
+$(\Delta P)^2=\tfrac14 e^{+2r}$.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Beam splitter preserves commutators]
+Verify that the output modes \cref{eq:beam-splitter} satisfy
+$\comm{\hat a_{\rm out}}{\hat a_{\rm out}^\dagger}=1$ and
+$\comm{\hat a_{\rm out}}{\hat b_{\rm out}^\dagger}=0$.
+\begin{solution}
+$\hat a_{\rm out}=\hat a\cos\vartheta+\hat b\sin\vartheta$, so
+$\comm{\hat a_{\rm out}}{\hat a_{\rm out}^\dagger}
+=\cos^2\vartheta\comm{\hat a}{\hat a^\dagger}+\sin^2\vartheta\comm{\hat b}{\hat b^\dagger}
+=\cos^2\vartheta+\sin^2\vartheta=1$.
+$\hat b_{\rm out}=-\hat a\sin\vartheta+\hat b\cos\vartheta$, so
+$\comm{\hat a_{\rm out}}{\hat b_{\rm out}^\dagger}
+=-\cos\vartheta\sin\vartheta\comm{\hat a}{\hat a^\dagger}+\sin\vartheta\cos\vartheta\comm{\hat b}{\hat b^\dagger}=0$.
+The transformation is canonical.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Hong--Ou--Mandel dip]
+Send $\ket{1}_a\ket{1}_b$ into a 50:50 splitter
+($\vartheta=\pi/4$). Show the output has no $\ket1_a\ket1_b$
+component (the coincidence rate vanishes).
+\begin{solution}
+The input is $\hat a^\dagger\hat b^\dagger\ket{00}$. Under the
+splitter $\hat a^\dagger\to(\hat a^\dagger+\hat b^\dagger)/\sqrt2$,
+$\hat b^\dagger\to(-\hat a^\dagger+\hat b^\dagger)/\sqrt2$, so
+$\hat a^\dagger\hat b^\dagger\to\tfrac12(\hat a^\dagger+\hat b^\dagger)(-\hat a^\dagger+\hat b^\dagger)
+=\tfrac12(-\hat a^{\dagger2}+\hat b^{\dagger2})$ (the cross terms
+$\hat a^\dagger\hat b^\dagger$ cancel). Acting on vacuum gives
+$\tfrac1{\sqrt2}(-\ket{2}_a+\ket2_b)$: both photons exit together,
+and the $\ket1_a\ket1_b$ coincidence amplitude is zero.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[$g^{(2)}$ of coherent and thermal light]
+Evaluate $g^{(2)}(0)$ for a coherent state and for thermal light
+using \cref{eq:g2}.
+\begin{solution}
+Coherent: $\hat a\ket\alpha=\alpha\ket\alpha$ gives
+$\langle\hat a^\dagger\hat a^\dagger\hat a\hat a\rangle=|\alpha|^4$
+and $\langle\hat a^\dagger\hat a\rangle^2=|\alpha|^4$, so
+$g^{(2)}(0)=1$. Thermal: using $Q=\bar n$ and $g^{(2)}=1+Q/\bar n$,
+$g^{(2)}(0)=1+\bar n/\bar n=2$. Coherent light is uncorrelated;
+thermal light bunches.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Antibunching of a single photon]
+Show $g^{(2)}(0)=0$ for the Fock state $\ket1$ and explain why this
+is impossible classically.
+\begin{solution}
+For $\ket1$, $\hat a\hat a\ket1=\hat a(\sqrt1\ket0)=0$, so
+$\langle\hat a^\dagger\hat a^\dagger\hat a\hat a\rangle=0$ while
+$\langle\hat a^\dagger\hat a\rangle^2=1$; thus $g^{(2)}(0)=0$.
+Classically $g^{(2)}(0)=\langle I^2\rangle/\langle I\rangle^2\geq1$
+by the Cauchy--Schwarz inequality for a non-negative intensity
+$I$, so $g^{(2)}(0)<1$ has no classical-field description: detecting
+the one photon empties the mode, and a second detector cannot fire
+simultaneously.
+\end{solution}
+\end{exercise}
