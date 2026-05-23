@@ -120,17 +120,17 @@ needed. Each `[ ]` becomes a section or chapter.
 - [x] Parametric / mixing processes: three- and four-wave mixing in Josephson nonlinearities
       (e.g., two resonator modes + drive + qubit as a four-wave-mixing example)
 - [x] Two-qubit gates: cross-resonance, iSWAP, CZ (overview)
-- [ ] Decoherence channels in cQED hardware (incl. quasiparticle poisoning)
+- [x] Decoherence channels in cQED hardware (incl. quasiparticle poisoning)
 - [x] Parametric amplifiers and quantum-limited readout (optional)
 
 #### Experimental basics (qubit calibration)
 
-- [ ] Resonator spectroscopy ($S_{21}$ vs. drive frequency; bare vs. dressed cavity)
-- [ ] Two-tone (drive) spectroscopy of the qubit
-- [ ] Rabi experiment: drive amplitude → $\pi$-pulse calibration
-- [ ] Ramsey experiment: detuning and $T_2^*$ measurement
-- [ ] Echo / CPMG sequences for $T_2$ (optional)
-- [ ] $T_1$ measurement (optional)
+- [x] Resonator spectroscopy ($S_{21}$ vs. drive frequency; bare vs. dressed cavity)
+- [x] Two-tone (drive) spectroscopy of the qubit
+- [x] Rabi experiment: drive amplitude → $\pi$-pulse calibration
+- [x] Ramsey experiment: detuning and $T_2^*$ measurement
+- [x] Echo / CPMG sequences for $T_2$ (optional)
+- [x] $T_1$ measurement (optional)
 
 ### Part V — Quantum information processing
 

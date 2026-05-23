@@ -16,7 +16,7 @@ Six parts plus an appendix:
 | I | Quantum mechanics foundations | drafted (chs. 1–4) |
 | II | Open quantum systems | drafted (chs. 5–8) |
 | III | Quantum optics | drafted (chs. 9–12) |
-| IV | Superconducting circuits | in progress (ch. 13 drafted; chs. 14–17 planned) |
+| IV | Superconducting circuits | drafted (chs. 13–17): superconductivity + circuit quantisation, Josephson junction & SQUIDs, Cooper-pair box → transmon, circuit QED (coupling/gates/parametric amps), qubit tune-up & experimental basics |
 | V | Quantum information processing | not started (placeholder ch. 18) |
 | VI | Quantum sensing | drafted (chs. 19–24): dark-matter search, four mechanism chapters, plus a coherent multi-qubit / Heisenberg-limit chapter |
 | App. A | Auxiliary mathematical definitions | drafted |
@@ -89,10 +89,11 @@ README.md               # public-facing scope, TODO list of topics
 - CI: every push runs `xu-cheng/latex-action@v3` (TeX Live container) and
   deploys `_site/{main.pdf,index.html}` via `actions/deploy-pages@v4`.
 - Preview URL: <https://fewagner.github.io/quantum101/>.
-- **Forward `\cref`s into Parts IV–V are expected to produce *warnings***
-  (undefined reference: `ch:circuit-qed`, `ch:quantum-information-processing`,
-  `sec:experimental-basics`, `sec:two-qubit-gates`, `ch:qec`). They are
-  not errors and do not break the build.
+- **Forward `\cref`s into Part V are expected to produce *warnings***
+  (undefined reference: `ch:quantum-information-processing`, `ch:qec`).
+  They are not errors and do not break the build. (The Part IV refs
+  `ch:circuit-qed`, `sec:experimental-basics`, `sec:two-qubit-gates`,
+  etc. now resolve, since Part IV is drafted.)
 
 ### Build gotchas to avoid (each has cost us a CI run)
 
@@ -221,18 +222,25 @@ without checking — the document should keep reading as a quiet book.
 | Two-qubit gates: iSWAP / CZ / cross-resonance | `stmt:two-qubit-gates` (provides `sec:two-qubit-gates`) | ch. 16 §16.3 |
 | Hardware dispersive readout (`$\chi$` from circuit) | `stmt:cqed-readout` | ch. 16 §16.4 |
 | Parametric amplification, JPA, quantum limit `$n_{\rm add}\ge\tfrac12$` | `stmt:parametric-amp` | ch. 16 §16.5 |
+| Qubit characterisation pipeline (bring-up sequence) | `stmt:bringup` (provides `sec:experimental-basics`) | ch. 17 §17.1 |
+| Resonator / two-tone spectroscopy, dressed cavity | `stmt:spectroscopy` | ch. 17 §17.2 |
+| Rabi / Ramsey / echo / CPMG / `$T_1$` sequences | `stmt:time-domain` | ch. 17 §17.3 |
+| Hardware decoherence channels (TLS, flux noise, quasiparticle poisoning, Purcell) | `stmt:hardware-decoherence` | ch. 17 §17.4 |
 
 When introducing new terms in future chapters, **append to this table**.
 
 ## Open todos
 
-- Parts I, II, III, and VI drafted. Part IV in progress: a five-chapter
-  arc — ch. 13 superconductivity + circuit quantisation (drafted),
+- Parts I, II, III, IV, and VI drafted. Part IV is the five-chapter arc
+  ch. 13 superconductivity + circuit quantisation (`ch:circuit-quantisation`),
   ch. 14 Josephson junction & SQUIDs (`ch:josephson`), ch. 15 Cooper-pair
   box → transmon (`ch:transmon`), ch. 16 circuit QED: coupling, gates,
   parametric processes & quantum-limited amps (`ch:circuit-qed`,
   `sec:two-qubit-gates`), ch. 17 qubit tune-up & experimental basics
-  (`ch:experimental-basics`, `sec:experimental-basics`). Part V is a
+  (`ch:experimental-basics`, `sec:experimental-basics`). All forward
+  `\cref`s into Part IV from Parts I–III/VI now resolve; the only
+  remaining expected warnings are forward refs into Part V
+  (`ch:quantum-information-processing`, `ch:qec`). Part V is a
   placeholder (ch. 18) outlined in `README.md` only.
 - Bibliography active (53 entries; foundations + decoherence +
   interpretations + superdeterminism + Part VI dark-matter

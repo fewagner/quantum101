@@ -1,0 +1,428 @@
+\chapter{Qubit tune-up and experimental basics}
+\label{ch:experimental-basics}
+
+The preceding four chapters built the superconducting platform on
+paper: a gap from BCS, a resonator from circuit quantisation, a qubit
+from the Josephson junction, and couplings, gates, and readout from
+circuit QED. A freshly fabricated chip, however, is a black box. The
+designer aimed for certain frequencies and couplings, but the actual
+values --- set by nanometre-scale junction areas and the dielectric
+environment --- are unknown until measured, and the coherence times are
+unknown until the device is cold. This chapter is the bring-up manual:
+the fixed sequence of measurements that turns a black box into a
+characterised qubit. Each step uses the result of the previous one ---
+resonator spectroscopy locates the cavity, two-tone spectroscopy
+locates the qubit, Rabi calibrates the $\pi$-pulse, Ramsey and echo
+measure the coherence times, and a $T_1$ measurement closes the loop.
+Along the way the abstract $T_1$, $T_2$, and $T_2^*$ of Part~II acquire
+concrete pulse sequences, and the noise spectral density of
+\cref{stmt:noise-rates} becomes something one measures. The chapter
+ends by naming the microscopic culprits behind decoherence in real
+hardware --- dielectric two-level systems, flux noise, and the
+quasiparticle poisoning that ties directly back to the gap of
+\cref{ch:circuit-quantisation} and the detectors of Part~VI.
+
+% --------------------------------------------------------------
+\section{The bring-up sequence}
+\label{sec:experimental-basics}
+
+\begin{phenomenon}
+You are handed a cold chip and a microwave line. You can send tones in
+and measure what comes back; nothing else. From this you must determine
+the resonator frequency, the qubit frequency, the drive amplitude that
+performs a $\pi$-pulse, and the three coherence times. The remarkable
+fact is that this can be done entirely from the outside, with a fixed
+recipe in which each measurement bootstraps the next --- because the
+dispersive coupling of \cref{ch:dispersive} makes the easily measured
+resonator a faithful reporter of the otherwise inaccessible qubit.
+\end{phenomenon}
+
+\begin{statement}[\textbf{The qubit characterisation pipeline}~\cite{krantz2019,blais2021}]
+\label{stmt:bringup}
+A superconducting qubit is brought up in the following order, each step
+supplying a parameter needed by the next:
+\begin{enumerate}
+\item \textbf{Resonator spectroscopy.} Sweep a probe tone across the
+  readout resonator and record the transmission $S_{21}$; the resonance
+  gives $\omega_r$ and linewidth $\kappa$ (\cref{stmt:reflection}).
+\item \textbf{Two-tone (qubit) spectroscopy.} Park the probe on
+  $\omega_r$, sweep a second tone; when it reaches $\omega_q$ the qubit
+  is excited and pulls the resonator (\cref{stmt:dispersive-H}),
+  shifting $S_{21}$ --- locating $\omega_q$.
+\item \textbf{Rabi.} Drive at $\omega_q$ and vary pulse amplitude or
+  duration; the excited-state population oscillates
+  (\cref{stmt:single-qubit-gates}), calibrating the $\pi$- and
+  $\pi/2$-pulse.
+\item \textbf{Ramsey.} Two $\pi/2$-pulses separated by a delay, with the
+  drive detuned by $\delta$; the fringes oscillate at $\delta$ and decay
+  at $T_2^*$ (\cref{stmt:t2star}) --- refining $\omega_q$ and giving
+  $T_2^*$.
+\item \textbf{Echo / CPMG.} Insert one or more refocusing $\pi$-pulses;
+  these cancel slow noise and extend the coherence to $T_2\ge T_2^*$
+  (\cref{stmt:bloch-equations}), and the $\pi$-pulse spacing probes the
+  noise spectrum $S(\omega)$ (\cref{stmt:noise-rates}).
+\item \textbf{$T_1$.} Prepare $\ket1$ with a $\pi$-pulse, wait, and
+  read out; the exponential decay gives the relaxation time $T_1$
+  (\cref{stmt:t1}).
+\end{enumerate}
+\end{statement}
+
+\paragraph{Why this order.}
+The sequence is not arbitrary. Readout happens \emph{through} the
+resonator, so its frequency must be found first. The qubit is invisible
+directly --- it has no port of its own that a network analyser reads ---
+so it is found indirectly through the resonator pull, which requires
+knowing $\omega_r$. Time-domain experiments (Rabi onward) require a
+calibrated readout and a known $\omega_q$, and the coherence
+measurements require a calibrated $\pi$-pulse. Each rung of the ladder
+stands on the one below.
+
+\paragraph{Transition.}
+We now unpack the two halves of the pipeline: the
+frequency-domain spectroscopy that locates the system, and the
+time-domain sequences that calibrate control and measure coherence.
+
+% --------------------------------------------------------------
+\section{Spectroscopy: finding the frequencies}
+\label{sec:spectroscopy}
+
+\begin{statement}[\textbf{Resonator and two-tone spectroscopy}]
+\label{stmt:spectroscopy}
+\textbf{Resonator spectroscopy.} The transmission past the readout
+resonator is a Lorentzian (\cref{stmt:reflection}) centred at the
+dressed cavity frequency, whose location depends on the qubit state
+through the dispersive pull $\pm\chi$ (\cref{stmt:dispersive-H}):
+\begin{equation}
+\label{eq:dressed-cavity}
+\omega_r^{\rm meas} = \omega_r + \chi\langle\hat\sigma_z\rangle,
+\end{equation}
+so the resonance for the qubit in $\ket0$ and in $\ket1$ differ by
+$2\chi$, the readout contrast. \textbf{Two-tone spectroscopy.} Holding
+the probe at $\omega_r$ and sweeping a stronger ``spectroscopy'' tone,
+the resonator response changes abruptly when the second tone hits
+$\omega_q$ (and, at higher power, the two-photon $\omega_q+\alpha/2$
+transition to $\ket2$), revealing the qubit frequency and, via the
+spacing to the $\ket2$ feature, the anharmonicity $\alpha$.
+\end{statement}
+
+\paragraph{Bare versus dressed, and the photon-number calibration.}
+At very low probe power the resonator shows its \emph{dressed}
+frequency (qubit in its ground state); driving the qubit or populating
+the cavity shifts it. The AC Stark shift of \cref{stmt:ac-stark}
+provides an absolute photon-number ruler: tracking the qubit-frequency
+shift $\delta\omega_q=2\chi\bar n$ as the probe power is raised
+calibrates the intracavity photon number $\bar n$ in absolute units ---
+the calibration promised back in \cref{ch:perturbations}. Mapping
+$\omega_q$ versus an applied flux (for a SQUID transmon) traces the
+tuning curve $E_J^{\rm eff}(\Phi_{\rm ext})$ of \cref{stmt:squid} and
+locates the flux sweet spots.
+
+\paragraph{Transition.}
+Spectroscopy fixes the static parameters $\omega_r$, $\kappa$,
+$\omega_q$, $\alpha$, and $\chi$. Control amplitudes and coherence times
+are dynamical, and require pulses in the time domain.
+
+% --------------------------------------------------------------
+\section{Time-domain calibration: Rabi, Ramsey, echo}
+\label{sec:time-domain}
+
+\begin{statement}[\textbf{Rabi, Ramsey, echo, and $T_1$}]
+\label{stmt:time-domain}
+Four time-domain sequences calibrate control and extract the coherence
+times:
+\begin{itemize}
+\item \textbf{Rabi.} A resonant drive of amplitude $\Omega$ for time $t$
+  gives excited-state population
+  $P_1(t)=\sin^2(\Omega t/2)$ (\cref{stmt:single-qubit-gates}); the
+  first maximum defines the $\pi$-pulse, half of it the $\pi/2$-pulse.
+\item \textbf{Ramsey.} $\tfrac\pi2$ -- delay $\tau$ -- $\tfrac\pi2$,
+  with detuning $\delta$, gives fringes
+  $P_1(\tau)=\tfrac12[1+e^{-\tau/T_2^*}\cos\delta\tau]$ --- the fringe
+  frequency refines $\omega_q$ (set $\delta\to0$) and the decay envelope
+  gives $T_2^*$ (\cref{stmt:t2star}).
+\item \textbf{Hahn echo / CPMG.} Inserting a refocusing $\pi$-pulse at
+  mid-delay (echo), or $n$ of them (CPMG), reverses dephasing from noise
+  slower than $1/\tau$, extending the coherence to $T_2\ge T_2^*$; the
+  pulse train acts as a frequency filter on $S(\omega)$
+  (\cref{stmt:noise-rates}).
+\item \textbf{$T_1$.} $\pi$-pulse -- delay $\tau$ -- readout gives
+  $P_1(\tau)=e^{-\tau/T_1}$, the amplitude-damping decay of
+  \cref{stmt:t1}.
+\end{itemize}
+\end{statement}
+
+\paragraph{From abstract times to pulse sequences.}
+These sequences are where the Part~II decoherence parameters become
+operational. $T_1$ is the amplitude-damping time of \cref{stmt:t1};
+$T_2^*$ is the free-induction (inhomogeneous) dephasing of
+\cref{stmt:t2star}, dominated by slow frequency drift; and the echo
+$T_2$ approaches the homogeneous limit $1/T_2=1/2T_1+1/T_\phi$ of the
+optical Bloch equations (\cref{stmt:bloch-equations}) once slow noise is
+refocused. The hierarchy $T_2^*\le T_2\le2T_1$ is thus measured
+directly, sequence by sequence.
+
+\paragraph{Echo as noise spectroscopy.}
+A CPMG train of $n$ equally spaced $\pi$-pulses is a band-pass filter
+centred at frequency $\sim n/2\tau$: it is insensitive to noise slower
+than the pulse spacing and maximally sensitive at the comb frequency.
+Sweeping $n$ and $\tau$ therefore \emph{maps} the noise spectral density
+$S(\omega)$ that \cref{stmt:noise-rates} converts into dephasing rates
+--- turning the qubit into a spectrometer of its own environment. This
+is the experimental handle on the $1/f$ flux and charge noise that
+limits dephasing.
+
+\paragraph{Transition.}
+The coherence times are numbers; their \emph{causes} are microscopic.
+We close Part~IV by naming the dominant decoherence channels in real
+superconducting hardware and connecting each to physics developed
+earlier.
+
+% --------------------------------------------------------------
+\section{Decoherence channels in real hardware}
+\label{sec:hardware-decoherence}
+
+\begin{statement}[\textbf{Dominant decoherence channels}]
+\label{stmt:hardware-decoherence}
+The measured $T_1$ and $T_2$ of a transmon are set by a handful of
+mechanisms, each mapping onto a Part~II noise process:
+\begin{itemize}
+\item \textbf{Dielectric loss / two-level systems (TLS).} Defects in
+  oxides and at interfaces behave as spurious two-level systems that
+  resonantly absorb energy from the qubit, limiting $T_1$; they appear
+  as fluctuating dips in $T_1$ versus frequency and are the leading
+  relaxation channel in well-shielded devices.
+\item \textbf{Flux noise.} $1/f$ fluctuations of the flux through a
+  SQUID loop dephase a tunable transmon through
+  $\partial\omega_q/\partial\Phi_{\rm ext}$; suppressed at the sweet
+  spots of \cref{stmt:squid}, where the slope vanishes.
+\item \textbf{Charge noise.} Exponentially suppressed by the transmon
+  design (\cref{stmt:transmon}), but residual charge-coupled TLS can
+  still contribute.
+\item \textbf{Quasiparticle poisoning.} Non-equilibrium quasiparticles
+  --- excitations above the gap $2\Delta$ (\cref{stmt:bogoliubov}) ---
+  tunnel across junctions and both relax and excite the qubit; bursts
+  follow cosmic-ray and radioactivity events
+  (\cref{app:gap-partvi,ch:qp-detection}).
+\item \textbf{Purcell decay.} Relaxation through the readout cavity at
+  $\Gamma_{\rm P}=\kappa(g/\Delta)^2$ (\cref{stmt:purcell}), mitigated
+  by a Purcell filter.
+\end{itemize}
+\end{statement}
+
+\paragraph{The same gap, two roles.}
+Quasiparticle poisoning ties the chapter back to where Part~IV began.
+The gap $2\Delta$ that BCS produced (\cref{stmt:bogoliubov}) is what
+makes a superconductor dissipationless and a qubit coherent; the
+\emph{same} gap, when an energetic event breaks pairs above it, releases
+the quasiparticles that poison the qubit. A superconducting qubit is
+thus both a sensitive victim of pair-breaking radiation and --- read
+the other way --- a sensitive \emph{detector} of it, which is exactly
+the dual use Part~VI develops: the qubit antenna of
+\cref{ch:qubit-antenna} and the quasiparticle sensors of
+\cref{ch:qp-detection} turn this decoherence channel into a signal.
+
+% --------------------------------------------------------------
+This chapter turned the platform into a working device. The bring-up
+pipeline --- resonator spectroscopy, two-tone spectroscopy, Rabi,
+Ramsey, echo/CPMG, and $T_1$ --- determines every parameter of a cold
+chip from the outside, each measurement bootstrapping the next through
+the dispersive coupling. In the process the abstract coherence times of
+Part~II became concrete pulse sequences, the noise spectral density
+became something a CPMG comb measures, and the dominant hardware
+decoherence channels --- dielectric TLS, flux noise, quasiparticle
+poisoning, and Purcell decay --- were each traced to physics from
+earlier parts.
+
+This completes Part~IV. We now have a fully grounded superconducting
+platform: a coherent, controllable, measurable qubit with known
+parameters and understood noise. Part~V takes these primitives up a
+level of abstraction --- into quantum gates, algorithms, and error
+correction (\cref{ch:quantum-information-processing}) --- while Part~VI
+turns the platform's exquisite sensitivity, including the very
+quasiparticle-poisoning channel catalogued here, into a tool for
+sensing dark matter and single quanta.
+
+\clearpage
+\begin{chaptersummary}
+
+\paragraph{Bring-up pipeline.}
+Resonator spectroscopy ($\omega_r,\kappa$) $\to$ two-tone spectroscopy
+($\omega_q,\alpha$) $\to$ Rabi ($\pi$-pulse) $\to$ Ramsey
+($T_2^*$, refine $\omega_q$) $\to$ echo/CPMG ($T_2$, $S(\omega)$) $\to$
+$T_1$. Each step bootstraps the next; the qubit is read indirectly
+through the dispersively coupled resonator.
+
+\paragraph{Spectroscopy.}
+Dressed cavity $\omega_r^{\rm meas}=\omega_r+\chi\langle\hat\sigma_z\rangle$
+(states split by $2\chi$); two-tone locates $\omega_q$ and $\alpha$. AC
+Stark shift $\delta\omega_q=2\chi\bar n$ calibrates photon number;
+$\omega_q$ vs flux maps $E_J^{\rm eff}(\Phi_{\rm ext})$.
+
+\paragraph{Time domain.}
+Rabi $P_1=\sin^2(\Omega t/2)$ (calibrate $\pi$); Ramsey
+$P_1=\tfrac12[1+e^{-\tau/T_2^*}\cos\delta\tau]$; echo/CPMG give $T_2$ and
+map $S(\omega)$; $T_1$ from $P_1=e^{-\tau/T_1}$. Hierarchy
+$T_2^*\le T_2\le2T_1$.
+
+\paragraph{Hardware decoherence.}
+Dielectric TLS (limit $T_1$), $1/f$ flux noise (dephasing, beaten at
+sweet spots), residual charge noise, quasiparticle poisoning (pairs
+broken above $2\Delta$), and Purcell decay $\kappa(g/\Delta)^2$. The
+gap that protects the qubit also, when broken, poisons it --- the dual
+use Part~VI exploits.
+
+\end{chaptersummary}
+
+% --------------------------------------------------------------
+\section*{Exercises}
+\addcontentsline{toc}{section}{Exercises}
+
+\begin{exercise}[Why the resonator is measured first]
+Explain why one cannot begin bring-up with two-tone spectroscopy, and
+why the resonator must be located before the qubit.
+\begin{solution}
+The qubit is read out only through its dispersive shift of the
+resonator: the measured signal is the resonator transmission $S_{21}$,
+not anything emitted by the qubit directly. Two-tone spectroscopy works
+by parking the probe on the resonator and watching $S_{21}$ change when
+the second tone excites the qubit --- which is impossible until one
+knows where the resonator is. Hence resonator spectroscopy must come
+first; it provides the ``screen'' on which all subsequent qubit
+measurements are displayed.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Readout contrast from the dispersive shift]
+A device has $\chi/2\pi=1\,$MHz and $\kappa/2\pi=2\,$MHz. What is the
+frequency separation of the two qubit-state resonances, and is the
+readout in the resolvable regime?
+\begin{solution}
+The two resonances sit at $\omega_r\pm\chi$, separated by
+$2\chi/2\pi=2\,$MHz. Since $2\chi=\kappa$ here, the separation equals
+the linewidth --- the matching condition for maximal phase contrast
+($\Delta\phi=2\arctan(2\chi/\kappa)=2\arctan1=\pi/2$). The two states are
+just resolvable; this is a typical, well-designed operating point.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Extracting the anharmonicity from two-tone spectra]
+In two-tone spectroscopy a strong drive reveals a second feature at
+frequency $\omega_q+\alpha/2$ (a two-photon transition to $\ket2$).
+Given features at $5.000\,$GHz and $4.875\,$GHz, find $\omega_q$ and
+$\alpha$.
+\begin{solution}
+The $\ket0\to\ket1$ line is at $\omega_q/2\pi=5.000\,$GHz. The
+two-photon $\ket0\to\ket2$ transition appears at
+$(\omega_q+\alpha/2)$, i.e.\ at $\omega_q/2\pi+\alpha/4\pi$. Setting
+this to $4.875\,$GHz: $\alpha/4\pi=4.875-5.000=-0.125\,$GHz, so
+$\alpha/2\pi=-0.250\,$GHz$=-250\,$MHz. Thus $\omega_q/2\pi=5.0\,$GHz and
+$\alpha/h=-250\,$MHz, consistent with $\alpha=-E_C$ for a typical
+transmon.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Calibrating the $\pi$-pulse]
+A Rabi experiment varying drive duration at fixed amplitude shows the
+first population maximum at $t=20\,$ns. What is the Rabi frequency
+$\Omega/2\pi$, and what is the $\pi/2$-pulse duration?
+\begin{solution}
+The first maximum of $P_1=\sin^2(\Omega t/2)$ occurs at
+$\Omega t/2=\pi/2$, i.e.\ $\Omega t=\pi$, so $\Omega=\pi/t
+=\pi/20\,$ns, giving $\Omega/2\pi=1/(2t)=1/(40\,\text{ns})=25\,$MHz. The
+$\pi$-pulse is $t=20\,$ns; the $\pi/2$-pulse (first reaching
+$P_1=1/2$, $\Omega t/2=\pi/4$) is half as long, $10\,$ns.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Reading $\omega_q$ off a Ramsey fringe]
+A Ramsey experiment with intended detuning shows fringes at
+$2\,$MHz; after lowering the drive frequency by $2\,$MHz the fringes
+slow to near-DC. What was the qubit frequency relative to the original
+drive, and why does the slow-fringe condition pinpoint it?
+\begin{solution}
+Ramsey fringes oscillate at the detuning $\delta=\omega_d-\omega_q$. A
+$2\,$MHz fringe means the original drive was $2\,$MHz away from
+$\omega_q$. Lowering $\omega_d$ by $2\,$MHz brings $\delta\to0$, so the
+qubit frequency equals the \emph{new} drive frequency: it was
+$2\,$MHz below the original drive. The slow-fringe (zero-detuning)
+condition pinpoints $\omega_q$ because the fringe frequency is exactly
+$|\delta|$ --- vanishing only at resonance.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Why echo beats Ramsey]
+Explain why the Hahn echo gives a longer coherence time $T_2$ than the
+Ramsey $T_2^*$, and what kind of noise it cannot remove.
+\begin{solution}
+$T_2^*$ includes dephasing from \emph{slow} (quasi-static) frequency
+fluctuations: shot to shot, the qubit frequency differs, and the
+ensemble-averaged Ramsey fringe decays quickly. The echo's mid-sequence
+$\pi$-pulse swaps the accumulated phase sign, so a frequency offset that
+is constant over the sequence is refocused --- its dephasing cancels,
+extending coherence to $T_2$. Echo cannot remove noise \emph{faster}
+than the pulse spacing (which changes between the two halves and so does
+not refocus); that high-frequency noise, plus the irreducible $1/2T_1$,
+sets the echo $T_2\le2T_1$.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[CPMG as a filter]
+A CPMG sequence with $n$ pulses over total time $\tau$ is sensitive to
+noise near frequency $f\approx n/2\tau$. To probe flux noise at
+$1\,$MHz over a $10\,\mu$s sequence, how many $\pi$-pulses are needed?
+\begin{solution}
+Set $n/2\tau=f$: $n=2\tau f=2(10\times10^{-6}\,\text{s})(10^6\,\text{Hz})
+=20$ pulses. By varying $n$ (hence the comb frequency) and measuring the
+resulting coherence decay, one reconstructs $S(\omega)$ point by point;
+$n=20$ centres the filter at the $1\,$MHz flux-noise feature of
+interest.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[The coherence hierarchy]
+A transmon has $T_1=50\,\mu$s and pure-dephasing time
+$T_\phi=80\,\mu$s. Compute the echo $T_2$ and state the bound it must
+respect.
+\begin{solution}
+$1/T_2=1/2T_1+1/T_\phi=1/(100\,\mu\text{s})+1/(80\,\mu\text{s})
+=(0.010+0.0125)\,\mu\text{s}^{-1}=0.0225\,\mu\text{s}^{-1}$, so
+$T_2\approx44\,\mu$s. This respects $T_2\le2T_1=100\,\mu$s, with the gap
+to the bound set entirely by the pure dephasing $T_\phi$. Removing all
+dephasing ($T_\phi\to\infty$) would give the limit $T_2=2T_1=100\,\mu$s.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Quasiparticle poisoning and the gap]
+Why does a transmon operated at $5\,$GHz nonetheless suffer relaxation
+from quasiparticles, even though $\hbar\omega_q\ll2\Delta$? Where do the
+quasiparticles come from?
+\begin{solution}
+The qubit drive ($5\,$GHz) is far below the pair-breaking threshold
+$2\Delta/h\sim80\,$GHz (\cref{app:gap-partvi}), so it does not itself
+create quasiparticles. But \emph{other} sources do: stray infrared
+radiation, cosmic-ray and radioactivity-induced phonon bursts, and
+hot quasiparticles left over from incomplete thermalisation. Once
+present (above the gap), a quasiparticle that tunnels across the
+junction can exchange the qubit's $\hbar\omega_q$ of energy and relax
+it. The qubit frequency need not reach $2\Delta$; the quasiparticles
+are produced by higher-energy events and then poison the qubit at its
+own frequency. This is the channel Part~VI's detectors turn into a
+signal (\cref{ch:qp-detection}).
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[The dual use of the gap]
+Summarise, in a sentence or two each, the two opposite roles the
+superconducting gap $2\Delta$ plays --- one enabling the qubit, one
+threatening it --- and how Part~VI inverts the second.
+\begin{solution}
+\emph{Enabling:} the gap removes all electronic excitations below
+$2\Delta$, so supercurrents flow without loss and the qubit stays
+coherent (\cref{stmt:bogoliubov}). \emph{Threatening:} when an energetic
+event breaks pairs, the resulting quasiparticles tunnel across junctions
+and relax the qubit (poisoning). Part~VI inverts the threat into a
+measurement: the qubit's sensitivity to pair-breaking events makes it a
+detector of the very radiation (dark matter, single photons, phonons)
+that would otherwise be noise (\cref{ch:qp-detection,ch:qubit-antenna}).
+\end{solution}
+\end{exercise}
