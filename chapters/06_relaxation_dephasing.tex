@@ -1,0 +1,533 @@
+\chapter{Relaxation and dephasing}
+\label{ch:relaxation-dephasing}
+
+The Lindblad equation of \cref{ch:open-systems} is general; this
+chapter specialises it to the single most important open system in
+the book, a qubit coupled to a noisy environment. Two qualitatively
+different things can happen to a qubit in contact with a bath. It
+can \emph{lose energy} --- decay from $\ket1$ to $\ket0$ by emitting
+a quantum into the environment --- which is \emph{relaxation},
+characterised by the time $T_1$. Or it can \emph{lose phase
+coherence} --- the relative phase between $\ket0$ and $\ket1$ can be
+randomised by fluctuations of its transition frequency, without any
+energy exchange at all --- which is \emph{pure dephasing},
+characterised by the time $T_\phi$. The experimentally measured
+coherence time $T_2$ combines the two. We derive each from the
+appropriate jump operator, assemble the optical Bloch equations,
+establish the relation $1/T_2 = 1/(2T_1)+1/T_\phi$, distinguish
+$T_2$ from the inhomogeneous free-induction time $T_2^*$, and close
+by connecting all of these rates to the environmental noise
+spectral density --- the viewpoint that explains why $T_1$ probes
+the bath at the qubit frequency while dephasing probes it near zero
+frequency.
+
+% --------------------------------------------------------------
+\section{Energy relaxation: \texorpdfstring{$T_1$}{T1}}
+\label{sec:relaxation}
+
+\begin{phenomenon}
+A qubit prepared in its excited state $\ket1$ does not stay there.
+Coupled to a cold electromagnetic environment, it emits a quantum
+and decays to $\ket0$; coupled to a bath at finite temperature, it
+also occasionally absorbs a quantum and is promoted back to $\ket1$.
+The net exponential approach of the excited-state population to its
+thermal value defines the energy-relaxation time $T_1$. Relaxation
+is an \emph{energy-exchanging} process: it requires the bath to be
+able to accept (or supply) a quantum at the qubit frequency
+$\omega_q$.
+\end{phenomenon}
+
+\begin{statement}[\textbf{Relaxation from amplitude damping}]
+\label{stmt:t1}
+A qubit with $\op H=-\tfrac{\hbar\omega_q}{2}\hat\sigma_z$ coupled to
+a thermal bath is described by the Lindblad equation
+(\cref{stmt:lindblad}) with two jump operators: emission
+$\op L_\downarrow=\hat\sigma_-$ at rate $\gamma_\downarrow$ and
+absorption $\op L_\uparrow=\hat\sigma_+$ at rate $\gamma_\uparrow$.
+The excited-state population obeys
+\begin{equation}
+\label{eq:t1-population}
+\dot\rho_{11} \;=\; -\gamma_\downarrow\,\rho_{11} + \gamma_\uparrow\,\rho_{00},
+\end{equation}
+relaxing exponentially to the steady value
+$\rho_{11}^{\infty}=\gamma_\uparrow/(\gamma_\uparrow+\gamma_\downarrow)$
+with the energy-relaxation rate
+\begin{equation}
+\label{eq:t1-rate}
+\frac{1}{T_1} \;=\; \gamma_\downarrow + \gamma_\uparrow.
+\end{equation}
+Detailed balance fixes the ratio
+$\gamma_\uparrow/\gamma_\downarrow=e^{-\hbar\omega_q/k_B T}$, so at
+$T\ll\hbar\omega_q/k_B$ absorption is exponentially suppressed,
+$1/T_1\approx\gamma_\downarrow$ and $\rho_{11}^\infty\approx0$.
+\end{statement}
+
+\paragraph{Derivation.}
+Starting from \cref{eq:amplitude-damping-me} generalised to two
+jump operators, the dissipator
+$\gamma_\downarrow\mathcal D[\hat\sigma_-]+\gamma_\uparrow\mathcal D[\hat\sigma_+]$
+acts on the populations as in \cref{eq:t1-population} (each jump
+moves population one way, each anticommutator term removes it),
+and the unitary part $-\tfrac{i}{\hbar}\comm{\op H}{\op\rho}$ leaves
+populations untouched. The off-diagonal coherence picks up
+$\dot\rho_{01}=(i\omega_q-\tfrac12(\gamma_\downarrow+\gamma_\uparrow))\rho_{01}$,
+so even pure relaxation already damps the coherence at half the
+energy-relaxation rate --- the unavoidable contribution of $T_1$ to
+the coherence budget, made precise in \cref{sec:bloch} below.
+
+\paragraph{Connection to Fermi's golden rule.}
+The emission rate $\gamma_\downarrow$ is exactly the spontaneous
+quantum-decay rate one would compute from Fermi's golden rule
+(\cref{thm:fermi}) for the qubit--bath coupling evaluated at the
+transition frequency. The Markovian master equation reproduces this
+rate and additionally tracks the coherence, the absorption channel,
+and the approach to thermal equilibrium --- information that the
+single golden-rule number does not carry.
+
+\paragraph{Numerical scale.}
+For a transmon at $\omega_q/2\pi=5\,$GHz the thermal occupancy at
+$T=20\,$mK is $\bar n=(e^{\hbar\omega_q/k_BT}-1)^{-1}\sim10^{-5}$, so
+the steady-state excited population is at the $10^{-5}$ level and
+relaxation is essentially one-way decay. Present-day transmons
+reach $T_1\sim 100\,\mu$s--$1\,$ms, set by dielectric loss, the
+Purcell channel into the readout resonator, and quasiparticle
+tunnelling (\cref{stmt:qp-relaxation}).
+
+% --------------------------------------------------------------
+\section{Pure dephasing: \texorpdfstring{$T_\phi$}{Tphi}}
+\label{sec:dephasing}
+
+\begin{phenomenon}
+A qubit can lose phase coherence without losing any energy. If the
+transition frequency $\omega_q$ fluctuates --- because of charge,
+flux, or photon-number noise in the environment --- then the
+relative phase accumulated between $\ket0$ and $\ket1$ becomes
+random from run to run, and the ensemble-averaged coherence decays.
+Because no quantum is exchanged with the bath, this \emph{pure
+dephasing} can occur even when $T_1\to\infty$, and it probes the
+environment at low frequency rather than at $\omega_q$.
+\end{phenomenon}
+
+\begin{statement}[\textbf{Pure dephasing from a $\hat\sigma_z$ channel}]
+\label{stmt:tphi}
+A Markovian frequency-noise environment is described by the
+Lindblad equation with the single Hermitian jump operator
+$\op L=\hat\sigma_z$ at rate $\gamma_z$,
+\begin{equation}
+\label{eq:dephasing-me}
+\frac{\dd\op\rho}{\dd t}
+= -\frac{i}{\hbar}\comm{\op H}{\op\rho}
++ \gamma_z\,\mathcal D[\hat\sigma_z]\,\op\rho.
+\end{equation}
+Because $\hat\sigma_z$ is diagonal, the populations are untouched
+($\dot\rho_{00}=\dot\rho_{11}=0$) while the coherence decays purely
+exponentially,
+\begin{equation}
+\label{eq:tphi-decay}
+\dot\rho_{01} \;=\; \bigl(i\omega_q - 2\gamma_z\bigr)\rho_{01},
+\qquad \frac{1}{T_\phi} \;=\; 2\gamma_z.
+\end{equation}
+The pure-dephasing rate $1/T_\phi$ is the rate at which the
+off-diagonal element decays in excess of the relaxation
+contribution.
+\end{statement}
+
+\paragraph{Derivation.}
+For $\op L=\hat\sigma_z$ the dissipator is
+$\mathcal D[\hat\sigma_z]\op\rho=\hat\sigma_z\op\rho\hat\sigma_z-\op\rho$
+(using $\hat\sigma_z^2=\id$). In the
+$\{\ket0,\ket1\}$ basis $\hat\sigma_z\op\rho\hat\sigma_z$ flips the
+sign of the off-diagonal elements and leaves the diagonal alone, so
+$\mathcal D[\hat\sigma_z]\op\rho$ has zero diagonal and
+$-2\rho_{01}$ off-diagonal. Hence the populations are constant and
+$\rho_{01}$ decays at $2\gamma_z$, giving \cref{eq:tphi-decay}. This
+is the Markovian, exponential version of the dephasing kernel
+derived microscopically by tracing out an environment in
+\cref{ex:decoherence-by-partial-trace}: there the off-diagonal
+element was multiplied by an overlap factor that decayed in time;
+here that decay is made exponential by the Markov approximation.
+
+\paragraph{Quasi-static versus Markovian dephasing.}
+\Cref{stmt:tphi} assumes white (Markovian) frequency noise, which
+gives exponential coherence decay. Real solid-state environments
+are dominated by $1/f$ noise --- slow, strongly correlated
+fluctuations of charge and flux --- whose low-frequency weight is
+large. Slow noise is better described as \emph{quasi-static}: the
+qubit frequency is essentially constant within one experimental
+shot but varies from shot to shot, producing a \emph{Gaussian}
+(rather than exponential) decay of the averaged coherence and a
+free-induction time $T_2^*$ that can be much shorter than the
+Markovian estimate. The distinction is the subject of
+\cref{sec:bloch,sec:noise-psd}.
+
+% --------------------------------------------------------------
+\section{The Bloch equations and the coherence-time relations}
+\label{sec:bloch}
+
+\begin{statement}[\textbf{Optical Bloch equations}]
+\label{stmt:bloch-equations}
+Combining relaxation (\cref{stmt:t1}) and pure dephasing
+(\cref{stmt:tphi}), the components of the Bloch vector
+$\vec r=(\langle\hat\sigma_x\rangle,\langle\hat\sigma_y\rangle,\langle\hat\sigma_z\rangle)$
+(\cref{def:density-tls}) obey
+\begin{equation}
+\label{eq:bloch-equations}
+\dot r_x = -\omega_q r_y - \frac{r_x}{T_2},\quad
+\dot r_y = +\omega_q r_x - \frac{r_y}{T_2},\quad
+\dot r_z = -\frac{r_z - r_z^\infty}{T_1},
+\end{equation}
+with $r_z^\infty=\rho_{11}^\infty-\rho_{00}^\infty$ the thermal
+steady state. The transverse components precess at $\omega_q$ and
+decay at the \emph{total} dephasing rate $1/T_2$, while the
+longitudinal component relaxes at $1/T_1$. The three timescales are
+related by
+\begin{equation}
+\label{eq:t2-relation}
+\boxed{\;\frac{1}{T_2} \;=\; \frac{1}{2T_1} \;+\; \frac{1}{T_\phi}\;}
+\end{equation}
+\end{statement}
+
+\paragraph{Reading the relation.}
+\Cref{eq:t2-relation} says the coherence decays for two independent
+reasons: relaxation, which destroys the coherence at half the
+energy-decay rate (the $1/2T_1$ floor derived in
+\cref{sec:relaxation}), and pure dephasing, which adds $1/T_\phi$ on
+top. In the absence of pure dephasing ($T_\phi\to\infty$) the
+coherence is \emph{relaxation-limited}, $T_2=2T_1$, the longest a
+coherence can survive given a fixed $T_1$. Any frequency noise
+shortens it.
+
+\begin{statement}[\textbf{$T_2$ versus $T_2^*$}]
+\label{stmt:t2star}
+The time $T_2$ in \cref{eq:t2-relation} is the \emph{homogeneous}
+(intrinsic) dephasing time, the coherence decay seen after
+echo sequences remove slow noise. The \emph{inhomogeneous} or
+free-induction time $T_2^*$ is what a simple Ramsey experiment
+measures: it additionally includes quasi-static, shot-to-shot
+frequency fluctuations (slow charge/flux drift, ensemble spread),
+and satisfies
+\begin{equation}
+\label{eq:t2star-ineq}
+T_2^* \;\leq\; T_2.
+\end{equation}
+$T_2^*$ is not a pure-dephasing time and should not be identified
+with $T_\phi$; it is the convolution of the homogeneous decay with
+the quasi-static noise distribution, often Gaussian in form.
+\end{statement}
+
+\begin{remark}[Terminology]
+\label{rem:t2-terminology}
+The pure-dephasing time is denoted $T_\phi$ (rate
+$\Gamma_\phi=1/T_\phi$), \emph{not} $T_2^*$. The free-induction time
+$T_2^*$ is the inhomogeneous dephasing time including quasi-static
+detuning noise and shot-to-shot frequency variations. The three
+homogeneous times are tied by \cref{eq:t2-relation}; the
+inhomogeneous $T_2^*$ sits below $T_2$ by \cref{eq:t2star-ineq}.
+Echo and CPMG pulse sequences (\cref{sec:experimental-basics}, in
+Part~III) refocus the slow noise and recover $T_2$ from $T_2^*$.
+\end{remark}
+
+\paragraph{Transition.}
+The Bloch picture tells us \emph{how} the coherences and
+populations decay, but the rates $1/T_1$ and $1/T_\phi$ are still
+phenomenological inputs. The final section ties them to a single
+microscopic object --- the environmental noise spectral density ---
+and shows that relaxation and dephasing simply sample that spectrum
+at different frequencies.
+
+% --------------------------------------------------------------
+\section{Noise spectral density and the sampling picture}
+\label{sec:noise-psd}
+
+\begin{phenomenon}
+Both relaxation and dephasing arise from a fluctuating coupling
+between the qubit and its environment. The strength of those
+fluctuations as a function of frequency is the \emph{noise spectral
+density} $S(\omega)$, the Fourier transform of the bath
+autocorrelation function. Relaxation requires the environment to
+absorb a quantum at the qubit frequency, so $1/T_1$ samples
+$S(\omega)$ at $\omega=\omega_q$; pure dephasing arises from
+slow frequency wander, so $1/T_\phi$ samples $S(\omega)$ near
+$\omega=0$. The same bath, read at two different frequencies,
+controls the two decay channels.
+\end{phenomenon}
+
+\begin{statement}[\textbf{Rates from the noise spectrum}]
+\label{stmt:noise-rates}
+Write the qubit--bath coupling as
+$\op H_{SB}=\hbar(\hat\sigma_z\,\hat\lambda_\parallel/2 + \hat\sigma_x\,\hat\lambda_\perp)$,
+with $\hat\lambda_\parallel$ a longitudinal (frequency) noise
+operator and $\hat\lambda_\perp$ a transverse (coupling) noise
+operator, and let $S_\parallel(\omega)$, $S_\perp(\omega)$ be their
+spectral densities. Then to leading order in the coupling
+(Fermi's golden rule, \cref{thm:fermi}),
+\begin{equation}
+\label{eq:t1-from-noise}
+\frac{1}{T_1} \;=\; S_\perp(\omega_q) + S_\perp(-\omega_q),
+\end{equation}
+the sum of the emission ($+\omega_q$) and absorption ($-\omega_q$)
+weights of the transverse spectrum, while the pure-dephasing rate
+for white longitudinal noise is
+\begin{equation}
+\label{eq:tphi-from-noise}
+\frac{1}{T_\phi} \;=\; \tfrac12\,S_\parallel(0),
+\end{equation}
+the zero-frequency weight of the longitudinal spectrum. For
+non-white (e.g.\ $1/f$) longitudinal noise the simple
+white-noise rate \cref{eq:tphi-from-noise} is replaced by a
+filter-function overlap, producing the non-exponential decay noted
+in \cref{stmt:t2star}.
+\end{statement}
+
+\paragraph{Why the frequencies differ.}
+The transverse coupling $\hat\sigma_x$ connects $\ket0$ and $\ket1$,
+so it can drive transitions only by exchanging the energy
+$\hbar\omega_q$ --- it is resonant, and samples $S_\perp$ at
+$\pm\omega_q$. The longitudinal coupling $\hat\sigma_z$ commutes
+with $\op H_S$: it does not cause transitions but modulates the
+energy splitting, so its effect accumulates from the slow, near-DC
+part of the spectrum. This frequency separation is the basis of
+\emph{noise spectroscopy}: by measuring $T_1$ and $T_\phi$ (and
+their dependence on dynamical-decoupling sequences) one reconstructs
+$S(\omega)$ over a wide band, a routine cQED characterisation tool.
+
+\paragraph{The fluctuation--dissipation connection.}
+The thermal-equilibrium spectral density obeys the
+fluctuation--dissipation relation
+$S(\omega)=\hbar\omega\,[\,\coth(\hbar\omega/2k_BT)+1\,]\,\mathrm{Re}\,Z(\omega)/\ldots$,
+which ties the dissipative response of the environment (an
+impedance $Z(\omega)$, for an electrical bath) to the noise it
+injects. Operationally, this is why a low-loss, low-temperature
+environment is a quiet one: suppressing dissipation at $\omega_q$
+suppresses the relaxation noise, and suppressing low-frequency loss
+suppresses the dephasing noise.
+
+% --------------------------------------------------------------
+This chapter turned the abstract Lindblad equation into the
+working vocabulary of qubit coherence. Relaxation comes from the
+amplitude-damping channel and defines $T_1$; pure dephasing comes
+from the $\hat\sigma_z$ channel and defines $T_\phi$; the optical
+Bloch equations assemble them, with the total coherence time set by
+$1/T_2=1/(2T_1)+1/T_\phi$ and the free-induction time $T_2^*\leq T_2$
+further shortened by quasi-static noise. All the rates are
+ultimately set by the environmental noise spectral density,
+sampled at $\omega_q$ for relaxation and near zero for dephasing.
+
+These are the numbers every cQED experiment reports. The next
+chapter, \cref{ch:input-output}, returns to the microscopic bath
+and treats it explicitly as a continuum of propagating modes,
+deriving the input--output relations that connect the intracavity
+field to the signals travelling on the lines --- the formalism
+behind dispersive readout and the photon-counter efficiency of
+Part~VI.
+
+\clearpage
+\begin{chaptersummary}
+
+\paragraph{Relaxation $T_1$.}
+The amplitude-damping channel $\hat\sigma_-$ (rate
+$\gamma_\downarrow$) plus thermal absorption $\hat\sigma_+$ (rate
+$\gamma_\uparrow$) gives $1/T_1=\gamma_\downarrow+\gamma_\uparrow$,
+with steady-state population
+$\rho_{11}^\infty=\gamma_\uparrow/(\gamma_\uparrow+\gamma_\downarrow)$
+and detailed balance
+$\gamma_\uparrow/\gamma_\downarrow=e^{-\hbar\omega_q/k_BT}$.
+
+\paragraph{Pure dephasing $T_\phi$.}
+The $\hat\sigma_z$ channel (rate $\gamma_z$) leaves populations
+fixed and decays the coherence at $1/T_\phi=2\gamma_z$, with no
+energy exchange.
+
+\paragraph{Bloch equations and $T_2$.}
+Transverse components precess at $\omega_q$ and decay at $1/T_2$;
+the longitudinal component relaxes at $1/T_1$. The homogeneous
+times satisfy
+\begin{equation}
+\frac{1}{T_2} = \frac{1}{2T_1} + \frac{1}{T_\phi},
+\end{equation}
+so $T_2\leq 2T_1$, with equality only when pure dephasing is
+absent. The inhomogeneous free-induction time obeys $T_2^*\leq T_2$
+and includes quasi-static, shot-to-shot frequency noise; it is not
+the pure-dephasing time.
+
+\paragraph{Noise spectral density.}
+$1/T_1=S_\perp(\omega_q)+S_\perp(-\omega_q)$ samples transverse
+noise at the qubit frequency; $1/T_\phi=\tfrac12 S_\parallel(0)$
+samples longitudinal noise near DC. Measuring the two (and their
+dynamical-decoupling dependence) reconstructs $S(\omega)$.
+
+\end{chaptersummary}
+
+% --------------------------------------------------------------
+\section*{Exercises}
+\addcontentsline{toc}{section}{Exercises}
+
+\begin{exercise}[Solving the population equation]
+Solve \cref{eq:t1-population} for $\rho_{11}(t)$ given
+$\rho_{11}(0)=1$, and show it relaxes exponentially to
+$\rho_{11}^\infty$ with time constant $T_1$.
+\begin{solution}
+With $\rho_{00}=1-\rho_{11}$, \cref{eq:t1-population} reads
+$\dot\rho_{11}=-(\gamma_\downarrow+\gamma_\uparrow)\rho_{11}+\gamma_\uparrow$.
+The solution is
+$\rho_{11}(t)=\rho_{11}^\infty+(1-\rho_{11}^\infty)e^{-t/T_1}$ with
+$\rho_{11}^\infty=\gamma_\uparrow/(\gamma_\uparrow+\gamma_\downarrow)$
+and $1/T_1=\gamma_\downarrow+\gamma_\uparrow$. It decays
+exponentially from $1$ to $\rho_{11}^\infty$.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Thermal occupancy of a transmon]
+Compute the equilibrium excited-state population
+$\rho_{11}^\infty$ for $\omega_q/2\pi=5\,$GHz at $T=20\,$mK and at
+$T=100\,$mK. Comment on the implication for state-preparation
+fidelity.
+\begin{solution}
+$\hbar\omega_q/k_B = (h\cdot5\times10^9)/k_B\approx 0.24\,$K. At
+$20\,$mK, $\hbar\omega_q/k_BT\approx12$, so
+$\rho_{11}^\infty\approx e^{-12}\approx6\times10^{-6}$. At
+$100\,$mK, $\approx e^{-2.4}\approx0.09$ (using
+$\rho_{11}^\infty=1/(1+e^{\hbar\omega_q/k_BT})$ gives $\approx0.08$).
+Residual thermal population caps passive ground-state preparation
+fidelity; at $100\,$mK an $8\%$ excited population is unacceptable,
+motivating active reset.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[The $\hat\sigma_z$ dissipator]
+Show that $\mathcal D[\hat\sigma_z]\op\rho=\hat\sigma_z\op\rho\hat\sigma_z-\op\rho$
+and evaluate its action on a general single-qubit $\op\rho$ in the
+$\{\ket0,\ket1\}$ basis. Confirm \cref{eq:tphi-decay}.
+\begin{solution}
+Since $\hat\sigma_z^\dagger\hat\sigma_z=\id$,
+$\mathcal D[\hat\sigma_z]\op\rho=\hat\sigma_z\op\rho\hat\sigma_z-\tfrac12\{\id,\op\rho\}
+=\hat\sigma_z\op\rho\hat\sigma_z-\op\rho$. With
+$\hat\sigma_z=\mathrm{diag}(1,-1)$ (taking $\ket0=(1,0)$),
+$\hat\sigma_z\op\rho\hat\sigma_z$ has unchanged diagonal and negated
+off-diagonal, so $\mathcal D[\hat\sigma_z]\op\rho$ has zero diagonal
+and $-2\rho_{01}$ at the off-diagonal. Adding the unitary precession
+gives $\dot\rho_{01}=(i\omega_q-2\gamma_z)\rho_{01}$, i.e.\
+$1/T_\phi=2\gamma_z$.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[The relaxation-limited coherence time]
+Show that pure relaxation (no $\hat\sigma_z$ channel) at
+zero temperature already gives $T_2=2T_1$. Why can $T_2$ never
+exceed $2T_1$?
+\begin{solution}
+From \cref{sec:relaxation}, the coherence with only
+$\hat\sigma_-$ decays at $\gamma_\downarrow/2=1/(2T_1)$, so
+$T_2=2T_1$. Any additional dephasing channel adds a non-negative
+$1/T_\phi$ to $1/T_2$ via \cref{eq:t2-relation}, which can only
+shorten $T_2$. Hence $T_2\leq2T_1$ always, with equality iff
+$T_\phi\to\infty$.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Deriving the $T_2$ relation]
+From the coherence-decay contributions of relaxation
+($1/2T_1$) and pure dephasing ($1/T_\phi$), argue that the total
+transverse decay rate is their sum, \cref{eq:t2-relation}. Under
+what assumption do the two rates simply add?
+\begin{solution}
+If the relaxation bath and the dephasing bath are statistically
+independent and both Markovian, their contributions to the
+coherence-decay exponent add linearly:
+$\rho_{01}(t)\propto e^{-t/2T_1}e^{-t/T_\phi}=e^{-t/T_2}$ with
+$1/T_2=1/2T_1+1/T_\phi$. The assumption is independence and white
+(Markovian) statistics; correlated or non-white noise spoils the
+simple additivity.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Ramsey fringe with quasi-static noise]
+A Ramsey experiment with detuning $\delta$ measures
+$\langle\hat\sigma_x(t)\rangle$. Model quasi-static frequency noise
+by averaging $\cos[(\delta+\xi)t]$ over a Gaussian distribution of
+$\xi$ with variance $\sigma^2$. Show that the fringe envelope
+decays as a Gaussian $e^{-\sigma^2t^2/2}$ and identify $T_2^*$.
+\begin{solution}
+$\langle\cos[(\delta+\xi)t]\rangle_\xi
+=\mathrm{Re}\,e^{i\delta t}\langle e^{i\xi t}\rangle
+=\cos(\delta t)\,e^{-\sigma^2t^2/2}$ using the Gaussian
+characteristic function. The envelope is Gaussian, not exponential,
+with $1/T_2^*=\sigma/\sqrt2$ (defining $T_2^*$ by the $1/e$ point of
+the envelope, $\sigma^2 (T_2^*)^2/2=1$). This is the inhomogeneous
+free-induction decay of \cref{stmt:t2star}, distinct from the
+exponential homogeneous decay.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Why $T_1$ samples $S(\omega_q)$]
+Using Fermi's golden rule (\cref{thm:fermi}) for the transverse
+coupling $\hbar\hat\sigma_x\hat\lambda_\perp$, argue that the
+emission rate is proportional to the noise spectral density
+evaluated at $+\omega_q$ and the absorption rate to that at
+$-\omega_q$, giving \cref{eq:t1-from-noise}.
+\begin{solution}
+The golden-rule rate for $\ket1\to\ket0$ is
+$\propto|\bra0\hat\sigma_x\ket1|^2 S_\perp(\omega_q)$, the bath
+supplying a final density of states / spectral weight at the
+emitted energy $+\hbar\omega_q$; the $\ket0\to\ket1$ rate is
+$\propto S_\perp(-\omega_q)$, requiring the bath to provide
+$\hbar\omega_q$. Their sum is $1/T_1$. The transverse operator
+$\hat\sigma_x$ is what connects the two levels, so only the bath
+spectrum at $\pm\omega_q$ enters.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Why dephasing samples $S(0)$]
+Explain why longitudinal $\hat\sigma_z$ coupling produces dephasing
+controlled by the \emph{zero-frequency} noise weight, and why for
+$1/f$ noise the resulting decay is non-exponential.
+\begin{solution}
+$\hat\sigma_z$ commutes with $\op H_S$, so it causes no transitions;
+it modulates the splitting $\omega_q\to\omega_q+\lambda_\parallel(t)$.
+The accumulated random phase is
+$\varphi(t)=\int_0^t\lambda_\parallel(t')\dd t'$, whose variance is
+$\propto\int S_\parallel(\omega)\,|\,\text{filter}\,|^2\dd\omega$,
+peaked at $\omega\to0$ for a free-induction (no-pulse) filter. For
+white noise this gives a linear-in-$t$ exponent (exponential decay,
+rate $\tfrac12 S_\parallel(0)$); for $1/f$ noise the diverging
+low-frequency weight makes the exponent grow faster than linearly
+(roughly $t^2\ln$), producing near-Gaussian, non-exponential decay.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Echo refocusing]
+Qualitatively explain how a single $\pi$-pulse inserted halfway
+through a free-evolution interval (a Hahn echo) removes the effect
+of quasi-static frequency noise and recovers $T_2$ from $T_2^*$.
+\begin{solution}
+Quasi-static noise gives a constant detuning $\xi$ within a shot,
+producing phase $\xi\,t/2$ in the first half. The $\pi$-pulse swaps
+$\ket0\leftrightarrow\ket1$, flipping the sign of subsequently
+accumulated phase, so the second half contributes $-\xi\,t/2$. The
+two cancel at the echo time regardless of $\xi$, removing the
+quasi-static contribution and leaving only the faster (non-static)
+noise --- recovering the homogeneous $T_2$. Noise varying within
+the interval is only partially refocused, which is why CPMG (many
+$\pi$-pulses) does better.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Purcell relaxation as a $T_1$ channel]
+A qubit dispersively coupled to a lossy readout resonator decays
+through the resonator (the Purcell effect) at a rate
+$\Gamma_{\rm P}=\kappa\,(g/\Delta)^2$, with $\kappa$ the resonator
+linewidth, $g$ the coupling, and $\Delta$ the detuning. Explain
+how this fits into the $T_1$ budget and how a Purcell filter
+suppresses it.
+\begin{solution}
+Purcell decay is one additive contribution to the relaxation rate,
+$1/T_1=\Gamma_{\rm dielectric}+\Gamma_{\rm qp}+\Gamma_{\rm P}+\cdots$;
+it is transverse noise delivered by the resonator's photonic
+density of states at $\omega_q$. A Purcell filter is a band-stop
+element that suppresses the environmental density of states at
+$\omega_q$ while passing the readout frequency, reducing
+$S_\perp(\omega_q)$ and hence $\Gamma_{\rm P}$ without spoiling
+readout. This is the noise-spectral-density viewpoint of
+\cref{stmt:noise-rates} applied to engineering.
+\end{solution}
+\end{exercise}
