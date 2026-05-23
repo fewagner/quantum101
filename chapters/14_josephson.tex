@@ -1,0 +1,496 @@
+\chapter{The Josephson junction and SQUIDs}
+\label{ch:josephson}
+
+The previous chapter ended on a deficit: a linear $LC$ resonator is a
+perfect harmonic oscillator and therefore a useless qubit, because its
+equally spaced levels cannot be addressed one transition at a time.
+What is needed is a circuit element that is \emph{nonlinear} --- so the
+level spacing varies --- yet \emph{dissipationless}, so it does not
+spoil the coherence that superconductivity buys. There is exactly one
+such element: the Josephson junction, a weak link across which the
+condensate phase of \cref{stmt:flux-quantisation} can tunnel. This
+chapter derives its two defining relations from the macroscopic
+wavefunction, shows that it behaves as a nonlinear inductor with a
+cosine potential energy, organises the resulting phenomenology (the DC
+and AC Josephson effects and the Shapiro steps that underlie the volt
+standard), and assembles the canonical circuit Hamiltonian
+$\op H=4E_C(\op n-n_g)^2-E_J\cos\op\varphi$ that the Cooper-pair box
+and transmon of \cref{ch:transmon} diagonalise. It closes with the
+SQUID, the two-junction loop whose Josephson energy is tunable by an
+external magnetic flux --- the in-situ frequency knob that
+\cref{ch:circuit-qed,ch:experimental-basics} rely on for gates and
+calibration.
+
+% --------------------------------------------------------------
+\section{The Josephson effect}
+\label{sec:josephson-effect}
+
+\begin{phenomenon}
+Place a thin insulating barrier between two superconductors. One
+expects an insulator to block DC current --- and for single electrons
+it does. But Cooper pairs can tunnel coherently through the barrier,
+and they do so as a single quantum amplitude: a dissipationless
+supercurrent flows across the junction at \emph{zero} voltage, its
+magnitude set by the difference in the condensate phase on the two
+sides. Stranger still, if a constant voltage is held across the
+junction, the supercurrent does not settle to a DC value but
+\emph{oscillates} at a frequency proportional to the voltage. The
+junction converts a DC voltage into an AC current --- a purely
+quantum-mechanical transduction with no classical analogue.
+\end{phenomenon}
+
+\begin{statement}[\textbf{The Josephson relations}~\cite{josephson1962}]
+\label{stmt:josephson-relations}
+Let $\varphi=\varphi_2-\varphi_1$ be the gauge-invariant difference of
+the condensate phase \cref{eq:order-parameter} across the junction.
+The supercurrent through the junction and the rate of change of the
+phase obey
+\begin{equation}
+\label{eq:josephson-relations}
+\boxed{\;I = I_c\sin\varphi\;}
+\qquad\text{(current--phase)},
+\qquad
+\boxed{\;\dot\varphi = \frac{2e}{\hbar}\,V = \frac{2\pi}{\Phi_0}\,V\;}
+\qquad\text{(voltage--phase)},
+\end{equation}
+where $I_c$ is the \emph{critical current} (the maximum supercurrent
+the junction sustains) and $\Phi_0=h/2e$ is the flux quantum of
+\cref{eq:flux-quantum}. The first relation says the junction carries a
+zero-voltage supercurrent fixed by the phase; the second says a
+voltage winds the phase at the \emph{Josephson frequency}
+$\omega_J=2eV/\hbar$.
+\end{statement}
+
+\paragraph{Derivation (two coupled condensates).}
+Model the two superconductors as single macroscopic states
+$\psi_j=\sqrt{n_j}\,e^{i\varphi_j}$ ($j=1,2$) weakly coupled through
+the barrier. Following Feynman, the coupled Schr\"odinger equations are
+\begin{equation}
+\label{eq:feynman-coupled}
+i\hbar\,\dot\psi_1 = \mu_1\psi_1 + K\psi_2,
+\qquad
+i\hbar\,\dot\psi_2 = \mu_2\psi_2 + K\psi_1,
+\end{equation}
+with $K$ the tunnelling amplitude and $\mu_j$ the (electro)chemical
+potential of each side. Substituting $\psi_j=\sqrt{n_j}e^{i\varphi_j}$
+and separating real and imaginary parts gives, for the particle
+transfer rate and the phase,
+\begin{equation}
+\label{eq:feynman-result}
+\dot n_1 = \frac{2K}{\hbar}\sqrt{n_1 n_2}\,\sin\varphi = -\dot n_2,
+\qquad
+\dot\varphi = \dot\varphi_2-\dot\varphi_1 = \frac{\mu_1-\mu_2}{\hbar}.
+\end{equation}
+The current is $I=2e\,\dot n_2 \propto \sin\varphi$, which is the
+current--phase relation with $I_c=2eK\sqrt{n_1n_2}/\hbar$ (constants
+absorbed). The chemical-potential difference for charge-$2e$ pairs
+across a voltage $V$ is $\mu_1-\mu_2=2eV$, giving the voltage--phase
+relation $\dot\varphi=2eV/\hbar$. Both relations follow from coherent
+pair tunnelling alone; no dissipative quasiparticle current appears,
+consistent with the gap $2\Delta$ of \cref{stmt:bogoliubov} suppressing
+single-electron transport at low energy.
+
+\paragraph{Transition.}
+The two relations are kinematic. Combined, they reveal the junction's
+dynamical role: a nonlinear, dissipationless inductor with a definite
+potential energy, which we extract next.
+
+% --------------------------------------------------------------
+\section{The junction as a nonlinear inductor}
+\label{sec:josephson-energy}
+
+\begin{statement}[\textbf{Josephson energy and inductance}]
+\label{stmt:josephson-energy}
+Differentiating the current--phase relation and using the
+voltage--phase relation, the junction obeys $V=L_J(\varphi)\,\dot I$
+with the \emph{Josephson inductance}
+\begin{equation}
+\label{eq:josephson-inductance}
+L_J(\varphi)=\frac{\Phi_0}{2\pi I_c\cos\varphi}
+=\frac{L_{J0}}{\cos\varphi},
+\qquad
+L_{J0}=\frac{\hbar}{2eI_c}=\frac{\Phi_0}{2\pi I_c},
+\end{equation}
+an inductance that \emph{depends on the phase} and even diverges at
+$\varphi=\pi/2$ --- the hallmark nonlinearity a linear coil cannot
+provide. Integrating the electrical power $IV$ over time gives the
+energy stored in the junction,
+\begin{equation}
+\label{eq:josephson-potential}
+U(\varphi) = -E_J\cos\varphi,
+\qquad
+E_J=\frac{I_c\Phi_0}{2\pi}=\frac{\hbar I_c}{2e}=\Bigl(\frac{\Phi_0}{2\pi}\Bigr)^{\!2}\frac{1}{L_{J0}},
+\end{equation}
+the \emph{Josephson energy}. The cosine potential is the
+anharmonic ingredient missing from the parabolic $\Phi^2/2L$ of the
+linear resonator \cref{eq:lc-hamiltonian}.
+\end{statement}
+
+\paragraph{Derivation.}
+From $I=I_c\sin\varphi$, $\dot I=I_c\cos\varphi\,\dot\varphi$; using
+$\dot\varphi=(2\pi/\Phi_0)V$ gives
+$\dot I=I_c\cos\varphi\,(2\pi/\Phi_0)V$, i.e.\
+$V=[\Phi_0/(2\pi I_c\cos\varphi)]\dot I$, which is
+\cref{eq:josephson-inductance}. The stored energy follows from
+$\dot U=IV=I_c\sin\varphi\cdot(\Phi_0/2\pi)\dot\varphi
+=E_J\sin\varphi\,\dot\varphi=\frac{\dd}{\dd t}(-E_J\cos\varphi)$,
+integrating to \cref{eq:josephson-potential} up to a constant.
+
+\begin{statement}[\textbf{The Josephson circuit Hamiltonian}~\cite{koch2007,vool2017}]
+\label{stmt:josephson-hamiltonian}
+A Josephson junction shunted by a capacitance $C_\Sigma$ is described
+by the conjugate pair of \emph{phase} $\op\varphi$ and \emph{Cooper-pair
+number} $\op n=\op Q/2e$, with
+\begin{equation}
+\label{eq:phase-number-commutator}
+\comm{\op\varphi}{\op n}=i,
+\end{equation}
+inherited from $\comm{\op\Phi}{\op Q}=i\hbar$ via
+$\varphi=2\pi\Phi/\Phi_0$. The Hamiltonian is
+\begin{equation}
+\label{eq:josephson-hamiltonian}
+\op H = 4E_C(\op n-n_g)^2 - E_J\cos\op\varphi,
+\qquad
+E_C=\frac{e^2}{2C_\Sigma},
+\end{equation}
+where $E_C$ is the single-electron \emph{charging energy} (the Cooper
+pair, charge $2e$, costs $4E_C$), and $n_g$ is a dimensionless
+\emph{offset charge} set by gate voltages and stray fields. The
+competition between the charging term (diagonal in charge) and the
+Josephson term (diagonal in phase) governs every superconducting qubit;
+the two limiting regimes $E_J\ll E_C$ and $E_J\gg E_C$ are the
+Cooper-pair box and the transmon of \cref{ch:transmon}.
+\end{statement}
+
+\paragraph{The two energy scales.}
+\Cref{eq:josephson-hamiltonian} replaces the single frequency
+$\omega=1/\sqrt{LC}$ of the linear resonator with \emph{two} scales,
+$E_J$ and $E_C$. Their ratio is the master design parameter of the
+field: small $E_J/E_C$ leaves the charge sharp and the phase wild
+(charge regime), large $E_J/E_C$ pins the phase near the bottom of a
+cosine well and lets the charge fluctuate (transmon regime). The
+cosine, expanded to quartic order about its minimum, is a harmonic
+oscillator plus a small negative quartic correction --- the source of
+the anharmonicity computed in \cref{ch:transmon}.
+
+\paragraph{Transition.}
+With the junction characterised statically --- a nonlinear inductor
+with cosine energy --- we turn to its dynamics under applied voltages,
+the classic Josephson effects.
+
+% --------------------------------------------------------------
+\section{DC, AC, and inverse-AC effects}
+\label{sec:josephson-effects}
+
+\begin{statement}[\textbf{The three Josephson effects}]
+\label{stmt:josephson-effects}
+The relations \cref{eq:josephson-relations} produce three regimes:
+\begin{itemize}
+\item \textbf{DC effect} ($V=0$): a constant supercurrent
+  $I=I_c\sin\varphi$ flows at zero voltage for any $|I|\le I_c$, the
+  phase adjusting to carry it.
+\item \textbf{AC effect} ($V=$ const $\neq0$): the phase winds linearly,
+  $\varphi(t)=\varphi_0+(2eV/\hbar)t$, so the current oscillates at the
+  Josephson frequency
+  \begin{equation}
+  \label{eq:josephson-frequency}
+  f_J=\frac{2eV}{h}=\frac{V}{\Phi_0}\approx 483.6\,\text{MHz}/\mu\text{V}.
+  \end{equation}
+\item \textbf{Inverse AC effect (Shapiro steps):} under combined DC and
+  microwave drive $V=V_{\rm dc}+V_{\rm ac}\cos\omega t$, the oscillating
+  current phase-locks to the drive whenever $f_J$ is a harmonic of
+  $\omega/2\pi$, producing quantised DC voltage plateaus
+  \begin{equation}
+  \label{eq:shapiro}
+  V_n = n\,\frac{\hbar\omega}{2e}=n\,\Phi_0\,\frac{\omega}{2\pi},
+  \qquad n\in\Z.
+  \end{equation}
+\end{itemize}
+\end{statement}
+
+\paragraph{The volt from a frequency.}
+The Shapiro relation \cref{eq:shapiro} ties a DC voltage to a
+\emph{frequency} through the fundamental constants $e$ and $h$ alone.
+Because frequency is the most accurately measurable quantity in
+physics, this is the basis of the modern Josephson voltage standard:
+irradiating an array of junctions at a known microwave frequency
+produces voltage steps reproducible to parts in $10^{10}$,
+independent of materials or temperature. The same quantum coherence
+that makes a qubit possible makes a metrological standard.
+
+\paragraph{Transition.}
+A single junction has a fixed $E_J\propto I_c$, set once at
+fabrication. For tunable qubits and gates one needs to vary $E_J$
+\emph{in operation}, without warming up the chip. Two junctions in a
+loop accomplish exactly this.
+
+% --------------------------------------------------------------
+\section{SQUIDs: flux-tunable Josephson energy}
+\label{sec:squid}
+
+\begin{phenomenon}
+Wire two junctions in parallel around a superconducting loop and thread
+the loop with a magnetic flux. The two tunnelling amplitudes interfere
+--- constructively or destructively depending on the enclosed flux ---
+so the maximum supercurrent the pair can carry oscillates with the
+flux, periodic in one flux quantum $\Phi_0$. The loop acts as a single
+junction whose effective Josephson energy is set by an external knob,
+the applied flux. This is the superconducting quantum interference
+device, the SQUID.
+\end{phenomenon}
+
+\begin{statement}[\textbf{Flux-tunable SQUID}]
+\label{stmt:squid}
+For a symmetric DC SQUID --- two identical junctions of critical
+current $I_c$ in a loop of negligible self-inductance threaded by
+external flux $\Phi_{\rm ext}$ --- fluxoid quantisation
+(\cref{stmt:flux-quantisation}) constrains the phase difference of the
+two junctions to $\varphi_1-\varphi_2=2\pi\Phi_{\rm ext}/\Phi_0$. The
+loop then behaves as a single junction with a flux-tunable critical
+current and Josephson energy
+\begin{equation}
+\label{eq:squid-tuning}
+I_c^{\rm eff}(\Phi_{\rm ext}) = 2I_c\Bigl|\cos\frac{\pi\Phi_{\rm ext}}{\Phi_0}\Bigr|,
+\qquad
+E_J^{\rm eff}(\Phi_{\rm ext}) = E_J^{\rm max}\Bigl|\cos\frac{\pi\Phi_{\rm ext}}{\Phi_0}\Bigr|,
+\end{equation}
+with $E_J^{\rm max}=I_c\Phi_0/\pi$ the energy at zero flux. Sweeping
+$\Phi_{\rm ext}$ from $0$ to $\Phi_0/2$ tunes $E_J^{\rm eff}$ from its
+maximum down to zero.
+\end{statement}
+
+\paragraph{Derivation.}
+The total current is the sum over the two arms,
+$I=I_c\sin\varphi_1+I_c\sin\varphi_2$. Writing the phases as a common
+part plus the flux-imposed difference,
+$\varphi_{1,2}=\bar\varphi\pm\pi\Phi_{\rm ext}/\Phi_0$, and using
+$\sin(A+B)+\sin(A-B)=2\sin A\cos B$,
+\begin{equation}
+I = 2I_c\cos\!\Bigl(\frac{\pi\Phi_{\rm ext}}{\Phi_0}\Bigr)\sin\bar\varphi,
+\end{equation}
+so the loop is a single effective junction with critical current
+$I_c^{\rm eff}=2I_c|\cos(\pi\Phi_{\rm ext}/\Phi_0)|$, and
+$E_J^{\rm eff}=I_c^{\rm eff}\Phi_0/2\pi$ gives \cref{eq:squid-tuning}.
+A real SQUID has finite loop inductance and slightly asymmetric
+junctions, which lift the minimum above zero and shift the phase of the
+modulation, but the $\Phi_0$-periodic tuning is robust.
+
+\begin{application}[The frequency knob of a superconducting processor]
+\label{app:squid-knob}
+Replacing a transmon's single junction with a SQUID makes its
+Josephson energy --- and hence its transition frequency
+$\omega_q\propto\sqrt{8E_J^{\rm eff}E_C}/\hbar$ (\cref{ch:transmon})
+--- tunable by a current in a nearby flux-bias line. This is the
+workhorse of the platform: it brings a qubit into resonance with a
+neighbour or a bus to run a two-qubit gate (\cref{ch:circuit-qed}),
+tunes it onto and off the readout sweet spot, and lets spectroscopy map
+the qubit spectrum versus flux (\cref{ch:experimental-basics}). The
+price is a new noise channel --- flux noise through
+$\partial\omega_q/\partial\Phi_{\rm ext}$ --- which vanishes at the
+``sweet spots'' $\Phi_{\rm ext}=0,\Phi_0/2$ where the tuning curve is
+flat, the dephasing-protection idea of \cref{stmt:noise-rates}.
+\end{application}
+
+% --------------------------------------------------------------
+This chapter introduced the one nonlinear, dissipationless circuit
+element. The Josephson relations $I=I_c\sin\varphi$ and
+$\dot\varphi=2eV/\hbar$ follow from coherent Cooper-pair tunnelling;
+together they make the junction a nonlinear inductor
+$L_J=L_{J0}/\cos\varphi$ with cosine energy $U=-E_J\cos\varphi$, and the
+shunted junction obeys the canonical Hamiltonian
+$\op H=4E_C(\op n-n_g)^2-E_J\cos\op\varphi$. The DC, AC, and inverse-AC
+effects organise its phenomenology and underwrite the volt standard,
+and the SQUID turns $E_J$ into a flux-tunable knob.
+
+What remains is to diagonalise that Hamiltonian. The ratio $E_J/E_C$
+selects the physics: the charge-dominated Cooper-pair box, exquisitely
+sensitive to offset charge, and its noise-immune descendant the
+transmon, which trades charge sensitivity for a small but usable
+anharmonicity. That is the subject of the next chapter.
+
+\clearpage
+\begin{chaptersummary}
+
+\paragraph{Josephson relations.}
+$I=I_c\sin\varphi$ and $\dot\varphi=2eV/\hbar=2\pi V/\Phi_0$, from
+coherent pair tunnelling. A DC voltage produces an AC current at
+$f_J=2eV/h\approx483.6\,$MHz$/\mu$V.
+
+\paragraph{Nonlinear inductor.}
+$L_J(\varphi)=L_{J0}/\cos\varphi$ with $L_{J0}=\Phi_0/2\pi I_c$;
+energy $U(\varphi)=-E_J\cos\varphi$, $E_J=I_c\Phi_0/2\pi=\hbar I_c/2e$.
+The cosine supplies the anharmonicity the linear $LC$ lacks.
+
+\paragraph{Circuit Hamiltonian.}
+$\op H=4E_C(\op n-n_g)^2-E_J\cos\op\varphi$, with $\comm{\op\varphi}{\op n}=i$,
+$E_C=e^2/2C_\Sigma$ (a Cooper pair costs $4E_C$). The ratio $E_J/E_C$
+sets the qubit type (\cref{ch:transmon}).
+
+\paragraph{Josephson effects.}
+DC: zero-voltage supercurrent. AC: oscillation at $f_J=2eV/h$.
+Inverse-AC: Shapiro voltage steps $V_n=n\hbar\omega/2e$ --- the volt
+standard.
+
+\paragraph{SQUID.}
+Two junctions in a flux-threaded loop give
+$E_J^{\rm eff}(\Phi_{\rm ext})=E_J^{\rm max}|\cos(\pi\Phi_{\rm ext}/\Phi_0)|$,
+the in-situ frequency knob; sweet spots at $\Phi_{\rm ext}=0,\Phi_0/2$
+are first-order insensitive to flux noise.
+
+\end{chaptersummary}
+
+% --------------------------------------------------------------
+\section*{Exercises}
+\addcontentsline{toc}{section}{Exercises}
+
+\begin{exercise}[Josephson inductance at zero bias]
+A junction has critical current $I_c=20\,$nA. Compute $E_J/h$ (in GHz)
+and the zero-bias Josephson inductance $L_{J0}$.
+\begin{solution}
+$E_J=\hbar I_c/2e=I_c\Phi_0/2\pi$. Numerically
+$E_J=I_c\Phi_0/2\pi=(20\times10^{-9})(2.07\times10^{-15})/(2\pi)
+\approx6.6\times10^{-24}\,$J. In frequency,
+$E_J/h=6.6\times10^{-24}/6.63\times10^{-34}\approx1.0\times10^{10}\,$Hz
+$=10\,$GHz. The inductance
+$L_{J0}=\Phi_0/2\pi I_c=(2.07\times10^{-15})/(2\pi\cdot20\times10^{-9})
+\approx16\,$nH --- large for such a tiny element, which is why the
+junction dominates the circuit inductance.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[The Josephson frequency]
+Verify the conversion $f_J/V=2e/h\approx483.6\,$MHz$/\mu$V, and find
+the Josephson frequency at $V=10\,\mu$V.
+\begin{solution}
+$2e/h=2(1.602\times10^{-19})/(6.626\times10^{-34})
+=4.836\times10^{14}\,$Hz/V$=483.6\,$MHz$/\mu$V. At $V=10\,\mu$V,
+$f_J=4.836\,$GHz --- conveniently in the microwave band, which is why
+junction dynamics and qubit frequencies sit at comparable scales.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Energy stored in the junction]
+Integrate the electrical power to confirm $U(\varphi)=-E_J\cos\varphi$,
+and identify the equilibrium phase for an applied bias current
+$I<I_c$.
+\begin{solution}
+$\dot U=IV=(I_c\sin\varphi)(\Phi_0\dot\varphi/2\pi)
+=(I_c\Phi_0/2\pi)\sin\varphi\,\dot\varphi=E_J\sin\varphi\,\dot\varphi$,
+which integrates to $U=-E_J\cos\varphi+$const. Under a bias $I$ the
+total ``washboard'' potential is $U(\varphi)-(\Phi_0/2\pi)I\varphi$;
+its minima satisfy $E_J\sin\varphi=(\Phi_0/2\pi)I$, i.e.\
+$\sin\varphi=I/I_c$, so $\varphi^*=\arcsin(I/I_c)$. For $I>I_c$ no
+minimum exists --- the phase ``runs'', a finite voltage develops, and
+the junction leaves the zero-voltage state.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Charging energy and the Cooper-pair cost]
+For a junction shunted by $C_\Sigma=70\,$fF, compute $E_C/h$ and
+explain why the Hamiltonian \cref{eq:josephson-hamiltonian} carries a
+factor $4E_C$ rather than $E_C$.
+\begin{solution}
+$E_C=e^2/2C_\Sigma=(1.602\times10^{-19})^2/(2\cdot70\times10^{-15})
+\approx1.83\times10^{-25}\,$J, so $E_C/h\approx0.28\,$GHz$=280\,$MHz.
+The capacitive energy is $Q^2/2C_\Sigma$ with $Q=2en$ (each excess
+Cooper pair carries $2e$): $Q^2/2C_\Sigma=(2e)^2n^2/2C_\Sigma
+=4(e^2/2C_\Sigma)n^2=4E_C n^2$. The $4$ is the square of the pair
+charge in units of $e$; $E_C$ is defined per \emph{electron} by
+convention (following~\cite{koch2007}).
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[The phase--number commutator]
+Starting from $\comm{\op\Phi}{\op Q}=i\hbar$ and the definitions
+$\varphi=2\pi\Phi/\Phi_0$, $n=Q/2e$, derive $\comm{\op\varphi}{\op n}=i$.
+\begin{solution}
+$\comm{\op\varphi}{\op n}=\comm{2\pi\op\Phi/\Phi_0}{\op Q/2e}
+=\frac{2\pi}{2e\Phi_0}\comm{\op\Phi}{\op Q}
+=\frac{2\pi}{2e\Phi_0}\,i\hbar$. With $\Phi_0=h/2e=2\pi\hbar/2e$,
+$\frac{2\pi}{2e\Phi_0}=\frac{2\pi}{2e}\cdot\frac{2e}{2\pi\hbar}=\frac1\hbar$,
+so $\comm{\op\varphi}{\op n}=i\hbar/\hbar=i$. Phase and Cooper-pair
+number are conjugate, the circuit analogue of angle and angular
+momentum.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Shapiro step spacing]
+Microwaves at $f=10\,$GHz irradiate a junction. Compute the voltage
+spacing $\Delta V$ between adjacent Shapiro steps.
+\begin{solution}
+$V_n=n\hbar\omega/2e=n\,hf/2e=n\Phi_0 f$, so
+$\Delta V=\Phi_0 f=(2.07\times10^{-15})(10^{10})=2.07\times10^{-5}\,$V
+$=20.7\,\mu$V. Equivalently $\Delta V=f/(2e/h)=10\,$GHz$/483.6\,$MHz$/\mu$V
+$\approx20.7\,\mu$V. Each step is a plateau where the junction
+phase-locks to the drive.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[SQUID tuning curve]
+From \cref{eq:squid-tuning}, find the flux that halves $E_J^{\rm eff}$
+from its maximum, and the flux at which it vanishes. Why is the tuning
+periodic in $\Phi_0$?
+\begin{solution}
+$E_J^{\rm eff}/E_J^{\rm max}=|\cos(\pi\Phi_{\rm ext}/\Phi_0)|$. Halving
+requires $\cos(\pi\Phi_{\rm ext}/\Phi_0)=1/2$, i.e.\
+$\pi\Phi_{\rm ext}/\Phi_0=\pi/3$, so $\Phi_{\rm ext}=\Phi_0/3$. It
+vanishes when $\cos=0$, i.e.\ $\Phi_{\rm ext}=\Phi_0/2$. The period is
+$\Phi_0$ because the physics depends on the phase
+$2\pi\Phi_{\rm ext}/\Phi_0$ only modulo $2\pi$ --- adding one flux
+quantum adds $2\pi$ and changes nothing, a direct consequence of flux
+quantisation (\cref{stmt:flux-quantisation}).
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Flux sensitivity and sweet spots]
+Compute $\partial E_J^{\rm eff}/\partial\Phi_{\rm ext}$ and show it
+vanishes at $\Phi_{\rm ext}=0$ and $\Phi_0/2$. Why are these the
+preferred operating points?
+\begin{solution}
+$\partial E_J^{\rm eff}/\partial\Phi_{\rm ext}
+=-E_J^{\rm max}(\pi/\Phi_0)\sin(\pi\Phi_{\rm ext}/\Phi_0)\,
+\operatorname{sgn}\cos(\cdots)$. The $\sin$ factor vanishes at
+$\Phi_{\rm ext}=0$ and (the $\cos$ argument at) $\Phi_0/2$, so the
+slope is zero there. At these \emph{sweet spots} the qubit frequency is
+first-order insensitive to flux fluctuations, so flux noise contributes
+only at second order and the pure-dephasing rate of
+\cref{stmt:noise-rates} is strongly suppressed --- the standard place
+to park a tunable qubit when it is not being tuned.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Anharmonicity from the cosine]
+Expand $-E_J\cos\op\varphi$ about $\varphi=0$ to quartic order and
+identify the harmonic and leading anharmonic terms. What sign is the
+anharmonicity?
+\begin{solution}
+$-E_J\cos\varphi=-E_J(1-\varphi^2/2+\varphi^4/24-\cdots)
+=\text{const}+\tfrac12 E_J\varphi^2-\tfrac{1}{24}E_J\varphi^4+\cdots$.
+The quadratic term $\tfrac12 E_J\varphi^2$ is a harmonic oscillator
+(an inductive energy with $1/L_{J0}$), and the quartic
+$-\tfrac{1}{24}E_J\varphi^4$ is the leading anharmonicity. Its
+\emph{negative} sign means higher levels are pushed \emph{down}
+relative to the harmonic ladder, so the $\ket1\to\ket2$ transition lies
+\emph{below} $\ket0\to\ket1$: the transmon has negative anharmonicity,
+quantified in \cref{ch:transmon}.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Why the junction is special]
+Argue that no combination of linear inductors and capacitors can
+produce anharmonic energy levels, so a nonlinear element is
+unavoidable, and explain why the junction is dissipationless where an
+ordinary nonlinear resistor would not be.
+\begin{solution}
+Any network of linear $L$'s and $C$'s has a Hamiltonian quadratic in
+fluxes and charges, hence a sum of independent harmonic modes with
+equally spaced levels --- no anharmonicity, by the argument of
+\cref{ch:circuit-quantisation}. Nonlinearity therefore requires a
+nonlinear element. A resistor is nonlinear but dissipative; the
+Josephson junction is the unique two-terminal element that is both
+nonlinear (cosine energy) and \emph{non-dissipative}, because pair
+tunnelling carries no entropy as long as energies stay below the gap
+$2\Delta$ (\cref{stmt:bogoliubov}) so no quasiparticles are excited.
+That combination is what makes a coherent qubit possible.
+\end{solution}
+\end{exercise}

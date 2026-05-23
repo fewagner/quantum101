@@ -207,6 +207,11 @@ without checking — the document should keep reading as a quiet book.
 | Bogoliubov quasiparticles, gap equation, gap `$\Delta$` / `$2\Delta$` | `stmt:bogoliubov` | ch. 13 §13.3 |
 | Canonical circuit quantisation (node flux/charge, `$[\hat\Phi,\hat Q]=i\hbar$`) | `stmt:circuit-quantisation` | ch. 13 §13.4 |
 | Quantised `$LC$` resonator, zero-point flux/charge, char. impedance | `stmt:lc-oscillator` | ch. 13 §13.5 |
+| Josephson relations (current/voltage--phase), critical current `$I_c$` | `stmt:josephson-relations` | ch. 14 §14.1 |
+| Josephson energy `$E_J$` / inductance `$L_J=L_{J0}/\cos\varphi$` | `stmt:josephson-energy` | ch. 14 §14.2 |
+| Josephson circuit Hamiltonian, charging energy `$E_C$`, ratio `$E_J/E_C$` | `stmt:josephson-hamiltonian` | ch. 14 §14.2 |
+| DC / AC / inverse-AC (Shapiro) Josephson effects | `stmt:josephson-effects` | ch. 14 §14.3 |
+| SQUID (flux-tunable `$E_J$`), sweet spots | `stmt:squid` | ch. 14 §14.4 |
 
 When introducing new terms in future chapters, **append to this table**.
 

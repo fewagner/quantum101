@@ -109,8 +109,8 @@ needed. Each `[ ]` becomes a section or chapter.
 - [x] Superconductivity primer: BCS ground state, Bogoliubov quasiparticles
 - [x] Lumped-element circuit quantization (node flux / charge)
 - [x] LC oscillator as a quantum harmonic oscillator
-- [ ] Josephson junctions: current–phase and voltage–phase relations, Josephson energy
-- [ ] Josephson effects: DC effect, AC effect, inverse AC effect (Shapiro steps)
+- [x] Josephson junctions: current–phase and voltage–phase relations, Josephson energy
+- [x] Josephson effects: DC effect, AC effect, inverse AC effect (Shapiro steps)
 - [ ] Cooper pair box and charge qubit
 - [ ] Transmon qubit: anharmonicity, charge-noise insensitivity
 - [ ] Flux qubit and fluxonium (overview)
