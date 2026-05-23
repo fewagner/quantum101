@@ -1,0 +1,421 @@
+\chapter{Quantisation of the electromagnetic field}
+\label{ch:em-quantisation}
+
+Part~I quantised mechanical degrees of freedom; Part~II coupled them
+to reservoirs. To describe light --- the photons that drive qubits,
+carry readout signals, and constitute the dark-matter candidates of
+Part~VI --- we must quantise the electromagnetic field itself. The
+route is the one already rehearsed for the harmonic oscillator in
+\cref{sec:qho}: expand the field in cavity modes, recognise that
+each mode is a harmonic oscillator, and promote its amplitude to a
+pair of ladder operators. The quanta of excitation are photons, the
+ground state is not empty but seethes with vacuum fluctuations, and
+the field amplitude becomes an operator with an irreducible noise
+floor. This chapter sets up that machinery: the mode expansion and
+canonical quantisation, the Fock states and the electric-field
+operator, the quadratures and their vacuum uncertainty, and the
+photon-number statistics that distinguish one state of light from
+another. It is the foundation for the coherent and squeezed states
+of \cref{ch:states-of-light} and the atom--field coupling of
+\cref{ch:jaynes-cummings}.
+
+% --------------------------------------------------------------
+\section{From classical modes to quantum oscillators}
+\label{sec:field-quantisation}
+
+\begin{phenomenon}
+The electromagnetic field in a cavity does not hold arbitrary
+amounts of energy at a given frequency: it holds energy in discrete
+quanta of $\hbar\omega$, the photons. The evidence is a century old
+--- the blackbody spectrum, the photoelectric effect, the
+photon-counting statistics of a photodetector --- and it points to
+the same conclusion: a single mode of the field behaves exactly
+like a quantum harmonic oscillator, with a ladder of equally spaced
+energy levels and a non-zero ground-state energy.
+\end{phenomenon}
+
+\paragraph{Mode expansion of the classical field.}
+In a cavity of volume $V$ with perfectly conducting walls, the
+source-free vector potential (in Coulomb gauge, $\nabla\cdot\bm A=0$)
+can be expanded in the discrete set of normal modes $\bm u_{\bm k,s}(\bm r)$
+labelled by wavevector $\bm k$ and polarisation $s$,
+\begin{equation}
+\label{eq:mode-expansion}
+\bm A(\bm r,t) \;=\; \sum_{\bm k,s}\Bigl[
+\alpha_{\bm k,s}(t)\,\bm u_{\bm k,s}(\bm r) + \text{c.c.}\Bigr],
+\end{equation}
+where each mode amplitude obeys $\ddot\alpha_{\bm k,s}=-\omega_k^2\,\alpha_{\bm k,s}$
+with $\omega_k=c|\bm k|$ --- the equation of a harmonic oscillator.
+The total field energy, integrated over the cavity, is a sum of
+independent oscillator energies, one per mode.
+
+\begin{statement}[\textbf{Field modes as quantum oscillators}]
+\label{stmt:field-oscillators}
+Quantising each mode by the canonical prescription of
+\cref{sec:qho} --- promoting the mode amplitude to ladder
+operators $\hat a_{\bm k,s},\hat a_{\bm k,s}^\dagger$ with
+\begin{equation}
+\label{eq:field-commutator}
+\comm{\hat a_{\bm k,s}}{\hat a_{\bm k',s'}^\dagger} \;=\; \delta_{\bm k\bm k'}\,\delta_{ss'},
+\qquad
+\comm{\hat a_{\bm k,s}}{\hat a_{\bm k',s'}} \;=\; 0,
+\end{equation}
+--- yields the field Hamiltonian
+\begin{equation}
+\label{eq:field-hamiltonian}
+\op H_{\rm field} \;=\; \sum_{\bm k,s}\hbar\omega_k
+\Bigl(\hat a_{\bm k,s}^\dagger\hat a_{\bm k,s} + \tfrac12\Bigr).
+\end{equation}
+Each mode is an independent harmonic oscillator (\cref{stmt:qho-spectrum});
+the quantum $\hbar\omega_k$ of excitation in mode $(\bm k,s)$ is a
+\emph{photon}, and $\hat a_{\bm k,s}^\dagger$ creates one.
+\end{statement}
+
+\paragraph{Derivation.}
+The classical mode energy is $E_{\bm k,s}=\tfrac12(\,p_{\bm k,s}^2+\omega_k^2 q_{\bm k,s}^2)$
+in terms of canonical position and momentum quadratures
+$q_{\bm k,s}\propto\mathrm{Re}\,\alpha_{\bm k,s}$,
+$p_{\bm k,s}\propto\mathrm{Im}\,\alpha_{\bm k,s}$. This is identical
+to the mechanical oscillator of \cref{sec:qho}, so the same
+canonical quantisation applies: impose $\comm{\hat q}{\hat p}=i\hbar$,
+define $\hat a=(\omega\hat q+i\hat p)/\sqrt{2\hbar\omega}$, and the
+energy becomes \cref{eq:field-hamiltonian}. The only new feature is
+that there is one oscillator per mode and the modes are spatial
+field patterns rather than the position of a particle.
+
+% --------------------------------------------------------------
+\section{Fock states and the field operators}
+\label{sec:fock-states}
+
+\begin{statement}[\textbf{Fock (number) states of a single mode}]
+\label{stmt:fock}
+For a single mode (dropping the $\bm k,s$ labels), the
+photon-number operator $\op N=\hat a^\dagger\hat a$ has eigenstates
+$\ket n$, the \emph{Fock} or \emph{number} states, with
+$\op N\ket n=n\ket n$, $n=0,1,2,\dots$. They are built from the
+vacuum $\ket0$ by
+\begin{equation}
+\label{eq:fock-ladder}
+\hat a^\dagger\ket n=\sqrt{n+1}\,\ket{n+1},\quad
+\hat a\ket n=\sqrt n\,\ket{n-1},\quad
+\ket n=\frac{(\hat a^\dagger)^n}{\sqrt{n!}}\,\ket0,
+\end{equation}
+form a complete orthonormal basis of the single-mode Hilbert space,
+and diagonalise the Hamiltonian
+$\op H=\hbar\omega(\op N+\tfrac12)$ with energy
+$E_n=\hbar\omega(n+\tfrac12)$.
+\end{statement}
+
+\paragraph{The electric-field operator.}
+Re-expressing the mode expansion \cref{eq:mode-expansion} in terms
+of the ladder operators, the electric field of a single mode (with
+mode function normalised over the cavity) becomes the operator
+\begin{equation}
+\label{eq:efield-operator}
+\hat{\bm E}(\bm r) \;=\; \bm{\mathcal E}_0\,\bigl[\hat a\,\bm u(\bm r) + \hat a^\dagger\,\bm u^*(\bm r)\bigr],
+\qquad
+\mathcal E_0=\sqrt{\frac{\hbar\omega}{2\varepsilon_0 V}},
+\end{equation}
+where $\mathcal E_0$ is the \emph{electric field per photon} --- the
+amplitude of the vacuum field fluctuation in the mode volume $V$. It
+is this single-photon field that sets the strength of every
+light--matter coupling in \cref{ch:jaynes-cummings}: smaller mode
+volume means larger $\mathcal E_0$ and stronger coupling, the design
+principle behind cavity and circuit QED.
+
+\paragraph{Vacuum fluctuations and zero-point energy.}
+The ground state $\ket0$ has $\op N\ket0=0$ --- no photons --- yet
+the field is not classically zero. The energy is
+$E_0=\tfrac12\hbar\omega$ per mode, and the field operator has
+non-zero variance in the vacuum: $\langle0|\hat{\bm E}|0\rangle=0$
+but $\langle0|\hat{\bm E}^2|0\rangle=\mathcal E_0^2\neq0$. These
+\emph{vacuum fluctuations} are physical: they drive spontaneous
+emission (the Purcell effect of \cref{sec:purcell}), they set the
+standard quantum limit on amplifiers (\cref{ch:input-output}), and
+their mode-volume dependence is what a small cavity exploits.
+
+\paragraph{Transition.}
+The Fock states diagonalise the energy, but they are not the states
+the field is usually found in --- a laser or a microwave drive
+produces something much closer to a classical wave. To compare
+states of light we need the language of \emph{quadratures}, which
+turns the abstract ladder operators into measurable field
+amplitudes.
+
+% --------------------------------------------------------------
+\section{Quadratures and vacuum noise}
+\label{sec:quadratures}
+
+\begin{statement}[\textbf{Field quadratures and their uncertainty}]
+\label{stmt:quadratures}
+Define the dimensionless \emph{quadrature operators}
+\begin{equation}
+\label{eq:quadratures}
+\hat X \;=\; \tfrac12(\hat a + \hat a^\dagger),
+\qquad
+\hat P \;=\; \tfrac{1}{2i}(\hat a - \hat a^\dagger),
+\end{equation}
+the in-phase and out-of-phase components of the field relative to a
+reference oscillation. They satisfy $\comm{\hat X}{\hat P}=\tfrac{i}{2}$
+and hence the uncertainty relation
+\begin{equation}
+\label{eq:quadrature-uncertainty}
+\Delta X\,\Delta P \;\geq\; \tfrac14.
+\end{equation}
+In the vacuum (and in any coherent state) the noise is equal in the
+two quadratures and saturates the bound,
+$\Delta X=\Delta P=\tfrac12$ --- the \emph{standard quantum limit}
+of field detection.
+\end{statement}
+
+\paragraph{The phase-space picture.}
+A single mode is naturally drawn in the $X$--$P$ plane. The vacuum
+is a unit-area ``ball'' of noise centred at the origin, radius
+$\tfrac12$ in each quadrature. A classical field is a displaced
+ball; a Fock state is a ring; a squeezed state, as we will see in
+\cref{ch:states-of-light}, is an ellipse with one quadrature
+squeezed below $\tfrac12$ at the expense of the other. The quadrature
+variances are exactly what a homodyne detector
+(\cref{sec:cascaded}) measures, which is why this representation is
+the working language of continuous-variable quantum optics.
+
+% --------------------------------------------------------------
+\section{Photon-number statistics}
+\label{sec:photon-statistics}
+
+\begin{phenomenon}
+Shine a field on an ideal photon counter and record the number of
+clicks in a fixed window. The distribution $P(n)$ of counts is a
+fingerprint of the state of light: a number state gives exactly $n$
+every time (zero variance), a thermal field gives a broad,
+super-Poissonian spread, and --- as the next chapter shows --- a
+laser gives the Poissonian distribution in between. The mean and
+variance of $P(n)$ are directly measurable and distinguish
+classical from non-classical light.
+\end{phenomenon}
+
+\begin{statement}[\textbf{Number statistics and the Mandel parameter}]
+\label{stmt:mandel}
+For a state with photon-number distribution $P(n)=|\langle n|\psi\rangle|^2$,
+the mean is $\bar n=\langle\op N\rangle$ and the variance
+$(\Delta n)^2=\langle\op N^2\rangle-\bar n^2$. The \emph{Mandel
+$Q$ parameter}
+\begin{equation}
+\label{eq:mandel-Q}
+Q \;=\; \frac{(\Delta n)^2 - \bar n}{\bar n}
+\end{equation}
+classifies the statistics: $Q=0$ for a Poissonian (coherent) field,
+$Q>0$ for super-Poissonian (e.g.\ thermal, $Q=\bar n$), and
+$-1\leq Q<0$ for sub-Poissonian (non-classical) light, with $Q=-1$
+for a Fock state ($\Delta n=0$). Sub-Poissonian statistics have no
+classical-field description and are a signature of genuinely quantum
+light.
+\end{statement}
+
+\paragraph{Thermal light.}
+A single mode in thermal equilibrium at temperature $T$ has the
+Bose--Einstein distribution
+$P(n)=\bar n^n/(1+\bar n)^{n+1}$ with mean
+$\bar n=(e^{\hbar\omega/k_BT}-1)^{-1}$ and variance
+$(\Delta n)^2=\bar n+\bar n^2$, hence $Q=\bar n>0$:
+thermal light is super-Poissonian, with number fluctuations larger
+than its mean. This is the photon statistics of the blackbody
+background that floods a cryostat and the dark-count budget of the
+photon counters in \cref{ch:microwave-absorption}.
+
+% --------------------------------------------------------------
+This chapter quantised the electromagnetic field by recognising
+each cavity mode as a harmonic oscillator: the mode amplitudes
+became ladder operators, the quanta became photons, and the field
+acquired a Hamiltonian \cref{eq:field-hamiltonian} with a non-zero
+ground-state energy. The Fock states diagonalise the photon number,
+the electric-field operator \cref{eq:efield-operator} carries the
+single-photon amplitude $\mathcal E_0$ that sets every light--matter
+coupling, the quadratures expose the vacuum noise floor, and the
+Mandel parameter classifies a state's photon statistics.
+
+With the field quantised, \cref{ch:states-of-light} builds the
+states of light that actually occur in the laboratory --- the
+coherent states of a laser or microwave drive, and the squeezed
+states that beat the standard quantum limit --- and
+\cref{ch:jaynes-cummings} couples a single mode to a qubit.
+
+\clearpage
+\begin{chaptersummary}
+
+\paragraph{Field quantisation.}
+Expanding the cavity field in normal modes makes each mode a
+harmonic oscillator. Promoting the amplitudes to ladder operators
+with $\comm{\hat a_{\bm k,s}}{\hat a_{\bm k',s'}^\dagger}=\delta_{\bm k\bm k'}\delta_{ss'}$
+gives $\op H_{\rm field}=\sum_{\bm k,s}\hbar\omega_k(\hat a_{\bm k,s}^\dagger\hat a_{\bm k,s}+\tfrac12)$.
+The quanta are photons.
+
+\paragraph{Fock states and field operator.}
+Number states $\ket n$ satisfy $\hat a^\dagger\ket n=\sqrt{n+1}\ket{n+1}$
+and diagonalise $\op N=\hat a^\dagger\hat a$. The single-mode field
+operator is $\hat{\bm E}=\mathcal E_0[\hat a\bm u+\hat a^\dagger\bm u^*]$
+with $\mathcal E_0=\sqrt{\hbar\omega/2\varepsilon_0 V}$ the field per
+photon; smaller $V$ means stronger coupling.
+
+\paragraph{Quadratures.}
+$\hat X=\tfrac12(\hat a+\hat a^\dagger)$,
+$\hat P=\tfrac1{2i}(\hat a-\hat a^\dagger)$ obey
+$\comm{\hat X}{\hat P}=i/2$, so $\Delta X\,\Delta P\geq\tfrac14$;
+vacuum and coherent states saturate it with
+$\Delta X=\Delta P=\tfrac12$ (the standard quantum limit). The
+vacuum has zero mean field but non-zero variance --- the fluctuations
+that drive spontaneous emission.
+
+\paragraph{Photon statistics.}
+The Mandel parameter $Q=[(\Delta n)^2-\bar n]/\bar n$ is $0$ for
+Poissonian (coherent), $>0$ for super-Poissonian (thermal,
+$Q=\bar n$), and $<0$ for sub-Poissonian (non-classical, $Q=-1$ for
+a Fock state).
+
+\end{chaptersummary}
+
+% --------------------------------------------------------------
+\section*{Exercises}
+\addcontentsline{toc}{section}{Exercises}
+
+\begin{exercise}[Single-mode field energy]
+Starting from the classical mode energy
+$E=\tfrac12(p^2+\omega^2 q^2)$ and the substitution
+$\hat a=(\omega\hat q+i\hat p)/\sqrt{2\hbar\omega}$, derive
+$\op H=\hbar\omega(\hat a^\dagger\hat a+\tfrac12)$.
+\begin{solution}
+Invert: $\hat q=\sqrt{\hbar/2\omega}(\hat a+\hat a^\dagger)$,
+$\hat p=-i\sqrt{\hbar\omega/2}(\hat a-\hat a^\dagger)$. Then
+$\hat p^2=-\tfrac{\hbar\omega}2(\hat a-\hat a^\dagger)^2$,
+$\omega^2\hat q^2=\tfrac{\hbar\omega}2(\hat a+\hat a^\dagger)^2$.
+Adding, the $\hat a^2$ and $\hat a^{\dagger2}$ terms cancel and
+$\op H=\tfrac{\hbar\omega}2(\hat a\hat a^\dagger+\hat a^\dagger\hat a)
+=\hbar\omega(\hat a^\dagger\hat a+\tfrac12)$ using
+$\comm{\hat a}{\hat a^\dagger}=1$.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Zero-point energy is unobservable as a shift]
+Explain why the $\tfrac12\hbar\omega$ per mode can usually be dropped
+from $\op H_{\rm field}$, and one situation where its
+mode-dependence is physical.
+\begin{solution}
+A constant added to the Hamiltonian shifts all energies equally and
+does not affect dynamics or transition frequencies, so the
+$\sum_{\bm k,s}\tfrac12\hbar\omega_k$ can be subtracted by redefining
+the energy zero. Its \emph{dependence on boundary conditions} is
+physical, however: changing the cavity geometry changes which modes
+exist and hence the total zero-point energy, producing the
+measurable Casimir force between conductors.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Field per photon scaling]
+Compute $\mathcal E_0=\sqrt{\hbar\omega/2\varepsilon_0 V}$ for a
+microwave mode at $\omega/2\pi=5\,$GHz in a $V=1\,$mm$^3$ volume,
+and comment on why circuit QED achieves strong coupling.
+\begin{solution}
+$\hbar\omega=h\cdot5\times10^9\approx3.3\times10^{-24}\,$J;
+$\varepsilon_0 V=8.85\times10^{-12}\cdot10^{-9}=8.85\times10^{-21}$.
+$\mathcal E_0=\sqrt{3.3\times10^{-24}/(2\cdot8.85\times10^{-21})}
+\approx\sqrt{1.9\times10^{-4}}\approx1.4\times10^{-2}\,$V/m.
+Circuit QED confines the mode to a quasi-1D transmission line with
+effective mode volume far below $\lambda^3$, boosting $\mathcal E_0$
+and the dipole coupling $g\propto\mathcal E_0$ into the strong-coupling
+regime where $g\gg\kappa,\gamma$.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Vacuum field variance]
+Show that $\langle0|\hat E|0\rangle=0$ but
+$\langle0|\hat E^2|0\rangle=\mathcal E_0^2$ for a single mode (take
+$\bm u$ real and evaluate at an antinode).
+\begin{solution}
+With $\hat E=\mathcal E_0(\hat a+\hat a^\dagger)$ at the antinode,
+$\langle0|\hat E|0\rangle=\mathcal E_0\langle0|(\hat a+\hat a^\dagger)|0\rangle=0$
+since $\hat a\ket0=0$ and $\langle0|\hat a^\dagger=0$. For the
+square, $\hat E^2=\mathcal E_0^2(\hat a^2+\hat a^{\dagger2}+\hat a\hat a^\dagger+\hat a^\dagger\hat a)$;
+only $\hat a\hat a^\dagger=\hat a^\dagger\hat a+1$ has non-zero vacuum
+expectation, giving $\langle0|\hat E^2|0\rangle=\mathcal E_0^2$. The
+field fluctuates even with no photons present.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Quadrature commutator and uncertainty]
+From $\comm{\hat a}{\hat a^\dagger}=1$ derive
+$\comm{\hat X}{\hat P}=i/2$ and hence
+$\Delta X\,\Delta P\geq\tfrac14$.
+\begin{solution}
+$\comm{\hat X}{\hat P}=\tfrac{1}{2}\cdot\tfrac{1}{2i}\comm{\hat a+\hat a^\dagger}{\hat a-\hat a^\dagger}
+=\tfrac1{4i}(\comm{\hat a}{-\hat a^\dagger}+\comm{\hat a^\dagger}{\hat a})
+=\tfrac1{4i}(-1-1)=\tfrac{i}{2}$.
+The Robertson relation $\Delta X\,\Delta P\geq\tfrac12|\langle\comm{\hat X}{\hat P}\rangle|=\tfrac12\cdot\tfrac12=\tfrac14$.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Vacuum saturates the bound]
+Show $\Delta X=\Delta P=\tfrac12$ in the vacuum, confirming it is a
+minimum-uncertainty state.
+\begin{solution}
+$\langle\hat X\rangle=\langle\hat P\rangle=0$ as in the field-mean
+exercise. $\langle\hat X^2\rangle=\tfrac14\langle0|(\hat a+\hat a^\dagger)^2|0\rangle=\tfrac14\langle0|\hat a\hat a^\dagger|0\rangle=\tfrac14$,
+so $\Delta X=\tfrac12$; identically $\Delta P=\tfrac12$. Then
+$\Delta X\,\Delta P=\tfrac14$, saturating \cref{eq:quadrature-uncertainty}.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Number-state quadrature noise]
+Compute $\langle\hat X\rangle$ and $(\Delta X)^2$ in a Fock state
+$\ket n$. Why does a number state have no well-defined phase?
+\begin{solution}
+$\langle n|\hat X|n\rangle=\tfrac12\langle n|(\hat a+\hat a^\dagger)|n\rangle=0$
+(off-diagonal). $\langle n|\hat X^2|n\rangle=\tfrac14\langle n|(\hat a\hat a^\dagger+\hat a^\dagger\hat a)|n\rangle=\tfrac14(2n+1)$,
+so $(\Delta X)^2=\tfrac14(2n+1)$, growing with $n$, and identically
+for $P$. The mean field is zero in every quadrature regardless of
+$n$: a Fock state is a ring in phase space with completely random
+phase --- number and phase are conjugate, and a sharp photon number
+means a maximally uncertain phase.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Mandel $Q$ of a Fock state]
+Evaluate the Mandel parameter \cref{eq:mandel-Q} for $\ket n$ and
+interpret the sign.
+\begin{solution}
+A Fock state has $\bar n=n$ and $(\Delta n)^2=0$, so
+$Q=(0-n)/n=-1$. The maximally negative value marks the most
+strongly sub-Poissonian (non-classical) state: the photon number is
+perfectly definite. No classical stochastic field can produce
+$Q<0$.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Thermal photon statistics]
+For the Bose--Einstein distribution
+$P(n)=\bar n^n/(1+\bar n)^{n+1}$, verify $\langle\op N\rangle=\bar n$
+and $(\Delta n)^2=\bar n+\bar n^2$, hence $Q=\bar n$.
+\begin{solution}
+Writing $x=\bar n/(1+\bar n)$, $P(n)=(1-x)x^n$, a geometric
+distribution. Its mean is $\langle n\rangle=x/(1-x)=\bar n$ and
+variance $\mathrm{Var}=x/(1-x)^2=\bar n(1+\bar n)=\bar n+\bar n^2$.
+Then $Q=[(\bar n+\bar n^2)-\bar n]/\bar n=\bar n>0$: thermal light is
+super-Poissonian (photon bunching), with fluctuations exceeding the
+mean.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Number of thermal microwave photons]
+Compute the mean thermal occupancy $\bar n$ of a $5\,$GHz mode at
+$T=20\,$mK and at $T=4\,$K, and comment on the implication for
+microwave single-photon detection.
+\begin{solution}
+$\hbar\omega/k_B\approx0.24\,$K. At $20\,$mK,
+$\bar n=(e^{0.24/0.02}-1)^{-1}=(e^{12}-1)^{-1}\approx6\times10^{-6}$:
+the mode is essentially in vacuum, so a single signal photon is
+detectable above the thermal background. At $4\,$K,
+$\bar n=(e^{0.06}-1)^{-1}\approx16$: a large thermal background that
+would swamp single-photon detection. This is why microwave photon
+counters (\cref{ch:microwave-absorption}) must operate at tens of
+mK.
+\end{solution}
+\end{exercise}
