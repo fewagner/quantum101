@@ -1,0 +1,640 @@
+\chapter{Open-system dynamics and the Lindblad master equation}
+\label{ch:open-systems}
+
+Every system treated so far has been \emph{closed}: its state
+evolved unitarily under a Hamiltonian, and the Schrödinger
+equation determined the dynamics for all time. No real device is
+closed. A superconducting qubit is capacitively coupled to control
+lines, radiates into its electromagnetic environment, exchanges
+energy with two-level defects in its oxide, and is bombarded by
+quasiparticles and stray photons. The honest description keeps the
+qubit \emph{and} its environment in one enormous closed system, but
+we never want --- and never have --- the environment's state. What
+we want is an equation for the qubit alone. This chapter derives
+that equation. Starting from the reduced density operator
+(\cref{ch:composite}), we make the two approximations --- weak
+coupling and short bath memory --- that turn the intractable exact
+dynamics into a time-local equation of motion, and we arrive at the
+Lindblad master equation, the workhorse of open-system dynamics in
+cavity and circuit QED. The relaxation and dephasing times of
+\cref{ch:relaxation-dephasing}, the input--output relations of
+\cref{ch:input-output}, and the continuous-measurement
+unravellings of \cref{ch:continuous-measurement} are all read off
+from it.
+
+% --------------------------------------------------------------
+\section{The reduced state of an open system}
+\label{sec:reduced-state}
+
+\begin{phenomenon}
+A system $S$ in contact with an environment (or ``bath'') $B$
+cannot be assigned a state vector of its own: $S$ and $B$ generally
+become entangled, and the only complete description is the joint
+state $\op\rho_{SB}$. The experimentally accessible object is the
+\emph{reduced} state $\op\rho_S=\Tr_B\op\rho_{SB}$, obtained by
+tracing out the inaccessible bath. Even when the joint evolution is
+unitary, the reduced evolution is not: probability flows
+coherently between $S$ and $B$, so $\op\rho_S$ generically loses
+purity, and the pure-state Schrödinger equation no longer applies.
+\end{phenomenon}
+
+\paragraph{Setup.}
+We split the total Hamiltonian of the closed $S+B$ universe into
+three pieces,
+\begin{equation}
+\label{eq:sb-hamiltonian}
+\op H \;=\; \op H_S \otimes \id_B \;+\; \id_S \otimes \op H_B
+\;+\; \op H_{SB},
+\end{equation}
+with $\op H_S$ acting on the system Hilbert space $\hilbert_S$,
+$\op H_B$ on the (typically infinite-dimensional) bath space
+$\hilbert_B$, and the interaction $\op H_{SB}$ coupling the two. It
+is convenient to write the interaction in the separable form
+\begin{equation}
+\label{eq:sb-interaction}
+\op H_{SB} \;=\; \hbar\sum_\alpha \op S_\alpha \otimes \op B_\alpha,
+\end{equation}
+where $\op S_\alpha$ are system operators and $\op B_\alpha$ bath
+operators (any interaction can be brought to this form by expanding
+in operator bases). The total state evolves unitarily,
+$\op\rho_{SB}(t)=\op U(t)\,\op\rho_{SB}(0)\,\op U^\dagger(t)$ with
+$\op U=e^{-i\op H t/\hbar}$, and the reduced state is recovered at
+each instant by the partial trace of \cref{def:partial-trace},
+\begin{equation}
+\label{eq:reduced-state}
+\op\rho_S(t) \;=\; \Tr_B\bigl[\op U(t)\,\op\rho_{SB}(0)\,\op U^\dagger(t)\bigr].
+\end{equation}
+
+\paragraph{Why this is not a closed equation.}
+\Cref{eq:reduced-state} is exact but useless as it stands: it
+requires propagating the full $S+B$ state and only then discarding
+$B$. The decoherence example of
+\cref{ex:decoherence-by-partial-trace} was a special case in which
+the partial trace could be done by hand because the interaction was
+diagonal and the bath trivial. In general we cannot. The goal of
+the chapter is to find, under controlled approximations, a
+\emph{self-contained} equation $\dot{\op\rho}_S=\mathcal L\op\rho_S$
+in which the bath appears only through a few numbers (rates and
+frequency shifts), not as a dynamical partner.
+
+\paragraph{The interaction picture.}
+We work in the interaction picture with respect to the free
+Hamiltonian $\op H_0=\op H_S+\op H_B$ (the picture transformation of
+\cref{stmt:pictures}), writing
+$\tilde{\op\rho}_{SB}(t)=e^{i\op H_0 t/\hbar}\,\op\rho_{SB}(t)\,e^{-i\op H_0 t/\hbar}$.
+The von Neumann equation for the joint state becomes
+\begin{equation}
+\label{eq:vn-interaction}
+\frac{\dd}{\dd t}\tilde{\op\rho}_{SB}(t)
+\;=\; -\frac{i}{\hbar}\,\comm{\tilde{\op H}_{SB}(t)}{\tilde{\op\rho}_{SB}(t)},
+\end{equation}
+with $\tilde{\op H}_{SB}(t)=e^{i\op H_0 t/\hbar}\op H_{SB}\,e^{-i\op H_0 t/\hbar}$
+the interaction-picture coupling. Everything that follows is an
+approximate solution of \cref{eq:vn-interaction} for the reduced
+state $\tilde{\op\rho}_S=\Tr_B\tilde{\op\rho}_{SB}$.
+
+\paragraph{Transition.}
+The exact equation \cref{eq:vn-interaction} still entangles $S$
+with $B$. To make progress we need physical assumptions about the
+bath --- that it is large, weakly coupled, and quick to forget. The
+next section states these assumptions precisely.
+
+% --------------------------------------------------------------
+\section{The Born--Markov approximations}
+\label{sec:born-markov}
+
+\begin{phenomenon}
+A useful environment is one that is \emph{big}, \emph{weakly
+coupled}, and \emph{forgetful}. Big: the bath has so many degrees
+of freedom that the small amount of energy and information it
+absorbs from the system never measurably changes its own state.
+Weakly coupled: the interaction $\op H_{SB}$ is small enough to
+treat to second order. Forgetful: bath correlations decay on a
+timescale $\tau_B$ much shorter than the timescale $\tau_S$ over
+which the system state changes appreciably. These three statements,
+made precise, are the Born and Markov approximations.
+\end{phenomenon}
+
+\paragraph{Formal integration and the Born approximation.}
+Integrate \cref{eq:vn-interaction} once and resubstitute it into
+itself to get an equation exact to second order in $\op H_{SB}$:
+\begin{equation}
+\label{eq:second-order}
+\frac{\dd}{\dd t}\tilde{\op\rho}_{SB}(t)
+= -\frac{i}{\hbar}\comm{\tilde{\op H}_{SB}(t)}{\op\rho_{SB}(0)}
+- \frac{1}{\hbar^2}\!\int_0^t\!\!\dd t'\,
+\comm{\tilde{\op H}_{SB}(t)}{\comm{\tilde{\op H}_{SB}(t')}{\tilde{\op\rho}_{SB}(t')}}.
+\end{equation}
+Now trace over the bath. The \emph{Born approximation} asserts that,
+because the bath is large and the coupling weak, the joint state
+stays approximately factorised with the bath frozen in a stationary
+state $\op\rho_B$,
+\begin{equation}
+\label{eq:born-factorisation}
+\tilde{\op\rho}_{SB}(t) \;\approx\; \tilde{\op\rho}_S(t)\otimes\op\rho_B,
+\end{equation}
+and that $\op\rho_B$ commutes with $\op H_B$ (it is a thermal or
+vacuum state). Choosing the coupling operators so that
+$\Tr_B[\op B_\alpha\,\op\rho_B]=0$ (any non-zero mean is absorbed
+into $\op H_S$), the first term of \cref{eq:second-order} drops out
+of the bath trace, leaving the second-order \emph{Redfield}
+equation
+\begin{equation}
+\label{eq:redfield}
+\frac{\dd}{\dd t}\tilde{\op\rho}_S(t)
+= -\frac{1}{\hbar^2}\!\int_0^t\!\!\dd t'\;
+\Tr_B\comm{\tilde{\op H}_{SB}(t)}{\comm{\tilde{\op H}_{SB}(t')}{\tilde{\op\rho}_S(t')\otimes\op\rho_B}}.
+\end{equation}
+
+\paragraph{Bath correlation functions.}
+Carrying out the bath trace in \cref{eq:redfield} produces the
+\emph{bath correlation functions}
+\begin{equation}
+\label{eq:bath-correlation}
+C_{\alpha\beta}(t-t') \;=\; \Tr_B\bigl[\tilde{\op B}_\alpha(t)\,\tilde{\op B}_\beta(t')\,\op\rho_B\bigr],
+\end{equation}
+which --- because $\op\rho_B$ is stationary --- depend only on the
+time difference $t-t'$. The whole influence of the bath on the
+system is encoded in these functions. Physically, $C_{\alpha\beta}$
+measures how long the bath ``remembers'' a kick from the system.
+
+\begin{statement}[\textbf{Born--Markov approximation}]
+\label{stmt:born-markov}
+Assume the bath correlation functions \cref{eq:bath-correlation}
+decay on a timescale $\tau_B$ much shorter than the system
+relaxation timescale $\tau_S$ over which $\tilde{\op\rho}_S$
+evolves:
+\begin{equation}
+\label{eq:markov-condition}
+\tau_B \;\ll\; \tau_S.
+\end{equation}
+Then two simplifications of the Redfield equation
+\cref{eq:redfield} are justified. First (the \emph{Markov}
+replacement), since $C_{\alpha\beta}(t-t')$ is sharply peaked at
+$t'=t$, the slowly varying system state may be evaluated at the
+present time, $\tilde{\op\rho}_S(t')\to\tilde{\op\rho}_S(t)$,
+removing the memory integral. Second, the lower limit of the
+time integral may be extended to $-\infty$ because the integrand
+has no support beyond $t'\approx t-\tau_B$. The result is a
+\emph{time-local} equation,
+\begin{equation}
+\label{eq:born-markov-eq}
+\frac{\dd}{\dd t}\tilde{\op\rho}_S(t)
+= -\frac{1}{\hbar^2}\!\int_0^{\infty}\!\!\dd\tau\;
+\Tr_B\comm{\tilde{\op H}_{SB}(t)}{\comm{\tilde{\op H}_{SB}(t-\tau)}{\tilde{\op\rho}_S(t)\otimes\op\rho_B}},
+\end{equation}
+in which the future of $\op\rho_S$ depends only on its present, not
+its history.
+\end{statement}
+
+\paragraph{What the two timescales mean physically.}
+For a superconducting qubit at $\omega_q/2\pi\sim 5\,$GHz coupled to
+a $50\,\Omega$ electromagnetic environment, the bath correlation
+time $\tau_B$ is set by the inverse bandwidth over which the
+environmental spectral density is flat --- picoseconds to
+nanoseconds --- whereas $\tau_S\sim T_1\sim 100\,\mu$s is the
+relaxation time. The separation $\tau_B\ll\tau_S$ spans many
+orders of magnitude, which is exactly why the Markovian description
+is so accurate in cQED. When it fails --- a sharply structured
+environment such as a single near-resonant two-level defect, or a
+narrow-band filter cavity --- one must either enlarge the system to
+absorb the offending mode or use a non-Markovian formalism.
+
+\paragraph{Transition.}
+\Cref{eq:born-markov-eq} is time-local but not yet in its canonical
+form, and as written it does not manifestly preserve the positivity
+of $\op\rho_S$. A final rearrangement --- the secular
+approximation --- brings it to the unique form that does.
+
+% --------------------------------------------------------------
+\section{The Lindblad master equation}
+\label{sec:lindblad}
+
+\begin{statement}[\textbf{Lindblad / GKLS master equation}~\cite{lindblad1976,gorini1976}]
+\label{stmt:lindblad}
+Under the Born--Markov approximation (\cref{stmt:born-markov})
+followed by the secular approximation (dropping cross terms that
+oscillate at the system's Bohr frequency differences), the reduced
+density operator of an open system obeys, back in the Schrödinger
+picture,
+\begin{equation}
+\label{eq:lindblad}
+\frac{\dd\op\rho}{\dd t}
+\;=\; -\frac{i}{\hbar}\comm{\op H}{\op\rho}
+\;+\; \sum_k \gamma_k\,\mathcal D[\op L_k]\,\op\rho,
+\end{equation}
+where $\op H=\op H_S+\op H_{\rm LS}$ is the system Hamiltonian
+augmented by a bath-induced \emph{Lamb shift} $\op H_{\rm LS}$
+(which commutes with $\op H_S$), the $\op L_k$ are the
+\emph{jump operators}, $\gamma_k\geq 0$ are the associated rates,
+and the \emph{dissipator} is
+\begin{equation}
+\label{eq:dissipator}
+\mathcal D[\op L]\,\op\rho
+\;=\; \op L\,\op\rho\,\op L^\dagger
+\;-\; \tfrac12\,\op L^\dagger\op L\,\op\rho
+\;-\; \tfrac12\,\op\rho\,\op L^\dagger\op L
+\;=\; \op L\,\op\rho\,\op L^\dagger - \tfrac12\acomm{\op L^\dagger\op L}{\op\rho}.
+\end{equation}
+This is the most general generator of a continuous, time-homogeneous
+family of completely positive, trace-preserving maps. The first
+term of \cref{eq:lindblad} is the familiar unitary (von Neumann)
+evolution; the dissipator is the non-unitary part that captures
+relaxation, dephasing, and decay.
+\end{statement}
+
+\paragraph{Derivation sketch.}
+Insert the separable interaction \cref{eq:sb-interaction} into the
+Born--Markov equation \cref{eq:born-markov-eq}. Decompose each
+system operator $\op S_\alpha$ into eigenoperators of $\op H_S$,
+$\op S_\alpha(\omega)=\sum_{\epsilon'-\epsilon=\hbar\omega}
+\Pi(\epsilon)\,\op S_\alpha\,\Pi(\epsilon')$, where $\Pi(\epsilon)$
+projects onto the eigenspace of $\op H_S$ at energy $\epsilon$;
+these satisfy $\tilde{\op S}_\alpha(\omega,t)=e^{-i\omega t}\op S_\alpha(\omega)$.
+The bath trace turns the correlation functions into their
+one-sided Fourier transforms
+\begin{equation}
+\label{eq:gamma-transform}
+\Gamma_{\alpha\beta}(\omega)
+\;=\; \int_0^\infty\!\!\dd\tau\; e^{i\omega\tau}\,C_{\alpha\beta}(\tau)
+\;=\; \tfrac12\gamma_{\alpha\beta}(\omega) + i\,S_{\alpha\beta}(\omega),
+\end{equation}
+whose real part $\gamma_{\alpha\beta}(\omega)$ is the bath
+\emph{spectral density} at frequency $\omega$ (the rate) and whose
+imaginary part $S_{\alpha\beta}(\omega)$ produces the Lamb shift.
+The \emph{secular approximation} keeps only the terms in which the
+two eigenoperators oscillate at the same frequency (the cross terms
+oscillate at $e^{i(\omega-\omega')t}$ and average to zero when
+$|\omega-\omega'|\gg \tau_S^{-1}$). Diagonalising the positive
+matrix $\gamma_{\alpha\beta}(\omega)$ yields the rates $\gamma_k$
+and the jump operators $\op L_k$, and the equation collapses to the
+canonical form \cref{eq:lindblad}. A complete account is in
+\cite{breuer2002}; the structural result --- that this is the
+\emph{only} form a Markovian generator can take --- is the
+Gorini--Kossakowski--Sudarshan--Lindblad theorem
+\cite{lindblad1976,gorini1976}.
+
+\paragraph{Reading the dissipator.}
+The combination in \cref{eq:dissipator} is not arbitrary. The
+``sandwich'' term $\op L\op\rho\op L^\dagger$ is the \emph{quantum
+jump}: it takes the state and acts with $\op L$ on both sides, the
+way a measurement outcome would update the state. The
+anticommutator term $-\tfrac12\acomm{\op L^\dagger\op L}{\op\rho}$
+is the \emph{no-jump} back-action that keeps the trace constant:
+one verifies directly, using cyclicity of the trace, that
+\begin{equation}
+\label{eq:trace-preserving}
+\Tr\bigl[\mathcal D[\op L]\op\rho\bigr]
+= \Tr\bigl[\op L^\dagger\op L\,\op\rho\bigr]
+- \tfrac12\Tr\bigl[\op L^\dagger\op L\,\op\rho\bigr]
+- \tfrac12\Tr\bigl[\op\rho\,\op L^\dagger\op L\bigr]
+= 0,
+\end{equation}
+so probability is conserved, $\tfrac{\dd}{\dd t}\Tr\op\rho=0$. The
+two pieces are exactly balanced; weakening either one would let
+probability leak.
+
+\begin{example}[\textbf{Amplitude damping of a qubit}]
+\label{ex:amplitude-damping}
+The most important single instance of \cref{eq:lindblad} is a
+two-level system that can emit a quantum into a zero-temperature
+bath but not absorb one. Take $\op H=-\tfrac{\hbar\omega_q}{2}\hat\sigma_z$
+and a single jump operator $\op L_1=\hat\sigma_-=\ket{0}\!\bra{1}$
+with rate $\gamma_1=\gamma$ (the decay rate). The master equation
+is
+\begin{equation}
+\label{eq:amplitude-damping-me}
+\frac{\dd\op\rho}{\dd t}
+= -\frac{i}{\hbar}\comm{\op H}{\op\rho}
++ \gamma\Bigl(\hat\sigma_-\op\rho\,\hat\sigma_+
+- \tfrac12\acomm{\hat\sigma_+\hat\sigma_-}{\op\rho}\Bigr).
+\end{equation}
+Writing $\op\rho$ in the
+$\{\ket{0},\ket{1}\}$ basis with excited-state population
+$\rho_{11}$ and coherence $\rho_{01}$, the dissipator gives
+$\dot\rho_{11}=-\gamma\rho_{11}$ and
+$\dot\rho_{01}=(i\omega_q-\tfrac{\gamma}{2})\rho_{01}$. The
+excited-state population decays at rate $\gamma$ and the coherence
+at rate $\gamma/2$ --- the population relaxation defines $T_1=1/\gamma$,
+and the factor-of-two relation between population and coherence
+decay is the seed of the $T_1$--$T_2$ connection developed
+systematically in \cref{ch:relaxation-dephasing}. This is the exact
+Markovian counterpart of the spontaneous-emission rate computed
+from Fermi's golden rule in \cref{ch:perturbations}.
+\end{example}
+
+\paragraph{Transition.}
+We now have a closed, positivity-preserving equation of motion for
+any open Markovian system. Before specialising it to the qubit
+relaxation and dephasing of the next chapter, it is worth pausing
+on \emph{why} the dissipator must take precisely the form
+\cref{eq:dissipator} --- the answer is the requirement of complete
+positivity.
+
+% --------------------------------------------------------------
+\section{Complete positivity and the dynamical-map picture}
+\label{sec:cptp}
+
+\begin{phenomenon}
+A physical evolution must map density operators to density
+operators: it must preserve the trace (probabilities sum to one)
+and positivity (no negative probabilities). It must do so even when
+the system is entangled with an innocent bystander that is not
+acted on at all. This last, stronger requirement --- \emph{complete}
+positivity --- is what singles out the Lindblad form and rules out
+otherwise plausible-looking decay equations.
+\end{phenomenon}
+
+\begin{statement}[\textbf{Dynamical maps and Kraus form}]
+\label{stmt:kraus}
+The finite-time evolution generated by \cref{eq:lindblad} is a
+family of \emph{dynamical maps} $\op\rho(t)=\mathcal E_t[\op\rho(0)]$,
+each of which is completely positive and trace preserving (CPTP)
+and therefore admits a \emph{Kraus} (operator-sum) representation
+\begin{equation}
+\label{eq:kraus}
+\mathcal E_t[\op\rho] \;=\; \sum_\mu \op K_\mu\,\op\rho\,\op K_\mu^\dagger,
+\qquad \sum_\mu \op K_\mu^\dagger\op K_\mu = \id.
+\end{equation}
+Conversely, the Lindblad generator is recovered as the
+infinitesimal limit: for a short time $\dd t$, the Kraus operators
+are $\op K_0=\id-\bigl(\tfrac{i}{\hbar}\op H+\tfrac12\sum_k\gamma_k\op L_k^\dagger\op L_k\bigr)\dd t$
+and $\op K_k=\sqrt{\gamma_k\,\dd t}\,\op L_k$, and substituting into
+\cref{eq:kraus} reproduces \cref{eq:lindblad} to first order in
+$\dd t$.
+\end{statement}
+
+\paragraph{Why complete positivity forbids naive decay laws.}
+Consider ``decay'' modelled by simply shrinking the off-diagonal
+coherences while doing nothing else --- a tempting but illegal
+operation. Such a map can be positive on the system alone yet send
+an entangled joint state to one with negative eigenvalues, an
+unphysical result. The Lindblad dissipator avoids this because its
+infinitesimal Kraus operators \cref{stmt:kraus} guarantee complete
+positivity by construction. This is the operational content of the
+GKLS theorem: among all time-local generators, exactly those of the
+form \cref{eq:lindblad} with $\gamma_k\geq 0$ generate legal
+quantum channels.
+
+\paragraph{Connection to the measurement picture.}
+The Kraus decomposition \cref{eq:kraus} is also the bridge to
+continuous measurement. Reading $\op K_k=\sqrt{\gamma_k\dd t}\,\op L_k$
+as the operator that updates the state \emph{given} that a quantum
+was emitted into the bath in the interval $\dd t$, and
+$\op K_0$ as the update \emph{given} that none was, turns the
+master equation into a stochastic equation for individual
+experimental runs. That unravelling is the subject of
+\cref{ch:continuous-measurement}; the deterministic master equation
+\cref{eq:lindblad} is what one recovers after averaging over all
+measurement records.
+
+% --------------------------------------------------------------
+This chapter built the central equation of open-system dynamics. We
+began with the exact but intractable reduced state
+\cref{eq:reduced-state}, introduced the Born approximation
+(factorised state, weak coupling) and the Markov approximation
+(short bath memory) to obtain a time-local equation, and applied
+the secular approximation to bring it to the canonical Lindblad
+form \cref{eq:lindblad}. The dissipator's exact structure is fixed
+by complete positivity, equivalently by the Kraus representation of
+the finite-time dynamical map.
+
+The Lindblad equation is the foundation for the rest of Part~II. In
+\cref{ch:relaxation-dephasing} we choose the jump operators
+$\hat\sigma_-$ and $\hat\sigma_z$ to read off the relaxation and
+dephasing times of a qubit; in \cref{ch:input-output} we recover
+the same dissipation from the explicit dynamics of a bosonic bath
+and obtain the input--output boundary relations; and in
+\cref{ch:continuous-measurement} we unravel the equation into the
+quantum trajectories that describe a single, continuously monitored
+device.
+
+\clearpage
+\begin{chaptersummary}
+
+\paragraph{Reduced state.}
+A system coupled to a bath has no state vector of its own; its
+description is the reduced density operator
+$\op\rho_S=\Tr_B\op\rho_{SB}$, whose evolution is non-unitary even
+when the joint $S+B$ evolution is unitary.
+
+\paragraph{Born--Markov.}
+For a large, weakly coupled, short-memory bath ($\tau_B\ll\tau_S$),
+the reduced dynamics becomes time-local: the Born approximation
+factorises the joint state $\op\rho_{SB}\approx\op\rho_S\otimes\op\rho_B$
+and works to second order in the coupling, while the Markov
+approximation evaluates the system at the present time and extends
+the memory integral to infinity. The bath enters only through the
+correlation functions $C_{\alpha\beta}(\tau)$ and their transforms,
+whose real parts are rates and imaginary parts the Lamb shift.
+
+\paragraph{Lindblad master equation.}
+The unique generator of a continuous CPTP family is
+\begin{equation}
+\frac{\dd\op\rho}{\dd t}
+= -\frac{i}{\hbar}\comm{\op H}{\op\rho}
++ \sum_k\gamma_k\Bigl(\op L_k\op\rho\op L_k^\dagger
+- \tfrac12\acomm{\op L_k^\dagger\op L_k}{\op\rho}\Bigr),
+\qquad \gamma_k\geq 0.
+\end{equation}
+The sandwich term is the quantum jump; the anticommutator term is
+the no-jump back-action that preserves the trace.
+
+\paragraph{Complete positivity.}
+The finite-time map is CPTP, with Kraus form
+$\mathcal E_t[\op\rho]=\sum_\mu\op K_\mu\op\rho\op K_\mu^\dagger$,
+$\sum_\mu\op K_\mu^\dagger\op K_\mu=\id$. Infinitesimally,
+$\op K_0=\id-(\tfrac{i}{\hbar}\op H+\tfrac12\sum_k\gamma_k\op L_k^\dagger\op L_k)\dd t$
+and $\op K_k=\sqrt{\gamma_k\dd t}\,\op L_k$. Complete positivity is
+what fixes the dissipator's form and forbids naive decay laws.
+
+\paragraph{Canonical example.}
+Amplitude damping: $\op L=\hat\sigma_-$, rate $\gamma$. The excited
+population decays at $\gamma$ and the coherence at $\gamma/2$,
+giving $T_1=1/\gamma$ and seeding the $T_1$--$T_2$ relation of
+\cref{ch:relaxation-dephasing}.
+
+\end{chaptersummary}
+
+% --------------------------------------------------------------
+\section*{Exercises}
+\addcontentsline{toc}{section}{Exercises}
+
+\begin{exercise}[Non-unitarity from entangling dynamics]
+Let $S$ and $B$ be single qubits, initially in the product state
+$\ket{+}_S\otimes\ket{0}_B$ with $\ket{+}=(\ket0+\ket1)/\sqrt2$,
+and let them evolve under a CNOT (control $S$, target $B$). Compute
+$\op\rho_S$ before and after. Show that an initially pure system
+state becomes mixed, even though the joint evolution is unitary.
+\begin{solution}
+Before: $\op\rho_S=\ket{+}\!\bra{+}$, pure ($\Tr\op\rho_S^2=1$).
+The CNOT maps $\ket{+}\ket0=\tfrac1{\sqrt2}(\ket{00}+\ket{10})$ to
+$\tfrac1{\sqrt2}(\ket{00}+\ket{11})$, a Bell state. Tracing out $B$
+gives $\op\rho_S=\tfrac12(\ket0\!\bra0+\ket1\!\bra1)=\tfrac12\id$,
+maximally mixed ($\Tr\op\rho_S^2=\tfrac12$). The interaction
+converted system purity into $S$--$B$ entanglement, the microscopic
+origin of decoherence.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Trace preservation of the dissipator]
+Verify explicitly that $\Tr\bigl[\mathcal D[\op L]\op\rho\bigr]=0$
+for any $\op L$ and any $\op\rho$, and that consequently the
+Lindblad equation \cref{eq:lindblad} preserves $\Tr\op\rho$.
+\begin{solution}
+Using linearity and cyclicity of the trace,
+$\Tr[\op L\op\rho\op L^\dagger]=\Tr[\op L^\dagger\op L\op\rho]$, so
+$\Tr[\mathcal D[\op L]\op\rho]=\Tr[\op L^\dagger\op L\op\rho]
+-\tfrac12\Tr[\op L^\dagger\op L\op\rho]-\tfrac12\Tr[\op\rho\op L^\dagger\op L]=0$.
+The commutator term also has zero trace
+($\Tr\comm{\op H}{\op\rho}=0$), so $\tfrac{\dd}{\dd t}\Tr\op\rho=0$.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Hermiticity preservation]
+Show that if $\op\rho=\op\rho^\dagger$ at $t=0$, the Lindblad
+generator keeps $\op\rho$ Hermitian for all $t$.
+\begin{solution}
+Take the adjoint of the right-hand side of \cref{eq:lindblad}. The
+commutator term: $(-\tfrac{i}{\hbar}\comm{\op H}{\op\rho})^\dagger
+=+\tfrac{i}{\hbar}\comm{\op H}{\op\rho^\dagger}\cdot(-1)$... explicitly
+$(-\tfrac i\hbar[\op H,\op\rho])^\dagger=\tfrac i\hbar[\op\rho^\dagger,\op H]
+=-\tfrac i\hbar[\op H,\op\rho^\dagger]$, which equals the original
+term when $\op\rho=\op\rho^\dagger$. The dissipator
+\cref{eq:dissipator} is manifestly self-adjoint under
+$\op\rho\to\op\rho^\dagger$ since $(\op L\op\rho\op L^\dagger)^\dagger
+=\op L\op\rho^\dagger\op L^\dagger$ and the anticommutator is
+self-adjoint. Hence $\dot{\op\rho}^\dagger=\dot{\op\rho}$ and
+Hermiticity is preserved.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Steady state of amplitude damping]
+For \cref{eq:amplitude-damping-me}, find the stationary state
+$\dot{\op\rho}=0$ and interpret it physically.
+\begin{solution}
+From $\dot\rho_{11}=-\gamma\rho_{11}$ the steady state has
+$\rho_{11}=0$; from $\dot\rho_{01}=(i\omega_q-\gamma/2)\rho_{01}$ the
+coherence also decays to zero. The stationary state is the ground
+state $\ket0\!\bra0$. Physically, a zero-temperature bath can only
+absorb energy, so the qubit relaxes to its ground state and stays
+there.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Population and coherence decay rates]
+From \cref{eq:amplitude-damping-me}, confirm that the excited
+population decays at $\gamma$ while the coherence decays at
+$\gamma/2$. Why is the coherence rate exactly half?
+\begin{solution}
+The jump term $\hat\sigma_-\op\rho\hat\sigma_+$ contributes only to
+$\rho_{00}$; the anticommutator
+$-\tfrac\gamma2\acomm{\hat\sigma_+\hat\sigma_-}{\op\rho}$ with
+$\hat\sigma_+\hat\sigma_-=\ket1\!\bra1$ gives
+$\dot\rho_{11}=-\gamma\rho_{11}$ and, for the off-diagonal element,
+$-\tfrac\gamma2\rho_{01}$ (only the $\ket1$ side of $\rho_{01}$ is
+hit). Coherence involves one factor of the excited amplitude, so it
+sees half the population decay rate. This is the $1/T_2=1/(2T_1)$
+floor in the absence of pure dephasing.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Markov condition for a transmon]
+A transmon couples to a $50\,\Omega$ line whose noise spectrum is
+flat over a bandwidth $\sim 1\,$GHz, giving $\tau_B\sim 1\,$ns.
+Its relaxation time is $T_1=100\,\mu$s. Estimate the ratio
+$\tau_B/\tau_S$ and comment on the validity of the Born--Markov
+approximation. When might it break down?
+\begin{solution}
+$\tau_B/\tau_S\sim 10^{-9}/10^{-4}=10^{-5}$, so the timescale
+separation \cref{eq:markov-condition} holds by five orders of
+magnitude --- Born--Markov is excellent. It breaks down when the
+environment is sharply structured: a near-resonant two-level
+defect, a high-$Q$ filter cavity, or $1/f$ charge/flux noise with
+long correlation times. Then one enlarges the system to include the
+offending mode, or uses a non-Markovian formalism.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Kraus operators for amplitude damping]
+Show that the finite-time amplitude-damping channel has Kraus
+operators
+$\op K_0=\ket0\!\bra0+\sqrt{1-p}\,\ket1\!\bra1$ and
+$\op K_1=\sqrt{p}\,\ket0\!\bra1$ with $p=1-e^{-\gamma t}$, and
+verify $\op K_0^\dagger\op K_0+\op K_1^\dagger\op K_1=\id$.
+\begin{solution}
+$\op K_1$ takes $\ket1$ to $\ket0$ with amplitude $\sqrt p$ (a
+decay event); $\op K_0$ leaves $\ket0$ untouched and damps $\ket1$
+by $\sqrt{1-p}$ (no decay, with back-action). Then
+$\op K_0^\dagger\op K_0=\ket0\!\bra0+(1-p)\ket1\!\bra1$ and
+$\op K_1^\dagger\op K_1=p\,\ket1\!\bra1$, summing to
+$\ket0\!\bra0+\ket1\!\bra1=\id$. Applying $\mathcal E[\op\rho]
+=\op K_0\op\rho\op K_0^\dagger+\op K_1\op\rho\op K_1^\dagger$
+reproduces $\rho_{11}\to(1-p)\rho_{11}=e^{-\gamma t}\rho_{11}$ and
+$\rho_{01}\to\sqrt{1-p}\,\rho_{01}=e^{-\gamma t/2}\rho_{01}$,
+matching \cref{ex:amplitude-damping}.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[A positive but not completely positive map]
+The transpose map $\op\rho\mapsto\op\rho^{\sf T}$ is positive (it
+preserves eigenvalues, hence positivity, of any single-system
+state). Show it is \emph{not} completely positive by applying
+$(\text{transpose})\otimes\text{id}$ to a Bell state and finding a
+negative eigenvalue.
+\begin{solution}
+Take $\ket{\Phi^+}=\tfrac1{\sqrt2}(\ket{00}+\ket{11})$, density
+matrix with entries $\tfrac12$ at positions $00\,00$, $00\,11$,
+$11\,00$, $11\,11$. Partial transpose on the first qubit swaps the
+off-diagonal block, producing the matrix with $\tfrac12$ on the
+diagonal $00,11$ and $\tfrac12$ swapping $01\leftrightarrow10$. Its
+eigenvalues are $\{\tfrac12,\tfrac12,\tfrac12,-\tfrac12\}$ --- the
+$-\tfrac12$ shows the partially transposed operator is not a valid
+density matrix. Hence transpose is positive but not completely
+positive, illustrating why the stronger condition is required of
+physical maps (and why the Lindblad form, which is automatically
+CP, is mandatory).
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Lamb shift versus dissipation]
+In \cref{eq:gamma-transform} the one-sided transform of the bath
+correlation function splits into a real part (rate) and an
+imaginary part (Lamb shift). Explain why the imaginary part
+produces a Hamiltonian term $\op H_{\rm LS}$ rather than
+dissipation, and why $\op H_{\rm LS}$ commutes with $\op H_S$ after
+the secular approximation.
+\begin{solution}
+The real part $\gamma_{\alpha\beta}(\omega)$ multiplies the
+dissipator (the genuinely irreversible jump+anticommutator
+structure); the imaginary part $S_{\alpha\beta}(\omega)$ multiplies
+a commutator $-\tfrac i\hbar\comm{\op H_{\rm LS}}{\op\rho}$, i.e.\
+unitary dynamics --- it shifts energy levels (a bath-induced
+renormalisation, the analogue of the Lamb shift in atomic physics)
+without causing decay. After the secular approximation only same-
+frequency eigenoperators survive, so $\op H_{\rm LS}$ is built from
+$\op S_\alpha^\dagger(\omega)\op S_\beta(\omega)$, which are
+diagonal in the $\op H_S$ eigenbasis; hence
+$\comm{\op H_{\rm LS}}{\op H_S}=0$.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[Thermal bath: adding the absorption channel]
+Generalise \cref{ex:amplitude-damping} to a bath at temperature $T$
+by adding a second jump operator $\op L_2=\hat\sigma_+$ with rate
+$\gamma_\uparrow$, while the emission rate is $\gamma_\downarrow$.
+Using detailed balance $\gamma_\uparrow/\gamma_\downarrow
+=e^{-\hbar\omega_q/k_BT}$, find the steady-state excited-state
+population and show it is the Boltzmann factor.
+\begin{solution}
+The population equation becomes
+$\dot\rho_{11}=-\gamma_\downarrow\rho_{11}+\gamma_\uparrow\rho_{00}$
+with $\rho_{00}=1-\rho_{11}$. Setting $\dot\rho_{11}=0$ gives
+$\rho_{11}=\gamma_\uparrow/(\gamma_\uparrow+\gamma_\downarrow)
+=1/(1+e^{\hbar\omega_q/k_BT})$, the Fermi--Dirac/Boltzmann
+thermal population. The total relaxation rate is the sum
+$1/T_1=\gamma_\downarrow+\gamma_\uparrow$, and at $T\to0$,
+$\gamma_\uparrow\to0$ and the qubit relaxes to the ground state as
+in \cref{ex:amplitude-damping}.
+\end{solution}
+\end{exercise}
