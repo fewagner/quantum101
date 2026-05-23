@@ -17,7 +17,7 @@ Six parts plus an appendix:
 | II | Open quantum systems | drafted (chs. 5–8) |
 | III | Quantum optics | drafted (chs. 9–12) |
 | IV | Superconducting circuits | drafted (chs. 13–17): superconductivity + circuit quantisation, Josephson junction & SQUIDs, Cooper-pair box → transmon, circuit QED (coupling/gates/parametric amps), qubit tune-up & experimental basics |
-| V | Quantum information processing | not started (placeholder ch. 18) |
+| V | Quantum information processing | ch. 18 drafted (computation: circuit model & universal gates, no-cloning, teleportation/superdense coding, QKD, Clifford/magic dichotomy); ch. 19 QEC next |
 | VI | Quantum sensing | drafted (chs. 19–24): dark-matter search, four mechanism chapters, plus a coherent multi-qubit / Heisenberg-limit chapter |
 | App. A | Auxiliary mathematical definitions | drafted |
 
@@ -226,30 +226,47 @@ without checking — the document should keep reading as a quiet book.
 | Resonator / two-tone spectroscopy, dressed cavity | `stmt:spectroscopy` | ch. 17 §17.2 |
 | Rabi / Ramsey / echo / CPMG / `$T_1$` sequences | `stmt:time-domain` | ch. 17 §17.3 |
 | Hardware decoherence channels (TLS, flux noise, quasiparticle poisoning, Purcell) | `stmt:hardware-decoherence` | ch. 17 §17.4 |
+| Quantum circuit model (gates, wires, diagram conventions) | `def:circuit-model` | ch. 18 §18.1 |
+| Universal gate set, Solovay–Kitaev, `\{H,T,CNOT\}` | `stmt:universal-gates` | ch. 18 §18.1 |
+| Hadamard / phase / `$\mathrm T$` gates, CNOT / CZ | (within `def:circuit-model`) | ch. 18 §18.1 |
+| No-cloning theorem | `thm:no-cloning` | ch. 18 §18.2 |
+| Quantum teleportation (fully worked; Pauli corrections) | `stmt:teleportation` | ch. 18 §18.3 |
+| Superdense coding | `stmt:superdense` | ch. 18 §18.3 |
+| Quantum key distribution (BB84, E91) | `stmt:bb84` | ch. 18 §18.4 |
+| Pauli / Clifford group, stabiliser state, Gottesman–Knill | `stmt:gottesman-knill` | ch. 18 §18.5 |
+| Magic states, magic-state distillation, transversality / Eastin–Knill | `stmt:magic-distillation` | ch. 18 §18.5 |
 
 When introducing new terms in future chapters, **append to this table**.
 
 ## Open todos
 
-- Parts I, II, III, IV, and VI drafted. Part IV is the five-chapter arc
-  ch. 13 superconductivity + circuit quantisation (`ch:circuit-quantisation`),
-  ch. 14 Josephson junction & SQUIDs (`ch:josephson`), ch. 15 Cooper-pair
-  box → transmon (`ch:transmon`), ch. 16 circuit QED: coupling, gates,
-  parametric processes & quantum-limited amps (`ch:circuit-qed`,
-  `sec:two-qubit-gates`), ch. 17 qubit tune-up & experimental basics
-  (`ch:experimental-basics`, `sec:experimental-basics`). All forward
-  `\cref`s into Part IV from Parts I–III/VI now resolve; the only
-  remaining expected warnings are forward refs into Part V
-  (`ch:quantum-information-processing`, `ch:qec`). Part V is a
-  placeholder (ch. 18) outlined in `README.md` only.
-- Bibliography active (53 entries; foundations + decoherence +
+- Parts I, II, III, IV, and VI drafted. Part V now in progress:
+  ch. 18 quantum computation (`ch:quantum-information-processing`) is
+  drafted — circuit model & universal gates, no-cloning, teleportation
+  & superdense coding, QKD (BB84/E91), and the Clifford / magic-state
+  dichotomy (Gottesman–Knill). ch. 19 quantum error correction
+  (`ch:qec`) is next, with worked stabiliser detail (repetition →
+  Shor/Steane → surface code → bosonic cat/GKP). **Renumber pending:**
+  when ch. 19 lands, the existing Part VI chapter files `19_…`–`24_…`
+  shift to `20_…`–`25_…` (rendered chs. 20–25) and `main.tex` updates
+  to suit; until then Part VI renders as chs. 19–24 and the build stays
+  consistent. The only remaining expected forward-ref warning is
+  `ch:qec` (resolves once ch. 19 is written);
+  `ch:quantum-information-processing` now resolves.
+- Bibliography active (58 entries; foundations + decoherence +
   interpretations + superdeterminism + Part VI dark-matter
   references including Lewin-Smith / Helm form factor /
   Essig-Mardon-Volansky / Knapen-Kozaczuk-Lin (DarkELF) /
   Feldman-Cousins / Cowan-Cranmer-Gross-Vitells profile-likelihood
   + cQED textbooks/reviews and historical-milestone papers cited
-  in the introduction; one entry on magic-state distillation for
-  Part V). Add new entries thematically grouped in
-  `bibliography.bib` as future chapters acquire citations.
+  in the introduction; a Part V cluster for quantum information
+  processing — no-cloning (Wootters–Zurek), BB84 (Bennett–Brassard),
+  E91 (Ekert), superdense coding (Bennett–Wiesner), Eastin–Knill, plus
+  the pre-existing Shor / Steane / Gottesman / Bravyi–Kitaev
+  magic-state and surface-code references). Add new entries thematically
+  grouped in `bibliography.bib` as future chapters acquire citations.
 - No figures yet. `figures/` is empty; consider TikZ for diagrams when
-  needed (Bloch sphere, circuit diagrams, level diagrams, …).
+  needed (Bloch sphere, circuit diagrams, level diagrams, …). Ch. 18
+  presents circuit diagrams as explicit gate-sequence algebra rather
+  than rendered diagrams, deferring a `quantikz`/TikZ figures pass (the
+  preamble pre-stages a commented `quantikz` line for that).

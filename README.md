@@ -137,11 +137,11 @@ needed. Each `[ ]` becomes a section or chapter.
 A general primer that progresses from the language of quantum
 computing into quantum error correction. Topics in order:
 
-- [ ] Quantum gates and the universal gate set; gate notation and
+- [x] Quantum gates and the universal gate set; gate notation and
       diagrammatic conventions for circuit diagrams
-- [ ] Quantum teleportation, fully worked
-- [ ] Magic states and stabiliser-vs-non-stabiliser dichotomy
-- [ ] Notes on quantum cryptography (BB84, E91) and quantum
+- [x] Quantum teleportation, fully worked
+- [x] Magic states and stabiliser-vs-non-stabiliser dichotomy
+- [x] Notes on quantum cryptography (BB84, E91) and quantum
       communication (no-cloning, dense coding)
 - [ ] Why QEC: noise channels, no-cloning, the digitization theorem
 - [ ] Repetition codes: bit-flip and phase-flip
