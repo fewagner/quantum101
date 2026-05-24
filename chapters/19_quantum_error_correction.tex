@@ -148,8 +148,24 @@ $\op{Z}_L=\hat\sigma_z^{(1)}$ and
 $\op{X}_L=\hat\sigma_x^{(1)}\hat\sigma_x^{(2)}\hat\sigma_x^{(3)}$.
 \end{statement}
 
+\begin{figure}[t]
+  \centering
+  \begin{quantikz}
+    \lstick{$\alpha\ket{0}+\beta\ket{1}$} & \ctrl{1} & \ctrl{2} & \qw \\
+    \lstick{$\ket{0}$}                    & \targ{}  & \qw      & \qw \\
+    \lstick{$\ket{0}$}                    & \qw      & \targ{}  & \qw
+  \end{quantikz}
+  \caption{Encoding the three-qubit repetition code
+  (\cref{stmt:repetition}): two CNOTs spread the logical amplitudes into
+  $\alpha\ket{000}+\beta\ket{111}$. The qubits become entangled --- the
+  amplitudes $\alpha,\beta$ are never copied, so no-cloning is
+  respected.}
+  \label{fig:rep-encoding}
+\end{figure}
+
 \begin{proof}[Derivation]
-The encoding is two CNOTs from the data qubit onto two blank qubits,
+The encoding is two CNOTs from the data qubit onto two blank qubits
+(\cref{fig:rep-encoding}),
 \begin{equation}
 (\alpha\ket{0}+\beta\ket{1})\ket{0}\ket{0}
 \;\xrightarrow{\;\mathrm{CNOT}_{1\to2}\,\mathrm{CNOT}_{1\to3}\;}\;
@@ -390,7 +406,8 @@ $\op{Z}_L=\hat\sigma_z^{\otimes7}$, giving distance $3$.
 \textbf{Syndrome extraction in practice.} Each generator is measured
 with one ancilla. For a $\hat\sigma_z$-type check
 $\hat\sigma_z^{(a)}\hat\sigma_z^{(b)}$, prepare an ancilla in $\ket{0}$,
-apply $\mathrm{CNOT}$ from qubits $a$ and $b$ onto it, and measure it:
+apply $\mathrm{CNOT}$ from qubits $a$ and $b$ onto it, and measure it
+(\cref{fig:syndrome}):
 the ancilla reads the parity $\hat\sigma_z^{(a)}\hat\sigma_z^{(b)}$
 without revealing either bit. An $\hat\sigma_x$-type check is the same
 circuit conjugated by Hadamards on the ancilla (so it measures
@@ -399,6 +416,22 @@ cycle; fault-tolerant designs repeat and cross-check them so that an
 error in the syndrome circuit itself does not masquerade as a data
 error.
 \end{remark}
+
+\begin{figure}[t]
+  \centering
+  \begin{quantikz}
+    \lstick{$q_a$}     & \ctrl{2} & \qw      & \qw \\
+    \lstick{$q_b$}     & \qw      & \ctrl{1} & \qw \\
+    \lstick{$\ket{0}$} & \targ{}  & \targ{}  & \meter{}
+  \end{quantikz}
+  \caption{Syndrome extraction for a $\hat\sigma_z$-type parity check
+  $\hat\sigma_z^{(a)}\hat\sigma_z^{(b)}$: two CNOTs map the joint parity
+  of data qubits $a,b$ onto an ancilla prepared in $\ket{0}$, whose
+  measurement returns the syndrome bit without revealing either data
+  qubit. An $\hat\sigma_x$-type check is the same gadget with the ancilla
+  conjugated by Hadamards.}
+  \label{fig:syndrome}
+\end{figure}
 
 \begin{application}[Transversal Cliffords and the return of magic states]
 \label{app:transversal}
@@ -441,9 +474,9 @@ it buildable.
 
 \begin{statement}[\textbf{The surface code}~\cite{kitaev2003,fowler2012}]
 \label{stmt:surface-code}
-Place data qubits on the edges of a two-dimensional square lattice.
-Define two families of stabilisers: a \emph{star} (vertex) operator at
-each vertex $v$,
+Place data qubits on the edges of a two-dimensional square lattice
+(\cref{fig:surface-code}). Define two families of stabilisers: a
+\emph{star} (vertex) operator at each vertex $v$,
 \begin{equation}
 \op A_v=\prod_{e\,\ni\,v}\hat\sigma_x^{(e)},
 \qquad
@@ -464,6 +497,39 @@ p_L\sim\Bigl(\frac{p}{p_{\rm th}}\Bigr)^{\!\lfloor d/2\rfloor},
 \end{equation}
 the threshold theorem of fault-tolerant computation.
 \end{statement}
+
+\begin{figure}[t]
+  \centering
+  \begin{tikzpicture}[scale=1.15]
+    % shaded plaquette (Z-check) on the face with corners (1,1)--(2,2)
+    \fill[example!15] (1,1) rectangle (2,2);
+    % lattice edges: 4x4 vertices, 3x3 faces
+    \foreach \y in {0,1,2,3}{ \draw[primary!45] (0,\y) -- (3,\y); }
+    \foreach \x in {0,1,2,3}{ \draw[primary!45] (\x,0) -- (\x,3); }
+    % logical Z string along the left boundary
+    \draw[remark,line width=1.6pt] (0,0) -- (0,3);
+    \node[remark] at (-0.38,1.5) {$\op Z_L$};
+    % data qubits on edge midpoints (vertical then horizontal edges)
+    \foreach \x in {0,1,2,3}{ \foreach \y in {0,1,2}{
+        \filldraw[primary!75] (\x,{\y+0.5}) circle (1.7pt); } }
+    \foreach \x in {0,1,2}{ \foreach \y in {0,1,2,3}{
+        \filldraw[primary!75] ({\x+0.5},\y) circle (1.7pt); } }
+    % star (X-check) at vertex (2,2): highlight its four incident qubits
+    \foreach \p in {(1.5,2),(2.5,2),(2,1.5),(2,2.5)}{
+        \filldraw[accent] \p circle (2.4pt); }
+    \node[example] at (1.5,1.5) {$\op B_p$};
+    \node[accent] at (2.42,2.42) {$\op A_v$};
+  \end{tikzpicture}
+  \caption{A patch of the surface code. Data qubits (dots) sit on the
+  edges of a square lattice. The plaquette operator $\op B_p$ (shaded
+  face) is the product of $\hat\sigma_z$ over its four bounding edges;
+  the star operator $\op A_v$ (highlighted dots) is the product of
+  $\hat\sigma_x$ over the four edges meeting at a vertex. The star and
+  plaquette shown share exactly two edges, so they commute. A logical
+  operator is a string spanning the patch, here a vertical $\op Z_L$;
+  its minimum length is the code distance.}
+  \label{fig:surface-code}
+\end{figure}
 
 \begin{proof}[Derivation]
 \emph{Commutation.} A star $\op A_v$ and a plaquette $\op B_p$ share

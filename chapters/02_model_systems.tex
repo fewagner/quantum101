@@ -276,10 +276,37 @@ to $|\bm{r}|=1$.
 In coordinates a pure state $\ket{\psi}=\cos(\theta/2)\ket{0}+
 e^{i\varphi}\sin(\theta/2)\ket{1}$ has Bloch vector
 $\bm{r}=(\sin\theta\cos\varphi,\sin\theta\sin\varphi,\cos\theta)$,
-parametrising the unit sphere $S^2$. The action of \cref{eq:tls-h}
-on $\bm{r}$ is precession around the axis $\bm{\Omega}$ at angular
-speed $|\bm{\Omega}|$ (the $\hbar$ in \cref{eq:tls-h} cancels with
-the $\hbar$ in $e^{-i\op{H}t/\hbar}$).
+parametrising the unit sphere $S^2$ (\cref{fig:bloch-sphere}). The
+action of \cref{eq:tls-h} on $\bm{r}$ is precession around the axis
+$\bm{\Omega}$ at angular speed $|\bm{\Omega}|$ (the $\hbar$ in
+\cref{eq:tls-h} cancels with the $\hbar$ in $e^{-i\op{H}t/\hbar}$).
+
+\begin{figure}[t]
+  \centering
+  \begin{tikzpicture}[scale=2.2]
+    \shade[ball color=primary!12] (0,0) circle (1);
+    \draw[primary!60] (0,0) circle (1);
+    \draw[dashed,primary!45] (-1,0) arc (180:360:1 and 0.32);
+    \draw[primary!55] (1,0) arc (0:180:1 and 0.32);
+    \draw[->,primary!80] (0,0) -- (0,1.30) node[above]{$z\;(\ket{0})$};
+    \draw[primary!80] (0,0) -- (0,-1.0);
+    \node[below] at (0,-1.16) {$\ket{1}$};
+    \draw[->,primary!80] (0,0) -- (1.28,0) node[right]{$x$};
+    \draw[->,primary!80] (0,0) -- (-0.64,-0.48) node[below left]{$y$};
+    \coordinate (r) at (0.50,0.63);
+    \draw[->,very thick,accent] (0,0) -- (r);
+    \node[accent,above right] at (r) {$\bm{r}$};
+    \draw[example,thick] (0,0.45) arc (90:51:0.45);
+    \node[example] at (0.17,0.58) {$\theta$};
+  \end{tikzpicture}
+  \caption{The Bloch sphere. A pure qubit state
+  $\ket{\psi}=\cos(\theta/2)\ket{0}+e^{i\varphi}\sin(\theta/2)\ket{1}$
+  maps to a unit Bloch vector $\bm{r}$ on the surface, with polar angle
+  $\theta$ and azimuth $\varphi$; mixed states fill the interior
+  ($|\bm{r}|<1$), the maximally mixed state sitting at the centre. The
+  poles are the computational basis states $\ket{0}$ and $\ket{1}$.}
+  \label{fig:bloch-sphere}
+\end{figure}
 
 \begin{remark}[How a pure state becomes mixed]
 Mixed states ($|\bm{r}|<1$) arise in two distinct but related ways.

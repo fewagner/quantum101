@@ -140,7 +140,7 @@ $\mathrm{T}$ tips the set over into universality.
 \label{ex:bell-circuit}
 The smallest nontrivial circuit prepares the Bell state of
 \cref{ex:bell-states}. Start in $\ket{00}$, apply a Hadamard to the
-first qubit, then a CNOT with the first as control:
+first qubit, then a CNOT with the first as control (\cref{fig:bell-circuit}):
 \begin{align}
 \ket{00}
 &\xrightarrow{\;\mathrm{H}\otimes\id\;}
@@ -156,6 +156,19 @@ protocol below, and its hardware incarnations (cross-resonance, iSWAP-,
 and controlled-phase gates) are the subject of
 \cref{sec:two-qubit-gates}.
 \end{example}
+
+\begin{figure}[t]
+  \centering
+  \begin{quantikz}
+    \lstick{$\ket{0}$} & \gate{\mathrm{H}} & \ctrl{1} & \qw \\
+    \lstick{$\ket{0}$} & \qw               & \targ{}  & \qw
+  \end{quantikz}
+  \caption{The Bell-pair circuit: a Hadamard on the first qubit followed
+  by a CNOT prepares $\ket{\Phi^+}=\tfrac{1}{\sqrt2}(\ket{00}+\ket{11})$
+  from $\ket{00}$ (\cref{ex:bell-circuit}). Run in reverse, the same
+  network is the Bell measurement that decodes superdense coding.}
+  \label{fig:bell-circuit}
+\end{figure}
 
 \paragraph{Transition.}
 The circuit model gives us a finite vocabulary --- a handful of gates
@@ -268,9 +281,9 @@ of \cref{ch:composite} a concrete, expendable currency.
 \begin{statement}[\textbf{Quantum teleportation}~\cite{bennett1993}]
 \label{stmt:teleportation}
 One ebit of pre-shared entanglement plus two classical bits suffice to
-transmit one unknown qubit. No physical qubit travels from sender to
-receiver, and the sender's copy is destroyed in the process, consistent
-with \cref{thm:no-cloning}.
+transmit one unknown qubit (\cref{fig:teleportation}). No physical qubit
+travels from sender to receiver, and the sender's copy is destroyed in
+the process, consistent with \cref{thm:no-cloning}.
 \end{statement}
 
 \begin{proof}[Derivation]
@@ -315,6 +328,23 @@ mixed $\tfrac12\id$, identical for every input, so no information has
 travelled faster than the classical bits --- there is no
 faster-than-light signalling.
 \end{proof}
+
+\begin{figure}[t]
+  \centering
+  \begin{quantikz}
+    \lstick{$\ket{\psi}$}      & \ctrl{1} & \gate{\mathrm{H}} & \meter{} &      \\
+    \lstick[2]{$\ket{\Phi^+}$} & \targ{}  & \qw               & \meter{} &      \\
+                               & \qw      & \qw               & \qw      & \gate{\hat\sigma_z^{m_C}\hat\sigma_x^{m_A}}
+  \end{quantikz}
+  \caption{Teleportation (\cref{stmt:teleportation}). Alice holds the
+  unknown $\ket{\psi}$ (top wire) and one half of the shared pair
+  $\ket{\Phi^+}$; she applies a CNOT and a Hadamard, then measures both
+  of her qubits to obtain the bits $m_C,m_A$. Bob (bottom wire) recovers
+  $\ket{\psi}$ by applying the Pauli correction
+  $\hat\sigma_z^{m_C}\hat\sigma_x^{m_A}$ conditioned on those two
+  classical bits.}
+  \label{fig:teleportation}
+\end{figure}
 
 \begin{statement}[\textbf{Superdense coding}~\cite{bennett1992}]
 \label{stmt:superdense}
