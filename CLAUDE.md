@@ -243,6 +243,9 @@ without checking — the document should keep reading as a quiet book.
 | Transversal gates (CSS Cliffords) | `app:transversal` | ch. 19 §19.4 |
 | Surface code (stars/plaquettes, strings, threshold theorem) | `stmt:surface-code` | ch. 19 §19.5 |
 | Bosonic codes: cat (parity syndrome) & GKP (grid states) | `stmt:bosonic-codes` | ch. 19 §19.6 |
+| Side-coupled (notch/hanger) resonator, transmission dip, `$Q_c/Q_i/Q_l$` | `eq:notch-s21` | ch. 7 §7.3 |
+| Direct qubit–feedline coupling, waveguide-QED coherent scattering (`$S_{21},S_{11}$`, the qubit as a saturable notch resonator) | `stmt:waveguide-readout` | ch. 16 §16.6 |
+| Resonator-free charge-sensitive transmon detector (SQUAT) | `app:squat` | ch. 16 §16.6 |
 
 When introducing new terms in future chapters, **append to this table**.
 
@@ -274,9 +277,12 @@ When introducing new terms in future chapters, **append to this table**.
   for QEC the CSS (Calderbank–Shor), surface/toric (Kitaev), GKP
   (Gottesman–Kitaev–Preskill) and cat-qubit (Mirrahimi et al.) papers
   alongside the pre-existing Shor / Steane / Gottesman / Bravyi–Kitaev /
-  Fowler / Michael / Ofek / Sivak references). Add new entries
-  thematically grouped in `bibliography.bib` as future chapters acquire
-  citations.
+  Fowler / Michael / Ofek / Sivak references; plus a waveguide-QED
+  cluster — Peropadre et al. (coherent-state scattering), Wiegand
+  (thesis), Gao (thesis) and Probst et al. (notch-resonator fitting),
+  and the SQUAT papers Magoon et al. 2026 / Fink et al. 2024).
+  Add new entries thematically grouped in `bibliography.bib` as future
+  chapters acquire citations.
 - No figures yet. `figures/` is empty; consider TikZ for diagrams when
   needed (Bloch sphere, circuit diagrams, level diagrams, …). Chs. 18–19
   present circuits (gate sequences, syndrome extraction) as explicit

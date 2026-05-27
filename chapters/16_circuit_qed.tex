@@ -219,10 +219,12 @@ $\chi=\dfrac{g^2}{\Delta}\dfrac{\alpha}{\Delta+\alpha}$ now built from
 the circuit $g$ of \cref{eq:cqed-jc} and the transmon anharmonicity
 $\alpha=-E_C$ of \cref{stmt:transmon}. A probe tone at the resonator
 frequency acquires a qubit-state-dependent phase
-(\cref{stmt:dispersive-readout}); it leaves through the output line as
-the field $\hat a_{\rm out}$ of the input--output theory
-(\cref{stmt:input-output}), where it must be amplified before it can be
-digitised.
+(\cref{stmt:dispersive-readout}); since the resonator is side-coupled
+to the feedline, the measured transmission is the notch dip
+\cref{eq:notch-s21}, pulled by $\pm\chi$ between the two qubit states.
+The signal leaves through the output line as the field $\hat a_{\rm out}$
+of the input--output theory (\cref{stmt:input-output}), where it must be
+amplified before it can be digitised.
 \end{statement}
 
 \paragraph{Why the first amplifier matters.}
@@ -299,6 +301,184 @@ where a four-wave-mixing process converts an incoming signal photon
 into a detectable qubit excitation. The Josephson nonlinearity is the
 single resource behind all of them.
 
+\paragraph{Transition.}
+The amplifier completes the \emph{cavity-based} readout chain. But the
+cavity is not mandatory. We close the chapter with the opposite limit:
+delete the readout resonator and couple the qubit straight to the
+measurement line. The scattering theory that results is the same
+input--output bookkeeping of \cref{ch:input-output}, now with a
+two-level atom where the linear cavity used to be.
+
+% --------------------------------------------------------------
+\section{Resonator-free readout: a qubit coupled directly to the feedline}
+\label{sec:waveguide-readout}
+
+\begin{phenomenon}
+Dispersive readout interposes a cavity between the qubit and the
+measurement line. One can instead delete the cavity and couple the
+transmon's dipole \emph{directly} to a transmission line, so that the
+qubit is the only circuit element the propagating field sees. A
+near-resonant probe is then coherently scattered by the two-level
+system: the fraction of the wave that excites the qubit and is
+re-emitted interferes with the fraction that passes by, carving a
+frequency-dependent \emph{dip} in the transmitted amplitude. A single,
+perfectly coupled, coherent emitter can in principle reflect the entire
+incident wave. This ``atom in a one-dimensional waveguide'' is the
+subject of waveguide QED, and the operating principle of
+resonator-free charge-sensitive detectors.
+\end{phenomenon}
+
+\begin{statement}[\textbf{Coherent scattering of a qubit on a feedline}~\cite{peropadre2013,wiegand2021}]
+\label{stmt:waveguide-readout}
+Model the transmission line as a continuum of modes $\hat b_\omega$ and
+couple the qubit (transition frequency $\omega_0$) to it linearly,
+\begin{equation}
+\label{eq:waveguide-hamiltonian}
+\op H = \frac{\hbar\omega_0}{2}\hat\sigma_z
+ + \hbar\!\int\!\dd\omega\;\omega\,\hat b_\omega^\dagger\hat b_\omega
+ + \hbar\!\int\!\dd\omega\;g\,\bigl(\hat b_\omega^\dagger\hat\sigma_- + \hat\sigma_+\hat b_\omega\bigr),
+\end{equation}
+the two-level version of the input--output Hamiltonian
+\cref{eq:io-hamiltonian} with the qubit dipole $\hat\sigma_-$ in place
+of the cavity operator $\hat a$. The qubit radiates into the line at
+the rate $\Gamma_c=2\pi J g^2$ ($J$ the density of line modes), and the
+boundary relation \cref{eq:input-output-relation} becomes
+\begin{equation}
+\label{eq:waveguide-io}
+\hat a_{\rm out}(t)=\hat a_{\rm in}(t) - i\sqrt{\Gamma_c}\,\hat\sigma_-(t).
+\end{equation}
+Driving on the line with detuning $\Delta=\omega_d-\omega_0$ and Rabi
+rate $\Omega$, and allowing non-feedline loss $\Gamma_l$ and pure
+dephasing $\Gamma_\phi$, the steady state gives the transmitted and
+reflected amplitudes
+\begin{align}
+\label{eq:waveguide-s21}
+S_{21}(\Delta) &= 1 - \frac{\Gamma_c}{2\gamma}\,
+   \frac{1 - i\Delta/\gamma}{1+(\Delta/\gamma)^2 + 2\Gamma_n/\gamma},\\
+\label{eq:waveguide-s11}
+S_{11}(\Delta) &= S_{21}(\Delta)-1,
+\end{align}
+where $\Gamma_r=\Gamma_c+\Gamma_l$ is the total radiative decay rate,
+$\gamma=\tfrac12\Gamma_r+\Gamma_\phi=1/T_2$ the total
+coherence-decay rate, and $2\Gamma_n=\Omega^2/\Gamma_r=4P/\hbar\omega_d$
+the drive expressed as a photon-interrogation rate ($P$ the on-chip
+power). In the weak-probe limit $2\Gamma_n\ll\gamma$ the line saturates
+negligibly and \cref{eq:waveguide-s21} is a Lorentzian dip,
+\begin{equation}
+\label{eq:waveguide-weak}
+S_{21}(\Delta)=1-\frac{\Gamma_c}{2\gamma}\,\frac{1}{1+i\Delta/\gamma},
+\end{equation}
+identical in form to the side-coupled notch resonator
+\cref{eq:notch-s21}.
+\end{statement}
+
+\paragraph{Derivation.}
+In the frame rotating at the drive frequency $\omega_d$ the qubit
+obeys $\op H_{\rm eff}=\tfrac{\hbar\Delta}{2}\hat\sigma_z
++\tfrac{\hbar\Omega}{2}\hat\sigma_x$ (the qubit form of the
+rotating-wave approximation, \cref{stmt:rwa}), and dissipation enters
+through the Lindblad master equation of \cref{stmt:lindblad},
+\begin{equation}
+\label{eq:waveguide-master}
+\dot{\op\rho}=-\tfrac{i}{\hbar}\comm{\op H_{\rm eff}}{\op\rho}
+ + \Gamma_r\,\mathcal D[\hat\sigma_-]\op\rho
+ + \tfrac{\Gamma_\phi}{2}\,\mathcal D[\hat\sigma_z]\op\rho.
+\end{equation}
+The resulting optical Bloch equations for the coherence and population
+are
+\begin{align}
+\label{eq:waveguide-bloch}
+\langle\dot{\hat\sigma}_\pm\rangle &= (\pm i\Delta-\gamma)\langle\hat\sigma_\pm\rangle
+   \mp \tfrac{i\Omega}{2}\langle\hat\sigma_z\rangle,\\
+\langle\dot{\hat\sigma}_z\rangle &= -i\Omega\bigl(\langle\hat\sigma_+\rangle-\langle\hat\sigma_-\rangle\bigr)
+   -\Gamma_r\bigl(\langle\hat\sigma_z\rangle+1\bigr).
+\end{align}
+Their decaying transients reproduce the coherence times of
+\cref{ch:relaxation-dephasing} --- $T_2=1/\gamma$, $T_1=1/\Gamma_r$,
+and $\Gamma_\phi=1/T_2-1/2T_1$ --- so the same $T_1,T_2$ measured on a
+conventional qubit are read off here from the scattering linewidth.
+Setting $\langle\dot{\hat\sigma}_\pm\rangle=\langle\dot{\hat\sigma}_z\rangle=0$
+yields the steady-state coherence
+\begin{equation}
+\label{eq:waveguide-sigma-minus}
+\langle\hat\sigma_-\rangle=-\frac{\Gamma_r}{2}\,
+  \frac{\Omega(\Delta+i\gamma)}{\Omega^2\gamma+\Gamma_r(\Delta^2+\gamma^2)},
+\end{equation}
+which, inserted into the boundary relation \cref{eq:waveguide-io} (with
+$\Omega=2g\langle\hat a_{\rm in}\rangle$ relating the drive to the
+incident amplitude), gives \cref{eq:waveguide-s21}.
+
+\paragraph{The qubit \emph{is} a notch resonator.}
+Comparing the weak-probe transmission \cref{eq:waveguide-weak} with the
+side-coupled cavity \cref{eq:notch-s21} term by term identifies the
+quality factors
+\begin{equation}
+\label{eq:waveguide-Q}
+Q_c=\frac{\omega_0}{\Gamma_c},\qquad
+Q_l=\frac{\omega_0}{2\gamma}=\frac{\omega_0}{2}\,T_2,\qquad
+Q_i=\frac{\omega_0}{\Gamma_l+2\Gamma_\phi}.
+\end{equation}
+The external (coupling) $Q$ is fixed by the radiative rate into the
+feedline, the loaded $Q$ by the total coherence time, and the internal
+$Q$ by every loss that is not the feedline --- exactly the bookkeeping
+of \cref{eq:notch-s21}. A qubit on a transmission line therefore
+scatters \emph{precisely} as a linear notch resonator does, with one
+decisive difference: a two-level system saturates. Each absorbed photon
+must be re-emitted before the next can be scattered, so once the
+interrogation rate reaches $2\Gamma_n\sim\gamma$ --- of order one
+photon per coherence time --- the dip washes out
+(\cref{eq:waveguide-s21}) and the steady-state excitation
+\begin{equation}
+\label{eq:waveguide-p1}
+P_1=\frac{1+\langle\hat\sigma_z\rangle}{2}
+   =\frac12\,\frac{2\Gamma_n/\gamma}{1+(\Delta/\gamma)^2+2\Gamma_n/\gamma}
+\end{equation}
+approaches $\tfrac12$. The linear-resonator description holds only at
+the single-photon level; this is why direct-coupled readout is
+intrinsically a low-power measurement, with no Josephson amplifier in
+between to be saturated.
+
+\paragraph{Readout lives in the equatorial plane.}
+Because the measured field is the radiated dipole
+\cref{eq:waveguide-io}, the signal is proportional to
+$\langle\hat\sigma_-\rangle=\tfrac12(\langle\hat\sigma_x\rangle-i\langle\hat\sigma_y\rangle)$,
+the \emph{transverse} coherence --- not the population
+$\langle\hat\sigma_z\rangle$ that dispersive readout
+(\cref{stmt:dispersive-readout}) projects. A qubit in an energy
+eigenstate ($\ket0$ or $\ket1$) radiates no coherent field; only states
+with equatorial weight scatter. Direct readout is thus a projection
+onto the $XY$ plane of the Bloch sphere rather than a quantum
+non-demolition measurement of energy, and the calibration sequences of
+\cref{ch:experimental-basics} must be adapted accordingly: a Rabi
+measurement reads the emitted amplitude (with
+$\Omega^2/\Gamma_r=2\Gamma_n=4P/\hbar\omega_d$ fixing the drive
+strength), a Ramsey sequence reads the free-precession envelope
+$A(\tau)\propto e^{-\tau/T_2^*}\cos(\Delta\tau+\phi_0)$ directly off the
+emitted field, and a $T_1$ sequence needs a final $\pi/2$ pulse to
+rotate the surviving population into the plane before the line can
+report it.
+
+\begin{application}[\textbf{The charge-sensitive transmon detector (SQUAT)}]
+\label{app:squat}
+Hold $E_J/E_C$ low enough (of order $E_J/E_C\sim25$) that the
+transmon's charge dispersion \cref{eq:charge-dispersion} is not fully
+suppressed. The even- and odd-charge-parity bands then remain split by
+a measurable $2\chi=2\chi_0\cos(\pi n_g)$, so the scattering resonance
+sits at $f_r=f_0\pm\chi$ according to the island parity. A single
+continuous feedline tone, fit to \cref{eq:waveguide-s21} to extract
+$\Gamma_c$, $\gamma$, and the on-chip drive $\Gamma_n$, then monitors
+the parity in real time: every quasiparticle that tunnels across the
+junction (\cref{sec:parity-switching}) flips the parity and steps the
+transmitted phase or amplitude between two values. Deleting the readout
+resonator lets such pixels be packed densely and read continuously at
+high bandwidth, the design goal of the superconducting
+quasiparticle-amplifying transmon~\cite{magoon2026,fink2024}. Optimal
+single-tone parity discrimination matches the dispersion to the
+linewidth, $2\chi\sim\gamma$, the direct-coupling analogue of the
+$2\chi\sim\kappa$ matching behind dispersive readout
+(\cref{stmt:reflection}).
+\end{application}
+
 % --------------------------------------------------------------
 This chapter gave the abstract cavity-QED toolkit its hardware. A
 coupling capacitor produces the Jaynes--Cummings interaction with a
@@ -311,7 +491,10 @@ and all-microwave cross-resonance --- realising the abstract CNOT of
 $\chi$ now built from circuit parameters, and a Josephson parametric
 amplifier, the squeezer of \cref{ch:states-of-light} run forward,
 supplies the quantum-limited gain that makes single-shot measurement
-possible.
+possible. Removing the cavity altogether and coupling the qubit
+straight to the feedline gives the resonator-free limit, where the
+qubit scatters the probe exactly as a notch resonator would --- the
+basis of the charge-sensitive detectors of Part~VI.
 
 What remains is to put the apparatus to work: to take a freshly
 fabricated chip and find its parameters --- the resonator and qubit
@@ -351,6 +534,16 @@ from circuit parameters. A Josephson parametric amplifier
 forward) gives phase-sensitive (noiseless) or phase-preserving
 ($n_{\rm add}\ge\tfrac12$) gain --- the quantum-limited front end of
 single-shot readout.
+
+\paragraph{Resonator-free readout.}
+Coupling the qubit directly to the feedline gives coherent scattering
+$S_{21}=1-\tfrac{\Gamma_c}{2\gamma}\,(1-i\Delta/\gamma)/[1+(\Delta/\gamma)^2+2\Gamma_n/\gamma]$,
+$S_{11}=S_{21}-1$. The qubit acts as a notch resonator with
+$Q_c=\omega_0/\Gamma_c$, $Q_l=\omega_0/2\gamma=\tfrac{\omega_0}{2}T_2$,
+$Q_i=\omega_0/(\Gamma_l+2\Gamma_\phi)$, but it saturates once
+$2\Gamma_n\gtrsim\gamma$. The signal $\propto\langle\hat\sigma_-\rangle$
+reads the equatorial plane, not $\langle\hat\sigma_z\rangle$; matched
+parity readout takes $2\chi\sim\gamma$ (the SQUAT detector).
 
 \end{chaptersummary}
 
@@ -514,5 +707,26 @@ converters:} the same mixing activates tunable interactions. (v)
 four-wave mixing converts a signal photon into a qubit excitation. A
 single nonlinear, dissipationless element underlies the qubit, its
 gates, and its readout amplifier alike.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[On-resonance extinction of a qubit on a feedline]
+For a qubit coupled directly to a feedline, evaluate the weak-probe
+transmission \cref{eq:waveguide-weak} on resonance ($\Delta=0$). What
+does $S_{21}(0)$ become for an ideal qubit with no internal loss and no
+pure dephasing, and what is the physical interpretation? Express the
+on-resonance dip in terms of the quality factors \cref{eq:waveguide-Q}.
+\begin{solution}
+On resonance \cref{eq:waveguide-weak} gives
+$S_{21}(0)=1-\Gamma_c/2\gamma$. For an ideal qubit
+$\Gamma_l=\Gamma_\phi=0$, so $\Gamma_r=\Gamma_c$ and
+$\gamma=\tfrac12\Gamma_r=\tfrac12\Gamma_c$, hence $S_{21}(0)=1-1=0$:
+the qubit reflects the entire incident wave (perfect extinction), the
+single-emitter analogue of a lossless, perfectly overcoupled notch
+resonator. In general $\Gamma_c/2\gamma=Q_l/Q_c$, so
+$S_{21}(0)=1-Q_l/Q_c=Q_i/(Q_i+Q_c)$ --- identical to the notch result
+$S_{21}(\omega_c)=Q_i/(Q_i+Q_c)$ of \cref{eq:notch-s21}. Any internal
+loss or dephasing ($Q_i<\infty$) lifts the dip off zero, and finite
+probe power ($2\Gamma_n>0$) fills it in further through saturation.
 \end{solution}
 \end{exercise}

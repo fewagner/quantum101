@@ -163,6 +163,37 @@ height $2\sqrt{\kappa_1\kappa_2}/\kappa$. This is the $S_{21}$ trace
 of resonator spectroscopy; fitting its centre and width yields
 $\omega_c$ and the loaded quality factor $Q=\omega_c/\kappa$.
 
+\paragraph{Side-coupled (notch) geometry.}
+The readout resonators of circuit QED are usually placed not
+\emph{inline} but \emph{beside} a continuous feedline: the line runs
+straight from port~1 to port~2, and the cavity hangs off it through a
+coupling capacitor (a \emph{hanger} or \emph{notch} resonator). The
+feedline is now the propagating bath of \cref{eq:io-hamiltonian}; the
+cavity radiates back into it at the external rate $\kappa_c$ and
+dissipates internally at $\kappa_i$, so the loaded linewidth is
+$\kappa=\kappa_c+\kappa_i$. The field transmitted \emph{past} the
+coupling point is the through-going wave minus what the cavity
+re-radiates forward, and the boundary relation
+\cref{eq:input-output-relation} gives
+\begin{equation}
+\label{eq:notch-s21}
+S_{21}(\omega_d) \;=\; 1 \;-\; \frac{\kappa_c/2}{\,i(\omega_c-\omega_d)+\kappa/2\,}
+\;=\; 1 \;-\; \frac{Q_l/Q_c}{\,1+2iQ_l\,\delta/\omega_c\,},
+\end{equation}
+with $\delta=\omega_d-\omega_c$ and the quality factors
+$Q_c=\omega_c/\kappa_c$ (external/coupling), $Q_i=\omega_c/\kappa_i$
+(internal), and loaded $Q_l^{-1}=Q_c^{-1}+Q_i^{-1}$. Unlike the inline
+Lorentzian \emph{peak} of \cref{eq:transmission}, the notch geometry
+produces a transmission \emph{dip}: off resonance $S_{21}\to1$ (the
+wave ignores the cavity), while on resonance the cavity scatters and
+$S_{21}(\omega_c)=1-Q_l/Q_c=Q_i/(Q_i+Q_c)$, which vanishes for a
+lossless, strongly overcoupled resonator ($\kappa_c\gg\kappa_i$).
+Fitting the complex dip in the $(\Re,\Im)$ plane yields $\omega_c$,
+$Q_l$, and the coupling/internal split~\cite{gao2008,probst2015}. We
+will meet \emph{exactly} this functional form again in
+\cref{sec:waveguide-readout}, where the scatterer is not a linear
+cavity but a single qubit coupled straight to the line.
+
 \paragraph{Application: dispersive readout.}
 In the dispersive regime (Part~III), the qubit shifts the cavity
 frequency by $\pm\chi$ depending on its state, $\omega_c\to\omega_c\pm\chi$.

@@ -116,6 +116,9 @@ needed. Each `[ ]` becomes a section or chapter.
 - [x] Flux qubit and fluxonium (overview)
 - [x] Capacitive and inductive coupling between elements
 - [x] Qubit–resonator coupling and dispersive readout
+- [x] Resonator–feedline coupling: the side-coupled (notch) resonator $S_{21}$
+- [x] Resonator-free readout: a qubit coupled directly to the feedline
+      (waveguide-QED coherent scattering; the charge-sensitive SQUAT detector)
 - [x] Drive Hamiltonians and single-qubit gates
 - [x] Parametric / mixing processes: three- and four-wave mixing in Josephson nonlinearities
       (e.g., two resonator modes + drive + qubit as a four-wave-mixing example)

@@ -88,10 +88,11 @@ time-domain sequences that calibrate control and measure coherence.
 
 \begin{statement}[\textbf{Resonator and two-tone spectroscopy}]
 \label{stmt:spectroscopy}
-\textbf{Resonator spectroscopy.} The transmission past the readout
-resonator is a Lorentzian (\cref{stmt:reflection}) centred at the
-dressed cavity frequency, whose location depends on the qubit state
-through the dispersive pull $\pm\chi$ (\cref{stmt:dispersive-H}):
+\textbf{Resonator spectroscopy.} The readout resonator is side-coupled
+to the feedline, so its transmission traces the notch dip
+\cref{eq:notch-s21} centred at the dressed cavity frequency, whose
+location depends on the qubit state through the dispersive pull
+$\pm\chi$ (\cref{stmt:dispersive-H}):
 \begin{equation}
 \label{eq:dressed-cavity}
 \omega_r^{\rm meas} = \omega_r + \chi\langle\hat\sigma_z\rangle,
